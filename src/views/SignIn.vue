@@ -44,7 +44,7 @@
                 </div>
                 <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch>
                 <div class="text-center">
-                  <material-button class="my-4 mb-2" variant="gradient" color="success" fullWidth>Sign in</material-button>
+                  <material-button class="my-4 mb-2" @click="signIn" variant="gradient" color="success" fullWidth>Sign in</material-button>
                 </div>
                 <p class="mt-4 text-sm text-center">
                   Don't have an account?
@@ -65,6 +65,7 @@ import MaterialInput from '@/components/MaterialInput.vue'
 import MaterialSwitch from '@/components/MaterialSwitch.vue'
 import MaterialButton from '@/components/MaterialButton.vue'
 import { mapMutations } from 'vuex'
+import axiosClient from '../axios'
 
 export default {
   name: 'sign-in',
@@ -84,6 +85,17 @@ export default {
   },
   methods: {
     ...mapMutations(['toggleEveryDisplay', 'toggleHideConfig']),
+
+    //----------SignIn-------------
+    async signIn() {
+      try {
+        const response = await this.$http.get('http://jsonplaceholder.typicode.com/posts')
+        // JSON responses are automatically parsed.
+        this.posts = response.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
 }
 </script>
