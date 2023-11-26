@@ -35,12 +35,13 @@
               </div>
             </div>
             <div class="card-body">
+              <small class="text-danger" v-if="unauthorized">Incorrect Email or Password</small>
               <!-- <form role="form" class="text-start mt-3"> -->
               <div class="mb-3">
-                <input id="email" v-model="credentials.email" type="email" label="Email" name="email" />
+                <input id="email" v-model="credentials.email" placeholder="Email" type="email" label="Email" name="email" />
               </div>
               <div class="mb-3">
-                <input id="password" v-model="credentials.password" type="password" label="Password" name="password" />
+                <input id="password" v-model="credentials.password" placeholder="Password" type="password" label="Password" name="password" />
               </div>
               <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch>
               <div class="text-center">
@@ -85,6 +86,7 @@ export default {
   },
   data() {
     return {
+      unauthorized: false,
       credentials: {
         email: '',
         password: '',
@@ -94,94 +96,23 @@ export default {
   methods: {
     ...mapMutations(['toggleEveryDisplay', 'toggleHideConfig']),
 
-    //----------SignIn-------------
+    //------------SignIn---------------
     async signIn() {
       try {
         const response = await axiosClient.post('/login', this.credentials)
-        console.log(response)
+        let user = response.data ? response.data.user : null
+        let token = response.data ? response.data.access_token : null
+        localStorage.setItem('user', user)
+        localStorage.setItem('token', token)
+        this.$router.push({ name: 'Dashboard' })
       } catch (error) {
-        console.log(error)
+        if (error.response.status == 401) {
+          this.unauthorized = true
+        }
       }
     },
   },
 }
 </script>
 
-<style scoped>
-.form-data {
-  width: 100%;
-}
-.text-area-box {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 10px;
-  font-size: 12px;
-  width: 280px;
-  height: 105px;
-}
-/* Hover effect */
-
-.text-area-box:hover {
-  border-color: #6c757d; /* Change to your preferred hover color */
-}
-
-.select-box {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  width: 100%;
-  font-size: 12px;
-  height: 35px;
-}
-.select-box:hover {
-  border-color: #6c757d; /* Change to your preferred hover color */
-}
-.select-box:focus {
-  outline: none;
-  border-color: #4caf50; /* Change to your preferred focus color */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
-}
-/* Focus effect */
-
-.text-area-box:focus {
-  outline: none;
-  border-color: #4caf50; /* Change to your preferred focus color */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
-}
-.input-label {
-  font-size: 12px;
-}
-/* Basic input styles */
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  width: 100%;
-  height: 35px;
-  font-size: 12px;
-}
-
-/* Hover effect */
-input:hover {
-  border-color: #6c757d; /* Change to your preferred hover color */
-}
-
-/* Focus effect */
-input:focus {
-  outline: none;
-  border-color: #4caf50; /* Change to your preferred focus color */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
-}
-
-/* Placeholder text style */
-::placeholder {
-  color: #999;
-}
-
-/* Styling for disabled state */
-input:disabled {
-  background-color: #f0f0f0;
-  color: #999;
-}
-</style>
+<style scoped></style>

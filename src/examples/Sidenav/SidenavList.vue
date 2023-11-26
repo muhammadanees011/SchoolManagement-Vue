@@ -1,166 +1,89 @@
 <template>
-  <div
-    class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100"
-    id="sidenav-collapse-main"
-  >
+  <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="dashboard"
-          navText="Dashboard"
-        >
+        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="dashboard" navText="Dashboard">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">dashboard</i>
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse
-          url="/schools"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="schools"
-          navText="Schools"
-        >
+        <sidenav-collapse :to="{ name: 'list-organizations' }" :aria-controls="''" v-bind:collapse="false" collapseRef="organizations" navText="Organizations">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">business</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
+        <sidenav-collapse url="/schools" :aria-controls="''" v-bind:collapse="false" collapseRef="schools" navText="Schools">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">account_balance</i>
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse
-          url="/students"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="students"
-          navText="Students"
-        >
+        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="students" navText="Students">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">people</i>
           </template>
         </sidenav-collapse>
       </li>
-      <!-- <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="tables"
-          navText="Tables"
-        >
+      <li class="nav-item">
+        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="bills" navText="Bills">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">table_view</i>
+            <i class="material-icons-round opacity-10 fs-5">receipt</i>
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="billing"
-          navText="Billing"
-        >
+        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="trips" navText="Trips">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">receipt_long</i>
+            <i class="material-icons-round opacity-10 fs-5">directions_bus</i>
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="rtl-page"
-          navText="Rtl"
-        >
+        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="reports" navText="Reports">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5"
-              >format_textdirection_r_to_l</i
-            >
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="mt-3 nav-item">
-        <h6
-          class="text-xs ps-4 text-uppercase font-weight-bolder text-white"
-          :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'"
-        >
-          ACCOUNT PAGES
-        </h6>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="profile"
-          navText="Profile"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">person</i>
+            <i class="material-icons-round opacity-10 fs-5">description</i>
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="sign-in"
-          navText="SignIn"
-        >
+        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="shops" navText="Shops">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">login</i>
+            <i class="material-icons-round opacity-10 fs-5">store</i>
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="sign-up"
-          navText="SignUp"
-        >
+        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="meals" navText="Meals">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">assignment</i>
+            <i class="material-icons-round opacity-10 fs-5">restaurant</i>
           </template>
         </sidenav-collapse>
-      </li> -->
+      </li>
     </ul>
-    <!-- <div class="sidenav-footer position-absolute w-100 bottom-0">
-      <div class="mx-3">
-        <a
-          class="btn mt-4 w-100"
-          :class="`bg-gradient-${this.$store.state.color}`"
-          href="https://www.creative-tim.com/product/vue-material-dashboard-2-pro"
-          >Upgrade to pro</a
-        >
-      </div>
-    </div> -->
   </div>
 </template>
 <script>
-import SidenavCollapse from "./SidenavCollapse.vue";
+import SidenavCollapse from './SidenavCollapse.vue'
 
 export default {
-  name: "SidenavList",
+  name: 'SidenavList',
   props: {
     cardBg: String,
   },
   data() {
     return {
-      title: "Soft UI Dashboard PRO",
-      controls: "dashboardsExamples",
-      isActive: "active",
-    };
+      title: 'Soft UI Dashboard PRO',
+      controls: 'dashboardsExamples',
+      isActive: 'active',
+    }
   },
   components: {
     SidenavCollapse,
   },
-};
+}
 </script>

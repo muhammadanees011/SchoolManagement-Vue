@@ -1,0 +1,76 @@
+.form-data {
+    width: 100%;
+}
+.text-area-box {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 12px;
+    width: 280px;
+    height: 105px;
+}
+/* Hover effect */
+
+.text-area-box:hover {
+    border-color: #6c757d; /* Change to your preferred hover color */
+}
+
+.select-box {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 12px;
+    height: 35px;
+}
+.select-box:hover {
+    border-color: #6c757d; /* Change to your preferred hover color */
+}
+.select-box:focus {
+    outline: none;
+    border-color: #4caf50; /* Change to your preferred focus color */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
+}
+/* Focus effect */
+
+.text-area-box:focus {
+    outline: none;
+    border-color: #4caf50; /* Change to your preferred focus color */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
+}
+.input-label {
+    font-size: 12px;
+}
+/* Basic input styles */
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 35px;
+    font-size: 12px;
+}
+
+/* Hover effect */
+input:hover {
+    border-color: #6c757d; /* Change to your preferred hover color */
+}
+
+/* Focus effect */
+input:focus {
+    outline: none;
+    border-color: #4caf50; /* Change to your preferred focus color */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
+}
+
+/* Placeholder text style */
+::placeholder {
+    color: #999;
+}
+
+/* Styling for disabled state */
+input:disabled {
+    background-color: #f0f0f0;
+    color: #999;
+}

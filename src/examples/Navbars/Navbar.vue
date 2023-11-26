@@ -7,10 +7,38 @@
           <!-- <material-input id="search" label="Search here" /> -->
         </div>
         <ul class="navbar-nav justify-content-end">
-          <li class="nav-item d-flex align-items-center">
+          <!-- <li class="nav-item d-flex align-items-center">
             <router-link :to="{ name: 'SignIn' }" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">
               <i class="material-icons" :class="isRTL ? 'ms-sm-2' : 'me-sm-1'"> account_circle </i>
             </router-link>
+          </li> -->
+
+          <li class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
+            <a href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showMenu ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" @click="showProfile = !showProfile">
+              <i class="material-icons cursor-pointer"> account_circle </i>
+            </a>
+            <ul class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4" :class="showMenu ? 'show' : ''" aria-labelledby="dropdownMenuButton">
+              <li class="mb-2">
+                <a class="dropdown-item border-radius-md" href="javascript:;">
+                  <div class="py-1 d-flex">
+                    <div class="d-flex flex-column justify-content-center">
+                      <router-link :to="{ name: 'Profile' }">
+                        <h6 class="mb-1 text-sm font-weight-normal"> <span class="font-weight-bold">Profile Settings</span> </h6>
+                      </router-link>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="mb-2">
+                <a class="dropdown-item border-radius-md" href="javascript:;">
+                  <div class="py-1 d-flex">
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 @click="signOut" class="mb-1 text-sm font-weight-normal"> <span class="font-weight-bold">Logout</span> </h6>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
             <a href="#" @click="toggleSidebar" class="p-0 nav-link text-body lh-1" id="iconNavbarSidenav">
@@ -115,12 +143,14 @@
 // import MaterialInput from '@/components/MaterialInput.vue'
 import Breadcrumbs from '../Breadcrumbs.vue'
 import { mapMutations, mapState } from 'vuex'
+import axiosClient from '../../axios'
 
 export default {
   name: 'navbar',
   data() {
     return {
       showMenu: false,
+      showProfile: false,
     }
   },
   props: ['minNav', 'color'],
@@ -132,6 +162,17 @@ export default {
 
     toggleSidebar() {
       this.navbarMinimize()
+    },
+    //------------SignOut---------------
+    async signOut() {
+      try {
+        await axiosClient.post('/logout', localStorage.getItem('token'))
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+        this.$router.push({ name: 'SignIn' })
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
   components: {

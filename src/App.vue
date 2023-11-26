@@ -7,6 +7,7 @@
     <app-footer v-show="showFooter" />
     <configurator :toggle="toggleConfigurator" :class="[showConfig ? 'show' : '', hideConfigButton ? 'd-none' : '']" />
   </main>
+  <vue3-snackbar top right :duration="3000"> </vue3-snackbar>
 </template>
 <script>
 import Sidenav from './examples/Sidenav'

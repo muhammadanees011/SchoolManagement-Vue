@@ -7,6 +7,9 @@ import Schools from '../views/schools/Schools.vue'
 import AddSchool from '../views/schools/add.vue'
 import Students from '../views/students/Students.vue'
 import AddStudent from '../views/students/add.vue'
+import Organizations from '../views/organizations/organizations.vue'
+import AddOrganizations from '../views/organizations/add.vue'
+import EditOrganization from '../views/organizations/edit.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
@@ -14,6 +17,7 @@ const routes = [
     path: '/',
     name: '/',
     redirect: '/dashboard',
+    meta: { requiresAuth: true },
   },
   {
     path: '/dashboard',
@@ -21,7 +25,22 @@ const routes = [
     component: Dashboard,
     meta: {
       title: 'Dashboard',
+      requiresAuth: true,
     },
+  },
+  {
+    path: '/organizations',
+    name: 'organizations',
+    component: DefaultLayout,
+    meta: {
+      title: 'Organizations',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/organizations', name: 'list-organizations', component: Organizations },
+      { path: '/add', name: 'add-organizations', component: AddOrganizations },
+      { path: '/edit/:id', name: 'edit-organization', component: EditOrganization },
+    ],
   },
   {
     path: '/schools',
@@ -29,6 +48,7 @@ const routes = [
     component: DefaultLayout,
     meta: {
       title: 'Schools',
+      requiresAuth: true,
     },
     children: [
       { path: '/schools', name: 'list-schools', component: Schools },
@@ -41,6 +61,7 @@ const routes = [
     component: DefaultLayout,
     meta: {
       title: 'Students',
+      requiresAuth: true,
     },
     children: [
       { path: '/students', name: 'list-students', component: Students },
@@ -51,6 +72,7 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+    meta: { requiresAuth: true },
   },
   {
     path: '/sign-in',
@@ -72,7 +94,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title || 'StudentPay'
-  next()
+  if (to.meta.requiresAuth && !localStorage.getItem('token')) {
+    next({ name: 'SignIn' })
+  } else if (localStorage.getItem('token') && (to.name === 'SignIn' || to.name === 'Register')) {
+    next({ name: 'Dashboard' })
+  } else {
+    next()
+  }
 })
 
 export default router
