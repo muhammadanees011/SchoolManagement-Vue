@@ -38,7 +38,7 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Sales', value: '$103,430' }"
+              :title="{ text: 'Sales', value: '£10,430' }"
               detail="<span class='text-success text-sm font-weight-bolder'>+5%</span> Just updated"
               :icon="{
                 name: 'weekend',

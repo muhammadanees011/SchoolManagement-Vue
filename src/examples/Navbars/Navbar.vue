@@ -19,21 +19,21 @@
             </a>
             <ul class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4" :class="showMenu ? 'show' : ''" aria-labelledby="dropdownMenuButton">
               <li class="mb-2">
+                <router-link :to="{ name: 'Profile' }">
                 <a class="dropdown-item border-radius-md" href="javascript:;">
                   <div class="py-1 d-flex">
                     <div class="d-flex flex-column justify-content-center">
-                      <router-link :to="{ name: 'Profile' }">
                         <h6 class="mb-1 text-sm font-weight-normal"> <span class="font-weight-bold">Profile Settings</span> </h6>
-                      </router-link>
                     </div>
                   </div>
                 </a>
+              </router-link>
               </li>
               <li class="mb-2">
-                <a class="dropdown-item border-radius-md" href="javascript:;">
+                <a @click="signOut" class="dropdown-item border-radius-md" href="javascript:;">
                   <div class="py-1 d-flex">
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 @click="signOut" class="mb-1 text-sm font-weight-normal"> <span class="font-weight-bold">Logout</span> </h6>
+                    <div  class="d-flex flex-column justify-content-center">
+                      <h6  class="mb-1 text-sm font-weight-normal"> <span class="font-weight-bold">Logout</span> </h6>
                     </div>
                   </div>
                 </a>
