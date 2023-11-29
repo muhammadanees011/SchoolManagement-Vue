@@ -8,7 +8,8 @@
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
+      <template v-if="user && user.role=='super_admin'">
+        <li class="nav-item">
         <sidenav-collapse :to="{ name: 'list-organizations' }" :aria-controls="''" v-bind:collapse="false" collapseRef="organizations" navText="Organizations">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">business</i>
@@ -16,12 +17,13 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse url="/schools" :aria-controls="''" v-bind:collapse="false" collapseRef="schools" navText="Schools">
+        <sidenav-collapse url="/schools" :aria-controls="''" v-bind:collapse="false" collapseRef="schools" navText="Schools/Colleges">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">account_balance</i>
           </template>
         </sidenav-collapse>
       </li>
+      </template>
       <li class="nav-item">
         <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="students" navText="Students">
           <template v-slot:icon>
@@ -29,13 +31,13 @@
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="bills" navText="Bills">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">receipt</i>
           </template>
         </sidenav-collapse>
-      </li>
+      </li> -->
       <li class="nav-item">
         <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="trips" navText="Trips">
           <template v-slot:icon>
@@ -44,23 +46,23 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="reports" navText="Reports">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">description</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="shops" navText="Shops">
+        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="shops" navText="Shops">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">store</i>
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="meals" navText="Meals">
+        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="meals" navText="Meals">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">restaurant</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
+        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="reports" navText="Reports">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">description</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -75,9 +77,16 @@ export default {
   props: {
     cardBg: String,
   },
+  mounted(){
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      this.user = JSON.parse(userData);
+    }
+  },
   data() {
     return {
-      title: 'Soft UI Dashboard PRO',
+      user:'',
+      title: 'StudentPay',
       controls: 'dashboardsExamples',
       isActive: 'active',
     }

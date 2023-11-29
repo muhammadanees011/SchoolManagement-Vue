@@ -102,7 +102,7 @@ export default {
         const response = await axiosClient.post('/login', this.credentials)
         let user = response.data ? response.data.user : null
         let token = response.data ? response.data.access_token : null
-        localStorage.setItem('user', user)
+        localStorage.setItem('user',  JSON.stringify(user))
         localStorage.setItem('token', token)
         this.$router.push({ name: 'Dashboard' })
       } catch (error) {

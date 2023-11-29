@@ -3,51 +3,80 @@
     <div class="row">
       <div class="col-12">
         <div class="card my-4">
-          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
               <h6 class="text-white text-capitalize ps-3">Students</h6>
               <router-link :to="{ name: 'add-student' }">
                 <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Add Student </button>
               </router-link>
             </div>
-          </div>
+          </div> -->
+          <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
+              <h6 class="text-dark text-capitalize ps-3">Students</h6>
+              <router-link :to="{ name: 'add-student' }">
+                <button style="font-size: 12px" class="me-3 bg-gradient-success shadow-success text-white fw-5 border-0 p-2 border-radius-lg"> Add Student </button>
+              </router-link>
+            </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School Name </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Country/City </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Student ID </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
+                    <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Country/City </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th> -->
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Registered On </th>
-                    <th class="text-secondary opacity-7"></th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(item, index) in schools" :key="index">
-                    <td>
-                      <div class="d-flex px-2 py-1">
-                        <div>
-                          <img src="@/assets/img/team-2.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="user1" />
-                        </div>
-                        <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">Stockton</h6>
-                          <p class="text-xs text-secondary mb-0"> Stockton@example.com </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0"> United Kingdom </p>
-                      <p class="text-xs text-secondary mb-0">Bristol</p>
-                    </td>
+                  <tr v-for="(item, index) in allStudents" :key="index">
                     <td class="align-middle text-center text-sm">
-                      <span class="badge badge-sm bg-gradient-success">Active</span>
+                      <p class="text-xs font-weight-bold mb-0"> {{ item.student_id }}</p>
+                    </td>
+                    <td>
+                      <p class="text-xs font-weight-bold mb-0"> {{ item.user.first_name }} {{ item.user.last_name }}</p>
+                    </td>
+                    <td>
+                      <p class="text-xs font-weight-bold mb-0"> {{ item.user.email }} </p>
+                      <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
+                    </td>
+                    <!-- <td>
+                      <p class="text-xs font-weight-bold mb-0"> {{ item.user.country }} </p>
+                      <p class="text-xs text-secondary mb-0">{{ item.user.city }}</p>
                     </td>
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">23/04/18</span>
+                      <span class="text-secondary text-xs font-weight-bold">test</span>
+                    </td> -->
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs font-weight-bold">{{ item.stage }}</span>
                     </td>
-                    <td class="align-middle">
-                      <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user"> Edit </a>
+                    <td class="align-middle text-center">
+                      <router-link :to="{name:'student-balance'}">
+                        <i class="fas fa-donate"></i>
+                      </router-link>
+                    </td>
+                    <td class="align-middle text-center">
+                      <router-link :to="{name:'student-billing'}">
+                        <i class="material-icons-round opacity-10 fs-5">swap_horizontal_circle</i>
+                      </router-link>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="badge badge-sm bg-gradient-success">{{item.user.status}}</span>
+                    </td>
+                    <td class="align-middle text-center">
+                      <span>
+                        <router-link :to="{ name: 'edit-student', params: { id: item.id } }">
+                          <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
+                        </router-link>
+                        <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
+                        <i @click="deleteStudent(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                      </span>
                     </td>
                   </tr>
                 </tbody>
@@ -61,15 +90,51 @@
 </template>
 
 <script>
+import axiosClient from '../../axios'
+
 export default {
   name: 'tables',
-  metaInfo: {
-    title: 'Students',
+  mounted(){
+    this.getAllStudents();
   },
   data() {
     return {
+      allStudents:'',
       schools: 6,
     }
   },
+  methods:{
+    snackbarMsg(message) {
+      this.$snackbar.add({
+        type: 'success',
+        text: message,
+        background: 'white',
+      })
+    },
+    //-------------GET ALL STUDENTS----------
+    async getAllStudents(){
+      try {
+        const response= await axiosClient.get('/getAllStudents')
+        this.allStudents=response.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    //-------------DELETE STUDENT---------
+    async deleteStudent(id){
+      try {
+        await axiosClient.delete('/deleteStudent/' + id)
+        this.removeStudentFromList(id)
+        this.snackbarMsg('Student Deleted')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    //------------REMOVE STUDENT FROM LIST-----------
+    removeStudentFromList(id) {
+      const indexToRemove = this.allStudents.findIndex((item) => item.id === id)
+      this.allStudents.splice(indexToRemove, 1)
+    },
+  }
 }
 </script>

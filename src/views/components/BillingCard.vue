@@ -10,21 +10,25 @@
         >
           <div class="d-flex flex-column">
             <h6 class="mb-3 text-sm">Oliver Liam</h6>
-            <span class="mb-2 text-xs">
-              Company Name:
+            <span class="mb-1 text-xs">
+              Account Number:
+              <span class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span>
+            </span>
+            <span class="mb-1 text-xs">
+              Account Name:
+              <span class="text-dark ms-sm-2 font-weight-bold">Stockton Funds</span>
+            </span>
+            <span class="mb-1 text-xs">
+              Payment Purpose:
               <span class="text-dark font-weight-bold ms-sm-2"
-                >Viking Burrito</span
+                >Trip Funds</span
               >
             </span>
-            <span class="mb-2 text-xs">
+            <span class="mb-1 text-xs">
               Email Address:
               <span class="text-dark ms-sm-2 font-weight-bold"
-                >oliver@burrito.com</span
+                >stockton.funds@gmail.com</span
               >
-            </span>
-            <span class="text-xs">
-              VAT Number:
-              <span class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span>
             </span>
           </div>
           <div class="ms-auto text-end">
@@ -38,6 +42,11 @@
               <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
               >Edit
             </a>
+            <br>
+            <small class="me-3">23 - 30 March 2020</small>
+            <div class="d-flex me-3 align-items-center text-danger text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
+              - $ 2,500
+            </div>
           </div>
         </li>
         <li
@@ -45,21 +54,25 @@
         >
           <div class="d-flex flex-column">
             <h6 class="mb-3 text-sm">Lucas Harper</h6>
-            <span class="mb-2 text-xs">
-              Company Name:
+            <span class="mb-1 text-xs">
+              Account Number:
+              <span class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span>
+            </span>
+            <span class="mb-1 text-xs">
+              Account Name:
+              <span class="text-dark ms-sm-2 font-weight-bold">Stockton Funds</span>
+            </span>
+            <span class="mb-1 text-xs">
+              Payment Purpose:
               <span class="text-dark font-weight-bold ms-sm-2"
-                >Stone Tech Zone</span
+                >Meals Fund</span
               >
             </span>
-            <span class="mb-2 text-xs">
+            <span class="mb-1 text-xs">
               Email Address:
               <span class="text-dark ms-sm-2 font-weight-bold"
-                >lucas@stone-tech.com</span
+                >stockton.funds@gmail.com</span
               >
-            </span>
-            <span class="text-xs">
-              VAT Number:
-              <span class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span>
             </span>
           </div>
           <div class="ms-auto text-end">
@@ -72,7 +85,12 @@
             <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
               <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
               >Edit
-            </a>
+            </a>  
+            <br>     
+            <small class="me-3">23 - 30 March 2020</small>
+            <div class="d-flex me-3 align-items-center text-danger text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
+              - $ 2,500
+            </div>
           </div>
         </li>
         <li
@@ -80,21 +98,25 @@
         >
           <div class="d-flex flex-column">
             <h6 class="mb-3 text-sm">Ethan James</h6>
-            <span class="mb-2 text-xs">
-              Company Name:
+            <span class="mb-1 text-xs">
+              Account Number:
+              <span class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span>
+            </span>
+            <span class="mb-1 text-xs">
+              Account Name:
+              <span class="text-dark ms-sm-2 font-weight-bold">Stockton Funds</span>
+            </span>
+            <span class="mb-1 text-xs">
+              Payment Purpose:
               <span class="text-dark font-weight-bold ms-sm-2"
-                >Fiber Notion</span
+                >School Shop Funds</span
               >
             </span>
-            <span class="mb-2 text-xs">
+            <span class="mb-1 text-xs">
               Email Address:
               <span class="text-dark ms-sm-2 font-weight-bold"
-                >ethan@fiber.com</span
+                >stockton.funds@gmail.com</span
               >
-            </span>
-            <span class="text-xs">
-              VAT Number:
-              <span class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span>
             </span>
           </div>
           <div class="ms-auto text-end">
@@ -108,6 +130,11 @@
               <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
               >Edit
             </a>
+            <br>     
+            <small class="me-3">23 - 30 March 2020</small>
+            <div class="d-flex me-3 align-items-center text-danger text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
+              - $ 2,500
+            </div>
           </div>
         </li>
       </ul>

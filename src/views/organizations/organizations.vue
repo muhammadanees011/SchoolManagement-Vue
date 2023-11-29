@@ -3,14 +3,20 @@
     <div class="row">
       <div class="col-12">
         <div class="card my-4">
-          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
               <h6 class="text-white text-capitalize ps-3">Organizations</h6>
               <router-link :to="{ name: 'add-organizations' }">
                 <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Add Organization </button>
               </router-link>
             </div>
-          </div>
+          </div> -->
+          <div class="d-flex justify-content-between border-radius-lg pt-4 ">
+              <h6 class="text-dark text-capitalize ps-3">Organizations</h6>
+              <router-link :to="{ name: 'add-organizations' }">
+                <button style="font-size: 12px" class="me-3 justify-content-between bg-gradient-success  text-white fw-5 border-0 p-2 border-radius-lg"> Add Organization </button>
+              </router-link>
+            </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">
@@ -18,8 +24,8 @@
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> ID </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Organization Name </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Country/City </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Email/Phone </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Email </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Country </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Schools </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Students </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
@@ -32,35 +38,34 @@
                       <p class="text-xs font-weight-bold mb-0"> {{ item.id }}</p>
                     </td>
                     <td>
-                      <div class="d-flex px-2 py-1">
+                      <div class="d-flex px-2">
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="text-xs font-weight-bold mb-1">{{ item.name }}</h6>
-                          <p class="text-xs text-secondary mb-0"> {{ item.website }}</p>
+                          <h6 class="text-xs text-secondary mb-0">{{ item.name }}</h6>
+                          <!-- <p class="text-xs text-secondary mb-0"> {{ item.website }}</p> -->
                         </div>
                       </div>
                     </td>
                     <td>
-                      <div class="d-flex px-2 py-1">
+                      <div class="d-flex px-2 ">
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="text-xs font-weight-bold mb-1">{{ item.country }}</h6>
-                          <p class="text-xs text-secondary mb-0"> {{ item.city }}</p>
+                          <h6 class="text-xs text-secondary mb-0 ">{{ item.user.email }}</h6>
+                          <!-- <p class="text-xs text-secondary mb-0"> {{ item.user.phone }}</p> -->
                         </div>
                       </div>
                     </td>
-
                     <td>
-                      <div class="d-flex px-2 py-1">
+                      <div class="d-flex px-2">
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="text-xs font-weight-bold mb-1">{{ item.user.email }}</h6>
-                          <p class="text-xs text-secondary mb-0"> {{ item.user.phone }}</p>
+                          <h6 class="text-xs text-secondary  mb-0">{{ item.country }}</h6>
+                          <!-- <p class="text-xs text-secondary mb-0"> {{ item.city }}</p> -->
                         </div>
                       </div>
                     </td>
-                    <td class="align-middle text-center text-sm">
-                      <p class="text-xs font-weight-bold mb-0"> 0 </p>
+                    <td class="align-middle text-center">
+                      <p class="text-xs text-secondary font-weight-bold  mb-0"> 0 </p>
                     </td>
-                    <td class="align-middle text-center text-sm">
-                      <p class="text-xs font-weight-bold mb-0">0 </p>
+                    <td class="align-middle text-center">
+                      <p class="text-xs text-secondary font-weight-bold mb-0">0 </p>
                     </td>
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success">{{ item.user.status }}</span>
@@ -70,7 +75,7 @@
                         <router-link :to="{ name: 'edit-organization', params: { id: item.id } }">
                           <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         </router-link>
-                        <i class="material-icons-round opacity-10 fs-5">info</i>
+                        <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
                         <i @click="deleteOrganization(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                       </span>
                     </td>

@@ -3,14 +3,17 @@
     <div class="row">
       <div class="col-12">
         <div class="card my-4">
-          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
               <h6 class="text-white text-capitalize ps-3">Edit Organization</h6>
               <router-link :to="{ name: 'list-organizations' }">
                 <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Back </button>
               </router-link>
             </div>
-          </div>
+          </div> -->
+          <div class="d-flex justify-content-between  border-radius-lg pt-4">
+              <h6 class="text-dark text-capitalize ps-3">Edit Organization</h6>
+            </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
               <div class="row py-2 bg-white form-data border-radius-lg">
@@ -127,7 +130,7 @@ export default {
         background: 'white',
       })
     },
-    //------------SAVE ORGANIZATIONs------------
+    //------------EDIT ORGANIZATIONs------------
     async editOrganization() {
       let id = this.$route.params.id
       try {

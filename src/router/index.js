@@ -5,11 +5,17 @@ import SignIn from '../views/SignIn.vue'
 import SignUp from '../views/SignUp.vue'
 import Schools from '../views/schools/Schools.vue'
 import AddSchool from '../views/schools/add.vue'
+import EditSchool from '../views/schools/edit.vue'
 import Students from '../views/students/Students.vue'
 import AddStudent from '../views/students/add.vue'
+import EditStudent from '../views/students/edit.vue'
+import StudentBilling from '../views/students/billing.vue'
+import StudentBallance from '../views/students/ballance.vue'
 import Organizations from '../views/organizations/organizations.vue'
 import AddOrganizations from '../views/organizations/add.vue'
 import EditOrganization from '../views/organizations/edit.vue'
+import Trips from '../views/trips/trips.vue'
+import AddTrips from '../views/trips/add.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
@@ -39,7 +45,7 @@ const routes = [
     children: [
       { path: '/organizations', name: 'list-organizations', component: Organizations },
       { path: '/add', name: 'add-organizations', component: AddOrganizations },
-      { path: '/edit/:id', name: 'edit-organization', component: EditOrganization },
+      { path: '/:id', name: 'edit-organization', component: EditOrganization },
     ],
   },
   {
@@ -53,6 +59,7 @@ const routes = [
     children: [
       { path: '/schools', name: 'list-schools', component: Schools },
       { path: '/add', name: 'add-school', component: AddSchool },
+      { path: '/:id', name: 'edit-school', component: EditSchool },
     ],
   },
   {
@@ -66,6 +73,22 @@ const routes = [
     children: [
       { path: '/students', name: 'list-students', component: Students },
       { path: '/add', name: 'add-student', component: AddStudent },
+      { path: '/:id', name: 'edit-student', component: EditStudent },
+      { path: '/student-billing', name: 'student-billing', component: StudentBilling },
+      { path: '/student-balance', name: 'student-balance', component: StudentBallance },
+    ],
+  },
+  {
+    path: '/trips',
+    name: 'trips',
+    component: DefaultLayout,
+    meta: {
+      title: 'Trips',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/trips', name: 'list-trips', component: Trips },
+      { path: '/add-trips', name: 'add-trips', component: AddTrips },
     ],
   },
   {
