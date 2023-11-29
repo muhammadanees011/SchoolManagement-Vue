@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from './store/modules/auth'
 
 const axiosClient = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: 'https://api.student-pay.co.uk/api',
 })
 
 axiosClient.interceptors.request.use((config) => {
