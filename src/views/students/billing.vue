@@ -5,7 +5,6 @@
     <div class="row">
       <div class="col-12">
         <div class="card my-4">
-       
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
               <div>
@@ -27,6 +26,9 @@
                       Account
                     </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      User
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                       Type
                     </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -34,6 +36,9 @@
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                       Date
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      Payment Method
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                       Status
@@ -57,6 +62,17 @@
                       </div>
                     </td>
                     <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <p class="text-xs text-secondary mb-0">
+                            Nhlaka
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
                       <p class="text-xs text-secondary mb-0">Health Care Funds</p>
                     </td>
                     <td>
@@ -67,6 +83,9 @@
                         >23/04/18</span
                       >
                     </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs ">Stripe</span>
+                    </td>
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success"
                         >success</span
@@ -74,14 +93,8 @@
                     </td>
                     
                     <td class="align-middle text-center text-sm">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary text-xs"
-                        data-toggle="tooltip"
-                        data-original-title="Edit user"
-                      >
-                        Delete
-                      </a>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">receipt</i>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                     </td>
                   </tr>
                   <tr>
@@ -92,6 +105,17 @@
                         <div class="d-flex flex-column justify-content-center">
                           <p class="text-xs text-secondary mb-0">
                             pm_1LaXpKGUcADgqoEMl0Cx0Ygg
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <p class="text-xs text-secondary mb-0">
+                            Peter
                           </p>
                         </div>
                       </div>
@@ -107,6 +131,9 @@
                         >23/04/18</span
                       >
                     </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs ">Stripe</span>
+                    </td>
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success"
                         >success</span
@@ -114,14 +141,8 @@
                     </td>
                     
                     <td class="align-middle text-center text-sm">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary text-xs"
-                        data-toggle="tooltip"
-                        data-original-title="Edit user"
-                      >
-                        Delete
-                      </a>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">receipt</i>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                     </td>
                   </tr>
                   <tr>
@@ -132,6 +153,17 @@
                         <div class="d-flex flex-column justify-content-center">
                           <p class="text-xs text-secondary mb-0">
                             pm_1LaXpKGUcADgqoEMl0Cx0Ygg
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <p class="text-xs text-secondary mb-0">
+                            Saim
                           </p>
                         </div>
                       </div>
@@ -147,21 +179,20 @@
                         >23/04/18</span
                       >
                     </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs "
+                        >Stripe</span
+                      >
+                    </td>
                     <td class="align-middle text-center text-sm">
-                      <span class="badge badge-sm bg-gradient-success"
-                        >success</span
+                      <span class="badge badge-sm bg-gradient-danger"
+                        >declined</span
                       >
                     </td>
                     
                     <td class="align-middle text-center text-sm">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary text-xs"
-                        data-toggle="tooltip"
-                        data-original-title="Edit user"
-                      >
-                        Delete
-                      </a>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">receipt</i>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                     </td>
                   </tr>
                   <tr>
@@ -177,41 +208,12 @@
                       </div>
                     </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">Trip Funds</p>
-                    </td>
-                    <td>
-                      <p class="text-xs text-secondary mb-0">£18</p>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs "
-                        >23/04/18</span
-                      >
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      <span class="badge badge-sm bg-gradient-success"
-                        >success</span
-                      >
-                    </td>
-                    
-                    <td class="align-middle text-center text-sm">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary text-xs"
-                        data-toggle="tooltip"
-                        data-original-title="Edit user"
-                      >
-                        Delete
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
                       <div class="d-flex px-2 py-1">
                         <div>
                         </div>
                         <div class="d-flex flex-column justify-content-center">
                           <p class="text-xs text-secondary mb-0">
-                            pm_1LaXpKGUcADgqoEMl0Cx0Ygg
+                            John
                           </p>
                         </div>
                       </div>
@@ -227,6 +229,9 @@
                         >23/04/18</span
                       >
                     </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs ">Stripe</span>
+                    </td>
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success"
                         >success</span
@@ -234,14 +239,8 @@
                     </td>
                     
                     <td class="align-middle text-center text-sm">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary text-xs"
-                        data-toggle="tooltip"
-                        data-original-title="Edit user"
-                      >
-                        Delete
-                      </a>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">receipt</i>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                     </td>
                   </tr>
                   <tr>
@@ -257,41 +256,12 @@
                       </div>
                     </td>
                     <td>
-                      <p class="text-xs text-secondary mb-0">Trip Funds</p>
-                    </td>
-                    <td>
-                      <p class="text-xs text-secondary mb-0">£18</p>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs "
-                        >23/04/18</span
-                      >
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      <span class="badge badge-sm bg-gradient-success"
-                        >success</span
-                      >
-                    </td>
-                    
-                    <td class="align-middle text-center text-sm">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary text-xs"
-                        data-toggle="tooltip"
-                        data-original-title="Edit user"
-                      >
-                        Delete
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
                       <div class="d-flex px-2 py-1">
                         <div>
                         </div>
                         <div class="d-flex flex-column justify-content-center">
                           <p class="text-xs text-secondary mb-0">
-                            pm_1LaXpKGUcADgqoEMl0Cx0Ygg
+                            Rob
                           </p>
                         </div>
                       </div>
@@ -307,6 +277,9 @@
                         >23/04/18</span
                       >
                     </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs ">Stripe</span>
+                    </td>
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success"
                         >success</span
@@ -314,14 +287,104 @@
                     </td>
                     
                     <td class="align-middle text-center text-sm">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary text-xs"
-                        data-toggle="tooltip"
-                        data-original-title="Edit user"
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">receipt</i>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <p class="text-xs text-secondary mb-0">
+                            pm_1LaXpKGUcADgqoEMl0Cx0Ygg
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <p class="text-xs text-secondary mb-0">
+                            Anees
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p class="text-xs text-secondary mb-0">Trip Funds</p>
+                    </td>
+                    <td>
+                      <p class="text-xs text-secondary mb-0">£18</p>
+                    </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs "
+                        >23/04/18</span
                       >
-                        Delete
-                      </a>
+                    </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs ">Stripe</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="badge badge-sm bg-gradient-success"
+                        >success</span
+                      >
+                    </td>
+                    
+                    <td class="align-middle text-center text-sm">
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">receipt</i>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <p class="text-xs text-secondary mb-0">
+                            pm_1LaXpKGUcADgqoEMl0Cx0Ygg
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <p class="text-xs text-secondary mb-0">
+                            Mike
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p class="text-xs text-secondary mb-0">Trip Funds</p>
+                    </td>
+                    <td>
+                      <p class="text-xs text-secondary mb-0">£18</p>
+                    </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs "
+                        >23/04/18</span
+                      >
+                    </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs ">Stripe</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="badge badge-sm bg-gradient-danger"
+                        >declined</span
+                      >
+                    </td>
+                    
+                    <td class="align-middle text-center text-sm">
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">receipt</i>
+                      <i class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                     </td>
                   </tr>
                 </tbody>
@@ -371,24 +434,4 @@ export default {
 
 </style>
 
-<!-- <template>
-    <div class="container-fluid mt-4">
-      <div class="row">
-        <div class="col-md-12">
-          <billing-card />
-        </div>
-      </div>
-    </div>
-  </template>
-  
-  <script>
-  import BillingCard from "../components/BillingCard.vue";
-  
-  export default {
-    name: "Billing",
-    components: {
-      BillingCard,
-    },
-  };
-  </script> -->
   

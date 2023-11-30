@@ -34,7 +34,7 @@
       </li>
       </template>
       <li class="nav-item">
-        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="transaction history" navText="Transaction History">
+        <sidenav-collapse :to="{ name: 'transaction-history' }" :aria-controls="''" v-bind:collapse="false" collapseRef="transaction history" navText="Transaction History">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">receipt</i>
           </template>
@@ -48,14 +48,14 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="shop" navText="Shop">
+        <sidenav-collapse  :to="{ name: 'shop-items' }"  :aria-controls="''" v-bind:collapse="false" collapseRef="shop" navText="Shop">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">store</i>
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="meals" navText="Meals">
+        <sidenav-collapse :to="{ name: 'list-meals' }"  :aria-controls="''" v-bind:collapse="false" collapseRef="meals" navText="Meals">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">restaurant</i>
           </template>

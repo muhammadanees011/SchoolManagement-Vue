@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid py-4">
-      <div class="row">
+      <div class="row ">
         <div class="col-12">
           <div class="card my-4">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 ">
@@ -16,6 +16,7 @@
                     <div class="card card-plain">
                       <div class="card-body">
                         <form role="form">
+                          <div class="row mb-1">
                           <div class="mb-1">
                             <label class="input-label" for="name">Trip Title</label>
                             <input class="input-box title-input" id="name" type="text" placeholder="Trip to Brazil" name="name" />
@@ -25,7 +26,8 @@
                             <br />
                             <textarea class="text-area-box text-area-trips"  id="name" type="text" placeholder="Description" name="description" />
                           </div>
-                          <div class="row">
+                          </div>
+                          <div class="row p-2">
                             <div class="col-xl-4 col-lg-4 col-md-4">
                             <div class="mb-1">
                                 <label class="input-label" for="name">Total Seats</label>

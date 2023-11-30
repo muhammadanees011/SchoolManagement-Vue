@@ -16,6 +16,9 @@ import AddOrganizations from '../views/organizations/add.vue'
 import EditOrganization from '../views/organizations/edit.vue'
 import Trips from '../views/trips/trips.vue'
 import AddTrips from '../views/trips/add.vue'
+import TransactionHistory from '../views/transaction_history/transaction_history.vue'
+import Shop from '../views/shop/shop.vue'
+import Meals from '../views/meals/meals.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
@@ -79,6 +82,30 @@ const routes = [
     ],
   },
   {
+    path: '/transactions-history',
+    name: 'transactions',
+    component: DefaultLayout,
+    meta: {
+      title: 'Transactions',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/transaction-history', name: 'transaction-history', component: TransactionHistory },
+    ],
+  },
+  {
+    path: '/shop',
+    name: 'shop',
+    component: DefaultLayout,
+    meta: {
+      title: 'Shop',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/shop-items', name: 'shop-items', component: Shop },
+    ],
+  },
+  {
     path: '/trips',
     name: 'trips',
     component: DefaultLayout,
@@ -89,6 +116,18 @@ const routes = [
     children: [
       { path: '/trips', name: 'list-trips', component: Trips },
       { path: '/add-trips', name: 'add-trips', component: AddTrips },
+    ],
+  },
+  {
+    path: '/meals',
+    name: 'meals',
+    component: DefaultLayout,
+    meta: {
+      title: 'Meals',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/meals', name: 'list-meals', component: Meals },
     ],
   },
   {

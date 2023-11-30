@@ -38,7 +38,7 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Sales', value: '£10,430' }"
+              :title="{ text: 'Transactions', value: '£10,430' }"
               detail="<span class='text-success text-sm font-weight-bolder'>+5%</span> Just updated"
               :icon="{
                 name: 'weekend',
@@ -48,7 +48,53 @@
             />
           </div>
         </div>
-        <div class="row mt-4">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <mini-statistics-card
+              :title="{ text: 'Trips', value: '3' }"
+              detail="<span class='text-success text-sm font-weight-bolder'>+55%</span> than last week"
+              :icon="{
+                name: 'weekend',
+                color: 'text-white',
+                background: 'dark',
+              }"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+            <mini-statistics-card
+              :title="{ text: 'My Balance', value: '£300' }"
+              detail="<span class='text-success text-sm font-weight-bolder'>+3%</span> than last month"
+              :icon="{
+                name: 'leaderboard',
+                color: 'text-white',
+                background: 'primary',
+              }"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+            <mini-statistics-card
+              :title="{ text: 'Last Month Transactions', value: '£25,380' }"
+              detail="<span class='text-danger text-sm font-weight-bolder'></span> Last Month Transactions"
+              :icon="{
+                name: 'person',
+                color: 'text-white',
+                background: 'success',
+              }"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+            <mini-statistics-card
+              :title="{ text: 'Last 7 days Transactions', value: '£1030' }"
+              detail="<span class='text-success text-sm font-weight-bolder'>+5%</span> Just updated"
+              :icon="{
+                name: 'weekend',
+                color: 'text-white',
+                background: 'info',
+              }"
+            />
+          </div>
+        </div>
+        <!-- <div class="row mt-4">
           <div class="col-lg-4 col-md-6 mt-4">
             <chart-holder-card title="Website Views" subtitle="Last Campaign Performance" update="campaign sent 2 days ago">
               <reports-bar-chart
@@ -89,15 +135,15 @@
               />
             </chart-holder-card>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 <script>
-import ChartHolderCard from './components/ChartHolderCard.vue'
-import ReportsBarChart from '@/examples/Charts/ReportsBarChart.vue'
-import ReportsLineChart from '@/examples/Charts/ReportsLineChart.vue'
+// import ChartHolderCard from './components/ChartHolderCard.vue'
+// import ReportsBarChart from '@/examples/Charts/ReportsBarChart.vue'
+// import ReportsLineChart from '@/examples/Charts/ReportsLineChart.vue'
 import MiniStatisticsCard from './components/MiniStatisticsCard.vue'
 import logoXD from '@/assets/img/small-logos/logo-xd.svg'
 import logoAtlassian from '@/assets/img/small-logos/logo-atlassian.svg'
@@ -126,9 +172,9 @@ export default {
     }
   },
   components: {
-    ChartHolderCard,
-    ReportsBarChart,
-    ReportsLineChart,
+    // ChartHolderCard,
+    // ReportsBarChart,
+    // ReportsLineChart,
     MiniStatisticsCard,
   },
 }
