@@ -201,6 +201,9 @@ export default {
     name: "payment-card",
     components: {
     },
+    mounted(){
+      this.setupStripeAccount();
+    },
     data() {
       return {
         img1,
@@ -226,6 +229,13 @@ export default {
           text: message,
           background: 'white',
         })
+      },
+      async setupStripeAccount(){
+        try {
+        await axiosClient.post('/setupPaymentInformation','');
+        } catch (error) {
+          console.log(error);
+        } 
       },
       async addExternalAccount(){
         try {
