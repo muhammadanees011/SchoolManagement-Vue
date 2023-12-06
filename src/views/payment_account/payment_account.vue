@@ -1,0 +1,172 @@
+<template>
+    <div class="card mt-4 card-height">
+      <div class="card-header pb-3 p-3">
+        <div class="row">
+          <div class="col-6 d-flex align-items-center">
+            <h6 class="mb-0">Set up Payment Account</h6>
+          </div>
+          <div class="col-6 text-end">
+            <router-link :to="{name:'add_card'}">
+              <button style="font-size: 12px; background-color: #f513ca;" class=" mb-3 trips-btn w-35  text-white fw-5 p-2 border-radius-lg">  <i class="fas fa-plus me-2"></i>
+              Add New Card </button>
+            <!-- <button @click="openModal" class="btn-color" variant="gradient">
+              <i class="fas fa-plus me-2"></i>
+              Add New Card
+            </button> -->
+            </router-link>
+          </div>
+        </div>
+      </div>
+      <div class="card-body p-3">
+        <div class="row">
+          <div class="col-md-6 mb-md-0 mb-4">
+            <div class="amount-radio">
+              <span class="mb-1" style="display: flex;">
+                  <input id="amount25" class="me-1" type="radio" v-model="balance_one" name="amount" value="25">
+                  <label  style="margin-top:-3px;" for="amount25">£25.00</label>
+              </span>
+              
+              <span class="mb-1" style="display: flex;">
+                  <input id="amount50" class="me-1" type="radio" v-model="balance_two" name="amount" value="50">
+                  <label  style="margin-top:-3px;"  for="amount50">£50.00</label>
+              </span>
+
+              <span class="mb-1" style="display: flex;">
+                  <input id="amount100" class="me-1" type="radio" v-bind="addedBalance" name="amount" value="100">
+                  <label class="" style="margin-top:-3px;" for="amount100">£100.00</label>
+              </span>
+              other<br>
+              <span class="mb-1" style="display: flex; ">
+                <input v-bind="addedBalance" style="width: 190px !important; height: 35px !important;" class="me-1" type="text" name="gender" value="1.00"> 
+              </span>  
+            </div>
+          </div>
+          <div class="col-md-4 ms-auto">
+            <template v-for="(item,index) in externalAccounts" :key="index">
+              <div :class="{ 'selected': isSelected === index }" @click="toggleSelection(index,$event)"
+                class=" mb-1 card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
+                <img class="w-10 me-3 mb-0" src="@/assets/img/logos/visa.png" alt="logo"/>
+                <h6 class="mb-0">
+                  **** **** **** {{ item.last4 }}
+                  <!-- {{ item.card_number }} -->
+                </h6>
+                <!-- <i @click="removeCardById(item.id)"
+                  class="fas fa-trash-alt ms-auto text-dark cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title
+                  aria-hidden="true"
+                  data-bs-original-title="Edit Card"
+                  aria-label="Edit Card"
+                ></i> -->
+                <span class="sr-only">Edit Card</span>
+              </div>
+            </template>
+          </div>
+          <div class="conteiner">
+        <button  @click="addBalance" style="font-size: 12px; background-color: #f513ca;" class=" mb-3 trips-btn w-15 text-white fw-5 p-2 border-radius-lg"> Add Balance </button>
+      </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  // import MaterialButton from "@/components/MaterialButton.vue";
+  import img1 from "@/assets/img/logos/mastercard.png";
+  import img2 from "@/assets/img/logos/visa.png";
+  import axiosClient from '../../axios'
+
+  export default {
+    name: "payment-card",
+    components: {
+      // MaterialButton,
+    },
+    mounted(){
+      this.getCards();
+    },
+    data() {
+      return {
+        externalAccounts:'',
+        addedBalance:'',
+        userCards:'',
+        isSelected:0,
+        img1,
+        img2,
+        showModal:false,
+      };
+    },
+    methods: {
+      snackbarMsg(message) {
+      this.$snackbar.add({
+        type: 'success',
+        text: message,
+        background: 'white',
+      })
+    },
+    addBalance(){
+      console.log('balance',this.addedBalance)
+    },
+    toggleSelection(id,event) {
+      if (event.target.tagName.toLowerCase() === 'i') {
+        return;
+      }
+      this.isSelected = id;
+    },
+    //------------GET USER CARDS-------------
+    async getCards(){
+      // let id = JSON.parse(localStorage.getItem('user')).id;
+      try {
+        // const response=await axiosClient.get('/getUserCards/' + id)
+        const response=await axiosClient.get('/getExternalAccounts')
+        this.externalAccounts=response.data.external_accounts.data
+        console.log(response.data.external_accounts.data)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    //-----------REMOVE CARD BY ID------------
+    async removeCardById(id){
+      try {
+        await axiosClient.delete('/removeCardById/' + id);
+        this.removeFromList(id)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    //-----------REMOVE CARD FROM LIST----------
+    removeFromList(id){
+      const indexToRemove = this.userCards.findIndex(card => card.id === id);
+      this.userCards.splice(indexToRemove,1)
+      this.snackbarMsg('Card Removed Successfully')
+    }
+  },
+  };
+  </script>
+<style>
+.amount-radio{
+  width: 100px;
+  font-size: 12px;
+}
+.amount-radio input{
+  width: 15px;
+  height: 15px;
+  font-size: 12px;
+  background-color: #F0F2F5;
+}
+.selected {
+  background-color: #f513ca !important; 
+  border: 2px solid #f513ca;
+  color: white !important;
+}
+.selected h6{
+color: white;
+}
+.card-height{
+  height: 100vh;
+}
+.btn-color{
+  background-color: #f513ca !important;
+}
+</style>
+  

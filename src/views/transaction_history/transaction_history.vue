@@ -431,7 +431,6 @@
     color: #555; /* Adjust the color as needed */
     cursor: pointer;
   }
-  
   </style>
   
     

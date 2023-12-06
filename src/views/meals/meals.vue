@@ -90,7 +90,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4">
             <div class="card">
                 <div class="card-header pb-0 px-3">
-                    <h6 class="mb-0">Cart</h6>
+                    <h6 class="mb-0">Favourite</h6>
                 </div>
                 <div class="card-body pt-4 p-3">
                     <ul class="list-group">
@@ -145,9 +145,9 @@
                         </div>
                         </div>
                     </li>
-                    <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                    <!-- <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                         <button style="font-size: 12px" class="me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-dark fw-5 p-2 border-radius-lg"> Checkout </button>
-                    </li>
+                    </li> -->
                     </ul>
                 </div>
             </div>

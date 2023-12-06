@@ -74,3 +74,12 @@ input:disabled {
     background-color: #f0f0f0;
     color: #999;
 }
+.sidenav-header{
+    background-color: #010A21;
+}
+.horizontal{
+    background-color: #010A21;
+}
+#sidenav-collapse-main{
+    background-color: #010A21;  
+}

@@ -38,15 +38,6 @@
                             <label class="input-label" for="address">Address</label>
                             <input class="input-box" id="name" v-model="newStudent.address" type="text" placeholder="Address" name="address" />
                           </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="phone">School</label>
-                            <br />
-                            <select class="select-box" v-model="newStudent.school_id" id="school" type="select" placeholder="school" name="school">
-                              <option v-for="(item, index) in allSchools" :key="index" :value="item.id">
-                                {{ item.title }}
-                              </option>
-                            </select>
-                          </div>
                         </form>
                       </div>
                     </div>
@@ -79,15 +70,6 @@
                             <label class="input-label" for="stage">Stage</label>
                             <input class="input-box" id="stage" v-model="newStudent.stage" type="text" placeholder="Stage" name="stage" />
                           </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="status">Status</label>
-                            <br />
-                            <select v-model="newStudent.status" class="select-box" id="status" type="select" placeholder="status" name="status">
-                              <option v-for="(item, index) in availableStatus" :key="index" :value="item">
-                                {{ item }}
-                              </option>
-                            </select>
-                          </div>
                         </form>
                       </div>
                     </div>
@@ -97,6 +79,15 @@
                       <div class="card-body">
                         <form role="form">
                           <div class="mb-1">
+                            <label class="input-label" for="status">Status</label>
+                            <br />
+                            <select v-model="newStudent.status" class="select-box" id="status" type="select" placeholder="status" name="status">
+                              <option v-for="(item, index) in availableStatus" :key="index" :value="item">
+                                {{ item }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="mb-1">
                             <label class="input-label" for="emergency_contact_name">Emergency Contact Name</label>
                             <input class="input-box" id="emergency_contact_name" v-model="newStudent.emergency_contact_name" type="text" placeholder="emergency contact name" name="emergency_contact_name" />
                           </div>
@@ -104,14 +95,6 @@
                             <label class="input-label" for="emergency_contact_phone">Emergency Contact Number</label>
                             <input class="input-box" id="emergency_contact_phone" v-model="newStudent.emergency_contact_phone" type="text" placeholder="emergency contact number" name="emergency_contact_phone" />
                           </div>
-                          <div class="mb-1">
-                          <label class="input-label" for="phone">Password</label>
-                          <input class="input-box" id="name" v-model="newStudent.password" type="password" placeholder="Password" name="password" />
-                        </div>
-                        <div class="mb-1">
-                          <label class="input-label" for="phone">Confirm Password</label>
-                          <input class="input-box" id="name" v-model="newStudent.password_confirmation" type="password" placeholder="Confirm Password" name="password_confirmation" />
-                        </div>
                           <div class="mb-1">
                             <label class="input-label" for="allergies">Allergies</label>
                             <input class="input-box" id="allergies" v-model="newStudent.allergies" type="text" placeholder="Allergies" name="allergies" />
@@ -130,7 +113,7 @@
                   </div>
                   <div class="d-flex align-items-left bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
                       <div class="">
-                          <material-button @click="saveNewStudent" class="mt-1 ms-4" variant="gradient" color="success" size="sm">Save</material-button>
+                          <material-button @click="updateStudent" class="mt-1 ms-4" variant="gradient" color="success" size="sm">Save</material-button>
                         </div>
                     </div>
                 </div>
@@ -152,12 +135,12 @@
       MaterialButton,
     },
     mounted() {
-    this.getSchools()
+    this.editStudent();
+    this.getSchools();
   },
     data() {
       return {
         newStudent: {
-          school_id:'',
           student_id:'',
           first_name: '',
           last_name:'',
@@ -168,8 +151,6 @@
           state: '',
           zip: '',
           address: '',
-          password: '',
-          password_confirmation: '',
           date_of_birth:'',
           stage:'',
           emergency_contact_name:'',
@@ -191,10 +172,46 @@
           background: 'white',
         })
       },
-      //------------SAVE STUDENT------------
-      async saveNewStudent() {
+      //------------EDIT SCHOOL------------
+      async editStudent() {
+        let id = this.$route.params.id
         try {
-          await axiosClient.post('/createStudent', this.newStudent)
+          const response=await axiosClient.get('/editStudent/' + id)
+          this.setData(response)
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      //------------SET EDIT DATA-------------
+      setData(response) {
+      let data
+      if (response) {
+        data = response.data
+        this.newStudent.student_id = data.student_id
+        this.newStudent.first_name = data.user.first_name
+        this.newStudent.last_name = data.user.last_name
+        this.newStudent.email = data.user.email
+        this.newStudent.phone = data.user.phone
+        this.newStudent.country = data.user.country
+        this.newStudent.city = data.user.city
+        this.newStudent.state = data.user.state
+        this.newStudent.zip = data.user.zip
+        this.newStudent.address = data.user.address
+        this.newStudent.date_of_birth= data.dob
+        this.newStudent.emergency_contact_name=data.emergency_contact_name
+        this.newStudent.emergency_contact_phone=data.emergency_contact_phone
+        this.newStudent.stage=data.stage
+        this.newStudent.status=data.user.status
+        this.newStudent.medical_conditions = data.medical_conditions
+        this.newStudent.enrollment_date=data.enrollment_date
+        this.newStudent.allergies = data.allergies
+      }
+    },
+      //------------UPDATE STUDENT------------
+      async updateStudent() {
+        let id = this.$route.params.id
+        try {
+          await axiosClient.put('/updateStudent/'+id, this.newStudent)
           this.$router.push({ name: 'list-students' })
           this.snackbarMsg('Student Saved Successfuly')
         } catch (error) {

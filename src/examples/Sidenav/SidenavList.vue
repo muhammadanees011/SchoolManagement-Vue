@@ -1,7 +1,7 @@
 <template>
   <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
-      <li class="nav-item">
+      <li class="nav-item" >
         <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="dashboard" navText="Dashboard">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">dashboard</i>
@@ -33,6 +33,13 @@
         </sidenav-collapse>
       </li>
       </template>
+      <li class="nav-item">
+        <sidenav-collapse :to="{ name: 'payment_account' }" :aria-controls="''" v-bind:collapse="false" collapseRef="transaction history" navText="Topup Account">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">credit_card</i>
+          </template>
+        </sidenav-collapse>
+      </li>
       <li class="nav-item">
         <sidenav-collapse :to="{ name: 'transaction-history' }" :aria-controls="''" v-bind:collapse="false" collapseRef="transaction history" navText="Transaction History">
           <template v-slot:icon>
@@ -105,3 +112,10 @@ export default {
   },
 }
 </script>
+
+<style>
+.navbar-nav .active {
+  background-color: #573078 !important;
+}
+
+</style>

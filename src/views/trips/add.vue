@@ -6,7 +6,7 @@
             <div class="d-flex justify-content-between  border-radius-lg pt-4 ">
                 <h6 class="text-dark text-capitalize ps-3">Add Trips</h6>
                 <router-link :to="{ name: 'list-trips' }">
-                  <button style="font-size: 12px" class="me-3 bg-gradient-success shadow-success text-white fw-5 border-0 p-2 border-radius-lg"> Back </button>
+                  <button style="font-size: 12px; background-color: #f513ca;" class="me-3 text-white fw-5 border-0 p-2 border-radius-lg"> Back </button>
                 </router-link>
             </div>
             <div class="card-body px-0 pb-2">

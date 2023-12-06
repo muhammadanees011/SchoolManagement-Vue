@@ -26,7 +26,7 @@
         <span class="ms-2 font-weight-bold text-white">StudentPay</span>
       </a>
     </div>
-    <hr class="horizontal light mt-0 mb-2" />
+    <!-- <hr class="horizontal  mt-0 mb-2" style="background-color: #573078 !important;" /> -->
     <sidenav-list />
   </aside>
 </template>
@@ -52,3 +52,6 @@ export default {
   },
 };
 </script>
+
+<style>
+</style>

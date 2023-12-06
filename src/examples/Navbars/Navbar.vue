@@ -14,6 +14,53 @@
           </li> -->
 
           <li class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
+            <a href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showCart ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" @click="showCart = !showCart">
+              <i class="material-icons cursor-pointer">shopping_cart</i>
+            </a>
+            <ul class="cart px-2 py-3 cart-dropdown dropdown-menu dropdown-menu-end me-sm-n4" :class="showCart ? 'show' : ''" aria-labelledby="dropdownMenuButton">
+              <li style="background-color: #573078;" class="text-white list-group-item border-0 d-flex p-4 mb-2 border-radius-lg">
+                  <div class="d-flex flex-column">
+                  <h6 class="mb-3 text-sm">Scotch Egg</h6>
+                  <span class="mb-1 text-xs">
+                      Boiled Egg and wrapped in a ground meat mixture coated in breadcrumbs, and deep-fried.
+                  </span>
+                  </div>
+                  <div class="ms-auto text-end">
+                      <span>
+                          <i class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
+                      </span>
+                  <br>
+                  <div class="d-flex ms-3 me-2 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
+                      £5
+                  </div>
+                  </div>
+              </li>
+
+              <li style="background-color: #573078;" class="text-white list-group-item border-0 d-flex p-4 mb-2 border-radius-lg">
+                  <div class="d-flex flex-column">
+                  <h6 class="mb-3 text-sm text-white">Rice and DODO</h6>
+                  <span class="mb-1 text-xs">
+                      Boiled Egg and wrapped in a ground meat mixture coated in breadcrumbs, and deep-fried.
+                  </span>
+                  </div>
+                  <div class="ms-auto text-end">
+                      <span>
+                          <i class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
+                      </span>
+                  <br>
+                  <div class=" d-flex ms-3 me-2 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
+                      £5
+                  </div>
+                  </div>
+              </li>
+              <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Checkout </button>
+              </li>
+              
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
             <a href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showMenu ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" @click="showProfile = !showProfile">
               <i class="material-icons cursor-pointer"> account_circle </i>
             </a>
@@ -149,6 +196,7 @@ export default {
   name: 'navbar',
   data() {
     return {
+      showCart:false,
       showMenu: false,
       showProfile: false,
     }
@@ -188,3 +236,11 @@ export default {
   },
 }
 </script>
+<style>
+.cart-dropdown{
+  width: 340px !important;
+}
+/* .cart{
+  border: 2px solid #573078 !important;
+} */
+</style>

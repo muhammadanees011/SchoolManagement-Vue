@@ -19,6 +19,9 @@ import AddTrips from '../views/trips/add.vue'
 import TransactionHistory from '../views/transaction_history/transaction_history.vue'
 import Shop from '../views/shop/shop.vue'
 import Meals from '../views/meals/meals.vue'
+import PaymentAccount from '../views/payment_account/payment_account.vue'
+import AddPaymentCard from '../views/payment_account/add_card.vue'
+
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
@@ -79,6 +82,19 @@ const routes = [
       { path: '/:id', name: 'edit-student', component: EditStudent },
       { path: '/student-billing', name: 'student-billing', component: StudentBilling },
       { path: '/student-balance', name: 'student-balance', component: StudentBallance },
+    ],
+  },
+  {
+    path: '/payment',
+    name: 'payment',
+    component: DefaultLayout,
+    meta: {
+      title: 'Payment Account',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/payment_account', name: 'payment_account', component: PaymentAccount },
+      { path: '/add_card', name: 'add_card', component: AddPaymentCard },
     ],
   },
   {
