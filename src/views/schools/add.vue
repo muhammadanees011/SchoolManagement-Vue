@@ -191,9 +191,25 @@ export default {
     //------------SAVE SCHOOL------------
     async saveNewSchool() {
       try {
-        await axiosClient.post('/createSchool', this.newSchool)
+        const response=await axiosClient.post('/createSchool', this.newSchool)
+        console.log('SchoolData',response)
+        this.createCustomer(response.data.id);
         this.$router.push({ name: 'list-schools' })
         this.snackbarMsg('School Saved Successfuly')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    //-----------CREATE STRIPE CUSTOMER----------
+    async createCustomer(id){
+      let name=this.newSchool.title;
+      let data={
+        'user_id':id,
+        'name':name,
+        'email':this.newSchool.email
+      }
+      try {
+        await axiosClient.post('/createCustomer',data)
       } catch (error) {
         console.log(error)
       }

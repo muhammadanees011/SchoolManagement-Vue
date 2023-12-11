@@ -22,32 +22,33 @@
           <div class="col-md-6 mb-md-0 mb-4">
             <div class="amount-radio">
               <span class="mb-1" style="display: flex;">
-                  <input id="amount25" class="me-1" type="radio" v-model="balance_one" name="amount" value="25">
+                  <input id="amount25" class="me-1" type="radio" v-model="selected_amount" name="amount" value="25">
                   <label  style="margin-top:-3px;" for="amount25">£25.00</label>
               </span>
               
               <span class="mb-1" style="display: flex;">
-                  <input id="amount50" class="me-1" type="radio" v-model="balance_two" name="amount" value="50">
+                  <input id="amount50" class="me-1" type="radio" v-model="selected_amount" name="amount" value="50">
                   <label  style="margin-top:-3px;"  for="amount50">£50.00</label>
               </span>
 
               <span class="mb-1" style="display: flex;">
-                  <input id="amount100" class="me-1" type="radio" v-bind="addedBalance" name="amount" value="100">
+                  <input id="amount100" class="me-1" type="radio" v-model="selected_amount" name="amount" value="100">
                   <label class="" style="margin-top:-3px;" for="amount100">£100.00</label>
               </span>
               other<br>
               <span class="mb-1" style="display: flex; ">
-                <input v-bind="addedBalance" style="width: 190px !important; height: 35px !important;" class="me-1" type="text" name="gender" value="1.00"> 
+                <input @keyup="selected_amount=null" v-model="addedBalance" style="width: 190px !important; height: 35px !important;" class="me-1" type="text" name="gender" placeholder="1.00"> 
               </span>  
             </div>
           </div>
-          <div class="col-md-4 ms-auto">
-            <template v-for="(item,index) in externalAccounts" :key="index">
+          <div class="col-md-5 ms-auto">
+            <template v-for="(item,index) in userCards" :key="index">
               <div :class="{ 'selected': isSelected === index }" @click="toggleSelection(index,$event)"
                 class=" mb-1 card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
-                <img class="w-10 me-3 mb-0" src="@/assets/img/logos/visa.png" alt="logo"/>
+                <img v-if="item.card.brand=='visa'" class="w-10 me-3 mb-0" src="@/assets/img/logos/visa.png" alt="logo"/>
+                <img v-if="item.card.brand=='mastercard'" class="w-10 me-3 mb-0" src="@/assets/img/logos/mastercard.png" alt="logo"/>
                 <h6 class="mb-0">
-                  **** **** **** {{ item.last4 }}
+                  **** **** **** {{ item.card.last4 }}
                   <!-- {{ item.card_number }} -->
                 </h6>
                 <!-- <i @click="removeCardById(item.id)"
@@ -83,10 +84,11 @@
       // MaterialButton,
     },
     mounted(){
-      this.getCards();
+      this.getCustomerPaymentMethods();
     },
     data() {
       return {
+        selected_amount:'',
         externalAccounts:'',
         addedBalance:'',
         userCards:'',
@@ -104,14 +106,51 @@
         background: 'white',
       })
     },
-    addBalance(){
-      console.log('balance',this.addedBalance)
+    //------------ADD BALANCE TO THE WALLET--------------
+    async addBalance(){
+      let user=localStorage.getItem('user')
+      user= JSON.parse(user)
+      let stripe_id=user.stripe_id
+      let amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
+      let payment_method=this.userCards[this.isSelected] ? this.userCards[this.isSelected].id :''
+      let data={
+        "amount":amount,
+        "customer":stripe_id,
+        "payment_method":payment_method
+      }
+      try {
+        await axiosClient.post('/payment/initiate',data)
+        this.snackbarMsg('Balance Added Successfully');
+      } catch (error) {
+        console.log(error)
+      }
     },
+    //---------------TOGGLE CARDS-----------
     toggleSelection(id,event) {
       if (event.target.tagName.toLowerCase() === 'i') {
         return;
       }
       this.isSelected = id;
+    },
+    //--------------PAYMENT METHODS---------
+    async getCustomerPaymentMethods(){
+      let user=localStorage.getItem('user')
+      user= JSON.parse(user)
+      let stripe_id=user.stripe_id
+      if(stripe_id==null){
+        this.snackbarMsg('Stripe Customer Not Found')
+        return
+      }
+      let data={
+      'customer_id':stripe_id,
+      }
+      try {
+        const response=await axiosClient.post('/getPaymentMethods',data)
+        this.userCards=response.data.data
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
     },
     //------------GET USER CARDS-------------
     async getCards(){
@@ -155,12 +194,12 @@
   background-color: #F0F2F5;
 }
 .selected {
-  background-color: #f513ca !important; 
-  border: 2px solid #f513ca;
-  color: white !important;
+  background-color: #F0F2F5 !important; 
+  border: 2px solid #F0F2F5;
+  color: #010A21 !important;
 }
 .selected h6{
-color: white;
+color: #010A21;
 }
 .card-height{
   height: 100vh;

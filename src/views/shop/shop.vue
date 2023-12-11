@@ -10,13 +10,17 @@
                 <div>
                   <div class="filter-container">
                     <input class="input-box filter-box" id="name" type="text" placeholder="Type to Search..." name="address" />
-                    <select class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                   
+                    <!-- <select class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
                       <option value="" disabled selected>Filter</option>
                       <option v-for="(item, index) in allFields" :key="index" :value="item">
                         {{ item }}
                       </option>
                     </select>
-                    <i class="fas fa-filter filter-icon me-1"></i>
+                    <i class="fas fa-filter filter-icon me-1"></i> -->
+                    <router-link :to="{ name: 'add-items' }" v-if="user && user.role=='school_user' || user.role=='super_admin'">
+                      <button style="font-size: 12px; background-color: #f513ca;" class="me-3 text-white fw-5 border-0 p-2 border-radius-lg"> Add Item </button>
+                    </router-link>
                   </div>              
                 </div>
                 <table class="table align-items-center mb-0">
@@ -29,7 +33,7 @@
                         Item
                       </th>
                       <th class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                        Type
+                        Quantity
                       </th>
                       <th class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
                         Price
@@ -43,165 +47,30 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr v-for="(item,index) in shopItems" :key="index">
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">1</span>
+                      <span class="text-secondary text-xs font-weight-bold">{{ item.id }}</span>
                     </td>
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Snacks</span>
+                      <span class="text-secondary text-xs ">{{item.name  }}</span>
                     </td>
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Snacks</span>
+                      <span class="text-secondary text-xs ">{{ item.quantity }}</span>
                     </td>
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">£4</span>
-                    </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success"
-                          >available</span
-                        >
-                      </td>
-                      
-                      <td class="align-middle text-center text-sm">
-                        <span  v-if="user && user.role=='student'" class="badge badge-sm bg-gradient-primary me-1">Checkout</span >
-                         <span  v-if="user && user.role=='super_admin' || user.role=='school_user'">
-                            <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                            <i  class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">2</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Highlighters</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Stationary</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">£8</span>
-                    </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-warning"
-                          >outofstock</span
-                        >
-                      </td>
-                      
-                      <td class="align-middle text-center text-sm">
-                        <span  v-if="user && user.role=='student'" class="badge badge-sm bg-gradient-primary me-1">Checkout</span >
-                         <span  v-if="user && user.role=='super_admin' || user.role=='school_user'">
-                            <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                            <i  class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">3</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Calculator</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">School Supplies</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">£11</span>
-                    </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-warning"
-                          >outofstock</span
-                        >
-                      </td>
-                      
-                      <td class="align-middle text-center text-sm">
-                        <span  v-if="user && user.role=='student'" class="badge badge-sm bg-gradient-primary me-1">Checkout</span >
-                         <span  v-if="user && user.role=='super_admin' || user.role=='school_user'">
-                            <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                            <i  class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">4</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">WorkBook</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Book</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">£10</span>
+                      <span class="text-secondary text-xs ">{{ item.price }}</span>
                     </td>
                       <td class="align-middle text-center text-sm">
                         <span class="badge badge-sm bg-gradient-success"
-                          >available</span
+                          >{{ item.status }}</span
                         >
                       </td>
                       
                       <td class="align-middle text-center text-sm">
                         <span  v-if="user && user.role=='student'" class="badge badge-sm bg-gradient-primary me-1">Checkout</span >
                          <span  v-if="user && user.role=='super_admin' || user.role=='school_user'">
-                            <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                            <i  class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">5</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Pens</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Stationary</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">£10</span>
-                    </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success"
-                          >available</span
-                        >
-                      </td>
-                      
-                      <td class="align-middle text-center text-sm">
-                        <span  v-if="user && user.role=='student'" class="badge badge-sm bg-gradient-primary me-1">Checkout</span >
-                         <span  v-if="user && user.role=='super_admin' || user.role=='school_user'">
-                            <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                            <i  class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">6</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Highlighters</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">Stationary</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">£8</span>
-                    </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-warning"
-                          >outofstock</span
-                        >
-                      </td>
-                      
-                      <td class="align-middle text-center text-sm">
-                        <span  v-if="user && user.role=='student'" class="badge badge-sm bg-gradient-primary me-1">Checkout</span >
-                         <span  v-if="user && user.role=='super_admin' || user.role=='school_user'">
-                            <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                            <i  class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                            <i @click="editShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
+                            <i @click="deleteShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                         </span>
                       </td>
                     </tr>
@@ -216,20 +85,58 @@
   </template>
   
   <script>
+  import axiosClient from '../../axios'
   export default {
     name: "tables",
     mounted(){
-        const userData = localStorage.getItem('user');
-        if (userData) {
+      const userData = localStorage.getItem('user');
+      if (userData) {
         this.user = JSON.parse(userData);
-        }
+      }
+      this.getShopItems();
     },
     data(){
     return{
-        user:'',
-        filterBy:'',
-        allFields:['Clear','Account','Type','Amount','Date','Status'],
+      shopItems:'',
+      user:'',
+      filterBy:'',
+      allFields:['Clear','Account','Type','Amount','Date','Status'],
     }
+    },
+    methods:{
+      snackbarMsg(message) {
+      this.$snackbar.add({
+        type: 'success',
+        text: message,
+        background: 'white',
+      })
+    },
+      async getShopItems(){
+        try {
+          const response=await axiosClient.get('/getShopItems')
+          this.shopItems=response.data.shop_items;
+          console.log('shopItems',response);
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      async deleteShopItem(id){
+        try {
+          await axiosClient.delete('/deleteShopItem/'+id)
+          this.removeShopItem(id);
+          this.snackbarMsg('Item Removed Successfuly')
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      //------------REMOVE Item FROM LIST-----------
+      removeShopItem(id) {
+        const indexToRemove = this.shopItems.findIndex((item) => item.id === id)
+        this.shopItems.splice(indexToRemove, 1)
+      },
+      editShopItem(id){
+        this.$router.push(`/edit-item/`+id)
+      },
     },
   };
   </script>

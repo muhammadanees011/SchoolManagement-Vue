@@ -1,5 +1,5 @@
 <template>
-  <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100" id="sidenav-collapse-main">
+  <div class="w-auto h-auto collapse navbar-collapse vh-100 h-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
       <li class="nav-item" >
         <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="dashboard" navText="Dashboard">

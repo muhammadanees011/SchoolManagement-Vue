@@ -83,3 +83,9 @@ input:disabled {
 #sidenav-collapse-main{
     background-color: #010A21;  
 }
+.sidenav .navbar-vertical{
+    background-color: #010A21 !important;  
+}
+#sidenav-main{
+    background-color: #010A21 !important;  
+}

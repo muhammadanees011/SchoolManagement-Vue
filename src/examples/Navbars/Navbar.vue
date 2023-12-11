@@ -65,22 +65,42 @@
               <i class="material-icons cursor-pointer"> account_circle </i>
             </a>
             <ul class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4" :class="showMenu ? 'show' : ''" aria-labelledby="dropdownMenuButton">
-              <li class="mb-2">
+              <li class="menu_item mb-2">
                 <router-link :to="{ name: 'Profile' }">
                 <a class="dropdown-item border-radius-md" href="javascript:;">
                   <div class="py-1 d-flex">
                     <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-1 text-sm font-weight-normal"> <span class="font-weight-bold">Profile Settings</span> </h6>
+                      <span class="d-flex align-items-center">
+                        <i class="fas fa-user pb-0"></i> 
+                        <h6 class="ms-1 pt-2 text-sm font-weight-normal"> <span class="font-weight-bold">Profile Settings</span> </h6>
+                        </span>
                     </div>
                   </div>
                 </a>
               </router-link>
               </li>
-              <li class="mb-2">
+              <li class="menu_item mb-2" >
+                <router-link :to="{name:'student-balance'}">
+                <a class="dropdown-item border-radius-md" href="javascript:;">
+                  <div class="py-1 d-flex">
+                    <div class="d-flex flex-column justify-content-center">
+                      <span class="d-flex  align-items-center">
+                        <i class="fas fa-wallet "></i> 
+                        <h6 class="ms-1 pt-2 text-sm font-weight-normal"> <span class="font-weight-bold">Wallet</span> </h6>
+                      </span>
+                    </div>
+                  </div>
+                </a>
+                </router-link>
+              </li>
+              <li class="menu_item mb-2">
                 <a @click="signOut" class="dropdown-item border-radius-md" href="javascript:;">
                   <div class="py-1 d-flex">
                     <div  class="d-flex flex-column justify-content-center">
-                      <h6  class="mb-1 text-sm font-weight-normal"> <span class="font-weight-bold">Logout</span> </h6>
+                      <span class="d-flex align-items-center">
+                      <i class="fas fa-power-off pb-0"></i> 
+                      <h6  class="ms-1 pt-2 text-sm font-weight-normal"> <span class="font-weight-bold">Logout</span> </h6>
+                      </span>
                     </div>
                   </div>
                 </a>
@@ -196,6 +216,7 @@ export default {
   name: 'navbar',
   data() {
     return {
+      user:'',
       showCart:false,
       showMenu: false,
       showProfile: false,
@@ -205,19 +226,28 @@ export default {
   created() {
     this.minNav
   },
+  mounted(){
+    this.getUser();
+  },
   methods: {
     ...mapMutations(['navbarMinimize', 'toggleConfigurator']),
 
     toggleSidebar() {
       this.navbarMinimize()
     },
+    getUser(){
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        this.user = JSON.parse(userData);
+      }
+    },
     //------------SignOut---------------
     async signOut() {
       try {
-        await axiosClient.post('/logout', localStorage.getItem('token'))
         localStorage.removeItem('user')
         localStorage.removeItem('token')
         this.$router.push({ name: 'SignIn' })
+        await axiosClient.post('/logout', localStorage.getItem('token'))
       } catch (error) {
         console.log(error)
       }
@@ -243,4 +273,7 @@ export default {
 /* .cart{
   border: 2px solid #573078 !important;
 } */
+.menu_item{
+  height: 35px;
+}
 </style>

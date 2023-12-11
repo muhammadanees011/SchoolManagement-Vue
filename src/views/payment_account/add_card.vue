@@ -1,4 +1,4 @@
-<!-- 
+
 <template>
   <div>
     <div class="card">
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="row d-flex justify-content-center">
-      <button style="font-size: 12px" class="me-3 w-20 mt-3 trips-btn bg-gradient-grey shadow-grey text-dark fw-5 p-2 border-radius-lg"> Save Payment Information </button>
+      <button @click="submitPaymentMethod" style="font-size: 12px" class="me-3 w-20 mt-3 trips-btn bg-gradient-grey shadow-grey text-dark fw-5 p-2 border-radius-lg"> Save Payment Method </button>
       </div>
       </div>
     </div>
@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import axiosClient from '../../axios'
+
 
 export default {
   mounted(){
@@ -39,13 +41,15 @@ export default {
   },
   data(){
       return {
+        card_token:'',
+        intentToken:'',
         name: '',
         addPaymentStatus: 0,
         addPaymentStatusError: '',
         stripe: '',
         elements: '',
         card: '',
-        stripeAPIToken: 'pk_test_51OJgsAImkTfQfjIk2hnn4CQtJFOQ40kO4BzyNsJsrnBDw8h5KAdi5b3AeCMbhXVi00wpkw7XbOfjOGqWMJDjC4C100JysiJ9PT'
+        stripeAPIToken: 'pk_test_51NL39OA54mv9Tt3cBvUM2bicn8hMv5NhdEuvJcjgezES5zhVCGMOf5IUoqjglR8UfAWjVFStR2iPn3yLvMF3XcpM00Q0oowpaJ'
       }
   },
   methods: {
@@ -63,9 +67,18 @@ export default {
     this.card = this.elements.create('card');
     this.card.mount('#card-element');
   },
+  generateToken() {
+  this.stripe.createToken(this.card)
+    .then((result) => {
+      this.savePaymentMethod(result.token.id);
+    })
+    .catch((error) => {
+      console.error('Error generating token:', error);
+    });
+},
   submitPaymentMethod(){
+    this.generateToken()
     this.addPaymentStatus = 1;
-
     this.stripe.confirmCardSetup(
         this.intentToken.client_secret, {
             payment_method: {
@@ -76,17 +89,43 @@ export default {
             }
         }
     ).then(function(result) {
+      console.log('CreateToken',result)
         if (result.error) {
             this.addPaymentStatus = 3;
             this.addPaymentStatusError = result.error.message;
         } else {
-            this.savePaymentMethod( result.setupIntent.payment_method );
             this.addPaymentStatus = 2;
             this.card.clear();
             this.name = '';
         }
     }.bind(this));
   },
+  async savePaymentMethod(token){
+    let user=localStorage.getItem('user')
+    user= JSON.parse(user)
+    let stripe_id=user.stripe_id
+    if(stripe_id==null){
+      this.snackbarMsg('Stripe Customer Not Found')
+      return
+    }
+    let data={
+      'card_token':token,
+      'customer_id':stripe_id,
+    }
+    try {
+      await axiosClient.post('/createCard',data);
+      this.$router.push({ name: 'payment_account' })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  snackbarMsg(message) {
+      this.$snackbar.add({
+        type: 'error',
+        text: message,
+        background: 'white',
+      })
+    },
   }
 }
 
@@ -131,10 +170,9 @@ export default {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-</style> -->
+</style>
 
-
-<template>
+<!-- <template>
     <div class="card mt-4">
       <div class="card-header pb-0 p-3">
         <div class="row">
@@ -168,20 +206,6 @@ export default {
                       </option>
                     </select>
                   </div>
-                <!-- <div class="mb-1 input-div">
-                    <span class="d-flex">
-                    <label class="input-label" for="address">Expiry Date (Month-Year)</label>
-                    </span>
-                </div>
-                <div class="mb-1 input-div">
-                    <span class="d-flex">
-                        <input class="input-box me-2" v-model="newCard.card_expiry_month"  id="name"  type="month" name="address" />
-                    </span>
-                </div>
-                <div class="mb-1 input-div-small">
-                    <label class="input-label" for="address">CCV</label>
-                    <input class="input-box" id="name"  v-model="newCard.card_ccv"  type="number" name="address" />
-                </div> -->
                <button @click="addExternalAccount" style="font-size: 12px; background-color:#f513ca;" class="mt-3 trips-btn w-100 text-white fw-5 p-2 px-3 border-radius-lg"> Add Card</button>
             </div>
           </div>
@@ -282,7 +306,7 @@ export default {
     width: 25%;
 }
 </style>
-  
+   -->
 
 
 
