@@ -21,7 +21,7 @@
                   <span class="payment-records mb-1 text-xs">
                     Current Balance:
                     <span class="text-dark font-weight-bold ms-sm-2">
-                      £732
+                      £{{ wallet.ballance }}
                     </span>
                   </span>
                   <span class="payment-records mb-1 text-xs">
@@ -80,8 +80,31 @@
   </template>
   
   <script>
+  import axiosClient from '../../axios'
+
   export default {
     name: "billing-card",
+    mounted(){
+      this.getWallet();
+    },
+    data() {
+      return {
+        wallet:'',
+      };
+    },
+    methods:{
+      async getWallet(){
+        let user=localStorage.getItem('user')
+        user= JSON.parse(user)
+        try {
+        const response= await axiosClient.get('/getWallet/'+user.id);
+        this.wallet=response.data
+        console.log(this.wallet)
+        } catch (error) {
+          console.log(error)
+        }
+      },
+    },
   };
   </script>
 <style>

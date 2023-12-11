@@ -114,6 +114,7 @@
       let amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
       let payment_method=this.userCards[this.isSelected] ? this.userCards[this.isSelected].id :''
       let data={
+        "user_id":user.id,
         "amount":amount,
         "customer":stripe_id,
         "payment_method":payment_method
