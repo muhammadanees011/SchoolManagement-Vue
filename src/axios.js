@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  // baseURL: 'https://api.student-pay.co.uk/api',
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: 'https://api.student-pay.co.uk/api',
+  // baseURL: 'http://127.0.0.1:8000/api',
 });
 // Add a request interceptor
 axiosClient.interceptors.request.use(
