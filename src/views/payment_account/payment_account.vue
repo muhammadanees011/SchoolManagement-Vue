@@ -3,7 +3,7 @@
       <div class="card-header pb-3 p-3">
         <div class="row">
           <div class="col-6 d-flex align-items-center">
-            <h6 class="mb-0">Set up Payment Account</h6>
+            <h6 class="mb-0">Set up Payment Account {{ user.role }}</h6>
           </div>
           <div class="col-6 text-end">
             <router-link v-if="user.role=='student'" :to="{name:'add_card'}">
@@ -84,6 +84,8 @@
       // MaterialButton,
     },
     mounted(){
+      let user=localStorage.getItem('user')
+      this.user= JSON.parse(user)
       this.getCustomerPaymentMethods();
     },
     data() {
@@ -109,14 +111,11 @@
     },
     //------------ADD BALANCE TO THE WALLET--------------
     async addBalance(){
-      let user;
       let user_id;
       if(this.$route.params.id){
         user_id=this.$route.params.id;
       }else{
-        user=localStorage.getItem('user')
-        user= JSON.parse(user)
-        user_id=user.id;
+        user_id=this.user.id;
       }
       // let user=localStorage.getItem('user')
       // user= JSON.parse(user)
