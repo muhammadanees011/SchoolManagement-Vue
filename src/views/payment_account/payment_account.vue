@@ -6,7 +6,7 @@
             <h6 class="mb-0">Set up Payment Account {{ user.role }}</h6>
           </div>
           <div class="col-6 text-end">
-            <router-link v-if="user.role=='student'" :to="{name:'add_card'}">
+            <router-link  :to="{name:'add_card'}">
               <button style="font-size: 12px; background-color: #f513ca;" class=" mb-3 trips-btn w-35  text-white fw-5 p-2 border-radius-lg">  <i class="fas fa-plus me-2"></i>
               Add New Card </button>
             <!-- <button @click="openModal" class="btn-color" variant="gradient">
