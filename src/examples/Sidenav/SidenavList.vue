@@ -17,7 +17,7 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse url="/schools" :aria-controls="''" v-bind:collapse="false" collapseRef="schools" navText="Schools/Colleges">
+        <sidenav-collapse :to="{ name: 'list-schools' }" :aria-controls="''" v-bind:collapse="false" collapseRef="schools" navText="Schools/Colleges">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">account_balance</i>
           </template>
@@ -26,7 +26,7 @@
       </template>
       <template  v-if="user && user.role=='super_admin' || user.role=='school_user'">
         <li class="nav-item">
-        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="students" navText="Students">
+        <sidenav-collapse :to="{ name: 'list-students' }" :aria-controls="''" v-bind:collapse="false" collapseRef="students" navText="Students">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">people</i>
           </template>
@@ -48,14 +48,14 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse url="/students" :aria-controls="''" v-bind:collapse="false" collapseRef="trips" navText="Trips">
+        <sidenav-collapse :to="{ name: 'list-trips' }" :aria-controls="''" v-bind:collapse="false" collapseRef="trips" navText="Trips">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">directions_bus</i>
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse  :to="{ name: 'shop-items' }"  :aria-controls="''" v-bind:collapse="false" collapseRef="shop" navText="Shop">
+        <sidenav-collapse @click="navLegacy('shop-items')"  :aria-controls="''" v-bind:collapse="false" collapseRef="shop" navText="Shop">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">store</i>
           </template>
@@ -113,6 +113,11 @@ export default {
       controls: 'dashboardsExamples',
       isActive: 'active',
     }
+  },
+  methods:{
+    navLegacy(routeName){
+      this.$router.push({ name: routeName });
+    },
   },
   components: {
     SidenavCollapse,
