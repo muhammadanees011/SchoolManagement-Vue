@@ -6,7 +6,7 @@
             <h6 class="mb-0">Set up Payment Account</h6>
           </div>
           <div class="col-6 text-end">
-            <router-link :to="{name:'add_card'}">
+            <router-link v-if="user.role=='student'" :to="{name:'add_card'}">
               <button style="font-size: 12px; background-color: #f513ca;" class=" mb-3 trips-btn w-35  text-white fw-5 p-2 border-radius-lg">  <i class="fas fa-plus me-2"></i>
               Add New Card </button>
             <!-- <button @click="openModal" class="btn-color" variant="gradient">
@@ -88,6 +88,7 @@
     },
     data() {
       return {
+        user:'',
         selected_amount:'',
         externalAccounts:'',
         addedBalance:'',
@@ -108,16 +109,27 @@
     },
     //------------ADD BALANCE TO THE WALLET--------------
     async addBalance(){
-      let user=localStorage.getItem('user')
-      user= JSON.parse(user)
-      let stripe_id=user.stripe_id
+      let user;
+      let user_id;
+      if(this.$route.params.id){
+        user_id=this.$route.params.id;
+      }else{
+        user=localStorage.getItem('user')
+        user= JSON.parse(user)
+        user_id=user.id;
+      }
+      // let user=localStorage.getItem('user')
+      // user= JSON.parse(user)
+      // this.user=user
+      // let stripe_id=user.stripe_id
       let amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
       let payment_method=this.userCards[this.isSelected] ? this.userCards[this.isSelected].id :''
       let data={
-        "user_id":user.id,
+        "user_id":user_id,
         "amount":amount,
-        "customer":stripe_id,
-        "payment_method":payment_method
+        // "customer":stripe_id,
+        "payment_method":payment_method,
+        "type":'top_up',
       }
       try {
         await axiosClient.post('/payment/initiate',data)
@@ -135,32 +147,27 @@
     },
     //--------------PAYMENT METHODS---------
     async getCustomerPaymentMethods(){
-      let user=localStorage.getItem('user')
-      user= JSON.parse(user)
-      let stripe_id=user.stripe_id
-      if(stripe_id==null){
+      let user;
+      let user_id;
+      if(this.$route.params.id){
+        user_id=this.$route.params.id;
+      }else{
+        user=localStorage.getItem('user')
+        user= JSON.parse(user)
+        user_id=user.id;
+      }
+      // let stripe_id=user.stripe_id
+      if(user_id==null && user.role=='student'){
         this.snackbarMsg('Stripe Customer Not Found')
         return
       }
       let data={
-      'customer_id':stripe_id,
+      'user_id':user_id,
       }
       try {
         const response=await axiosClient.post('/getPaymentMethods',data)
         this.userCards=response.data.data
         console.log(response)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    //------------GET USER CARDS-------------
-    async getCards(){
-      // let id = JSON.parse(localStorage.getItem('user')).id;
-      try {
-        // const response=await axiosClient.get('/getUserCards/' + id)
-        const response=await axiosClient.get('/getExternalAccounts')
-        this.externalAccounts=response.data.external_accounts.data
-        console.log(response.data.external_accounts.data)
       } catch (error) {
         console.log(error)
       }

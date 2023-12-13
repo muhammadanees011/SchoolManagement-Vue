@@ -21,8 +21,11 @@ import Shop from '../views/shop/shop.vue'
 import AddShopItem from '../views/shop/add.vue'
 import EditShopItem from '../views/shop/edit.vue'
 import Meals from '../views/meals/meals.vue'
+import AddMenu from '../views/meals/addMenu.vue'
 import PaymentAccount from '../views/payment_account/payment_account.vue'
 import AddPaymentCard from '../views/payment_account/add_card.vue'
+import CoursesList from '../views/courses/coursesList.vue'
+
 
 import DefaultLayout from '../views/DefaultLayout.vue'
 
@@ -82,7 +85,7 @@ const routes = [
       { path: '/students', name: 'list-students', component: Students },
       { path: '/add', name: 'add-student', component: AddStudent },
       { path: '/:id', name: 'edit-student', component: EditStudent },
-      { path: '/student-billing', name: 'student-billing', component: StudentBilling },
+      { path: '/student-billing/:id', name: 'student-billing', component: StudentBilling },
       { path: '/student-balance', name: 'student-balance', component: StudentBallance },
     ],
   },
@@ -95,7 +98,7 @@ const routes = [
       requiresAuth: true,
     },
     children: [
-      { path: '/payment_account', name: 'payment_account', component: PaymentAccount },
+      { path: '/payment_account/:id?', name: 'payment_account', component: PaymentAccount },
       { path: '/add_card', name: 'add_card', component: AddPaymentCard },
     ],
   },
@@ -139,6 +142,18 @@ const routes = [
     ],
   },
   {
+    path: '/courses',
+    name: 'courses',
+    component: DefaultLayout,
+    meta: {
+      title: 'Courses',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/courses', name: 'list-courses', component: CoursesList },
+    ],
+  },
+  {
     path: '/meals',
     name: 'meals',
     component: DefaultLayout,
@@ -148,6 +163,7 @@ const routes = [
     },
     children: [
       { path: '/meals', name: 'list-meals', component: Meals },
+      { path: '/add-menu', name: 'add-menu', component: AddMenu },
     ],
   },
   {

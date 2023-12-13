@@ -33,7 +33,7 @@
         </sidenav-collapse>
       </li>
       </template>
-      <li class="nav-item">
+      <li class="nav-item" v-if="user && user.role=='student'">
         <sidenav-collapse :to="{ name: 'payment_account' }" :aria-controls="''" v-bind:collapse="false" collapseRef="transaction history" navText="Topup Account">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">credit_card</i>
@@ -61,10 +61,17 @@
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-collapse :to="{ name: 'list-meals' }"  :aria-controls="''" v-bind:collapse="false" collapseRef="meals" navText="Meals">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">restaurant</i>
+          </template>
+        </sidenav-collapse>
+      </li> -->
+      <li class="nav-item">
+        <sidenav-collapse :to="{ name: 'list-courses' }"  :aria-controls="''" v-bind:collapse="false" collapseRef="meals" navText="Courses">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">book</i>
           </template>
         </sidenav-collapse>
       </li>

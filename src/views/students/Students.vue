@@ -30,6 +30,7 @@
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
                   </tr>
@@ -62,9 +63,12 @@
                       </router-link>
                     </td>
                     <td class="align-middle text-center">
-                      <router-link :to="{name:'student-billing'}">
-                        <i class="material-icons-round opacity-10 fs-5">swap_horizontal_circle</i>
-                      </router-link>
+                      <!-- <router-link :to="{name:'student-billing'}"> -->
+                        <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">swap_horizontal_circle</i>
+                      <!-- </router-link> -->
+                    </td>
+                    <td class="align-middle text-center">
+                        <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">credit_card</i>
                     </td>
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success">{{item.user.status}}</span>
@@ -111,6 +115,12 @@ export default {
         background: 'white',
       })
     },
+    topUps(id){
+      this.$router.push('/payment_account/'+id)
+    },
+    transactionHistoryNav(id){
+      this.$router.push('/student-billing/'+id)
+    },
     //-------------GET ALL STUDENTS----------
     async getAllStudents(){
       try {
@@ -138,3 +148,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.hover-pointer:hover {
+  cursor: pointer;
+  color: red;
+}
+</style>
