@@ -14,49 +14,31 @@
           </li> -->
 
           <li class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
-            <a href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showCart ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" @click="showCart = !showCart">
+            <a @click="getCartItems" href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showCart ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="material-icons cursor-pointer">shopping_cart</i>
             </a>
             <ul class="cart px-2 py-3 cart-dropdown dropdown-menu dropdown-menu-end me-sm-n4" :class="showCart ? 'show' : ''" aria-labelledby="dropdownMenuButton">
-              <li style="background-color: #573078;" class="text-white list-group-item border-0 d-flex p-4 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                  <h6 class="mb-3 text-sm">Scotch Egg</h6>
-                  <span class="mb-1 text-xs">
-                      Boiled Egg and wrapped in a ground meat mixture coated in breadcrumbs, and deep-fried.
-                  </span>
-                  </div>
-                  <div class="ms-auto text-end">
-                      <span>
-                          <i class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
-                      </span>
-                  <br>
-                  <div class="d-flex ms-3 me-2 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                      £5
-                  </div>
-                  </div>
-              </li>
 
-              <li style="background-color: #573078;" class="text-white list-group-item border-0 d-flex p-4 mb-2 border-radius-lg">
+              <li v-for="(item,index) in cartItemsList" :key="index" class="text-white list-group-item bg-gray-100 border-0 d-flex p-4 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
-                  <h6 class="mb-3 text-sm text-white">Rice and DODO</h6>
-                  <span class="mb-1 text-xs">
-                      Boiled Egg and wrapped in a ground meat mixture coated in breadcrumbs, and deep-fried.
+                  <h6 class="mb-3 text-sm text-dark">{{ item.shop_item.name }}</h6>
+                  <span class="mb-1 text-xs text-dark">
+                      {{ item.shop_item.detail }}
                   </span>
                   </div>
                   <div class="ms-auto text-end">
                       <span>
-                          <i class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
+                          <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
                       </span>
                   <br>
                   <div class=" d-flex ms-3 me-2 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                      £5
+                      £{{ item.shop_item.price }}
                   </div>
                   </div>
               </li>
               <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                 <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Checkout </button>
               </li>
-              
             </ul>
           </li>
 
@@ -216,6 +198,7 @@ export default {
   name: 'navbar',
   data() {
     return {
+      cartItemsList:'',
       user:'',
       showCart:false,
       showMenu: false,
@@ -252,6 +235,37 @@ export default {
         console.log(error)
       }
     },
+    //-----------GET CART ITEMS-----------
+    async getCartItems(){
+      this.showCart=!this.showCart
+      if(this.showCart==false){
+        return
+      }
+        try {
+          const response=await axiosClient.get('/getUserCartItems')
+          this.cartItemsList=response.data
+        } catch (error) {
+          console.log(error)
+        }
+    },
+    //----------REMOVE ITEM FROM CART-----------
+    async removeItemFromCart(id){
+      this.showCart=true
+      let data={
+        "item_id":id
+      }
+      try {
+          await axiosClient.post('/removeItemFromCart',data)
+          this.removeItemFromList(id)
+        } catch (error) {
+          console.log(error)
+        }
+    },
+    removeItemFromList(id){
+      const indexToRemove = this.cartItemsList.findIndex(item => item.id === id);
+      this.cartItemsList.splice(indexToRemove,1)
+      this.snackbarMsg('Item Removed Successfully')
+    }
   },
   components: {
     Breadcrumbs,
@@ -269,6 +283,8 @@ export default {
 <style>
 .cart-dropdown{
   width: 340px !important;
+  height: 300px !important;
+  overflow-y: scroll;
 }
 /* .cart{
   border: 2px solid #573078 !important;

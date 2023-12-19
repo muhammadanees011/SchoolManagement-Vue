@@ -3,7 +3,7 @@
       <div class="card-header pb-3 p-3">
         <div class="row">
           <div class="col-6 d-flex align-items-center">
-            <h6 class="mb-0">Set up Payment Account {{ user.role }}</h6>
+            <h6 class="mb-0">Set up Payment Account</h6>
           </div>
           <div class="col-6 text-end">
             <router-link  :to="{name:'add_card'}">
@@ -117,16 +117,11 @@
       }else{
         user_id=this.user.id;
       }
-      // let user=localStorage.getItem('user')
-      // user= JSON.parse(user)
-      // this.user=user
-      // let stripe_id=user.stripe_id
       let amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
       let payment_method=this.userCards[this.isSelected] ? this.userCards[this.isSelected].id :''
       let data={
         "user_id":user_id,
         "amount":amount,
-        // "customer":stripe_id,
         "payment_method":payment_method,
         "type":'top_up',
       }
@@ -155,7 +150,6 @@
         user= JSON.parse(user)
         user_id=user.id;
       }
-      // let stripe_id=user.stripe_id
       if(user_id==null && user.role=='student'){
         this.snackbarMsg('Stripe Customer Not Found')
         return

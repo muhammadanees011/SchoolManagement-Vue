@@ -20,6 +20,7 @@ import TransactionHistory from '../views/transaction_history/transaction_history
 import Shop from '../views/shop/shop.vue'
 import AddShopItem from '../views/shop/add.vue'
 import EditShopItem from '../views/shop/edit.vue'
+import Checkout from '../views/shop/checkout.vue'
 import Meals from '../views/meals/meals.vue'
 import AddMenu from '../views/meals/addMenu.vue'
 import PaymentAccount from '../views/payment_account/payment_account.vue'
@@ -126,6 +127,7 @@ const routes = [
       { path: '/shop-items', name: 'shop-items', component: Shop },
       { path: '/add-items', name: 'add-items', component: AddShopItem },
       { path: '/edit-item/:id', name: 'edit-item', component: EditShopItem },
+      { path: '/checkout/:id', name: 'shop-checkout', component: Checkout },
     ],
   },
   {

@@ -33,7 +33,7 @@
                   Trip Funds - £ 500
                 </div>
                 <br>
-                <div class="mt-5">
+                <div class="mt-5" v-if="user.role=='super_admin' || user.role=='school_user'">
                 <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
                 <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
                 </div>
@@ -66,7 +66,7 @@
                   Trip Funds - £ 500
                 </div>
                 <br>
-                <div class="mt-5">
+                <div class="mt-5" v-if="user.role=='super_admin' || user.role=='school_user'">
                 <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
                 <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
                 </div>
@@ -99,8 +99,8 @@
                   Trip Funds - £ 500
                 </div>
                 <br>
-                <div class="mt-5">
-                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
+                <div class="mt-5" v-if="user.role=='super_admin' || user.role=='school_user'">
+                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit</button>
                 <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
                 </div>
                 <br>
@@ -115,6 +115,17 @@
   <script>
   export default {
     name: "billing-card",
+    data(){
+      return{
+        user:'',
+      }
+    },
+    mounted(){
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        this.user = JSON.parse(userData);
+      }
+    },
     methods:{
       redirectToAddTrips() {
         this.$router.push({ name: 'add-trips' });

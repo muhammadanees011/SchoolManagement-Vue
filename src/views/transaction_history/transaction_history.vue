@@ -9,7 +9,7 @@
               <div class="table-responsive p-0">
                 <div>
                   <div class="filter-container">
-                    <input class="input-box filter-box" id="name" type="text" placeholder="Type to Search..." name="address" />
+                    <input class="input-box filter-box" @keyup.enter="filterTransactionHistory" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
                     <select class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
                       <option value="" disabled selected>Filter</option>
                       <option v-for="(item, index) in allFields" :key="index" :value="item">
@@ -73,7 +73,10 @@
                         <p class="text-xs text-secondary mb-0">{{ item.type }}</p>
                       </td>
                       <td class="align-middle text-center">  
-                        <p class="text-xs text-secondary mb-0">£{{ item.amount }}</p>
+                        <span class="d-flex justify-content-center">
+                          <i class="fas fa-arrow-down text-success me-2" aria-hidden="true"></i>
+                          <p class="text-xs text-secondary mb-0">£{{ item.amount }}</p>
+                        </span>
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs "
@@ -113,13 +116,14 @@
       return{
         transactionHistoryList:'',
         filterBy:'',
-        allFields:['Clear','Account','Type','Amount','Date','Status'],
+        seachString:'',
+        allFields:['Type','Amount','Date'],
       }
     },
     methods:{
-      snackbarMsg(message) {
+      snackbarMsg(message,type='success') {
       this.$snackbar.add({
-        type: 'success',
+        type: type,
         text: message,
         background: 'white',
       })
@@ -138,6 +142,28 @@
         } catch (error) {
           console.log(error)
         }
+      },
+      //-----------FILTER TRANSACTION HISTORY------------
+      async filterTransactionHistory(){
+        let user=localStorage.getItem('user')
+        user= JSON.parse(user)
+        if(this.filterBy=='' && this.seachString==''){
+          this.filterBy="Clear"
+          this.seachString="clear"
+        }else if(this.filterBy!='' && this.seachString==''){
+          this.snackbarMsg('Please Enter the Search String','error');
+        }
+        let data={
+          "user_id":user.id,
+          "type":this.filterBy,
+          "value":this.seachString
+        }
+        try {
+           const response=await axiosClient.post('/filterTransactionHistory',data);
+           this.transactionHistoryList=response.data;
+          } catch (error) {
+            console.log(error)
+          }
       },
       //-----------DELETE RECORD--------------
       async deleteTransactionHistory(id){

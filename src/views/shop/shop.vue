@@ -67,7 +67,10 @@
                       </td>
                       
                       <td class="align-middle text-center text-sm">
-                        <span  v-if="user && user.role=='student'" class="badge badge-sm bg-gradient-primary me-1">Checkout</span >
+                        <i @click="addToCart(item.id)" class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i>
+                        <router-link :to="{ name: 'shop-checkout', params: { id: item.id }  }">
+                          <i v-if="user && user.role=='student'" class="fas fa-shopping-cart text-success me-2" aria-hidden="true"></i>
+                        </router-link>
                          <span  v-if="user && user.role=='super_admin' || user.role=='school_user'">
                             <i @click="editShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                             <i @click="deleteShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
@@ -136,6 +139,20 @@
       },
       editShopItem(id){
         this.$router.push(`/edit-item/`+id)
+      },
+      async addToCart(itemId){
+        let user=localStorage.getItem('user')
+        user= JSON.parse(user)
+        let data={
+          'user_id':user.id,
+          'shop_item_id':itemId
+        }
+        try {
+          await axiosClient.post('/addItemToCart',data)
+          this.snackbarMsg('Item Added to Cart')
+        } catch (error) {
+          console.log(error)
+        }
       },
     },
   };
