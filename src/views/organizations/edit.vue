@@ -37,7 +37,7 @@
                         <input class="input-box" id="name" v-model="newOrganization.website" type="url" placeholder="https://example.com" name="website" />
                       </div>
                       <div class="d-flex align-items-right">
-                        <material-button class="mt-4" @click="updateOrganization" variant="gradient" color="success" size="sm">Save</material-button>
+                        <button @click="updateOrganization" style="font-size: 12px;background-color: #573078;" class="btn me-3 mt-4 text-white fw-5 border-0 py-2 px-5 border-radius-lg"> Save </button>
                       </div>
                     </div>
                   </div>
@@ -89,14 +89,14 @@
 </template>
 
 <script>
-import MaterialButton from '@/components/MaterialButton.vue'
+// import MaterialButton from '@/components/MaterialButton.vue'
 import axiosClient from '../../axios'
 
 export default {
   name: '',
   props: ['data'],
   components: {
-    MaterialButton,
+    // MaterialButton,
   },
   mounted() {
     this.editOrganization()

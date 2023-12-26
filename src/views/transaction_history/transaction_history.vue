@@ -25,9 +25,9 @@
                       <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Account
                       </th> -->
-                      <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        User
-                      </th> -->
+                      <th v-if="user.role=='super_admin' || user.role=='school_user'" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        Student
+                      </th>
                       <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Type
                       </th>
@@ -58,23 +58,24 @@
                           </div>
                         </div>
                       </td> -->
-                      <!-- <td>
+                      <td v-if="user.role=='super_admin' || user.role=='school_user'" >
                         <div class="d-flex px-2 py-1">
                           <div>
                           </div>
                           <div class="d-flex flex-column justify-content-center">
                             <p class="text-xs text-secondary mb-0">
-                              Nhlaka
+                              {{ item.user.first_name }} {{ item.user.last_name }}
                             </p>
                           </div>
                         </div>
-                      </td> -->
+                      </td>
                       <td class="align-middle text-center">
                         <p class="text-xs text-secondary mb-0">{{ item.type }}</p>
                       </td>
                       <td class="align-middle text-center">  
                         <span class="d-flex justify-content-center">
-                          <i class="fas fa-arrow-down text-success me-2" aria-hidden="true"></i>
+                          <i v-if="item.type=='top_up'" class="fas fa-plus fa-xs text-success me-2" aria-hidden="true"></i>
+                          <i v-else class="fas fa-minus fa-xs text-danger me-2" aria-hidden="true"></i>
                           <p class="text-xs text-secondary mb-0">£{{ item.amount }}</p>
                         </span>
                       </td>
@@ -114,6 +115,7 @@
     },
     data(){
       return{
+        user:'',
         transactionHistoryList:'',
         filterBy:'',
         seachString:'',
@@ -121,6 +123,10 @@
       }
     },
     methods:{
+      getUser(){
+        let user=localStorage.getItem('user')
+        this.user= JSON.parse(user)
+      },
       snackbarMsg(message,type='success') {
       this.$snackbar.add({
         type: type,

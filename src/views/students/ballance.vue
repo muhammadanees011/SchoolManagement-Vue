@@ -96,8 +96,14 @@
       async getWallet(){
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
+        let id='';
+        if(this.$route.params.id){
+          id=this.$route.params.id;
+        }else{
+          id=user.id
+        }
         try {
-        const response= await axiosClient.get('/getWallet/'+user.id);
+        const response= await axiosClient.get('/getWallet/'+id);
         this.wallet=response.data
         console.log(this.wallet)
         } catch (error) {

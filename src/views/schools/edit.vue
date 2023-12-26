@@ -116,7 +116,7 @@
                   </div>
                   <div class="d-flex align-items-left bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
                       <div class="">
-                          <material-button @click="updateData" class="mt-1 ms-4" variant="gradient" color="success" size="sm">Save</material-button>
+                        <button @click="updateData" style="font-size: 12px; background-color: #573078;" class="btn ms-3 text-white fw-5 border-0 px-5 py-2 border-radius-lg"> Save </button>
                         </div>
                     </div>
                 </div>
@@ -129,13 +129,13 @@
   </template>
   
   <script>
-  import MaterialButton from '@/components/MaterialButton.vue'
+  // import MaterialButton from '@/components/MaterialButton.vue'
   import axiosClient from '../../axios'
   
   export default {
     name: '',
     components: {
-      MaterialButton,
+      // MaterialButton,
     },
     mounted() {
     this.editSchool()

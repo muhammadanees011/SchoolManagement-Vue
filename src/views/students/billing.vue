@@ -72,8 +72,12 @@
                     <td class="align-middle text-center">
                       <p class="text-xs text-secondary mb-0">{{ item.type }}</p>
                     </td>
-                    <td class="align-middle text-center">  
+                    <td class="align-middle text-center"> 
+                      <span class="d-flex justify-content-center"> 
+                      <i v-if="item.type=='top_up'" class="fas fa-plus fa-xs text-success me-2" aria-hidden="true"></i>
+                      <i v-else class="fas fa-minus fa-xs text-danger me-2" aria-hidden="true"></i>
                       <p class="text-xs text-secondary mb-0">£{{ item.amount }}</p>
+                      </span>
                     </td>
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs "

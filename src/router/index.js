@@ -87,7 +87,7 @@ const routes = [
       { path: '/add', name: 'add-student', component: AddStudent },
       { path: '/:id', name: 'edit-student', component: EditStudent },
       { path: '/student-billing/:id', name: 'student-billing', component: StudentBilling },
-      { path: '/student-balance', name: 'student-balance', component: StudentBallance },
+      { path: '/student-balance/:id?', name: 'student-balance', component: StudentBallance },
     ],
   },
   {

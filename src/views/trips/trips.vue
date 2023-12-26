@@ -3,7 +3,7 @@
       <div class="card-header pb-0 px-3">
         <div class="d-flex justify-content-between">
           <h6 class="mb-0">Trips</h6>
-          <button @click="redirectToAddTrips"  :to="{ name: 'add-trips' }" style="font-size: 12px; background-color: #f513ca;"  class="me-3 trips-btn w-10  text-white fw-5 p-2 border-radius-lg"> Add Trips </button>
+          <button @click="redirectToAddTrips"  :to="{ name: 'add-trips' }" style="font-size: 12px; background-color: #573078;"  class="me-3 trips-btn w-10  text-white fw-5 p-2 border-radius-lg"> Add Trips </button>
         </div>
       </div>
       <div class="card-body pt-1 p-3">
@@ -34,8 +34,8 @@
                 </div>
                 <br>
                 <div class="mt-5" v-if="user.role=='super_admin' || user.role=='school_user'">
-                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
-                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
+                <button style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
+                <button style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
                 </div>
                 <br>
                 </div>
@@ -67,8 +67,8 @@
                 </div>
                 <br>
                 <div class="mt-5" v-if="user.role=='super_admin' || user.role=='school_user'">
-                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
-                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
+                <button style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
+                <button style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
                 </div>
                 <br>
                 </div>

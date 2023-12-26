@@ -15,13 +15,13 @@
         </div>
         <div class="col-auto my-auto">
           <div class="h-100">
-            <h5 class="mb-1">Richard Davis</h5>
-            <p class="mb-0 font-weight-normal text-sm">CEO / Co-Founder</p>
+            <h5 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h5>
+            <p class="mb-0 font-weight-normal text-sm">{{ user.role }}</p>
           </div>
         </div>
         <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
           <div class="nav-wrapper position-relative end-0">
-            <ul class="p-1 bg-transparent nav nav-pills nav-fill" role="tablist">
+            <!-- <ul class="p-1 bg-transparent nav nav-pills nav-fill" role="tablist">
               <li class="nav-item">
                 <a class="px-0 py-1 mb-0 nav-link active" data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="true">
                   <svg class="text-dark" width="16px" height="16px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -98,13 +98,13 @@
                   <span class="ms-1">Settings</span>
                 </a>
               </li>
-            </ul>
+            </ul> -->
           </div>
         </div>
       </div>
       <div class="row">
         <div class="mt-3 row">
-          <div class="col-12 col-md-6 col-xl-4 position-relative">
+          <!-- <div class="col-12 col-md-6 col-xl-6 position-relative">
             <div class="card card-plain h-100">
               <div class="p-3 pb-0 card-header">
                 <h6 class="mb-0">Platform Settings</h6>
@@ -138,31 +138,17 @@
               </div>
             </div>
             <hr class="vertical dark" />
-          </div>
-          <div class="col-12 col-md-6 col-xl-4 mt-md-0 mt-4 position-relative">
+          </div> -->
+          <div class="col-12 col-md-6 col-xl-6 mt-md-0 mt-4 position-relative">
             <profile-info-card
               title="Profile Information"
-              description="Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
+              description=""
               :info="{
-                fullName: 'Alec M. Thompson',
-                mobile: '(44) 123 1234 123',
-                email: 'alecthompson@mail.com',
-                location: 'USA',
+                fullName: user.first_name+' '+user.last_name,
+                email: user.email ? user.email :'-',
+                mobile: user.phone ? user.phone:'-',
+                location: user.country ? user.country:'-',
               }"
-              :social="[
-                {
-                  link: 'https://www.facebook.com/CreativeTim/',
-                  icon: 'fa-facebook',
-                },
-                {
-                  link: 'https://twitter.com/creativetim',
-                  icon: 'fa-twitter',
-                },
-                {
-                  link: 'https://www.instagram.com/creativetimofficial/',
-                  icon: 'fa-instagram',
-                },
-              ]"
               :action="{
                 route: 'javascript:;',
                 tooltip: 'Edit Profile',
@@ -170,59 +156,30 @@
             />
             <hr class="vertical dark" />
           </div>
-          <div class="mt-4 col-12 col-xl-4 mt-xl-0">
+          <div class="mt-4 col-12 col-xl-6 mt-xl-0">
             <div class="card card-plain h-100">
               <div class="p-3 pb-0 card-header">
-                <h6 class="mb-0">Conversations</h6>
+                <h6 class="mb-0">Change Password</h6>
               </div>
               <div class="p-3 card-body">
                 <ul class="list-group">
                   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                    <material-avatar class="me-3" :img="sophie" alt="kal" border-radius="lg" shadow="regular" />
-                    <div class="d-flex align-items-start flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Sophie B.</h6>
-                      <p class="mb-0 text-xs">Hi! I need more information..</p>
+                    <div class="col-md-5 mx-auto bg-white new-pass p-2">
+                      <label>Old Password</label>
+                      <input v-model="changePassword.old_password" id="card-holder-name" type="password" class="bg-white w-100  mb-2">
+                      <label>New Password</label>
+                      <input v-model="changePassword.new_password" id="card-holder-name" type="password" class="bg-white w-100  mb-2">
+                      <label>Confirm New Password</label>
+                      <input v-model="changePassword.new_password_confirmation" id="card-holder-name" type="password" class="bg-white w-100  mb-2">
+                      <button @click="changeUserPassword" style="font-size: 12px; background-color: #573078;" class="save-pass-btn p-2 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Save </button>
                     </div>
-                    <a class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">Reply</a>
-                  </li>
-                  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                    <material-avatar class="me-3" :img="marie" alt="kal" border-radius="lg" shadow="regular" />
-                    <div class="d-flex align-items-start flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Anne Marie</h6>
-                      <p class="mb-0 text-xs">Awesome work, can you..</p>
-                    </div>
-                    <a class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">Reply</a>
-                  </li>
-                  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                    <material-avatar class="me-3" :img="ivana" alt="kal" border-radius="lg" shadow="regular" />
-                    <div class="d-flex align-items-start flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Ivanna</h6>
-                      <p class="mb-0 text-xs">About files I can..</p>
-                    </div>
-                    <a class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">Reply</a>
-                  </li>
-                  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                    <material-avatar class="me-3" :img="peterson" alt="kal" border-radius="lg" shadow="regular" />
-                    <div class="d-flex align-items-start flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Peterson</h6>
-                      <p class="mb-0 text-xs">Have a great afternoon..</p>
-                    </div>
-                    <a class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">Reply</a>
-                  </li>
-                  <li class="px-0 border-0 list-group-item d-flex align-items-center">
-                    <material-avatar class="me-3" :img="nick" alt="kal" border-radius="lg" shadow="regular" />
-                    <div class="d-flex align-items-start flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Nick Daniel</h6>
-                      <p class="mb-0 text-xs">Hi! I need more information..</p>
-                    </div>
-                    <a class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">Reply</a>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
-        <div class="row mt-4">
+        <!-- <div class="row mt-4">
           <div class="col-12">
             <div class="mb-5 ps-3">
               <h6 class="mb-1">Projects</h6>
@@ -349,7 +306,7 @@
               />
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -357,9 +314,9 @@
 
 <script>
 import ProfileInfoCard from './components/ProfileInfoCard.vue'
-import DefaultProjectCard from './components/DefaultProjectCard.vue'
-import MaterialSwitch from '@/components/MaterialSwitch.vue'
-import MaterialAvatar from '@/components/MaterialAvatar.vue'
+// import DefaultProjectCard from './components/DefaultProjectCard.vue'
+// import MaterialSwitch from '@/components/MaterialSwitch.vue'
+// import MaterialAvatar from '@/components/MaterialAvatar.vue'
 import sophie from '@/assets/img/kal-visuals-square.jpg'
 import marie from '@/assets/img/marie.jpg'
 import ivana from '@/assets/img/ivana-square.jpg'
@@ -375,11 +332,18 @@ import team4 from '@/assets/img/team-4.jpg'
 
 import setNavPills from '@/assets/js/nav-pills.js'
 import setTooltip from '@/assets/js/tooltip.js'
+import axiosClient from '../axios'
 
 export default {
   name: 'profile-overview',
   data() {
     return {
+      user:'',
+      changePassword:{
+      'old_password':'',
+      'new_password':'',
+      'new_password_confirmation':''
+      },
       showMenu: false,
       sophie,
       marie,
@@ -397,18 +361,73 @@ export default {
   },
   components: {
     ProfileInfoCard,
-    DefaultProjectCard,
-    MaterialSwitch,
-    MaterialAvatar,
+    // DefaultProjectCard,
+    // MaterialSwitch,
+    // MaterialAvatar,
   },
 
   mounted() {
     this.$store.state.isAbsolute = true
     setNavPills()
     setTooltip()
+    this.getUser()
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false
   },
+  methods:{
+    getUser(){
+    let user=localStorage.getItem('user')
+    user= JSON.parse(user)
+    this.user=user
+   },
+   //-----------CHANGE USER PASSWORD-------------
+   async changeUserPassword(){
+    let user=localStorage.getItem('user')
+    user= JSON.parse(user)
+    let data={
+      'user_id':user.id,
+      'old_password':this.changePassword.old_password,
+      'new_password':this.changePassword.new_password,
+      'new_password_confirmation':this.changePassword.new_password_confirmation
+      }
+      if(data.new_password==data.old_password){
+        this.snackbarMsg('New password can not be the same as old password!','error')
+        return 
+      }
+      try {
+        const response=await axiosClient.post('/changePassword',data)
+        this.snackbarMsg('Password changed successfully!')
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+        this.$router.push({ name: 'SignIn' })
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+   },
+   snackbarMsg(message,type='success') {
+      this.$snackbar.add({
+        type: type,
+        text: message,
+        background: 'white',
+      })
+    },
+  }
 }
 </script>
+<style>
+.new-pass{
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    width: 385px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .save-pass-btn{
+  margin-top: 4px;
+  width: 10em !important; 
+  height: 3em !important;
+  }
+</style>

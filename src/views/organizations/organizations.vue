@@ -14,7 +14,7 @@
           <div class="d-flex justify-content-between border-radius-lg pt-4 ">
               <h6 class="text-dark text-capitalize ps-3">Organizations</h6>
               <router-link :to="{ name: 'add-organizations' }">
-                <button style="font-size: 12px" class="me-3 justify-content-between bg-gradient-success  text-white fw-5 border-0 p-2 border-radius-lg"> Add Organization </button>
+                <button style="font-size: 12px;background-color: #573078;" class="btn me-3 justify-content-between text-white fw-5 border-0 py-2 px-3 border-radius-lg"> Add Organization </button>
               </router-link>
             </div>
           <div class="card-body px-0 pb-2">

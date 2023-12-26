@@ -38,9 +38,11 @@ export default {
     this.includeStripe('js.stripe.com/v3/', function(){
         this.configureStripe();
     }.bind(this) );
+    this.getUser();
   },
   data(){
       return {
+        user:'',
         card_token:'',
         intentToken:'',
         name: '',
@@ -117,6 +119,12 @@ export default {
       this.$router.push({ name: 'payment_account' })
     } catch (error) {
       console.log(error)
+    }
+  },
+  getUser(){
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      this.user = JSON.parse(userData);
     }
   },
   snackbarMsg(message) {

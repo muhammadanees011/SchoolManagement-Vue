@@ -1,7 +1,14 @@
 <template>
   <nav class="shadow-none navbar navbar-main navbar-expand-lg border-radius-xl" v-bind="$attrs" id="navbarBlur" data-scroll="true" :class="isAbsolute ? 'mt-4' : 'mt-0'">
     <div class="px-3 py-1 container-fluid">
-      <breadcrumbs :currentPage="currentRouteName" :color="color" />
+      <!-- <breadcrumbs :currentPage="currentRouteName" :color="color" /> -->
+      <div v-if="!passwordStatus" class="change-pass-alert">
+        <small class="pass-text">For security reasons, we kindly ask you to change your password,
+          <router-link :to="{name:'Profile'}">
+            <span class="click-link">click here</span> 
+          </router-link>
+            to change the password</small>
+      </div>
       <div class="mt-2 collapse navbar-collapse mt-sm-0 me-md-0 me-sm-4" :class="isRTL ? 'px-0' : 'me-sm-4'" id="navbar">
         <div class="pe-md-3 d-flex align-items-center" :class="isRTL ? 'me-md-auto' : 'ms-md-auto'">
           <!-- <material-input id="search" label="Search here" /> -->
@@ -36,8 +43,11 @@
                   </div>
                   </div>
               </li>
-              <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Checkout </button>
+              <li v-if="cartItemsList.length>0" class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                <button style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Checkout </button>
+              </li>
+              <li v-else class="list-group-item border-0 d-flex align-items-center justify-content-center p-4 mb-2 bg-warning-100 text-warning border-radius-lg">
+                <small>Cart is empty</small>
               </li>
             </ul>
           </li>
@@ -54,7 +64,7 @@
                     <div class="d-flex flex-column justify-content-center">
                       <span class="d-flex align-items-center">
                         <i class="fas fa-user pb-0"></i> 
-                        <h6 class="ms-1 pt-2 text-sm font-weight-normal"> <span class="font-weight-bold">Profile Settings</span> </h6>
+                        <h6 class="ms-1 pt-2 text-sm font-weight-normal"> <span class="font-weight-bold">{{ user.first_name}} {{user.last_name}} <small class="">({{ userRole }})</small></span> </h6>
                         </span>
                     </div>
                   </div>
@@ -190,7 +200,7 @@
 </template>
 <script>
 // import MaterialInput from '@/components/MaterialInput.vue'
-import Breadcrumbs from '../Breadcrumbs.vue'
+// import Breadcrumbs from '../Breadcrumbs.vue'
 import { mapMutations, mapState } from 'vuex'
 import axiosClient from '../../axios'
 
@@ -198,6 +208,7 @@ export default {
   name: 'navbar',
   data() {
     return {
+      passwordStatus:'',
       cartItemsList:'',
       user:'',
       showCart:false,
@@ -211,6 +222,7 @@ export default {
   },
   mounted(){
     this.getUser();
+    this.isUpdatedRecently();
   },
   methods: {
     ...mapMutations(['navbarMinimize', 'toggleConfigurator']),
@@ -222,6 +234,18 @@ export default {
       const userData = localStorage.getItem('user');
       if (userData) {
         this.user = JSON.parse(userData);
+      }
+    },
+    //---------CHECK IF PASSWORD UPDATED---------
+    isUpdatedRecently() {
+      let user = localStorage.getItem('user');
+      user = JSON.parse(user);
+      const createdDate = new Date(user.created_at);
+      const updatedDate = new Date(user.updated_at);
+      if(updatedDate > createdDate){
+        this.passwordStatus=true;
+      }else{
+        this.passwordStatus=false;
       }
     },
     //------------SignOut---------------
@@ -268,15 +292,23 @@ export default {
     }
   },
   components: {
-    Breadcrumbs,
+    // Breadcrumbs,
     // MaterialInput,
   },
   computed: {
     ...mapState(['isRTL', 'isAbsolute']),
-
     currentRouteName() {
       return this.$route.name
     },
+    userRole(){
+      if(this.user.role=='super_admin'){
+        return "Admin"
+      }else if(this.user.role=='school_user'){
+        return "School"
+      }else{
+       return this.user.role
+      }
+    }
   },
 }
 </script>
@@ -291,5 +323,22 @@ export default {
 } */
 .menu_item{
   height: 35px;
+}
+.change-pass-alert{
+  width: 40rem;
+  height: 2rem;
+  background: rgba(238, 220, 130, 0.5);
+  border: 1px solid black;
+  border-radius: 6px;
+}
+.pass-text{
+  color: black;
+  margin-left: 10px;
+  font-size: 10px;
+}
+.click-link{
+  color: blueviolet;
+  text-decoration-line: underline;
+  cursor: pointer;
 }
 </style>

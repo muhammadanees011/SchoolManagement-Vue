@@ -14,7 +14,7 @@
           <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
               <h6 class="text-dark text-capitalize ps-3">Students</h6>
               <router-link :to="{ name: 'add-student' }">
-                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 text-white fw-5 border-0 p-2 border-radius-lg"> Add Student </button>
+                <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Student </button>
               </router-link>
             </div>
           <div class="card-body px-0 pb-2">
@@ -58,7 +58,7 @@
                       <span class="text-secondary text-xs font-weight-bold">{{ item.stage }}</span>
                     </td>
                     <td class="align-middle text-center">
-                      <router-link :to="{name:'student-balance'}">
+                      <router-link :to="{name:'student-balance',params: { id: item.user.id }}">
                         <i class="fas fa-donate"></i>
                       </router-link>
                     </td>

@@ -5,10 +5,10 @@
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
-              :title="{ text: 'Total Organizations', value: '53' }"
-              detail="<span class='text-success text-sm font-weight-bolder'>+55%</span> than last week"
+              :title="{ text: 'Total Balance', value: '£'+userBallance }"
+              detail="<span class='text-success text-sm font-weight-bolder'></span>your ballance"
               :icon="{
-                name: 'weekend',
+                name: 'credit_card',
                 color: 'text-white',
                 background: 'dark',
               }"
@@ -48,7 +48,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
               :title="{ text: 'Trips', value: '3' }"
@@ -93,7 +93,7 @@
               }"
             />
           </div>
-        </div>
+        </div> -->
         <!-- <div class="row mt-4">
           <div class="col-lg-4 col-md-6 mt-4">
             <chart-holder-card title="Website Views" subtitle="Last Campaign Performance" update="campaign sent 2 days ago">
@@ -155,10 +155,13 @@ import team1 from '@/assets/img/team-1.jpg'
 import team2 from '@/assets/img/team-2.jpg'
 import team3 from '@/assets/img/team-3.jpg'
 import team4 from '@/assets/img/team-4.jpg'
+import axiosClient from '../axios'
+
 export default {
   name: 'dashboard-default',
   data() {
     return {
+      userBallance:'',
       logoXD,
       team1,
       team2,
@@ -169,6 +172,22 @@ export default {
       logoSpotify,
       logoJira,
       logoInvision,
+    }
+  },
+  mounted(){
+    this.getStudentBalance();
+  },
+  methods:{
+   async getStudentBalance(){
+    let user=localStorage.getItem('user')
+    user= JSON.parse(user)
+      try {
+          let response= await axiosClient.get('/getStudentBalance/'+user.id)
+          response=response.data
+          this.userBallance=response
+      } catch (error) {
+          console.log(error)
+      }
     }
   },
   components: {

@@ -14,7 +14,7 @@
           <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
               <h6 class="text-dark text-capitalize ps-3">Add Student</h6>
               <router-link :to="{ name: 'list-students' }">
-                <button style="font-size: 12px" class="me-3 bg-gradient-success shadow-success text-white fw-5 border-0 p-2 border-radius-lg"> Back </button>
+                <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4  border-radius-lg"> Back </button>
               </router-link>
             </div>
           <div class="card-body px-0 pb-2">
@@ -140,7 +140,7 @@
                 </div>
                 <div class="d-flex align-items-left bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
                     <div class="">
-                        <material-button @click="saveNewStudent" class="mt-1 ms-4" variant="gradient" color="success" size="sm">Save</material-button>
+                      <button @click="saveNewStudent" style="font-size: 12px; background-color: #573078;" class="btn ms-3 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save </button>
                       </div>
                   </div>
               </div>
@@ -153,13 +153,13 @@
 </template>
 
 <script>
-import MaterialButton from '@/components/MaterialButton.vue'
+// import MaterialButton from '@/components/MaterialButton.vue'
 import axiosClient from '../../axios'
 
 export default {
   name: '',
   components: {
-    MaterialButton,
+    // MaterialButton,
   },
   mounted() {
   this.getSchools()

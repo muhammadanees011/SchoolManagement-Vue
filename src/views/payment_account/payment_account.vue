@@ -5,9 +5,9 @@
           <div class="col-6 d-flex align-items-center">
             <h6 class="mb-0">Set up Payment Account</h6>
           </div>
-          <div class="col-6 text-end">
+          <div class="col-6 text-end" v-if="user.role=='student'">
             <router-link  :to="{name:'add_card'}">
-              <button style="font-size: 12px; background-color: #f513ca;" class=" mb-3 trips-btn w-35  text-white fw-5 p-2 border-radius-lg">  <i class="fas fa-plus me-2"></i>
+              <button style="font-size: 12px; background-color: #573078;" class="add-card-btn mb-3 trips-btn w-35  text-white fw-5 border-radius-lg">  <i class="fas fa-plus me-2"></i>
               Add New Card </button>
             <!-- <button @click="openModal" class="btn-color" variant="gradient">
               <i class="fas fa-plus me-2"></i>
@@ -21,27 +21,31 @@
         <div class="row">
           <div class="col-md-6 mb-md-0 mb-4">
             <div class="amount-radio">
-              <span class="mb-1" style="display: flex;">
+              <div class="top-up-row">
+                <span class="mb-1" style="display: flex;">
                   <input id="amount25" class="me-1" type="radio" v-model="selected_amount" name="amount" value="25">
                   <label  style="margin-top:-3px;" for="amount25">£25.00</label>
-              </span>
-              
+                </span>
+              </div>
+              <div class="top-up-row">
               <span class="mb-1" style="display: flex;">
                   <input id="amount50" class="me-1" type="radio" v-model="selected_amount" name="amount" value="50">
                   <label  style="margin-top:-3px;"  for="amount50">£50.00</label>
               </span>
-
+              </div>
+              <div class="top-up-row">
               <span class="mb-1" style="display: flex;">
                   <input id="amount100" class="me-1" type="radio" v-model="selected_amount" name="amount" value="100">
                   <label class="" style="margin-top:-3px;" for="amount100">£100.00</label>
               </span>
-              other<br>
-              <span class="mb-1" style="display: flex; ">
-                <input @keyup="selected_amount=null" v-model="addedBalance" style="width: 190px !important; height: 35px !important;" class="me-1" type="text" name="gender" placeholder="1.00"> 
+              </div>
+              <!-- other<br> -->
+              <span class="mb-1 amount-container" style="display: flex; ">
+                <input @keyup="selected_amount=null" v-model="addedBalance" class="me-1 amount-input" type="text" name="gender" placeholder="1.00"> 
               </span>  
             </div>
           </div>
-          <div class="col-md-5 ms-auto">
+          <div class="col-md-5 ms-auto" v-if="user.role=='student'">
             <template v-for="(item,index) in userCards" :key="index">
               <div :class="{ 'selected': isSelected === index }" @click="toggleSelection(index,$event)"
                 class=" mb-1 card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
@@ -49,9 +53,8 @@
                 <img v-if="item.card.brand=='mastercard'" class="w-10 me-3 mb-0" src="@/assets/img/logos/mastercard.png" alt="logo"/>
                 <h6 class="mb-0">
                   **** **** **** {{ item.card.last4 }}
-                  <!-- {{ item.card_number }} -->
                 </h6>
-                <!-- <i @click="removeCardById(item.id)"
+                <i @click="removePaymentMethod(item.id)"
                   class="fas fa-trash-alt ms-auto text-dark cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
@@ -59,13 +62,13 @@
                   aria-hidden="true"
                   data-bs-original-title="Edit Card"
                   aria-label="Edit Card"
-                ></i> -->
+                ></i>
                 <span class="sr-only">Edit Card</span>
               </div>
             </template>
           </div>
           <div class="conteiner">
-        <button  @click="addBalance" style="font-size: 12px; background-color: #f513ca;" class=" mb-3 trips-btn w-15 text-white fw-5 p-2 border-radius-lg"> Add Balance </button>
+        <button  @click="addBalance" style="font-size: 12px; background-color: #573078;" class="top-up-btn p-3 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Add Balance </button>
       </div>
         </div>
       </div>
@@ -102,9 +105,9 @@
       };
     },
     methods: {
-      snackbarMsg(message) {
+      snackbarMsg(message,type='success') {
       this.$snackbar.add({
-        type: 'success',
+        type: type,
         text: message,
         background: 'white',
       })
@@ -119,6 +122,13 @@
       }
       let amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
       let payment_method=this.userCards[this.isSelected] ? this.userCards[this.isSelected].id :''
+      if(amount==""){
+        this.snackbarMsg('Please select the amount','error');
+        return
+      }else if(payment_method==""){
+        this.snackbarMsg('No card found','error');
+        return
+      }
       let data={
         "user_id":user_id,
         "amount":amount,
@@ -166,9 +176,15 @@
       }
     },
     //-----------REMOVE CARD BY ID------------
-    async removeCardById(id){
+    async removePaymentMethod(id){
+      let user=localStorage.getItem('user')
+      user= JSON.parse(user)
+      let data={
+        "user_id":user.id,
+        "payment_method":id
+      }
       try {
-        await axiosClient.delete('/removeCardById/' + id);
+        await axiosClient.post('/removePaymentMethod',data);
         this.removeFromList(id)
       } catch (error) {
         console.log(error)
@@ -207,6 +223,31 @@ color: #010A21;
 }
 .btn-color{
   background-color: #f513ca !important;
+}
+.top-up-row{
+  padding: 17px;
+  height: 50px;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid black;
+  margin-bottom: 3px;
+}
+.amount-input{
+  width: 25.3em !important; 
+  height: 4em !important;
+  border: 1px solid black;
+}
+.amount-container{
+  width: 25.3em !important; 
+  height: 3.5em !important;
+}
+.top-up-btn{
+  margin-top: 4px;
+  width: 25.3em !important; 
+  height: 4em !important;
+}
+.add-card-btn{
+  height: 4em !important;
 }
 </style>
   
