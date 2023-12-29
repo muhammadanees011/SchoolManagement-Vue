@@ -43,7 +43,7 @@
                       <!-- <p class="text-xs text-secondary mb-0">{{ item.website }}</p> -->
                     </td>
                     <td>
-                      <p class="text-xs font-weight-bold mb-0"> {{ item.user.email }} </p>
+                      <p class="text-xs font-weight-bold mb-0"> {{ item.email }} </p>
                       <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
                     </td>
                     <td>
@@ -88,12 +88,14 @@ import axiosClient from '../../axios'
 export default {
   name: 'tables',
   mounted(){
+    this.getUser();
     this.getAllSchools();
   },
   data() {
     return {
       allSchools:'',
       schools: 6,
+      user:''
     }
   },
   methods:{
@@ -104,10 +106,20 @@ export default {
         background: 'white',
       })
     },
+    //-------------GET USER----------
+    getUser(){
+      let user=localStorage.getItem('user')
+      user= JSON.parse(user)
+      this.user=user
+    },
     //-------------GET ALL SCHOOLS----------
     async getAllSchools(){
       try {
-        const response= await axiosClient.get('/getAllSchools')
+        let url='/getAllSchools'
+        if(this.user.role=='organization_admin'){
+          url='/getAllSchools/'+this.user.id
+        }
+        const response= await axiosClient.get(url)
         this.allSchools=response.data
       } catch (error) {
         console.log(error)

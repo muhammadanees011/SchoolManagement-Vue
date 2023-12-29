@@ -16,6 +16,15 @@
           </template>
         </sidenav-collapse>
       </li>
+      </template>
+      <li  v-if="user && user.role=='super_admin'" class="nav-item">
+        <sidenav-collapse :to="{ name: 'list-organization-admins' }" :aria-controls="''" v-bind:collapse="false" collapseRef="organization-admins" navText="Admins">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">business</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+      <template  v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
       <li class="nav-item">
         <sidenav-collapse :to="{ name: 'list-schools' }" :aria-controls="''" v-bind:collapse="false" collapseRef="schools" navText="Schools/Colleges">
           <template v-slot:icon>
@@ -23,8 +32,6 @@
           </template>
         </sidenav-collapse>
       </li>
-      </template>
-      <template  v-if="user && user.role=='super_admin' || user.role=='school_user'">
         <li class="nav-item">
         <sidenav-collapse :to="{ name: 'list-students' }" :aria-controls="''" v-bind:collapse="false" collapseRef="students" navText="Students">
           <template v-slot:icon>

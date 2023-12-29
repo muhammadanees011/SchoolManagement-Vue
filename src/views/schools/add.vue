@@ -44,7 +44,7 @@
                           <label class="input-label" for="address">Address</label>
                           <input class="input-box" id="name" v-model="newSchool.address" type="text" placeholder="Address" name="address" />
                         </div>
-                        <div class="mb-1">
+                        <div v-if="user.role=='super_admin'" class="mb-1">
                           <label class="input-label" for="phone">Organization</label>
                           <br />
                           <select class="select-box" v-model="newSchool.organization_id" id="name" type="select" placeholder="Zip" name="zip">
@@ -98,14 +98,6 @@
                           <input class="input-box" id="students_count" v-model="newSchool.students_count" type="number" placeholder="Teachers Count" name="students_count" />
                         </div>
                         <div class="mb-1">
-                        <label class="input-label" for="phone">Password</label>
-                        <input class="input-box" id="name" v-model="newSchool.password" type="password" placeholder="Password" name="password" />
-                      </div>
-                      <div class="mb-1">
-                        <label class="input-label" for="phone">Confirm Password</label>
-                        <input class="input-box" id="name" v-model="newSchool.password_confirmation" type="password" placeholder="Confirm Password" name="password_confirmation" />
-                      </div>
-                        <div class="mb-1">
                           <label class="input-label" for="tagLine">Tag Line</label>
                           <input class="input-box" id="name" v-model="newSchool.tagline" type="text" placeholder="Tag Line" name="tagLine" />
                         </div>
@@ -151,10 +143,12 @@ export default {
     // MaterialButton,
   },
   mounted() {
+  this.getUser();
   this.getOrganizations()
 },
   data() {
     return {
+      user:'',
       newSchool: {
         organization_id:'',
         title: '',
@@ -188,11 +182,20 @@ export default {
         background: 'white',
       })
     },
+    //------------GET USER----------------
+    getUser(){
+      let user=localStorage.getItem('user')
+      user= JSON.parse(user)
+      this.user=user
+    },
     //------------SAVE SCHOOL------------
     async saveNewSchool() {
       try {
-        const response=await axiosClient.post('/createSchool', this.newSchool)
-        console.log('SchoolData',response)
+        let url='/createSchool'
+        if(this.user.role=='organization_admin'){
+          url='/createSchool/'+this.user.id
+        }
+        const response=await axiosClient.post(url, this.newSchool)
         this.createCustomer(response.data.id);
         this.$router.push({ name: 'list-schools' })
         this.snackbarMsg('School Saved Successfuly')

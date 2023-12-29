@@ -48,7 +48,7 @@
                     <td>
                       <div class="d-flex px-2 ">
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="text-xs text-secondary mb-0 ">{{ item.user.email }}</h6>
+                          <h6 class="text-xs text-secondary mb-0 ">{{ item.email }}</h6>
                           <!-- <p class="text-xs text-secondary mb-0"> {{ item.user.phone }}</p> -->
                         </div>
                       </div>
@@ -68,7 +68,7 @@
                       <p class="text-xs text-secondary font-weight-bold mb-0">0 </p>
                     </td>
                     <td class="align-middle text-center text-sm">
-                      <span class="badge badge-sm bg-gradient-success">{{ item.user.status }}</span>
+                      <span class="badge badge-sm bg-gradient-success">{{ item.status }}</span>
                     </td>
                     <td class="align-middle text-center">
                       <span>

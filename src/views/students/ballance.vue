@@ -1,75 +1,100 @@
 <template>
     <div class="card">
-      <div class="card-header pb-0 px-3">
+      <!-- <div class="card-header pb-0 px-3">
         <h6 class="mb-0">Balance Information</h6>
-      </div>
+      </div> -->
       <div class="card-body pt-4 p-3">
         <div class="row">
-          <div class="col-9">
+          <div class="col-md-12 col-sm-12">
             <ul class="list-group">
-              <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+              <li style="background-color: #573078 !important;" class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                 <div class="d-flex flex-column">
-                  <h6 class="mb-3 text-sm">Muhammad Anees</h6>
-                  <span class="payment-records mb-1 text-xs">
+                  <h6 class="mb-3 text-sm text-white">
+                    {{ `${walletData.user?.first_name || '-'} ${walletData.user?.last_name || '-'}` }}
+                  </h6>
+                  <!-- <span class="text-white mb-1 text-xs">
                     Account Number:
-                    <span class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span>
+                    <span class="text-white ms-sm-2 font-weight-bold">FRB1235476</span>
                   </span>
-                  <span class="payment-records mb-1 text-xs">
+                  <span class="text-white mb-1 text-xs">
                     Account Name:
-                    <span class="text-dark ms-sm-2 font-weight-bold">Stockton Funds</span>
-                  </span>
-                  <span class="payment-records mb-1 text-xs">
+                    <span class="text-white ms-sm-2 font-weight-bold">Stockton Funds</span>
+                  </span> -->
+                  <span class="text-white mb-1 text-xs">
                     Current Balance:
-                    <span class="text-dark font-weight-bold ms-sm-2">
-                      £{{ wallet.ballance }}
+                    <span class="text-white font-weight-bold ms-sm-2">
+                      £{{ walletData?.ballance || '-' }}
                     </span>
                   </span>
-                  <span class="payment-records mb-1 text-xs">
+                  <span class="text-white mb-1 text-xs">
                     Phone:
-                    <span class="text-dark ms-sm-2 font-weight-bold">
-                      6836376231280
+                    <span class="text-white ms-sm-2 font-weight-bold">
+                      {{ walletData.user?.phone || '-' }}
                     </span>
                   </span>
-                  <span class="payment-records mb-1 text-xs">
+                  <span class="text-white mb-1 text-xs">
                     Email Address:
-                    <span class="text-dark ms-sm-2 font-weight-bold">
-                      stockton.funds@gmail.com
+                    <span class="text-white ms-sm-2 font-weight-bold">
+                      {{ walletData.user?.email || '-' }}
                     </span>
                   </span>
                 </div>
               </li>
             </ul>
           </div>
-          <div class="col-3">
+          <!-- <div class="col-md-3 col-sm-12">
+            <ul class="list-group">
+              <li style="background-color: #573078 !important;" class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-3 text-sm text-white">This Month Consumption</h6>
+                  <span class="mb-4 text-xs d-flex justify-content-between">
+                    <div>
+                      <span class="text-white ms-sm-2 text-xs font-weight-bold">Total Expense</span>
+                    </div>
+                    <span class="text-white ms-sm-2 font-weight-bold">£225</span>
+                  </span>
+                  <span class="mb-1 text-xs d-flex justify-content-between">
+                    <div>
+                      <span class="text-white ms-sm-2 text-xs">Meals</span>
+                    </div>
+                    <span class="text-white ms-sm-2 font-weight-bold">£75</span>
+                  </span>
+                  <span class="mb-1 text-xs d-flex justify-content-between">
+                    <div>
+                      <span class="text-white ms-sm-2 text-xs">Trips</span>
+                    </div>
+                    <span class="text-white ms-sm-2 font-weight-bold">£75</span>
+                  </span>
+                  <span class="mb-1 text-xs d-flex justify-content-between">
+                    <div>
+                      <span class="text-white ms-sm-2 text-xs">School Shop</span>
+                    </div>
+                    <span class="text-white ms-sm-2 font-weight-bold">£75</span>
+                  </span>
+    
+                </div>
+              </li>
+            </ul>
+          </div> -->
+          <div class="col-md-12 col-sm-12">
             <ul class="list-group">
               <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                 <div class="d-flex flex-column">
-                  <h6 class="mb-3 text-sm">This Month Consumption Record</h6>
-                  <span class="mb-4 payment-records text-xs d-flex justify-content-between">
+                  <h6 class="mb-3 text-sm">Recent Transaction</h6>
+                  <span v-for="(item,index) in transactions" :key="index" class="recent-transactions mb-1 text-xs">
+                    <span class="text-dark ms-sm-2 font-weight-bold">{{item.type=='top_up' ? "Top Up":item.type }}
+                    <br>
+                    <small>{{ formatDate(item.created_at) }}</small>
+                    </span>
                     <div>
-                      <span class="text-dark ms-sm-2 text-xs font-weight-bold">Total Expense</span>
+                      <span class="font-weight-bold me-3" :class="{ 'text-danger': item.type !== 'top_up','text-success': item.type === 'top_up', }">{{item.type=='top_up' ? "+":"-" }} £{{ item.amount }}</span>
+                      <br>
+                      <small class="text-dark font-weight-bold me-3">{{item.type=='top_up' ? "Received":"Spent" }}</small>
                     </div>
-                    <span class="text-dark ms-sm-2 font-weight-bold">£225</span>
                   </span>
-                  <span class="mb-1 payment-records text-xs d-flex justify-content-between">
-                    <div>
-                      <span class="text-dark ms-sm-2 text-xs">Meals</span>
-                    </div>
-                    <span class="text-dark ms-sm-2 font-weight-bold">£75</span>
+                  <span v-if="transactions.length==0 && isTransactions" class="recent-transactions mb-1 text-xs">
+                    <span class="text-warning ms-sm-2 font-weight-bold">No recent transactions.</span>
                   </span>
-                  <span class="mb-1 payment-records text-xs d-flex justify-content-between">
-                    <div>
-                      <span class="text-dark ms-sm-2 text-xs">Trips</span>
-                    </div>
-                    <span class="text-dark ms-sm-2 font-weight-bold">£75</span>
-                  </span>
-                  <span class="mb-1 payment-records text-xs d-flex justify-content-between">
-                    <div>
-                      <span class="text-dark ms-sm-2 text-xs">School Shop</span>
-                    </div>
-                    <span class="text-dark ms-sm-2 font-weight-bold">£75</span>
-                  </span>
-    
                 </div>
               </li>
             </ul>
@@ -81,34 +106,66 @@
   
   <script>
   import axiosClient from '../../axios'
+  import moment from 'moment';
 
   export default {
     name: "billing-card",
     mounted(){
+      this.getUserId();
       this.getWallet();
+      this.getRecentTransactions();
     },
     data() {
       return {
+        isTransactions:false,
+        transactions:'',
+        user_id:'',
+        user:'',
         wallet:'',
       };
     },
+    computed:{
+      walletData(){
+       return this.wallet;
+      }
+    },
     methods:{
-      async getWallet(){
+      getUserId(){
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
-        let id='';
         if(this.$route.params.id){
-          id=this.$route.params.id;
+          this.user_id=this.$route.params.id;
         }else{
-          id=user.id
+          this.user_id=user.id
         }
+      },
+      //----------------USER'S WALLET-----------------
+      async getWallet(){
         try {
-        const response= await axiosClient.get('/getWallet/'+id);
+        const response= await axiosClient.get('/getWallet/'+this.user_id);
         this.wallet=response.data
-        console.log(this.wallet)
         } catch (error) {
           console.log(error)
         }
+      },
+      //------------USER'S RECENT TRANSACTIONS-----------------
+      async getRecentTransactions(){
+        let data={
+          'user_id':this.user_id,
+          'admin_id':null
+        }
+        try {
+        const response= await axiosClient.post('/getTransactionHistory',data);
+        this.transactions=response.data
+        this.isTransactions=true
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      //------------FORMAT DATE--------------
+      formatDate(data) {
+        const date = moment(data);
+        return date.format('MMM D, YYYY');
       },
     },
   };
@@ -118,6 +175,18 @@
   background-color: #FFFFFF;
   border-radius: 3px;
   padding: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+.recent-transactions {
+  background-color: #FFFFFF;
+  border-radius: 6px;
+  padding: 5px;
+  height: 3.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  width: 70vw !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
   

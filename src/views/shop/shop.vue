@@ -19,7 +19,7 @@
                     </select>
                     <i class="fas fa-filter filter-icon me-1"></i> -->
                     <router-link :to="{ name: 'add-items' }" v-if="user && user.role=='school_user' || user.role=='super_admin'">
-                      <button style="font-size: 12px; background-color: #f513ca;" class="me-3 text-white fw-5 border-0 p-2 border-radius-lg"> Add Item </button>
+                      <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Item </button>
                     </router-link>
                   </div>              
                 </div>

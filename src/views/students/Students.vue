@@ -3,14 +3,6 @@
     <div class="row">
       <div class="col-12">
         <div class="card my-4">
-          <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-            <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
-              <h6 class="text-white text-capitalize ps-3">Students</h6>
-              <router-link :to="{ name: 'add-student' }">
-                <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Add Student </button>
-              </router-link>
-            </div>
-          </div> -->
           <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
               <h6 class="text-dark text-capitalize ps-3">Students</h6>
               <router-link :to="{ name: 'add-student' }">
@@ -25,10 +17,9 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Student ID </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
-                    <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Country/City </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th> -->
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
+                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th> -->
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
@@ -47,21 +38,17 @@
                       <p class="text-xs font-weight-bold mb-0"> {{ item.user.email }} </p>
                       <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
                     </td>
-                    <!-- <td>
-                      <p class="text-xs font-weight-bold mb-0"> {{ item.user.country }} </p>
-                      <p class="text-xs text-secondary mb-0">{{ item.user.city }}</p>
-                    </td>
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">test</span>
-                    </td> -->
+                      <span class="text-secondary text-xs font-weight-bold">{{ item.school.title }}</span>
+                    </td>
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">{{ item.stage }}</span>
                     </td>
-                    <td class="align-middle text-center">
+                    <!-- <td class="align-middle text-center">
                       <router-link :to="{name:'student-balance',params: { id: item.user.id }}">
                         <i class="fas fa-donate"></i>
                       </router-link>
-                    </td>
+                    </td> -->
                     <td class="align-middle text-center">
                       <!-- <router-link :to="{name:'student-billing'}"> -->
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">swap_horizontal_circle</i>
@@ -75,6 +62,10 @@
                     </td>
                     <td class="align-middle text-center">
                       <span>
+                        <router-link :to="{name:'student-balance',params: { id: item.user.id }}" title="Wallet">
+                         <i class="fas fa-donate me-2"></i>
+                        </router-link>
+
                         <router-link :to="{ name: 'edit-student', params: { id: item.id } }">
                           <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         </router-link>
@@ -99,12 +90,14 @@ import axiosClient from '../../axios'
 export default {
   name: 'tables',
   mounted(){
+    this.getUser();
     this.getAllStudents();
   },
   data() {
     return {
       allStudents:'',
       schools: 6,
+      user:'',
     }
   },
   methods:{
@@ -121,10 +114,20 @@ export default {
     transactionHistoryNav(id){
       this.$router.push('/student-billing/'+id)
     },
+    //------------GET USER-----------------
+    getUser(){
+      let user=localStorage.getItem('user')
+      user= JSON.parse(user)
+      this.user=user
+    },
     //-------------GET ALL STUDENTS----------
     async getAllStudents(){
       try {
-        const response= await axiosClient.get('/getAllStudents')
+        let url='/getAllStudents'
+        if(this.user.role=='organization_admin'){
+          url='/getAllStudents/'+this.user.id
+        }
+        const response= await axiosClient.get(url)
         this.allStudents=response.data
       } catch (error) {
         console.log(error)

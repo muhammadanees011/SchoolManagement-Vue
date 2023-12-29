@@ -39,7 +39,7 @@
                             <label class="input-label" for="address">Address</label>
                             <input class="input-box" id="name" v-model="newSchool.address" type="text" placeholder="Address" name="address" />
                           </div>
-                          <div class="mb-1">
+                          <div v-if="user.role=='super_admin'" class="mb-1">
                             <label class="input-label" for="phone">Organization</label>
                             <br />
                             <select class="select-box" v-model="newSchool.organization_id" id="name" type="select" placeholder="Zip" name="zip">
@@ -138,11 +138,13 @@
       // MaterialButton,
     },
     mounted() {
+    this.getUser()
     this.editSchool()
     this.getOrganizations()
   },
     data() {
       return {
+        user:'',
         schoolData:'',
         newSchool: {
           organization_id:'',
@@ -177,6 +179,12 @@
           background: 'white',
         })
       },
+    //------------GET USER---------------
+    getUser(){
+      let user=localStorage.getItem('user')
+      user= JSON.parse(user)
+      this.user=user
+    },
     //------------EDIT SCHOOL------------
     async editSchool() {
       let id = this.$route.params.id
@@ -192,11 +200,12 @@
       let data
       if (response) {
         data = response.data
+        this.newSchool.organization_id = data.organization_id
         this.newSchool.website = data.website
         this.newSchool.title = data.title
         this.newSchool.website = data.website
-        this.newSchool.email = data.user.email
-        this.newSchool.phone = data.user.phone
+        this.newSchool.email = data.email
+        this.newSchool.phone = data.phone
         this.newSchool.country = data.country
         this.newSchool.city = data.city
         this.newSchool.state = data.state
@@ -214,7 +223,12 @@
     async updateData(){
         let id = this.$route.params.id
         try {
-        await axiosClient.put('/updateSchool/' + id, this.newSchool)
+        let url='/updateSchool/'+id
+        if(this.user.role=='organization_admin'){
+          alert("hello")
+          url='/updateSchool/'+id+'/'+this.user.id
+        }
+        await axiosClient.put(url, this.newSchool)
         this.$router.push({ name: 'list-schools' })
         this.snackbarMsg('School Updated')
         } catch (error) {

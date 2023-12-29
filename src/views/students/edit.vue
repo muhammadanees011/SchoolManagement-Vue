@@ -9,8 +9,10 @@
               </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
-                <div class="row py-2 bg-white form-data border-radius-lg">
-                  <div class="bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
+                <div class="row d-flex justify-content-center bg-white form-data border-radius-lg">
+                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
+                    <div class="form-bg container p-4">
+                    <p class="text-dark ms-4 font-weight-bold">Personal Information</p>
                     <div class="card card-plain">
                       <div class="card-body">
                         <form role="form">
@@ -38,11 +40,23 @@
                             <label class="input-label" for="address">Address</label>
                             <input class="input-box" id="name" v-model="newStudent.address" type="text" placeholder="Address" name="address" />
                           </div>
+                          <div class="mb-1">
+                            <label class="input-label" for="phone">School</label>
+                            <br />
+                            <select class="select-box" v-model="newStudent.school_id" id="school" type="select" placeholder="school" name="school">
+                              <option v-for="(item, index) in allSchools" :key="index" :value="item.id">
+                                {{ item.title }}
+                              </option>
+                            </select>
+                          </div>
                         </form>
                       </div>
                     </div>
+                    </div>
                   </div>
-                  <div class="bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
+                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
+                    <div class="form-bg container p-4">
+                    <p class="text-dark ms-4 font-weight-bold">Account Information</p>
                     <div class="card card-plain">
                       <div class="card-body">
                         <form role="form"> 
@@ -73,8 +87,11 @@
                         </form>
                       </div>
                     </div>
+                    </div>
                   </div>
-                  <div class="bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
+                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
+                    <div class="form-bg container p-4">
+                    <p class="text-dark ms-4 font-weight-bold">Contact Information</p>
                     <div class="card card-plain">
                       <div class="card-body">
                         <form role="form">
@@ -110,10 +127,11 @@
                         </form>
                       </div>
                     </div>
+                    </div>
                   </div>
-                  <div class="d-flex align-items-left bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
+                  <div class="d-flex justify-content-center bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                       <div class="">
-                        <button @click="updateStudent" style="font-size: 12px; background-color: #573078;" class="btn ms-3 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save </button>
+                        <button @click="updateStudent" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-3 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Update Student </button>
                         </div>
                     </div>
                 </div>
@@ -135,12 +153,15 @@
       // MaterialButton,
     },
     mounted() {
+    this.getUser();
     this.editStudent();
     this.getSchools();
   },
     data() {
       return {
+        user:'',
         newStudent: {
+          school_id:'',
           student_id:'',
           first_name: '',
           last_name:'',
@@ -172,6 +193,12 @@
           background: 'white',
         })
       },
+      //------------GET USER--------------
+      getUser(){
+        let user=localStorage.getItem('user')
+        user= JSON.parse(user)
+        this.user=user
+      },
       //------------EDIT SCHOOL------------
       async editStudent() {
         let id = this.$route.params.id
@@ -187,6 +214,7 @@
       let data
       if (response) {
         data = response.data
+        this.newStudent.school_id = data.school_id
         this.newStudent.student_id = data.student_id
         this.newStudent.first_name = data.user.first_name
         this.newStudent.last_name = data.user.last_name
@@ -220,13 +248,17 @@
       },
       //------------GET SCHOOLS------------
       async getSchools() {
-        try {
-          const response= await axiosClient.get('/getAllSchools')
-          this.allSchools=response.data
-        } catch (error) {
-          console.log(error)
+      try {
+        let url='/getAllSchools'
+        if(this.user.role=='organization_admin'){
+          url='/getAllSchools/'+this.user.id
         }
-      },
+        const response= await axiosClient.get(url)
+        this.allSchools=response.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
     }
   }
   </script>
@@ -251,11 +283,11 @@
   
   .select-box {
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 24px;
     box-sizing: border-box;
     width: 100%;
     font-size: 12px;
-    height: 35px;
+    height: 40px;
   }
   .select-box:hover {
     border-color: #6c757d; /* Change to your preferred hover color */
@@ -279,10 +311,10 @@
   input {
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 24px;
     box-sizing: border-box;
     width: 100%;
-    height: 35px;
+    height: 40px;
     font-size: 12px;
   }
   
@@ -308,5 +340,9 @@
     background-color: #f0f0f0;
     color: #999;
   }
+  .form-bg{
+  background-color: #F8F9FA;
+  border-radius: 15px;
+}
   </style>
   

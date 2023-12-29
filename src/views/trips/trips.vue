@@ -100,8 +100,8 @@
                 </div>
                 <br>
                 <div class="mt-5" v-if="user.role=='super_admin' || user.role=='school_user'">
-                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit</button>
-                <button style="font-size: 12px; background-color: #f513ca;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
+                <button style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit</button>
+                <button style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
                 </div>
                 <br>
                 </div>

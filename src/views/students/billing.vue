@@ -139,8 +139,12 @@ export default {
         user= JSON.parse(user)
         user_id=user.id;
       }
+      let data={
+        'user_id':user_id,
+        'admin_id':null
+      }
       try {
-       const response= await axiosClient.get('/getTransactionHistory/'+user_id);
+       const response= await axiosClient.post('/getTransactionHistory',data);
        this.transactionHistoryList=response.data;
       } catch (error) {
         console.log(error)

@@ -147,8 +147,8 @@ export default {
         data = response.data
         this.newOrganization.name = data.name
         this.newOrganization.website = data.website
-        this.newOrganization.email = data.user.email
-        this.newOrganization.phone = data.user.phone
+        this.newOrganization.email = data.email
+        this.newOrganization.phone = data.phone
         this.newOrganization.country = data.country
         this.newOrganization.city = data.city
         this.newOrganization.state = data.state

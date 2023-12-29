@@ -26,8 +26,9 @@ import AddMenu from '../views/meals/addMenu.vue'
 import PaymentAccount from '../views/payment_account/payment_account.vue'
 import AddPaymentCard from '../views/payment_account/add_card.vue'
 import CoursesList from '../views/courses/coursesList.vue'
-
-
+import OrganizationAdmins from '../views/organization_admins/admins.vue'
+import AddAdmin from '../views/organization_admins/addAdmin.vue'
+import EditAdmin from '../views/organization_admins/editAdmin.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
@@ -46,6 +47,7 @@ const routes = [
       requiresAuth: true,
     },
   },
+  //------------ORGANIZATION-----------------
   {
     path: '/organizations',
     name: 'organizations',
@@ -58,6 +60,21 @@ const routes = [
       { path: '/organizations', name: 'list-organizations', component: Organizations },
       { path: '/add', name: 'add-organizations', component: AddOrganizations },
       { path: '/:id', name: 'edit-organization', component: EditOrganization },
+    ],
+  },
+  //------------ORGANIZATION ADMINS---------------
+  {
+    path: '/organization-admins',
+    name: 'organizationAdmins',
+    component: DefaultLayout,
+    meta: {
+      title: 'Organizations Admins',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/organizations-admins', name: 'list-organization-admins', component: OrganizationAdmins },
+      { path: '/add-organizations-admins', name: 'add-organization-admins', component: AddAdmin },
+      { path: '/edit-organizations-admin/:id', name: 'edit-organization-admin', component: EditAdmin },
     ],
   },
   {
@@ -84,7 +101,7 @@ const routes = [
     },
     children: [
       { path: '/students', name: 'list-students', component: Students },
-      { path: '/add', name: 'add-student', component: AddStudent },
+      { path: '/add/student', name: 'add-student', component: AddStudent },
       { path: '/:id', name: 'edit-student', component: EditStudent },
       { path: '/student-billing/:id', name: 'student-billing', component: StudentBilling },
       { path: '/student-balance/:id?', name: 'student-balance', component: StudentBallance },

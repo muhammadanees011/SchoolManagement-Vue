@@ -11,42 +11,53 @@
               </router-link>
             </div>
           </div> -->
-          <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-              <h6 class="text-dark text-capitalize ps-3">Add Student</h6>
-              <router-link :to="{ name: 'list-students' }">
-                <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4  border-radius-lg"> Back </button>
-              </router-link>
-            </div>
+          <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-1">
+            <h6 class="text-dark text-capitalize ps-3">Add Student</h6>
+            <router-link :to="{ name: 'list-students' }">
+              <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4  border-radius-lg"> Back </button>
+            </router-link>
+          </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
-              <div class="row py-2 bg-white form-data border-radius-lg">
-                <div class="bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
+              <div class="row py-1 d-flex justify-content-center bg-white form-data border-radius-lg">
+                <!-- <div v-if="isError" class="mb-3 change-pass-alert">
+                  <small v-for="(item,index) in validationErrors" :key="index" class="pass-text">{{ item }}<br></small>
+                </div> -->
+                <div class="bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
+                  <div class="form-bg container p-4">
+                  <p class="text-dark ms-4 font-weight-bold">Personal Information</p>
                   <div class="card card-plain">
                     <div class="card-body">
                       <form role="form">
                         <div class="mb-1">
                           <label class="input-label" for="name">First Name</label>
                           <input class="input-box" id="name" v-model="newStudent.first_name" type="text" placeholder="First Name" name="first_name" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["first_name"]!==""'>First Name is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="name">Last Name</label>
                           <input class="input-box" id="name" v-model="newStudent.last_name" type="text" placeholder="Last Name" name="last_name" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["last_name"]!==""'>Last Name is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="student_id">Student ID</label>
                           <input class="input-box" id="student_id" v-model="newStudent.student_id" type="number" placeholder="ID" name="student_id" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["student_id"]!==""'>Student ID is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="email">Email</label>
                           <input class="input-box" id="name" v-model="newStudent.email" type="email" placeholder="email" name="email" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="phone">Phone</label>
                           <input class="input-box" id="name" v-model="newStudent.phone" type="tel" placeholder="Phone" name="phone" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["phone"]!==""'>Phone is required</small>
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="address">Address</label>
-                          <input class="input-box" id="name" v-model="newStudent.address" type="text" placeholder="Address" name="address" />
+                          <label class="input-label" for="date_of_birth">Date Of Birth</label>
+                          <input class="input-box" id="date_of_birth" v-model="newStudent.date_of_birth" type="date" placeholder="date of birth" name="date_of_birth" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["date_of_birth"]!==""'>date of birth is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="phone">School</label>
@@ -56,38 +67,48 @@
                               {{ item.title }}
                             </option>
                           </select>
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School ID is required</small>
                         </div>
                       </form>
                     </div>
                   </div>
+                  </div>
                 </div>
-                <div class="bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
+                <div class="mt-3 bg-white box-shadow-dark border-radius-lg  col-xl-10 col-lg-10 col-md-10">
+                  <div class="form-bg container p-4">
+                  <p class="text-dark ms-4 font-weight-bold">Account Information</p>
                   <div class="card card-plain">
                     <div class="card-body">
                       <form role="form"> 
                         <div class="mb-1">
                           <label class="input-label" for="last_name">Country</label>
                           <input class="input-box" id="name" type="text" v-model="newStudent.country" placeholder="Country" name="country" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="state">State</label>
                           <input class="input-box" id="name" type="text" v-model="newStudent.state" placeholder="State" name="state" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["state"]!==""'>state is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="city">City</label>
                           <input class="input-box" id="name" v-model="newStudent.city" type="text" placeholder="City" name="city" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="phone">Zip Code</label>
                           <input class="input-box" id="name" v-model="newStudent.zip" type="text" placeholder="Zip Code" name="zip" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>zip is required</small>
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="date_of_birth">Date Of Birth</label>
-                          <input class="input-box" id="date_of_birth" v-model="newStudent.date_of_birth" type="date" placeholder="date of birth" name="date_of_birth" />
+                          <label class="input-label" for="address">Address</label>
+                          <input class="input-box" id="name" v-model="newStudent.address" type="text" placeholder="Address" name="address" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>address is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="stage">Stage</label>
                           <input class="input-box" id="stage" v-model="newStudent.stage" type="text" placeholder="Stage" name="stage" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["stage"]!==""'>stage is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="status">Status</label>
@@ -97,50 +118,62 @@
                               {{ item }}
                             </option>
                           </select>
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>status is required</small>
                         </div>
                       </form>
                     </div>
                   </div>
+                  </div>
                 </div>
-                <div class="bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
+                <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
+                  <div class="form-bg container p-4">
+                  <p class="text-dark ms-4 font-weight-bold">Contact Information</p>
                   <div class="card card-plain">
                     <div class="card-body">
                       <form role="form">
                         <div class="mb-1">
                           <label class="input-label" for="emergency_contact_name">Emergency Contact Name</label>
                           <input class="input-box" id="emergency_contact_name" v-model="newStudent.emergency_contact_name" type="text" placeholder="emergency contact name" name="emergency_contact_name" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["emergency_contact_name"]!==""'>emergency contact name is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="emergency_contact_phone">Emergency Contact Number</label>
                           <input class="input-box" id="emergency_contact_phone" v-model="newStudent.emergency_contact_phone" type="text" placeholder="emergency contact number" name="emergency_contact_phone" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["emergency_contact_phone"]!==""'>emergency contact phone is required</small>
                         </div>
                         <div class="mb-1">
                         <label class="input-label" for="phone">Password</label>
                         <input class="input-box" id="name" v-model="newStudent.password" type="password" placeholder="Password" name="password" />
+                        <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>password is required</small>
                       </div>
                       <div class="mb-1">
                         <label class="input-label" for="phone">Confirm Password</label>
                         <input class="input-box" id="name" v-model="newStudent.password_confirmation" type="password" placeholder="Confirm Password" name="password_confirmation" />
+                        <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password_confirmation"]!==""'>confirm password is required</small>
                       </div>
                         <div class="mb-1">
                           <label class="input-label" for="allergies">Allergies</label>
                           <input class="input-box" id="allergies" v-model="newStudent.allergies" type="text" placeholder="Allergies" name="allergies" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["allergies"]!==""'>allergies is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="medical_conditions">Medical Conditions</label>
                           <input class="input-box" id="medical_conditions" v-model="newStudent.medical_conditions" type="text" placeholder="Medical Conditions" name="medical_conditions" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["medical_conditions"]!==""'>medical conditions is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="enrollment_date">Enrollment Date</label>
                           <input class="input-box" id="enrollment_date" v-model="newStudent.enrollment_date" type="date" placeholder="Enrollment Date" name="enrollment_date" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["enrollment_date"]!==""'>enrollment date is required</small>
                         </div>
                       </form>
                     </div>
                   </div>
+                  </div>
                 </div>
-                <div class="d-flex align-items-left bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
+                <div class="d-flex justify-content-center bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                     <div class="">
-                      <button @click="saveNewStudent" style="font-size: 12px; background-color: #573078;" class="btn ms-3 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save </button>
+                      <button @click="saveNewStudent" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-5 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save Student </button>
                       </div>
                   </div>
               </div>
@@ -155,6 +188,7 @@
 <script>
 // import MaterialButton from '@/components/MaterialButton.vue'
 import axiosClient from '../../axios'
+import cloneDeep from 'lodash/cloneDeep';
 
 export default {
   name: '',
@@ -162,10 +196,15 @@ export default {
     // MaterialButton,
   },
   mounted() {
+  this.getUser();
   this.getSchools()
 },
   data() {
     return {
+      user:'',
+      isError:false,
+      formValidation:"",
+      validationErrors:'',
       newStudent: {
         school_id:'',
         student_id:'',
@@ -194,6 +233,7 @@ export default {
     }
   },
   methods:{
+    //----------TOASTS---------------------
     snackbarMsg(message) {
       this.$snackbar.add({
         type: 'success',
@@ -201,16 +241,43 @@ export default {
         background: 'white',
       })
     },
+    //------------VALIDATE FORM-------------
+    validateForm(){
+      let status=false
+      let validate=''
+      validate=cloneDeep(this.newStudent)
+      for(let item in this.newStudent){
+        if(this.newStudent[item]==''){
+          validate[item]="is required"
+          status=true
+        }else{
+          validate[item]=''
+        }
+      }
+      this.formValidation=validate
+      return status;
+    },
+    //------------GET USER----------------
+    getUser(){
+      let user=localStorage.getItem('user')
+      user= JSON.parse(user)
+      this.user=user
+    },
     //------------SAVE STUDENT------------
     async saveNewStudent() {
+      if(this.validateForm()){
+        return;
+      }
       try {
         let response=await axiosClient.post('/createStudent', this.newStudent)
+        this.isError=false;
         response=response.data;
         this.createCustomer(response.user.id);
         this.$router.push({ name: 'list-students' })
         this.snackbarMsg('Student Saved Successfuly')
       } catch (error) {
-        console.log(error)
+        this.isError=true;
+        this.validationErrors=error.response.data.errors
       }
     },
     //-----------CREATE STRIPE CUSTOMER----------
@@ -230,7 +297,11 @@ export default {
     //------------GET SCHOOLS------------
     async getSchools() {
       try {
-        const response= await axiosClient.get('/getAllSchools')
+        let url='/getAllSchools'
+        if(this.user.role=='organization_admin'){
+          url='/getAllSchools/'+this.user.id
+        }
+        const response= await axiosClient.get(url)
         this.allSchools=response.data
       } catch (error) {
         console.log(error)
@@ -260,11 +331,11 @@ export default {
 
 .select-box {
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 24px;
   box-sizing: border-box;
   width: 100%;
   font-size: 12px;
-  height: 35px;
+  height: 40px;
 }
 .select-box:hover {
   border-color: #6c757d; /* Change to your preferred hover color */
@@ -288,10 +359,10 @@ export default {
 input {
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 24px;
   box-sizing: border-box;
   width: 100%;
-  height: 35px;
+  height: 40px;
   font-size: 12px;
 }
 
@@ -316,5 +387,30 @@ input:focus {
 input:disabled {
   background-color: #f0f0f0;
   color: #999;
+}
+.form-bg{
+  background-color: #F8F9FA;
+  border-radius: 15px;
+}
+.change-pass-alert{
+  width: 80%;
+  height: auto;
+  background: rgba(238, 220, 130, 0.5);
+  border: 1px solid black;
+  border-radius: 6px;
+  padding-bottom: 5px;
+}
+.pass-text{
+  color: black;
+  margin-left: 10px;
+  font-size: 10px;
+}
+.click-link{
+  color: blueviolet;
+  text-decoration-line: underline;
+  cursor: pointer;
+}
+.error-txt{
+  font-size: 11px;
 }
 </style>

@@ -75,14 +75,6 @@
                         <input class="input-box" id="address" v-model="newOrganization.address" type="text" placeholder="Address" name="address" />
                       </div>
                       <div class="mb-1">
-                        <label class="input-label" for="phone">Password</label>
-                        <input class="input-box" id="name" v-model="newOrganization.password" type="password" placeholder="Password" name="password" />
-                      </div>
-                      <div class="mb-1">
-                        <label class="input-label" for="phone">Confirm Password</label>
-                        <input class="input-box" id="name" v-model="newOrganization.password_confirmation" type="password" placeholder="Confirm Password" name="password_confirmation" />
-                      </div>
-                      <div class="mb-1">
                         <label class="input-label" for="first_name">Description</label>
                         <br />
                         <textarea class="text-area-box" v-model="newOrganization.description" id="name" type="text" placeholder="Description..." name="description" />

@@ -25,7 +25,7 @@
                       <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Account
                       </th> -->
-                      <th v-if="user.role=='super_admin' || user.role=='school_user'" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th v-if="user.role==='super_admin' || user.role==='organization_admin'" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Student
                       </th>
                       <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -58,7 +58,7 @@
                           </div>
                         </div>
                       </td> -->
-                      <td v-if="user.role=='super_admin' || user.role=='school_user'" >
+                      <td v-if="user.role==='super_admin' || user.role==='organization_admin'" >
                         <div class="d-flex px-2 py-1">
                           <div>
                           </div>
@@ -111,6 +111,7 @@
   export default {
     name: "tables",
     mounted(){
+      this.getUser();
       this.getTransactionHistory();
     },
     data(){
@@ -138,12 +139,20 @@
       async getTransactionHistory(){
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
-        let user_id='';
+        let user_id=null;
         if(user.role=='student'){
           user_id=user.id
         }
+        let data={
+          'user_id':null,
+          'admin_id':null,
+        }
+        data.user_id=user_id
+        if(this.user.role=='organization_admin'){
+         data.admin_id=this.user.id
+        }
         try {
-         const response= await axiosClient.get('/getTransactionHistory/'+user_id);
+         const response= await axiosClient.post('getTransactionHistory',data);
          this.transactionHistoryList=response.data;
         } catch (error) {
           console.log(error)
