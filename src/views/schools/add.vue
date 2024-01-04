@@ -61,14 +61,19 @@
                   <div class="card card-plain">
                     <div class="card-body">
                       <form role="form"> 
-                        <div class="mb-1">
+                        <div  class="mb-1">
+                        <label class="input-label" for="country">Country</label>
+                        <br />
+                        <select class="select-box" v-model="newSchool.country" id="country" type="select" placeholder="Country" name="country">
+                          <option v-for="(item, index) in availableCountries" :key="index" :value="item">
+                            {{ item }}
+                          </option>
+                        </select>
+                      </div>
+                        <!-- <div class="mb-1">
                           <label class="input-label" for="last_name">Country</label>
                           <input class="input-box" id="name" type="text" v-model="newSchool.country" placeholder="Country" name="country" />
-                        </div>
-                        <div class="mb-1">
-                          <label class="input-label" for="state">State</label>
-                          <input class="input-box" id="name" type="text" v-model="newSchool.state" placeholder="State" name="state" />
-                        </div>
+                        </div> -->
                         <div class="mb-1">
                           <label class="input-label" for="city">City</label>
                           <input class="input-box" id="name" v-model="newSchool.city" type="text" placeholder="City" name="city" />
@@ -80,6 +85,10 @@
                         <div class="mb-1">
                           <label class="input-label" for="teachers_count">Teachers Count</label>
                           <input class="input-box" id="teachers_count" v-model="newSchool.teachers_count" type="number" placeholder="Teachers Count" name="teachers_count" />
+                        </div>
+                        <div class="mb-1">
+                          <label class="input-label" for="students_count">Students Count</label>
+                          <input class="input-box" id="students_count" v-model="newSchool.students_count" type="number" placeholder="Teachers Count" name="students_count" />
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="stages">Stages</label>
@@ -94,10 +103,6 @@
                     <div class="card-body">
                       <form role="form">
                         <div class="mb-1">
-                          <label class="input-label" for="students_count">Students Count</label>
-                          <input class="input-box" id="students_count" v-model="newSchool.students_count" type="number" placeholder="Teachers Count" name="students_count" />
-                        </div>
-                        <div class="mb-1">
                           <label class="input-label" for="tagLine">Tag Line</label>
                           <input class="input-box" id="name" v-model="newSchool.tagline" type="text" placeholder="Tag Line" name="tagLine" />
                         </div>
@@ -109,11 +114,6 @@
                               {{ item }}
                             </option>
                           </select>
-                        </div>
-                        <div class="mb-1">
-                          <label class="input-label" for="description">Description</label>
-                          <br />
-                          <textarea class="text-area-box" v-model="newSchool.description" id="name" type="text" placeholder="Description" name="description" />
                         </div>
                       </form>
                     </div>
@@ -149,6 +149,7 @@ export default {
   data() {
     return {
       user:'',
+      availableCountries:['UK','USA','Canada'],
       newSchool: {
         organization_id:'',
         title: '',
@@ -157,14 +158,12 @@ export default {
         phone: '',
         country: '',
         city: '',
-        state: '',
         zip: '',
         address: '',
         founded_date: '',
         password: '',
         password_confirmation: '',
         tagline: '',
-        description: '',
         teachers_count:'',
         students_count:'',
         stages:'',

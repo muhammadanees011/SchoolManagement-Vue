@@ -45,36 +45,30 @@
                 <div class="bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
                   <div class="card card-plain">
                     <div class="card-body">
-                      <div class="mb-1">
+                      <div  class="mb-1">
+                        <label class="input-label" for="country">Country</label>
+                        <br />
+                        <select class="select-box" v-model="newOrganization.country" id="country" type="select" placeholder="Country" name="country">
+                          <option v-for="(item, index) in availableCountries" :key="index" :value="item">
+                            {{ item }}
+                          </option>
+                        </select>
+                      </div>
+                      <!-- <div class="mb-1">
                         <label class="input-label" for="last_name">Country</label>
                         <input class="input-box" id="name" v-model="newOrganization.country" type="text" placeholder="Country" name="country" />
-                      </div>
-                      <div class="mb-1">
-                        <label class="input-label" for="last_name">State</label>
-                        <input class="input-box" id="name" v-model="newOrganization.state" type="text" placeholder="Country" name="country" />
-                      </div>
+                      </div> -->
                       <div class="mb-1">
                         <label class="input-label" for="city">City</label>
                         <input class="input-box" id="name" v-model="newOrganization.city" type="city" placeholder="City" name="city" />
                       </div>
                       <div class="mb-1">
-                        <label class="input-label" for="phone">Zip</label>
+                        <label class="input-label" for="phone">Postcode/Zip</label>
                         <input class="input-box" id="name" v-model="newOrganization.zip" type="text" placeholder="Zip" name="zip" />
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
-                  <div class="card card-plain">
-                    <div class="card-body">
                       <div class="mb-1">
                         <label class="input-label" for="address">Address</label>
                         <input class="input-box" id="address" v-model="newOrganization.address" type="text" placeholder="Address" name="address" />
-                      </div>
-                      <div class="mb-1">
-                        <label class="input-label" for="first_name">Description</label>
-                        <br />
-                        <textarea class="text-area-box" v-model="newOrganization.description" id="name" type="text" placeholder="Description..." name="description" />
                       </div>
                     </div>
                   </div>
@@ -104,6 +98,7 @@ export default {
   computed: {},
   data() {
     return {
+      availableCountries:['UK','USA','Canada'],
       newOrganization: {
         name: '',
         website: '',

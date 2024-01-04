@@ -18,12 +18,12 @@
             sidebarType === 'bg-white' ||
             (sidebarType === 'bg-transparent' && !isDarkMode)
               ? logoDark
-              : logo
+              : StudentPayLogo
           "
           class="navbar-brand-img h-100"
           alt="main_logo"
         />
-        <span class="ms-2 font-weight-bold text-white">StudentPay</span>
+        <span class="ms-2 font-weight-bold text-white"></span>
       </a>
     </div>
     <!-- <hr class="horizontal  mt-0 mb-2" style="background-color: #573078 !important;" /> -->
@@ -33,6 +33,7 @@
 <script>
 import SidenavList from "./SidenavList.vue";
 import logo from "@/assets/img/logos/mastercard.png";
+import StudentPayLogo from "@/assets/img/logos/StudentPay-logo.png";
 import logoDark from "@/assets/img/logos/mastercard.png";
 import { mapState } from "vuex";
 
@@ -45,6 +46,7 @@ export default {
     return {
       logo,
       logoDark,
+      StudentPayLogo,
     };
   },
   computed: {

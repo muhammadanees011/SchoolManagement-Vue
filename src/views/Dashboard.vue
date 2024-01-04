@@ -5,8 +5,8 @@
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
-              :title="{ text: 'Total Balance', value: '£'+userBallance }"
-              detail="<span class='text-success text-sm font-weight-bolder'></span>your ballance"
+              :title="{ text:isAdmin ? 'Total Figures':'Total Balance', value: '£'+userBallance }"
+              :detail="(isAdmin ? 'Total Figures' : 'Total Balance')"
               :icon="{
                 name: 'credit_card',
                 color: 'text-white',
@@ -161,6 +161,7 @@ export default {
   name: 'dashboard-default',
   data() {
     return {
+      user:'',
       userBallance:'',
       logoXD,
       team1,
@@ -177,10 +178,16 @@ export default {
   mounted(){
     this.getStudentBalance();
   },
+  computed:{
+    isAdmin(){
+      return this.user.role === 'organization_admin' || this.user.role === 'super_admin';
+    }
+  },
   methods:{
    async getStudentBalance(){
     let user=localStorage.getItem('user')
     user= JSON.parse(user)
+    this.user=user
       try {
           let response= await axiosClient.get('/getStudentBalance/'+user.id)
           response=response.data

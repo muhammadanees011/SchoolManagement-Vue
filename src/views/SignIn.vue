@@ -14,24 +14,8 @@
           <div class="card z-index-0 fadeIn3 fadeInBottom">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
-                <h4 class="text-white font-weight-bolder text-center mt-2 mb-0"> Sign in </h4>
-                <div class="row mt-3">
-                  <div class="col-2 text-center ms-auto">
-                    <a class="btn btn-link px-3" href="javascript:;">
-                      <i class="fab fa-facebook text-white text-lg"></i>
-                    </a>
-                  </div>
-                  <div class="col-2 text-center px-1">
-                    <a class="btn btn-link px-3" href="javascript:;">
-                      <i class="fab fa-github text-white text-lg"></i>
-                    </a>
-                  </div>
-                  <div class="col-2 text-center me-auto">
-                    <a class="btn btn-link px-3" href="javascript:;">
-                      <i class="fab fa-google text-white text-lg"></i>
-                    </a>
-                  </div>
-                </div>
+                <img class="ms-5" style="width: 200px; height: 45px;" src="@/assets/img/logos/StudentPay-logo.png">
+                <h4 class="text-white font-weight-bolder text-center mt-2 "> Sign in </h4>
               </div>
             </div>
             <div class="card-body">
@@ -39,17 +23,19 @@
               <!-- <form role="form" class="text-start mt-3"> -->
               <div class="mb-3">
                 <input id="email" v-model="credentials.email" placeholder="Email" type="email" label="Email" name="email" />
+                <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
               </div>
               <div class="mb-3">
                 <input id="password" v-model="credentials.password" placeholder="Password" type="password" label="Password" name="password" />
+                <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>Password is required</small>
               </div>
               <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch>
               <div class="text-center">
                 <material-button class="my-4 mb-2" @click="signIn" variant="gradient" color="success" fullWidth>Sign in</material-button>
               </div>
-              <p class="mt-4 text-sm text-center">
-                Don't have an account?
-                <router-link :to="{ name: 'SignUp' }" class="text-success text-gradient font-weight-bold">Sign up</router-link>
+              <p class="mt-4 text-sm text-success text-center">
+                <!-- <small class="text-success text-gradient font-weight-bold">Forgot Password ?</small> -->
+                <router-link :to="{ name: 'ForgotPassword' }" class="text-success text-gradient font-weight-bold">Forgot Password ?</router-link>
               </p>
               <!-- </form> -->
             </div>
@@ -67,6 +53,7 @@ import MaterialSwitch from '@/components/MaterialSwitch.vue'
 import MaterialButton from '@/components/MaterialButton.vue'
 import { mapMutations } from 'vuex'
 import axiosClient from '../axios'
+import cloneDeep from 'lodash/cloneDeep';
 
 export default {
   name: 'sign-in',
@@ -87,6 +74,7 @@ export default {
   data() {
     return {
       unauthorized: false,
+      formValidation:"",
       credentials: {
         email: '',
         password: '',
@@ -95,9 +83,27 @@ export default {
   },
   methods: {
     ...mapMutations(['toggleEveryDisplay', 'toggleHideConfig']),
-
+    //------------VALIDATE FORM-------------
+    validateForm(){
+      let status=false
+      let validate=''
+      validate=cloneDeep(this.credentials)
+      for(let item in this.credentials){
+        if(this.credentials[item]==''){
+          validate[item]="is required"
+          status=true
+        }else{
+          validate[item]=''
+        }
+      }
+      this.formValidation=validate
+      return status;
+    },
     //------------SignIn---------------
     async signIn() {
+      if(this.validateForm()){
+        return;
+      }
       try {
         const response = await axiosClient.post('/login', this.credentials)
         let user = response.data ? response.data.user : null

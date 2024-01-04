@@ -28,4 +28,7 @@ export default {
 </script>
 
 <style>
+.main-content::-webkit-scrollbar {
+    width: 0px;
+  }
 </style>

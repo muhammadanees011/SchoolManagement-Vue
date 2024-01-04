@@ -2,6 +2,12 @@
   <nav class="shadow-none navbar navbar-main navbar-expand-lg border-radius-xl" v-bind="$attrs" id="navbarBlur" data-scroll="true" :class="isAbsolute ? 'mt-4' : 'mt-0'">
     <div class="px-3 py-1 container-fluid">
       <!-- <breadcrumbs :currentPage="currentRouteName" :color="color" /> -->
+      <div v-if="user.role!='super_admin'" class="organization-name mt-2 me-5">
+        <h5>{{ organization_name }}</h5>
+      </div>
+      <div v-if="user.role=='super_admin'" class="organization-name mt-2 me-5">
+        <h5>Super Admin</h5>
+      </div>
       <div v-if="!passwordStatus" class="change-pass-alert">
         <small class="pass-text">For security reasons, we kindly ask you to change your password,
           <router-link :to="{name:'Profile'}">
@@ -211,6 +217,7 @@ export default {
       passwordStatus:'',
       cartItemsList:'',
       user:'',
+      organization_name:'',
       showCart:false,
       showMenu: false,
       showProfile: false,
@@ -223,6 +230,7 @@ export default {
   mounted(){
     this.getUser();
     this.isUpdatedRecently();
+    this.getOrganizationName();
   },
   methods: {
     ...mapMutations(['navbarMinimize', 'toggleConfigurator']),
@@ -242,6 +250,8 @@ export default {
       user = JSON.parse(user);
       const createdDate = new Date(user.created_at);
       const updatedDate = new Date(user.updated_at);
+      console.log(createdDate)
+      console.log(updatedDate)
       if(updatedDate > createdDate){
         this.passwordStatus=true;
       }else{
@@ -255,6 +265,23 @@ export default {
         localStorage.removeItem('token')
         this.$router.push({ name: 'SignIn' })
         await axiosClient.post('/logout', localStorage.getItem('token'))
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    //------------GET ORGANIZATION NAME---------------
+    async getOrganizationName(){
+      if(this.user.role=='super_admin'){
+        return
+      }
+      let data={
+        'user_id':this.user.id,
+        'role':this.user.role
+      }
+      try {
+        const response=await axiosClient.post('/getOrganizationName',data)
+        this.organization_name=response.data.organization_name;
+        console.log(response)
       } catch (error) {
         console.log(error)
       }
@@ -340,5 +367,8 @@ export default {
   color: blueviolet;
   text-decoration-line: underline;
   cursor: pointer;
+}
+.organization-name{
+  color: #010A21;
 }
 </style>

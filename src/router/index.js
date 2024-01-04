@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import Profile from '../views/Profile.vue'
 import SignIn from '../views/SignIn.vue'
+import ForgotPassword from '../views/ForgotPassword.vue'
+import ResetPassword from '../views/ResetPassword.vue'
 import SignUp from '../views/SignUp.vue'
 import Schools from '../views/schools/Schools.vue'
 import AddSchool from '../views/schools/add.vue'
@@ -29,6 +31,12 @@ import CoursesList from '../views/courses/coursesList.vue'
 import OrganizationAdmins from '../views/organization_admins/admins.vue'
 import AddAdmin from '../views/organization_admins/addAdmin.vue'
 import EditAdmin from '../views/organization_admins/editAdmin.vue'
+import Staff from '../views/staff/staff.vue'
+import AddStaff from '../views/staff/add.vue'
+import EditStaff from '../views/staff/edit.vue'
+import Parents from '../views/parent/parents.vue'
+import AddParents from '../views/parent/add.vue'
+import EditParents from '../views/parent/edit.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
@@ -77,6 +85,7 @@ const routes = [
       { path: '/edit-organizations-admin/:id', name: 'edit-organization-admin', component: EditAdmin },
     ],
   },
+  //------------SCHOOLS---------------
   {
     path: '/schools',
     name: 'schools',
@@ -91,6 +100,7 @@ const routes = [
       { path: '/:id', name: 'edit-school', component: EditSchool },
     ],
   },
+  //------------STUDENTS---------------
   {
     path: '/students',
     name: 'students',
@@ -107,6 +117,37 @@ const routes = [
       { path: '/student-balance/:id?', name: 'student-balance', component: StudentBallance },
     ],
   },
+  //------------STAFF---------------
+  {
+    path: '/staff',
+    name: 'staff',
+    component: DefaultLayout,
+    meta: {
+      title: 'Staff',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/staff', name: 'list-staff', component: Staff },
+      { path: '/staff/add', name: 'add-staff', component: AddStaff },
+      { path: '/staff/edit/:id', name: 'edit-staff', component: EditStaff },
+    ],
+  },
+  //------------PARENT---------------
+  {
+    path: '/parent',
+    name: 'parent',
+    component: DefaultLayout,
+    meta: {
+      title: 'Parent',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/parents', name: 'list-parent', component: Parents },
+      { path: '/parents/add', name: 'add-parent', component: AddParents },
+      { path: '/parents/edit/:id', name: 'edit-parent', component: EditParents },
+    ],
+  },
+  //------------PAYMENTS---------------
   {
     path: '/payment',
     name: 'payment',
@@ -120,6 +161,7 @@ const routes = [
       { path: '/add_card', name: 'add_card', component: AddPaymentCard },
     ],
   },
+  //------------TRANSACTION HISTORY----------
   {
     path: '/transactions-history',
     name: 'transactions',
@@ -132,6 +174,7 @@ const routes = [
       { path: '/transaction-history', name: 'transaction-history', component: TransactionHistory },
     ],
   },
+  //-------------SHOP----------------
   {
     path: '/shop',
     name: 'shop',
@@ -147,6 +190,7 @@ const routes = [
       { path: '/checkout/:id', name: 'shop-checkout', component: Checkout },
     ],
   },
+  //--------------TRIPS-----------------
   {
     path: '/trips',
     name: 'trips',
@@ -160,6 +204,7 @@ const routes = [
       { path: '/add-trips', name: 'add-trips', component: AddTrips },
     ],
   },
+  //---------------COURSES---------------
   {
     path: '/courses',
     name: 'courses',
@@ -172,6 +217,7 @@ const routes = [
       { path: '/courses', name: 'list-courses', component: CoursesList },
     ],
   },
+  //----------------MEALS-------------------
   {
     path: '/meals',
     name: 'meals',
@@ -185,6 +231,7 @@ const routes = [
       { path: '/add-menu', name: 'add-menu', component: AddMenu },
     ],
   },
+  //----------------PROFILE-----------------
   {
     path: '/profile',
     name: 'Profile',
@@ -195,6 +242,16 @@ const routes = [
     path: '/sign-in',
     name: 'SignIn',
     component: SignIn,
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: ForgotPassword,
+  },
+  {
+    path: '/reset-password/:email/:otp',
+    name: 'ResetPassword',
+    component: ResetPassword,
   },
   {
     path: '/sign-up',

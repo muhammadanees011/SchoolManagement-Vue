@@ -89,3 +89,6 @@ input:disabled {
 #sidenav-main{
     background-color: #010A21 !important;  
 }
+.sidenav::-webkit-scrollbar {
+    width: 0px;
+  }

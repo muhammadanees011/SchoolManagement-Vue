@@ -52,7 +52,6 @@
                         <div class="mb-1">
                           <label class="input-label" for="phone">Phone</label>
                           <input class="input-box" id="name" v-model="newStudent.phone" type="tel" placeholder="Phone" name="phone" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["phone"]!==""'>Phone is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="date_of_birth">Date Of Birth</label>
@@ -81,22 +80,22 @@
                     <div class="card-body">
                       <form role="form"> 
                         <div class="mb-1">
-                          <label class="input-label" for="last_name">Country</label>
-                          <input class="input-box" id="name" type="text" v-model="newStudent.country" placeholder="Country" name="country" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
-                        </div>
-                        <div class="mb-1">
-                          <label class="input-label" for="state">State</label>
-                          <input class="input-box" id="name" type="text" v-model="newStudent.state" placeholder="State" name="state" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["state"]!==""'>state is required</small>
-                        </div>
+                            <label class="input-label" for="status">Country</label>
+                            <br />
+                            <select v-model="newStudent.country" class="select-box" id="country" type="select" placeholder="country" name="country">
+                              <option v-for="(item, index) in availableCountries" :key="index" :value="item">
+                                {{ item }}
+                              </option>
+                            </select>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
+                          </div>
                         <div class="mb-1">
                           <label class="input-label" for="city">City</label>
                           <input class="input-box" id="name" v-model="newStudent.city" type="text" placeholder="City" name="city" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small>
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="phone">Zip Code</label>
+                          <label class="input-label" for="phone">Postcode/Zip</label>
                           <input class="input-box" id="name" v-model="newStudent.zip" type="text" placeholder="Zip Code" name="zip" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>zip is required</small>
                         </div>
@@ -201,6 +200,7 @@ export default {
 },
   data() {
     return {
+      availableCountries:['UK','USA','Canada'],
       user:'',
       isError:false,
       formValidation:"",
@@ -214,7 +214,6 @@ export default {
         phone: '',
         country: '',
         city: '',
-        state: '',
         zip: '',
         address: '',
         password: '',
@@ -247,12 +246,12 @@ export default {
       let validate=''
       validate=cloneDeep(this.newStudent)
       for(let item in this.newStudent){
-        if(this.newStudent[item]==''){
-          validate[item]="is required"
-          status=true
-        }else{
-          validate[item]=''
-        }
+        if ((this.newStudent[item] === '' || this.newStudent[item] === undefined) && (item !== "phone")) {
+              validate[item]="is required"
+              status=true
+          }else{
+            validate[item]=''
+          }
       }
       this.formValidation=validate
       return status;

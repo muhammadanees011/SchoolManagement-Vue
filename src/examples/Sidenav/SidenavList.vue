@@ -1,5 +1,5 @@
 <template>
-  <div class="w-auto h-auto collapse navbar-collapse vh-100 h-100" id="sidenav-collapse-main">
+  <div class="w-auto collapse navbar-collapse vh-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
       <li class="nav-item" >
         <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="dashboard" navText="Dashboard">
@@ -18,7 +18,7 @@
       </li>
       </template>
       <li  v-if="user && user.role=='super_admin'" class="nav-item">
-        <sidenav-collapse :to="{ name: 'list-organization-admins' }" :aria-controls="''" v-bind:collapse="false" collapseRef="organization-admins" navText="Admins">
+        <sidenav-collapse :to="{ name: 'list-organization-admins' }" :aria-controls="''" v-bind:collapse="false" collapseRef="organization-admins" navText="Organization Admins">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">business</i>
           </template>
@@ -32,8 +32,22 @@
           </template>
         </sidenav-collapse>
       </li>
-        <li class="nav-item">
+      <li class="nav-item">
         <sidenav-collapse :to="{ name: 'list-students' }" :aria-controls="''" v-bind:collapse="false" collapseRef="students" navText="Students">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">people</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
+        <sidenav-collapse :to="{ name: 'list-staff' }" :aria-controls="''" v-bind:collapse="false" collapseRef="staff" navText="Staff">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">people</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
+        <sidenav-collapse :to="{ name: 'list-parent' }" :aria-controls="''" v-bind:collapse="false" collapseRef="parents" navText="Parents">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">people</i>
           </template>
@@ -136,5 +150,7 @@ export default {
 .navbar-nav .active {
   background-color: #573078 !important;
 }
-
+#sidenav-collapse-main::-webkit-scrollbar {
+  width: 0px;
+}
 </style>
