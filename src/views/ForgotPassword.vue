@@ -13,7 +13,7 @@
           <div class="col-lg-4 col-md-8 col-12 mx-auto">
             <div class="card z-index-0 fadeIn3 fadeInBottom">
               <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
+                <div class="border-radius-lg py-3 pe-1" style="background-color: #573078;">
                   <img class="ms-5" style="width: 200px; height: 45px;" src="@/assets/img/logos/StudentPay-logo.png">
                   <h5 class="text-white text-center mt-2">Forgot Password</h5>
                 </div>
@@ -30,7 +30,7 @@
                   <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["otp"]!==""'>otp is required</small>
                 </div>
                 <div class="text-center">
-                  <material-button class="my-4 mb-2" @click="requestOtp" variant="gradient" color="success" fullWidth>Next</material-button>
+                  <material-button class="my-4 mb-2" @click="requestOtp" style="background-color: #573078;" fullWidth>Next</material-button>
                 </div>
                 <p class="mt-4 text-sm text-success text-center">
                   <!-- <small class="text-success text-gradient font-weight-bold">SignIn</small> -->

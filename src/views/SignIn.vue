@@ -13,7 +13,7 @@
         <div class="col-lg-4 col-md-8 col-12 mx-auto">
           <div class="card z-index-0 fadeIn3 fadeInBottom">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
+              <div class=" border-radius-lg py-3 pe-1" style="background-color: #573078;">
                 <img class="ms-5" style="width: 200px; height: 45px;" src="@/assets/img/logos/StudentPay-logo.png">
                 <h4 class="text-white font-weight-bolder text-center mt-2 "> Sign in </h4>
               </div>
@@ -31,11 +31,11 @@
               </div>
               <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch>
               <div class="text-center">
-                <material-button class="my-4 mb-2" @click="signIn" variant="gradient" color="success" fullWidth>Sign in</material-button>
+                <material-button class="my-4 mb-2" @click="signIn" style="background-color: #573078;" fullWidth>Sign in</material-button>
               </div>
               <p class="mt-4 text-sm text-success text-center">
                 <!-- <small class="text-success text-gradient font-weight-bold">Forgot Password ?</small> -->
-                <router-link :to="{ name: 'ForgotPassword' }" class="text-success text-gradient font-weight-bold">Forgot Password ?</router-link>
+                <router-link :to="{ name: 'ForgotPassword' }" class="font-weight-bold" style="color: #573078;">Forgot Password ?</router-link>
               </p>
               <!-- </form> -->
             </div>

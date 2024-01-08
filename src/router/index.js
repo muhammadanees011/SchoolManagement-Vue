@@ -37,6 +37,7 @@ import EditStaff from '../views/staff/edit.vue'
 import Parents from '../views/parent/parents.vue'
 import AddParents from '../views/parent/add.vue'
 import EditParents from '../views/parent/edit.vue'
+import Childrens from '../views/childrens/childrens.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
@@ -229,6 +230,33 @@ const routes = [
     children: [
       { path: '/meals', name: 'list-meals', component: Meals },
       { path: '/add-menu', name: 'add-menu', component: AddMenu },
+    ],
+  },
+  //----------------Childrens-------------------
+  {
+    path: '/childrens',
+    name: 'childrens',
+    component: DefaultLayout,
+    meta: {
+      title: 'Childrens',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/childrens', name: 'list-childrens', component: Childrens },
+    ],
+  },
+  //----------------Payment Items-------------------
+  {
+    path: '/payments',
+    name: 'payments',
+    component: DefaultLayout,
+    meta: {
+      title: 'Payments',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/active-payments', name: 'list-active-payments', component: '' },
+      { path: '/historical-payments', name: 'list-historical-payments', component: '' },
     ],
   },
   //----------------PROFILE-----------------

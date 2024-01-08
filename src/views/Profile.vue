@@ -16,7 +16,9 @@
         <div class="col-auto my-auto">
           <div class="h-100">
             <h5 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h5>
-            <p class="mb-0 font-weight-normal text-sm">{{ user.role }}</p>
+            <span class="d-flex"><p class="mb-0 font-weight-normal text-sm">Role: {{ user.role }}</p></span>
+            <span class="d-flex"><small class="text-xs">Email: {{ user.email ? user.email :'-' }}</small></span>
+            <span class="d-flex"><small class="text-xs">Phone: {{ user.phone ? user.phone:'-' }}</small></span>
           </div>
         </div>
         <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
@@ -104,42 +106,7 @@
       </div>
       <div class="row">
         <div class="mt-3 row">
-          <!-- <div class="col-12 col-md-6 col-xl-6 position-relative">
-            <div class="card card-plain h-100">
-              <div class="p-3 pb-0 card-header">
-                <h6 class="mb-0">Platform Settings</h6>
-              </div>
-              <div class="p-3 card-body">
-                <h6 class="text-xs text-uppercase text-body font-weight-bolder"> Account </h6>
-                <ul class="list-group">
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch id="flexSwitchCheckDefault" class="ps-0 ms-0" name="flexSwitchCheckDefault" label-class="mb-0 text-body text-truncate w-80" checked>Email me when someone follows me</material-switch>
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch id="flexSwitchCheckDefault1" class="ps-0 ms-0" name="flexSwitchCheckDefault1" label-class="mb-0 text-body text-truncate w-80">Email me when someone answers on my post</material-switch>
-                  </li>
-
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch id="flexSwitchCheckDefault2" class="ps-0 ms-0" name="flexSwitchCheckDefault2" label-class="mb-0 text-body text-truncate w-80" checked>Email me when someone mentions me</material-switch>
-                  </li>
-                </ul>
-                <h6 class="mt-4 text-xs text-uppercase text-body font-weight-bolder"> Application </h6>
-                <ul class="list-group">
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch id="flexSwitchCheckDefault3" class="ps-0 ms-0" name="flexSwitchCheckDefault3" label-class="mb-0 text-body text-truncate w-80">New launches and projects</material-switch>
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch id="flexSwitchCheckDefault4" class="ps-0 ms-0" name="flexSwitchCheckDefault4" label-class="mb-0 text-body text-truncate w-80" checked>Monthly product updates</material-switch>
-                  </li>
-                  <li class="px-0 pb-0 border-0 list-group-item">
-                    <material-switch id="flexSwitchCheckDefault5" class="ps-0 ms-0" name="flexSwitchCheckDefault5" label-class="mb-0 text-body text-truncate w-80">Subscribe to newsletter</material-switch>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <hr class="vertical dark" />
-          </div> -->
-          <div class="col-12 col-md-6 col-xl-6 mt-md-0 mt-4 position-relative">
+          <!-- <div class="col-12 col-md-6 col-xl-6 mt-md-0 mt-4 position-relative">
             <profile-info-card
               title="Profile Information"
               description=""
@@ -155,6 +122,39 @@
               }"
             />
             <hr class="vertical dark" />
+          </div> -->
+          <div class="col-12 col-md-6 col-xl-6 position-relative">
+            <div class="card card-plain h-100">
+              <div class="p-3 pb-0 card-header">
+                <h6 class="mb-0">Profile Settings</h6>
+              </div>
+              <div class="p-3 card-body">
+                <ul class="list-group">
+                  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                    <div class="col-md-5 mx-auto bg-white new-pass p-2">
+                      <label>First Name</label>
+                      <input v-model="updateData.first_name" id="card-holder-name" type="text" class="bg-white w-100  mb-2">
+                      <small class="err-txt text-danger error-txt" v-if='formValidation!=="" && formValidation["first_name"]!==""'>First Name is required</small>
+                      <br>
+                      <label>Last Name</label>
+                      <input v-model="updateData.last_name" id="card-holder-name" type="text" class="bg-white w-100  mb-2">
+                      <small class="err-txt text-danger error-txt" v-if='formValidation!=="" && formValidation["last_name"]!==""'>Last Name is required</small>
+                      <br>
+                      <label>Email</label>
+                      <input v-model="updateData.email" id="card-holder-name" type="email" class="bg-white w-100  mb-2">
+                      <small class="err-txt text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
+                      <br>
+                      <label>Phone</label>
+                      <input v-model="updateData.phone" id="card-holder-name" type="tel" class="bg-white w-100  mb-2">
+                      <small class="err-txt text-danger error-txt" v-if='formValidation!=="" && formValidation["phone"]!==""'>Phone is required</small>
+                      <br>
+                      <button @click="updateSettings()" style="font-size: 12px; background-color: #573078;" class="save-pass-btn p-2 mb-3 trips-btn  text-white fw-5 border-radius-lg">Update Settings </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <hr class="vertical dark" />
           </div>
           <div class="mt-4 col-12 col-xl-6 mt-xl-0">
             <div class="card card-plain h-100">
@@ -167,10 +167,16 @@
                     <div class="col-md-5 mx-auto bg-white new-pass p-2">
                       <label>Old Password</label>
                       <input v-model="changePassword.old_password" id="card-holder-name" type="password" class="bg-white w-100  mb-2">
+                      <small class="err-txt text-danger error-txt" v-if='passwordValidationForm!=="" && passwordValidationForm["old_password"]!==""'>Old Password is required</small>
+                      <br>
                       <label>New Password</label>
                       <input v-model="changePassword.new_password" id="card-holder-name" type="password" class="bg-white w-100  mb-2">
+                      <small class="err-txt text-danger error-txt" v-if='passwordValidationForm!=="" && passwordValidationForm["new_password"]!==""'>New Password is required</small>
+                      <br>
                       <label>Confirm New Password</label>
                       <input v-model="changePassword.new_password_confirmation" id="card-holder-name" type="password" class="bg-white w-100  mb-2">
+                      <small class="err-txt text-danger error-txt" v-if='passwordValidationForm!=="" && passwordValidationForm["new_password_confirmation"]!==""'>Confirm Password is required</small>
+                      <br>
                       <button @click="changeUserPassword" style="font-size: 12px; background-color: #573078;" class="save-pass-btn p-2 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Save </button>
                     </div>
                   </li>
@@ -313,7 +319,7 @@
 </template>
 
 <script>
-import ProfileInfoCard from './components/ProfileInfoCard.vue'
+// import ProfileInfoCard from './components/ProfileInfoCard.vue'
 // import DefaultProjectCard from './components/DefaultProjectCard.vue'
 // import MaterialSwitch from '@/components/MaterialSwitch.vue'
 // import MaterialAvatar from '@/components/MaterialAvatar.vue'
@@ -333,11 +339,15 @@ import team4 from '@/assets/img/team-4.jpg'
 import setNavPills from '@/assets/js/nav-pills.js'
 import setTooltip from '@/assets/js/tooltip.js'
 import axiosClient from '../axios'
+import cloneDeep from 'lodash/cloneDeep';
 
 export default {
   name: 'profile-overview',
   data() {
     return {
+      updateData:'',
+      passwordValidationForm:'',
+      formValidation:'',
       user:'',
       changePassword:{
       'old_password':'',
@@ -360,7 +370,7 @@ export default {
     }
   },
   components: {
-    ProfileInfoCard,
+    // ProfileInfoCard,
     // DefaultProjectCard,
     // MaterialSwitch,
     // MaterialAvatar,
@@ -380,9 +390,13 @@ export default {
     let user=localStorage.getItem('user')
     user= JSON.parse(user)
     this.user=user
+    this.updateData=cloneDeep(this.user)
    },
    //-----------CHANGE USER PASSWORD-------------
    async changeUserPassword(){
+    if(this.validatePasswordForm()){
+      return;
+    }
     let user=localStorage.getItem('user')
     user= JSON.parse(user)
     let data={
@@ -413,6 +427,72 @@ export default {
         background: 'white',
       })
     },
+    //------------VALIDATE FORM-------------
+    validateForm(){
+        let status=false
+        let validate=''
+        validate=cloneDeep(this.updateData)
+        for(let item in this.updateData){
+          if ((this.updateData[item] === '' || this.updateData[item] === undefined) && (item == "first_name" || item == "last_name" || item == "email" || item == "phone")) {
+              validate[item]="is required"
+              status=true
+          }else{
+            validate[item]=''
+          }
+        }
+        this.formValidation=validate
+        return status;
+      },
+      async updateSettings(){
+        if(this.validateForm()){
+            return;
+          }
+          let data={
+            'first_name':this.updateData.first_name,
+            'last_name':this.updateData.last_name,
+            'email':this.updateData.email,
+            'phone':this.updateData.phone,
+          }
+          try {
+          const response=await axiosClient.post('/profileSettings',data)
+          this.snackbarMsg('Profile Updated successfully!')
+          this.updateUserData(data)
+          console.log(response)
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      updateUserData(data){
+        this.user.first_name=data.first_name
+        this.user.last_name=data.last_name
+        this.user.email=data.email
+        this.user.phone=data.phone
+
+        let userData = localStorage.getItem('user');
+        let user = JSON.parse(userData);
+        user.first_name = data.first_name;
+        user.last_name = data.last_name;
+        user.email = data.email;
+        user.phone = data.phone;
+        localStorage.setItem('user', JSON.stringify(user));
+        window.location.reload()
+      },
+      //------------VALIDATE PASSWORD-------------
+      validatePasswordForm(){
+        let status=false
+        let validate=''
+        validate=cloneDeep(this.changePassword)
+        for(let item in this.changePassword){
+          if ((this.changePassword[item] === '' || this.changePassword[item] === undefined)) {
+              validate[item]="is required"
+              status=true
+          }else{
+            validate[item]=''
+          }
+        }
+        this.passwordValidationForm=validate
+        return status;
+      },
   }
 }
 </script>
@@ -429,5 +509,14 @@ export default {
   margin-top: 4px;
   width: 10em !important; 
   height: 3em !important;
+  }
+  label{
+    font-size: 11px !important;
+  }
+  #card-holder-name{
+    font-size: 11px;
+  }
+  .err-txt{
+    font-size: 10px;
   }
 </style>

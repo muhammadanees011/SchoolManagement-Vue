@@ -17,6 +17,7 @@
                       <th class="text-uppercase  text-center text-secondary text-xxs font-weight-bolder opacity-7">  ID </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Student </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
                     </tr>
@@ -32,6 +33,9 @@
                       <td>
                         <p class="text-xs font-weight-bold mb-0"> {{ item.user.email }} </p>
                         <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0"> Student1,Student2,Student3</p>
                       </td>
                       <td class="align-middle text-center text-sm">
                         <span class="badge badge-sm bg-gradient-success">{{item.user.status}}</span>

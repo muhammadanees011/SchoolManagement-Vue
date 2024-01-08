@@ -1,8 +1,5 @@
 <template>
     <div class="card">
-      <!-- <div class="card-header pb-0 px-3">
-        <h6 class="mb-0">Balance Information</h6>
-      </div> -->
       <div class="card-body pt-4 p-3">
         <div class="row">
           <div class="col-md-12 col-sm-12">
@@ -12,18 +9,16 @@
                   <h6 class="mb-3 text-sm text-white">
                     {{ `${walletData.user?.first_name || '-'} ${walletData.user?.last_name || '-'}` }}
                   </h6>
-                  <!-- <span class="text-white mb-1 text-xs">
-                    Account Number:
-                    <span class="text-white ms-sm-2 font-weight-bold">FRB1235476</span>
-                  </span>
-                  <span class="text-white mb-1 text-xs">
-                    Account Name:
-                    <span class="text-white ms-sm-2 font-weight-bold">Stockton Funds</span>
-                  </span> -->
                   <span class="text-white mb-1 text-xs">
                     Current Balance:
                     <span class="text-white font-weight-bold ms-sm-2">
-                      £{{ walletData?.ballance || '-' }}
+                      £{{ walletData?.ballance || '0' }}
+                    </span>
+                  </span>
+                  <span class="text-white mb-1 text-xs">
+                    FSM Balance:
+                    <span class="text-white font-weight-bold ms-sm-2">
+                      £{{ fsmAmount?.fsm_amount || '0' }}
                     </span>
                   </span>
                   <span class="text-white mb-1 text-xs">
@@ -42,40 +37,6 @@
               </li>
             </ul>
           </div>
-          <!-- <div class="col-md-3 col-sm-12">
-            <ul class="list-group">
-              <li style="background-color: #573078 !important;" class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                <div class="d-flex flex-column">
-                  <h6 class="mb-3 text-sm text-white">This Month Consumption</h6>
-                  <span class="mb-4 text-xs d-flex justify-content-between">
-                    <div>
-                      <span class="text-white ms-sm-2 text-xs font-weight-bold">Total Expense</span>
-                    </div>
-                    <span class="text-white ms-sm-2 font-weight-bold">£225</span>
-                  </span>
-                  <span class="mb-1 text-xs d-flex justify-content-between">
-                    <div>
-                      <span class="text-white ms-sm-2 text-xs">Meals</span>
-                    </div>
-                    <span class="text-white ms-sm-2 font-weight-bold">£75</span>
-                  </span>
-                  <span class="mb-1 text-xs d-flex justify-content-between">
-                    <div>
-                      <span class="text-white ms-sm-2 text-xs">Trips</span>
-                    </div>
-                    <span class="text-white ms-sm-2 font-weight-bold">£75</span>
-                  </span>
-                  <span class="mb-1 text-xs d-flex justify-content-between">
-                    <div>
-                      <span class="text-white ms-sm-2 text-xs">School Shop</span>
-                    </div>
-                    <span class="text-white ms-sm-2 font-weight-bold">£75</span>
-                  </span>
-    
-                </div>
-              </li>
-            </ul>
-          </div> -->
           <div class="col-md-12 col-sm-12">
             <ul class="list-group">
               <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
@@ -113,10 +74,12 @@
     mounted(){
       this.getUserId();
       this.getWallet();
+      this.getFSMamount();
       this.getRecentTransactions();
     },
     data() {
       return {
+        fsmAmount:'',
         isTransactions:false,
         transactions:'',
         user_id:'',
@@ -144,6 +107,15 @@
         try {
         const response= await axiosClient.get('/getWallet/'+this.user_id);
         this.wallet=response.data
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      //----------------USER'S FSM AMOUNT-----------------
+      async getFSMamount(){
+        try {
+        const response= await axiosClient.get('/getAmountFSM/'+this.user_id);
+        this.fsmAmount=response.data
         } catch (error) {
           console.log(error)
         }

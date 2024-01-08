@@ -25,7 +25,7 @@
                       <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Account
                       </th> -->
-                      <th v-if="user.role==='super_admin' || user.role==='organization_admin'" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th v-if="user.role!=='student'" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Student
                       </th>
                       <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -58,7 +58,7 @@
                           </div>
                         </div>
                       </td> -->
-                      <td v-if="user.role==='super_admin' || user.role==='organization_admin'" >
+                      <td v-if="user.role!=='student'" >
                         <div class="d-flex px-2 py-1">
                           <div>
                           </div>
@@ -146,10 +146,12 @@
         let data={
           'user_id':null,
           'admin_id':null,
+          'role':null,
         }
         data.user_id=user_id
-        if(this.user.role=='organization_admin'){
+        if(this.user.role=='organization_admin' || this.user.role=='staff' || this.user.role=='parent'){
          data.admin_id=this.user.id
+         data.role=this.user.role
         }
         try {
          const response= await axiosClient.post('getTransactionHistory',data);

@@ -55,6 +55,16 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>school is required</small>
                           </div>
+                        <div class="mb-1">
+                          <label class="input-label" for="phone">Free School Meal (FSM)</label>
+                          <br />
+                          <select class="select-box" v-model="newStudent.fsm" id="fsm" type="select" placeholder="FSM" name="fsm">
+                            <option v-for="(item, index) in fsm" :key="index" :value="item">
+                              {{ item }}
+                            </option>
+                          </select>
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School ID is required</small>
+                        </div>
                         </form>
                       </div>
                     </div>
@@ -202,6 +212,7 @@
         user:'',
         formValidation:"",
         validationErrors:'',
+        fsm:[false,true],
         newStudent: {
           school_id:'',
           student_id:'',
@@ -223,6 +234,7 @@
           status:'',
           password:'',
           password_confirmation:'',
+          fsm:''
         },
         availableStatus:['active','pending','blocked'],
         allSchools:'',

@@ -237,11 +237,11 @@
       //------------GET STUDENTS------------
       async getStudents() {
         try {
-          let url='/getAllStudents'
-          if(this.user.role=='organization_admin'){
-            url='/getAllStudents/'+this.user.id
+          let data={
+          'user_id':this.user.id,
+          'role':this.user.role
           }
-          const response= await axiosClient.get(url)
+          const response= await axiosClient.post('/getAllStudents',data)
           this.allStudents=response.data
         } catch (error) {
           console.log(error)
