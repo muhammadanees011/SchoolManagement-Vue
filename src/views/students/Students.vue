@@ -39,7 +39,7 @@
                       <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
                     </td>
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">{{ item.school.title }}</span>
+                      <span class="text-secondary text-xs font-weight-bold">{{item.school ? item.school.title :'-' }}</span>
                     </td>
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">{{ item.stage }}</span>

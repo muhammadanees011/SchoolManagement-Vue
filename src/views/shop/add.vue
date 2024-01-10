@@ -52,7 +52,7 @@
                               </option>
                             </select>
                           </div>
-                        </form>
+                         </form>
                       </div>
                     </div>
                     </div>
@@ -98,7 +98,7 @@
             quantity: '',
             detail:'',
             attribute_id:'',
-        },
+        },   
         availableStatus:['active','pending','blocked'],
         allSchools:'',
       }
