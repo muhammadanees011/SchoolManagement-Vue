@@ -38,6 +38,9 @@ import Parents from '../views/parent/parents.vue'
 import AddParents from '../views/parent/add.vue'
 import EditParents from '../views/parent/edit.vue'
 import Childrens from '../views/childrens/childrens.vue'
+import Attributes from '../views/student_attributes/attributes.vue'
+import AddAttribute from '../views/student_attributes/add.vue'
+import EditAttribute from '../views/student_attributes/edit.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
@@ -116,6 +119,21 @@ const routes = [
       { path: '/:id', name: 'edit-student', component: EditStudent },
       { path: '/student-billing/:id', name: 'student-billing', component: StudentBilling },
       { path: '/student-balance/:id?', name: 'student-balance', component: StudentBallance },
+    ],
+  },
+  //----------STUDENT ATTRIBUTES------------
+  {
+    path: '/student/attributes',
+    name: 'student-attributes',
+    component: DefaultLayout,
+    meta: {
+      title: 'Student Attributes',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/attributes', name: 'list-attributes', component: Attributes },
+      { path: '/attributes/add', name: 'add-attribute', component: AddAttribute },
+      { path: '/attributes/edit/:id', name: 'edit-attribute', component: EditAttribute },
     ],
   },
   //------------STAFF---------------

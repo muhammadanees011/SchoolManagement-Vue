@@ -78,6 +78,15 @@
                           </select>
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School ID is required</small>
                         </div>
+                        <div class="mb-1">
+                          <label class="input-label" for="phone">Attribute</label>
+                          <br />
+                          <select class="select-box" v-model="newStudent.attribute_id" id="attribute" type="select" placeholder="Attribute" name="attribute">
+                            <option v-for="(item, index) in allAttributes" :key="index" :value="item.id">
+                              {{ item.name }}
+                            </option>
+                          </select>
+                        </div>
                       </form>
                     </div>
                   </div>
@@ -206,11 +215,13 @@ export default {
   },
   mounted() {
   this.getUser();
-  this.getSchools()
+  this.getSchools();
+  this.getAllAttributes();
 },
   data() {
     return {
       fsm:[false,true],
+      allAttributes:'',
       availableCountries:['UK','USA','Canada'],
       user:'',
       isError:false,
@@ -219,6 +230,7 @@ export default {
       newStudent: {
         school_id:'',
         student_id:'',
+        attribute_id:'',
         first_name: '',
         last_name:'',
         email: '',
@@ -258,7 +270,7 @@ export default {
       let validate=''
       validate=cloneDeep(this.newStudent)
       for(let item in this.newStudent){
-        if ((this.newStudent[item] === '' || this.newStudent[item] === undefined) && (item !== "phone")) {
+        if ((this.newStudent[item] === '' || this.newStudent[item] === undefined) && (item !== "phone" && item !== "attribute_id")) {
               validate[item]="is required"
               status=true
           }else{
@@ -290,6 +302,15 @@ export default {
         this.isError=true;
         this.validationErrors=error.response.data.errors
       }
+    },
+    //-------------GET ALL Attributes----------
+    async getAllAttributes(){
+        try {
+          const response= await axiosClient.get('/getAllAttributes')
+          this.allAttributes=response.data
+        } catch (error) {
+          console.log(error)
+        }
     },
     //-----------CREATE STRIPE CUSTOMER----------
     async createCustomer(id){

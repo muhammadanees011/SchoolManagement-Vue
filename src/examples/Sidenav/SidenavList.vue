@@ -10,7 +10,7 @@
       </li>
       <template v-if="user && user.role=='parent'">
         <li class="nav-item">
-        <sidenav-collapse :to="{ name: 'list-childrens' }" :aria-controls="''" v-bind:collapse="false" collapseRef="childrens" navText="Childrens">
+        <sidenav-collapse :to="{ name: 'list-childrens' }" :aria-controls="''" v-bind:collapse="false" collapseRef="childrens" navText="My Childrens">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">business</i>
           </template>
@@ -45,6 +45,13 @@
       <template  v-if="user && user.role=='staff' || user.role=='super_admin' || user.role=='organization_admin'">
         <li class="nav-item">
         <sidenav-collapse :to="{ name: 'list-students' }" :aria-controls="''" v-bind:collapse="false" collapseRef="students" navText="Students">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">people</i>
+          </template>
+        </sidenav-collapse>
+        </li>
+        <li class="nav-item">
+        <sidenav-collapse :to="{ name: 'list-attributes' }" :aria-controls="''" v-bind:collapse="false" collapseRef="student-attributes" navText="Attributes">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">people</i>
           </template>

@@ -6,37 +6,62 @@
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
                 <h6 class="text-dark text-capitalize ps-3">Edit Shop Item</h6>
               </div>
-            <div class="card-body px-0 pb-2">
+            
+              <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
-                <div class="row py-2 bg-white form-data border-radius-lg">
-                  <div class="bg-white box-shadow-dark border-radius-lg col-xl-6 col-lg-6 col-md-6">
+                <div class="row py-1 d-flex justify-content-center bg-white form-data border-radius-lg">
+                  <div class="bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
+                    <div class="form-bg container p-4">
                     <div class="card card-plain">
                       <div class="card-body">
                         <form role="form">
                           <div class="mb-1">
-                            <label class="input-label" for="name"> Name</label>
-                            <input class="input-box" id="name" v-model="newItem.name" type="text" placeholder=" Name" name="first_name" />
+                            <label class="input-label" for="name">Name</label>
+                            <input class="input-box" id="name" v-model="newItem.name" type="text" placeholder="Name" name="name" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["name"]!==""'>Name is required</small>
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="name">Price</label>
-                            <input class="input-box" id="name" v-model="newItem.price" type="number" placeholder="Price" name="last_name" />
+                            <input class="input-box" id="price" v-model="newItem.price" type="number" placeholder="price" name="price" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["price"]!==""'>Price is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="student_id">Quantity</label>
-                            <input class="input-box" id="student_id" v-model="newItem.quantity" type="number" placeholder="quantity" name="student_id" />
+                            <label class="input-label" for="name">Quantity</label>
+                            <input class="input-box" id="quantity" v-model="newItem.quantity" type="number" placeholder="Quantity" name="quantity" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["quantity"]!==""'>Quantity is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="email">Detail</label>
-                            <input class="input-box" id="name" v-model="newItem.detail" type="text" placeholder="detail" name="detail" />
+                            <label class="input-label" for="name">Detail</label>
+                            <input class="input-box" id="name" v-model="newItem.detail" type="text" placeholder="Detail" name="detail" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["detail"]!==""'>Detail is required</small>
+                          </div>
+                          <div class="mb-1">
+                            <label class="input-label" for="phone">Attribute</label>
+                            <br />
+                            <select class="select-box" v-model="newItem.attribute_id" id="attribute" type="select" placeholder="Attribute" name="attribute">
+                              <option v-for="(item, index) in allAttributes" :key="index" :value="item.id">
+                                {{ item.name }}
+                              </option>
+                            </select>
+                          </div>
+                          <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="mb-1">
+                            <label class="input-label" for="phone">Shop</label>
+                            <br />
+                            <select class="select-box" v-model="newItem.shop_id" id="shop" type="select" placeholder="shop" name="shop">
+                              <option v-for="(item, index) in allShops" :key="index" :value="item.id">
+                                {{ item.shop_name }}
+                              </option>
+                            </select>
                           </div>
                         </form>
                       </div>
                     </div>
+                    </div>
                   </div>
-                </div>
-                <div class="d-flex align-items-left bg-white box-shadow-dark border-radius-lg col-xl-4 col-lg-4 col-md-4">
-                    <div class="">
-                        <material-button @click="updateItem" class="mt-1 ms-4" variant="gradient" color="success" size="sm">Save</material-button>
+                  <div class="d-flex justify-content-center bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
+                      <div class="">
+                        <button @click="updateItem" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-5 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save Item </button>
+                        </div>
                     </div>
                 </div>
               </div>
@@ -48,24 +73,33 @@
   </template>
   
   <script>
-  import MaterialButton from '@/components/MaterialButton.vue'
+  // import MaterialButton from '@/components/MaterialButton.vue'
   import axiosClient from '../../axios'
   
   export default {
     name: '',
     components: {
-      MaterialButton,
+      // MaterialButton,
     },
     mounted() {
-        this.editItem()
-  },
+      this.getUser();
+      this.editItem();
+      this.getAllAttributes();
+      this.getAllShops();
+    },
     data() {
       return {
+        formValidation:"",
+        allAttributes:'',
+        allShops:'',
+        user:"",
         newItem: {
             name:'',
             price:'',
             quantity: '',
             detail:'',
+            attribute_id:'',
+            shop_id:'',
         },
         availableStatus:['active','pending','blocked'],
         allSchools:'',
@@ -78,6 +112,12 @@
           text: message,
           background: 'white',
         })
+      },
+      //------------GET USER----------------
+      getUser(){
+        let user=localStorage.getItem('user')
+        user= JSON.parse(user)
+        this.user=user
       },
       //------------UPDATE ITEM------------
       async updateItem() {
@@ -106,7 +146,27 @@
         this.newItem.name=data.name
         this.newItem.price=data.price
         this.newItem.quantity=data.quantity
+        this.newItem.shop_id=data.shop_id
+        this.newItem.attribute_id=data.attribute_id
         this.newItem.detail=data.detail
+    },
+    //-------------GET ALL Attributes----------
+    async getAllAttributes(){
+      try {
+        const response= await axiosClient.get('/getAllAttributes')
+        this.allAttributes=response.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    //-------------GET ALL SHOPs----------
+    async getAllShops(){
+      try {
+        const response= await axiosClient.get('/getAllSchoolShop')
+        this.allShops=response.data
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     }
@@ -114,81 +174,5 @@
   </script>
   
   <style scoped>
-  .form-data {
-    width: 100%;
-  }
-  .text-area-box {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    font-size: 12px;
-    width: 237px;
-    height: 35px;
-  }
-  /* Hover effect */
-  
-  .text-area-box:hover {
-    border-color: #6c757d; /* Change to your preferred hover color */
-  }
-  
-  .select-box {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    width: 100%;
-    font-size: 12px;
-    height: 35px;
-  }
-  .select-box:hover {
-    border-color: #6c757d; /* Change to your preferred hover color */
-  }
-  .select-box:focus {
-    outline: none;
-    border-color: #4caf50; /* Change to your preferred focus color */
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
-  }
-  /* Focus effect */
-  
-  .text-area-box:focus {
-    outline: none;
-    border-color: #4caf50; /* Change to your preferred focus color */
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
-  }
-  .input-label {
-    font-size: 12px;
-  }
-  /* Basic input styles */
-  input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    width: 100%;
-    height: 35px;
-    font-size: 12px;
-  }
-  
-  /* Hover effect */
-  input:hover {
-    border-color: #6c757d; /* Change to your preferred hover color */
-  }
-  
-  /* Focus effect */
-  input:focus {
-    outline: none;
-    border-color: #4caf50; /* Change to your preferred focus color */
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
-  }
-  
-  /* Placeholder text style */
-  ::placeholder {
-    color: #999;
-  }
-  
-  /* Styling for disabled state */
-  input:disabled {
-    background-color: #f0f0f0;
-    color: #999;
-  }
   </style>
   
