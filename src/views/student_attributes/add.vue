@@ -22,7 +22,7 @@
                             <input class="input-box" id="name" v-model="newAttribute.name" type="text" placeholder="Name" name="name" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["name"]!==""'>Name is required</small>
                           </div>
-                          <div class="mb-1">
+                          <!-- <div class="mb-1">
                             <label class="input-label" for="phone">Organization</label>
                             <br />
                             <select class="select-box" v-model="newAttribute.organization_id" id="organization" type="select" placeholder="organization" name="organization">
@@ -31,7 +31,7 @@
                               </option>
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>Organization is required</small>
-                          </div>
+                          </div> -->
                         </form>
                       </div>
                     </div>
@@ -74,7 +74,7 @@
         validationErrors:'',
         allOrganizations:'',
         newAttribute: {
-          organization_id:'',
+          // organization_id:'',
           name: '',
           user_role:'',
         },

@@ -52,6 +52,7 @@
                                 {{ item.shop_name }}
                               </option>
                             </select>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["shop_id"]!==""'>Shop is required</small>
                           </div>
                         </form>
                       </div>
@@ -75,7 +76,8 @@
   <script>
   // import MaterialButton from '@/components/MaterialButton.vue'
   import axiosClient from '../../axios'
-  
+  import cloneDeep from 'lodash/cloneDeep';
+
   export default {
     name: '',
     components: {
@@ -113,6 +115,26 @@
           background: 'white',
         })
       },
+      //------------VALIDATE FORM-------------
+      validateForm(){
+        let status=false
+        let validate=''
+        validate=cloneDeep(this.newItem)
+        for(let item in this.newItem){
+          if ((this.newItem[item] === '' || this.newItem[item] === undefined)&& (item!=='attribute_id')) {
+            if((item=='shop_id' && (this.user.role=='super_admin' || this.user.role=='organization_admin'))){
+              validate[item]="is required"
+              status=true
+            }
+            validate[item]="is required"
+            status=true
+          }else{
+            validate[item]=''
+          }
+        }
+        this.formValidation=validate
+        return status;
+      },
       //------------GET USER----------------
       getUser(){
         let user=localStorage.getItem('user')
@@ -121,6 +143,9 @@
       },
       //------------UPDATE ITEM------------
       async updateItem() {
+        if(this.validateForm()){
+          return;
+        }
         let id = this.$route.params.id
         try {
           await axiosClient.put('/updateShopItem/'+id, this.newItem)

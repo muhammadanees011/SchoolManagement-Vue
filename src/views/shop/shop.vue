@@ -64,7 +64,7 @@
                       <span class="text-secondary text-xs ">{{item.attribute ? item.attribute.name:'-' }}</span>
                     </td>
                     <td v-if="user && user.role=='super_admin' || user.role=='organization_admin'" class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{data.shop_name }}</span>
+                      <span class="text-secondary text-xs ">{{data.shop_name  ? data.shop_name:'-' }}</span>
                     </td>
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success">{{ item.status }}</span>

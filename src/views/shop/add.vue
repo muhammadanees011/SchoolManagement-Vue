@@ -51,6 +51,7 @@
                                 {{ item.shop_name }}
                               </option>
                             </select>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["shop_id"]!==""'>Shop is required</small>
                           </div>
                          </form>
                       </div>
@@ -98,6 +99,7 @@
             quantity: '',
             detail:'',
             attribute_id:'',
+            shop_id:'',
         },   
         availableStatus:['active','pending','blocked'],
         allSchools:'',
@@ -117,12 +119,16 @@
         let validate=''
         validate=cloneDeep(this.newItem)
         for(let item in this.newItem){
-          if ((this.newItem[item] === '' || this.newItem[item] === undefined) && (item!=='attribute_id')) {
-                validate[item]="is required"
-                status=true
-            }else{
-              validate[item]=''
+          if ((this.newItem[item] === '' || this.newItem[item] === undefined)&& (item!=='attribute_id')) {
+            if((item=='shop_id' && (this.user.role=='super_admin' || this.user.role=='organization_admin'))){
+              validate[item]="is required"
+              status=true
             }
+            validate[item]="is required"
+            status=true
+          }else{
+            validate[item]=''
+          }
         }
         this.formValidation=validate
         return status;
