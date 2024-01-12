@@ -20,8 +20,8 @@
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
-                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th> -->
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
                   </tr>
@@ -47,12 +47,12 @@
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.user.balance ? item.user.balance.ballance:0 )}}</span>
                     </td>
-                    <!-- <td class="align-middle text-center">
+                    <td class="align-middle text-center">
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">swap_horizontal_circle</i>
                     </td>
                     <td class="align-middle text-center">
                         <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">credit_card</i>
-                    </td> -->
+                    </td>
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success">{{item.user.status}}</span>
                     </td>
@@ -61,12 +61,12 @@
                         <router-link :to="{name:'student-balance',params: { id: item.user.id }}" title="Wallet">
                          <i class="fas fa-donate fs-5 me-2"></i>
                         </router-link>
-                        <router-link to="#" title="Topup">
+                        <!-- <router-link to="#" title="Topup">
                         <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5 me-2">credit_card</i>
                         </router-link>
                         <router-link to="#" title="Transaction">
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5 me-2">swap_horizontal_circle</i>
-                        </router-link>
+                        </router-link> -->
                         <router-link :to="{ name: 'edit-student', params: { id: item.id } }">
                           <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         </router-link>
