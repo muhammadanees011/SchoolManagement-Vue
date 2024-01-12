@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
-              :title="{ text:isAdmin ? 'Total Figures':'Total Balance', value: '£'+userBallance }"
+              :title="{ text:isAdmin ? 'Total Figures':'Total Balance', value: '£'+formattedPrice(userBallance) }"
               :detail="(isAdmin ? 'Total Figures' : 'Total Balance')"
               :icon="{
                 name: 'credit_card',
@@ -184,6 +184,10 @@ export default {
     }
   },
   methods:{
+  formattedPrice(value){
+    const formattedValue = parseFloat(value).toFixed(2);
+    return formattedValue;
+   },
    async getStudentBalance(){
     let user=localStorage.getItem('user')
     user= JSON.parse(user)

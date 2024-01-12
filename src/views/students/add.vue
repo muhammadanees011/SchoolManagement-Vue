@@ -87,6 +87,12 @@
                             </option>
                           </select>
                         </div>
+                        <MultiSelect
+                          label="Attributes"
+                          :options="allAttributes"
+                          @input="handleAttributes"
+                          placeholder="Attributes"
+                        />
                       </form>
                     </div>
                   </div>
@@ -207,10 +213,12 @@
 // import MaterialButton from '@/components/MaterialButton.vue'
 import axiosClient from '../../axios'
 import cloneDeep from 'lodash/cloneDeep';
+import MultiSelect from "../components/MultiSelect.vue"
 
 export default {
   name: '',
   components: {
+    MultiSelect
     // MaterialButton,
   },
   mounted() {
@@ -220,6 +228,7 @@ export default {
 },
   data() {
     return {
+      selected: null,
       fsm:[false,true],
       allAttributes:'',
       availableCountries:['UK','USA','Canada'],
@@ -227,10 +236,12 @@ export default {
       isError:false,
       formValidation:"",
       validationErrors:'',
-      newStudent: {
+      multiValue:'',
+        newStudent: {
         school_id:'',
         student_id:'',
         attribute_id:'',
+        attributes:[],
         first_name: '',
         last_name:'',
         email: '',
@@ -279,6 +290,12 @@ export default {
       }
       this.formValidation=validate
       return status;
+    },
+    handleAttributes(data){
+      this.newStudent.attributes=[]
+      data.filter((item)=>{
+        this.newStudent.attributes.push(item.id);
+      })
     },
     //------------GET USER----------------
     getUser(){

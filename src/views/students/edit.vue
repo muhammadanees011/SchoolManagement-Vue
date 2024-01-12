@@ -74,6 +74,10 @@
                             </option>
                           </select>
                         </div>
+                        <div class="mb-1">
+                            <label class="input-label" for="balance">Balance</label>
+                            <input class="input-box" id="balance" v-model="formattedBalance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
+                        </div>
                         </form>
                       </div>
                     </div>
@@ -211,11 +215,22 @@
       // MaterialButton,
     },
     mounted() {
-    this.getUser();
-    this.editStudent();
-    this.getSchools();
-    this.getAllAttributes();
-  },
+      this.getUser();
+      this.editStudent();
+      this.getSchools();
+      this.getAllAttributes();
+    },
+    computed: {
+      formattedBalance: {
+        get() {
+          return this.newStudent.balance;
+        },
+        set(value) {
+          const formattedValue = parseFloat(value).toFixed(2);
+          this.newStudent.balance = formattedValue;
+        },
+      },
+    },
     data() {
       return {
         allAttributes:'',
@@ -246,7 +261,8 @@
           status:'',
           password:'',
           password_confirmation:'',
-          fsm:''
+          fsm:'',
+          balance:'',
         },
         availableStatus:['active','pending','blocked'],
         allSchools:'',
@@ -316,8 +332,15 @@
         this.newStudent.medical_conditions = data.medical_conditions
         this.newStudent.enrollment_date=data.enrollment_date
         this.newStudent.allergies = data.allergies
+        this.newStudent.fsm = data.fsm_activated==0 ? false:true
+        this.newStudent.attribute_id = data.attribute_id
+        this.newStudent.balance =this.formattedPrice(data.balance);
       }
     },
+    formattedPrice(value){
+        const formattedValue = parseFloat(value).toFixed(2);
+        return formattedValue;
+      },
       //------------UPDATE STUDENT------------
       async updateStudent() {
         if(this.validateForm()){

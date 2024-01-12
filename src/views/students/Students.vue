@@ -19,9 +19,9 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th>
-                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th> -->
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
+                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th> -->
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
                   </tr>
@@ -44,28 +44,29 @@
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">{{ item.stage }}</span>
                     </td>
-                    <!-- <td class="align-middle text-center">
-                      <router-link :to="{name:'student-balance',params: { id: item.user.id }}">
-                        <i class="fas fa-donate"></i>
-                      </router-link>
-                    </td> -->
                     <td class="align-middle text-center">
-                      <!-- <router-link :to="{name:'student-billing'}"> -->
+                      <span class="text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.user.balance ? item.user.balance.ballance:0 )}}</span>
+                    </td>
+                    <!-- <td class="align-middle text-center">
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">swap_horizontal_circle</i>
-                      <!-- </router-link> -->
                     </td>
                     <td class="align-middle text-center">
                         <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">credit_card</i>
-                    </td>
+                    </td> -->
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success">{{item.user.status}}</span>
                     </td>
                     <td class="align-middle text-center">
                       <span>
                         <router-link :to="{name:'student-balance',params: { id: item.user.id }}" title="Wallet">
-                         <i class="fas fa-donate me-2"></i>
+                         <i class="fas fa-donate fs-5 me-2"></i>
                         </router-link>
-
+                        <router-link to="#" title="Topup">
+                        <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5 me-2">credit_card</i>
+                        </router-link>
+                        <router-link to="#" title="Transaction">
+                        <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5 me-2">swap_horizontal_circle</i>
+                        </router-link>
                         <router-link :to="{ name: 'edit-student', params: { id: item.id } }">
                           <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         </router-link>
@@ -100,6 +101,8 @@ export default {
       user:'',
     }
   },
+  components:{
+  },
   methods:{
     snackbarMsg(message) {
       this.$snackbar.add({
@@ -107,6 +110,10 @@ export default {
         text: message,
         background: 'white',
       })
+    },
+    formattedPrice(value){
+        const formattedValue = parseFloat(value).toFixed(2);
+        return formattedValue;
     },
     topUps(id){
       this.$router.push('/payment_account/'+id)

@@ -21,7 +21,7 @@
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="name">Price</label>
-                            <input class="input-box" id="price" v-model="newItem.price" type="number" placeholder="price" name="price" />
+                            <input class="input-box" id="price" v-model="formattedPrice" type="number" step="0.01" min="0" placeholder="price" name="price" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["price"]!==""'>Price is required</small>
                           </div>
                           <div class="mb-1">
@@ -43,6 +43,12 @@
                               </option>
                             </select>
                           </div>
+                          <MultiSelect
+                            label="Attributes"
+                            :options="allAttributes"
+                            @input="handleAttributes"
+                            placeholder="Attributes"
+                          />
                           <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="mb-1">
                             <label class="input-label" for="phone">Shop</label>
                             <br />
@@ -74,18 +80,31 @@
   
   <script>
   // import MaterialButton from '@/components/MaterialButton.vue'
-  import axiosClient from '../../axios'
+  import axiosClient from '../../axios';
   import cloneDeep from 'lodash/cloneDeep';
+  import MultiSelect from "../components/MultiSelect.vue";
   
   export default {
     name: '',
     components: {
+      MultiSelect
       // MaterialButton,
     },
     mounted() {
       this.getUser();
       this.getAllAttributes();
       this.getAllShops();
+    },
+    computed: {
+      formattedPrice: {
+        get() {
+          return this.newItem.price;
+        },
+        set(value) {
+          const formattedValue = parseFloat(value).toFixed(2);
+          this.newItem.price = formattedValue;
+        },
+      },
     },
     data() {
       return {
@@ -95,6 +114,7 @@
         user:"",
         newItem: {
             name:'',
+            attributes:[],
             price:'',
             quantity: '',
             detail:'',
@@ -151,6 +171,13 @@
         } catch (error) {
           console.log(error)
         }
+      },
+      //-------------STORE ALL Attributes----------
+      handleAttributes(data){
+        this.newItem.attributes=[]
+        data.filter((item)=>{
+          this.newItem.attributes.push(item.id);
+        })
       },
       //-------------GET ALL Attributes----------
       async getAllAttributes(){

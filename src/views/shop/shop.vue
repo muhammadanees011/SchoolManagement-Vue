@@ -58,7 +58,7 @@
                       <span class="text-secondary text-xs ">{{ item.quantity }}</span>
                     </td>
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{ item.price }}</span>
+                      <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
                     </td>
                     <td v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff' "  class="align-middle text-center">
                       <span class="text-secondary text-xs ">{{item.attribute ? item.attribute.name:'-' }}</span>
@@ -117,6 +117,10 @@
         text: message,
         background: 'white',
       })
+    },
+    formattedPrice(value){
+      const formattedValue = parseFloat(value).toFixed(2);
+      return formattedValue;
     },
       async getShopItems(){
         try {

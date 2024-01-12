@@ -9,25 +9,25 @@
                   <h6 class="mb-3 text-sm text-white">
                     {{ `${walletData.user?.first_name || '-'} ${walletData.user?.last_name || '-'}` }}
                   </h6>
-                  <span class="text-white mb-1 text-xs">
+                  <span class="text-white mb-1 text-xs font-weight-bold">
                     Current Balance:
                     <span class="text-white font-weight-bold ms-sm-2">
-                      £{{ walletData?.ballance || '0' }}
+                      £{{ formattedPrice(walletData?.ballance || '0') }}
                     </span>
                   </span>
-                  <span class="text-white mb-1 text-xs">
+                  <span class="text-white mb-1 font-weight-bold text-xs">
                     FSM Balance:
                     <span class="text-white font-weight-bold ms-sm-2">
-                      £{{ fsmAmount?.fsm_amount || '0' }}
+                      £{{ formattedPrice(fsmAmount?.fsm_amount || '0') }}
                     </span>
                   </span>
-                  <span class="text-white mb-1 text-xs">
+                  <span class="text-white mb-1 font-weight-bold text-xs">
                     Phone:
                     <span class="text-white ms-sm-2 font-weight-bold">
                       {{ walletData.user?.phone || '-' }}
                     </span>
                   </span>
-                  <span class="text-white mb-1 text-xs">
+                  <span class="text-white mb-1 font-weight-bold text-xs">
                     Email Address:
                     <span class="text-white ms-sm-2 font-weight-bold">
                       {{ walletData.user?.email || '-' }}
@@ -48,7 +48,7 @@
                     <small>{{ formatDate(item.created_at) }}</small>
                     </span>
                     <div>
-                      <span class="font-weight-bold me-3" :class="{ 'text-danger': item.type !== 'top_up','text-success': item.type === 'top_up', }">{{item.type=='top_up' ? "+":"-" }} £{{ item.amount }}</span>
+                      <span class="font-weight-bold me-3" :class="{ 'text-danger': item.type !== 'top_up','text-success': item.type === 'top_up', }">{{item.type=='top_up' ? "+":"-" }} £{{ formattedPrice(item.amount) }}</span>
                       <br>
                       <small class="text-dark font-weight-bold me-3">{{item.type=='top_up' ? "Received":"Spent" }}</small>
                     </div>
@@ -93,6 +93,10 @@
       }
     },
     methods:{
+      formattedPrice(value){
+        const formattedValue = parseFloat(value).toFixed(2);
+        return formattedValue;
+      },
       getUserId(){
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
@@ -137,7 +141,7 @@
       //------------FORMAT DATE--------------
       formatDate(data) {
         const date = moment(data);
-        return date.format('MMM D, YYYY');
+        return date.format('MMM D, YYYY,   HH:mm:ss');
       },
     },
   };

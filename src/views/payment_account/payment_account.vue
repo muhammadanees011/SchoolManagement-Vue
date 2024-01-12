@@ -236,6 +236,7 @@ color: #010A21;
   width: 25.3em !important; 
   height: 4em !important;
   border: 1px solid black;
+  border-radius: 5px;
 }
 .amount-container{
   width: 25.3em !important; 

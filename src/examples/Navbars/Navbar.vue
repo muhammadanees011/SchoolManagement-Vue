@@ -2,10 +2,10 @@
   <nav class="shadow-none navbar navbar-main navbar-expand-lg border-radius-xl" v-bind="$attrs" id="navbarBlur" data-scroll="true" :class="isAbsolute ? 'mt-4' : 'mt-0'">
     <div class="px-3 py-1 container-fluid">
       <!-- <breadcrumbs :currentPage="currentRouteName" :color="color" /> -->
-      <div v-if="user.role!='super_admin'" class="organization-name mt-2 me-5">
+      <div v-if="user.role!='super_admin'" class="organization-name mt-2 me-2">
         <h5>{{ organization_name }}</h5>
       </div>
-      <div v-if="user.role=='super_admin'" class="organization-name mt-2 me-5">
+      <div v-if="user.role=='super_admin'" class="organization-name mt-2 me-2">
         <h5>Super Admin</h5>
       </div>
       <div v-if="!passwordStatus" class="change-pass-alert">
@@ -352,7 +352,7 @@ export default {
   height: 35px;
 }
 .change-pass-alert{
-  width: 40rem;
+  width: 36rem !important;
   height: 2rem;
   background: rgba(238, 220, 130, 0.5);
   border: 1px solid black;
@@ -370,5 +370,9 @@ export default {
 }
 .organization-name{
   color: #010A21;
+  width: 10rem;
+}
+.organization-name h5{
+  font-size: 1rem;
 }
 </style>
