@@ -43,7 +43,7 @@
                 <div class="d-flex flex-column">
                   <h6 class="mb-3 text-sm">Recent Transaction</h6>
                   <span v-for="(item,index) in transactions" :key="index" class="recent-transactions mb-1 text-xs">
-                    <span class="text-dark ms-sm-2 font-weight-bold">{{item.type=='top_up' ? "Top Up":item.type }}
+                    <span class="text-dark ms-sm-2 font-weight-bold">{{item.type=='top_up' ? "Top Up":(item.type=='pos_transaction' ? "Cafeteria Purchase":item.type) }}
                     <br>
                     <small>{{ formatDate(item.created_at) }}</small>
                     </span>

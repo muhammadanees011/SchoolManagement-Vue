@@ -16,8 +16,8 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Total Schools', value: '300' }"
-              detail="<span class='text-success text-sm font-weight-bolder'>+3%</span> than last month"
+              :title="{ text: 'Total Schools', value: totalSchool ? totalSchool:0 }"
+              detail="Total Schools"
               :icon="{
                 name: 'leaderboard',
                 color: 'text-white',
@@ -27,8 +27,8 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Total Students', value: '3,462' }"
-              detail="<span class='text-danger text-sm font-weight-bolder'>-2%</span> than yesterday"
+              :title="{ text: 'Total Students', value: totalStudents ? totalStudents: 0 }"
+              detail="Total Students"
               :icon="{
                 name: 'person',
                 color: 'text-white',
@@ -38,14 +38,19 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Transactions', value: '£10,430' }"
-              detail="<span class='text-success text-sm font-weight-bolder'>+5%</span> Just updated"
+              :title="{ text: 'Transactions', value: '£'+(totalTransactions ? totalTransactions :0)  }"
+              detail="Total Transactions"
               :icon="{
                 name: 'weekend',
                 color: 'text-white',
                 background: 'info',
               }"
             />
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <img src="../assets/img/dashboard2.jpg" style="width: 100%;height:95% ; border-radius: 20px; box-shadow: 0px 0px 2px #CCCCCC;">
           </div>
         </div>
         <!-- <div class="row">
@@ -161,6 +166,9 @@ export default {
   name: 'dashboard-default',
   data() {
     return {
+      totalTransactions:'',
+      totalSchool:'',
+      totalStudents:'',
       user:'',
       userBallance:'',
       logoXD,
@@ -177,6 +185,9 @@ export default {
   },
   mounted(){
     this.getStudentBalance();
+    this.getTotalSchools();
+    this.getTotalStudents();
+    this.getTotalTransactions();
   },
   computed:{
     isAdmin(){
@@ -188,6 +199,7 @@ export default {
     const formattedValue = parseFloat(value).toFixed(2);
     return formattedValue;
    },
+   //--------------GET BALANCE---------------
    async getStudentBalance(){
     let user=localStorage.getItem('user')
     user= JSON.parse(user)
@@ -199,7 +211,37 @@ export default {
       } catch (error) {
           console.log(error)
       }
-    }
+    },
+    //--------------GET TOTAL SCHOOLS---------------
+    async getTotalSchools(){
+      try {
+          let response= await axiosClient.get('/totalSchools')
+          response=response.data
+          this.totalSchool=response
+      } catch (error) {
+          console.log(error)
+      }
+    },
+    //--------------GET TOTAL STUDENTS---------------
+    async getTotalStudents(){
+      try {
+          let response= await axiosClient.get('/getTotalStudents')
+          response=response.data
+          this.totalStudents=response
+      } catch (error) {
+          console.log(error)
+      }
+    },
+    //--------------GET TOTAL Transactions---------------
+    async getTotalTransactions(){
+      try {
+          let response= await axiosClient.get('/getTotalTransactions')
+          response=response.data
+          this.totalTransactions=response
+      } catch (error) {
+          console.log(error)
+      }
+    },
   },
   components: {
     // ChartHolderCard,

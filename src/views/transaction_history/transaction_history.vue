@@ -40,9 +40,9 @@
                       <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Status
                       </th> -->
-                      <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      <!-- <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Action
-                      </th>                  
+                      </th>                   -->
                     </tr>
                   </thead>
                   <tbody>
@@ -90,10 +90,9 @@
                         >
                       </td> -->
                       
-                      <td class="align-middle text-center text-sm">
-                        <!-- <i class="material-icons-round opacity-10 fs-5 cursor-pointer">receipt</i> -->
+                      <!-- <td class="align-middle text-center text-sm">
                         <i @click="deleteTransactionHistory(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                      </td>
+                      </td> -->
                     </tr>           
                   </tbody>
                 </table>
