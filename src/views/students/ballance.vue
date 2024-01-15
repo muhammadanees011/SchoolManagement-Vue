@@ -48,7 +48,7 @@
                     <small>{{ formatDate(item.created_at) }}</small>
                     </span>
                     <div>
-                      <span class="font-weight-bold me-3" :class="{ 'text-danger': item.type !== 'top_up', 'text-success': item.type === 'top_up' || item.type === 'pos_refund' }">
+                      <span class="font-weight-bold me-3 text-danger"  :class="{'text-success': item.type === 'top_up' || item.type === 'pos_refund' }">
                         {{ (item.type === 'top_up' || item.type === 'pos_refund') ? "+" : "-" }} £{{ formattedPrice(item.amount) }}
                       </span>
                       <br>
