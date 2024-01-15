@@ -48,11 +48,11 @@
                     <small>{{ formatDate(item.created_at) }}</small>
                     </span>
                     <div>
-                      <span class="font-weight-bold me-3 text-danger"  :class="{'text-success': item.type === 'top_up' || item.type === 'pos_refund' }">
+                      <span class="font-weight-bold me-3" :class="{'text-success': item.type === 'top_up' || item.type === 'pos_refund', 'text-danger': !(item.type === 'top_up' || item.type === 'pos_refund')}">
                         {{ (item.type === 'top_up' || item.type === 'pos_refund') ? "+" : "-" }} £{{ formattedPrice(item.amount) }}
                       </span>
                       <br>
-                      <small class="text-dark font-weight-bold me-3">{{item.type=='top_up' ? "Received":"Spent" }}</small>
+                      <small class="text-dark font-weight-bold me-3">{{ (item.type === 'top_up' || item.type === 'pos_refund') ? "Received" : "Spent" }}</small>
                     </div>
                   </span>
                   <span v-if="transactions.length==0 && isTransactions" class="recent-transactions mb-1 text-xs">
