@@ -43,12 +43,14 @@
                 <div class="d-flex flex-column">
                   <h6 class="mb-3 text-sm">Recent Transaction</h6>
                   <span v-for="(item,index) in transactions" :key="index" class="recent-transactions mb-1 text-xs">
-                    <span class="text-dark ms-sm-2 font-weight-bold">{{item.type=='top_up' ? "Top Up":(item.type=='pos_transaction' ? "Cafeteria Purchase":item.type) }}
+                    <span class="text-dark ms-sm-2 font-weight-bold">{{transactionType(item.type) }}
                     <br>
                     <small>{{ formatDate(item.created_at) }}</small>
                     </span>
                     <div>
-                      <span class="font-weight-bold me-3" :class="{ 'text-danger': item.type !== 'top_up','text-success': item.type === 'top_up', }">{{item.type=='top_up' ? "+":"-" }} £{{ formattedPrice(item.amount) }}</span>
+                      <span class="font-weight-bold me-3" :class="{ 'text-danger': item.type !== 'top_up', 'text-success': item.type === 'top_up' || item.type === 'pos_refund' }">
+                        {{ (item.type === 'top_up' || item.type === 'pos_refund') ? "+" : "-" }} £{{ formattedPrice(item.amount) }}
+                      </span>
                       <br>
                       <small class="text-dark font-weight-bold me-3">{{item.type=='top_up' ? "Received":"Spent" }}</small>
                     </div>
@@ -93,6 +95,9 @@
       }
     },
     methods:{
+      transactionType(type){
+        return type=='top_up' ? "Top Up":(type=='pos_transaction' ? "Cafeteria Purchase":(type=='pos_refund' ? 'Cafeteria Refund':type))
+      },
       formattedPrice(value){
         const formattedValue = parseFloat(value).toFixed(2);
         return formattedValue;

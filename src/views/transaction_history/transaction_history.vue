@@ -70,7 +70,7 @@
                         </div>
                       </td>
                       <td class="align-middle text-center">
-                        <p class="text-xs text-secondary mb-0">{{ item.type }}</p>
+                        <p class="text-xs text-secondary mb-0">{{ transactionType(item.type) }}</p>
                       </td>
                       <td class="align-middle text-center">  
                         <span class="d-flex justify-content-center">
@@ -123,6 +123,9 @@
       }
     },
     methods:{
+      transactionType(type){
+        return type=='top_up' ? "Top Up":(type=='pos_transaction' ? "Cafeteria Purchase":(type=='pos_refund' ? 'Cafeteria Refund':type))
+      },
       formattedPrice(value){
         const formattedValue = parseFloat(value).toFixed(2);
         return formattedValue;

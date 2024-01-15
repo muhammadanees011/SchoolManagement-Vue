@@ -2,7 +2,7 @@
   <div class="w-auto collapse navbar-collapse vh-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
       <li class="nav-item" >
-        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="dashboard" navText="Dashboard">
+        <sidenav-collapse :to="{ name: 'Dashboard' }" :aria-controls="''" v-bind:collapse="false" collapseRef="dashboard" navText="Dashboard">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">dashboard</i>
           </template>
