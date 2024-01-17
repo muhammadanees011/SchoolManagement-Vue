@@ -68,11 +68,13 @@
                         <div class="mb-1">
                           <label class="input-label" for="phone">Attribute</label>
                           <br />
-                          <select class="select-box" v-model="newStudent.attribute_id" id="attribute" type="select" placeholder="Attribute" name="attribute">
-                            <option v-for="(item, index) in allAttributes" :key="index" :value="item.id">
-                              {{ item.name }}
-                            </option>
-                          </select>
+                          <MultiSelect
+                            label="Attributes"
+                            :value="selectedAttrs"
+                            :options="allAttributes"
+                            @input="handleAttributes"
+                            placeholder="Attributes"
+                          />
                         </div>
                         <div class="mb-1">
                             <label class="input-label" for="balance">Balance</label>
@@ -208,10 +210,12 @@
   // import MaterialButton from '@/components/MaterialButton.vue'
   import axiosClient from '../../axios'
   import cloneDeep from 'lodash/cloneDeep';
+  import MultiSelect from "../components/MultiSelect.vue"
 
   export default {
     name: '',
     components: {
+      MultiSelect
       // MaterialButton,
     },
     mounted() {
@@ -239,10 +243,12 @@
         formValidation:"",
         validationErrors:'',
         fsm:[false,true],
+        selectedAttrs:[],
         newStudent: {
           school_id:'',
           student_id:'',
           attribute_id:'',
+          attributes:[],
           first_name: '',
           last_name:'',
           email: '',
@@ -335,6 +341,7 @@
         this.newStudent.fsm = data.fsm_activated==0 ? false:true
         this.newStudent.attribute_id = data.attribute_id
         this.newStudent.balance =this.formattedPrice(data.balance);
+        this.newStudent.attributes =data.attributes;
       }
     },
     formattedPrice(value){
@@ -370,13 +377,26 @@
     },
     //-------------GET ALL Attributes----------
     async getAllAttributes(){
-        try {
-          const response= await axiosClient.get('/getAllAttributes')
-          this.allAttributes=response.data
-        } catch (error) {
-          console.log(error)
+      try {
+        const response= await axiosClient.get('/getAllAttributes')
+        this.allAttributes=response.data
+      } catch (error) {
+        console.log(error)
+      }
+      this.allAttributes.map((item)=>{
+        if(this.newStudent.attributes.includes(item.id)){
+          this.selectedAttrs.push(item)
         }
-      },
+      })
+    },
+    //-------------STORE ALL Attributes----------
+    handleAttributes(data){
+        this.newStudent.attributes=[]
+        data.filter((item)=>{
+          this.newStudent.attributes.push(item.id);
+        })
+    },
+
     }
   }
   </script>

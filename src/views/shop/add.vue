@@ -37,18 +37,18 @@
                           <div class="mb-1">
                             <label class="input-label" for="phone">Attribute</label>
                             <br />
-                            <select class="select-box" v-model="newItem.attribute_id" id="attribute" type="select" placeholder="Attribute" name="attribute">
-                              <option v-for="(item, index) in allAttributes" :key="index" :value="item.id">
-                                {{ item.name }}
-                              </option>
-                            </select>
-                          </div>
-                          <MultiSelect
+                            <MultiSelect
                             label="Attributes"
                             :options="allAttributes"
                             @input="handleAttributes"
                             placeholder="Attributes"
-                          />
+                            />
+                            <!-- <select class="select-box" v-model="newItem.attribute_id" id="attribute" type="select" placeholder="Attribute" name="attribute">
+                              <option v-for="(item, index) in allAttributes" :key="index" :value="item.id">
+                                {{ item.name }}
+                              </option>
+                            </select> -->
+                          </div>
                           <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="mb-1">
                             <label class="input-label" for="phone">Shop</label>
                             <br />

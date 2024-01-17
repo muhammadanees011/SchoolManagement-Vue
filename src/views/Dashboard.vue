@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
-              :title="{ text:isAdmin ? 'Total Figures':'Total Balance', value: '£'+formattedPrice(userBallance) }"
+              :title="{ text:isAdmin ? 'Total Figures':'Total Balance', value: '£'+formattedPrice(userBallance ? userBallance : 0) }"
               :detail="(isAdmin ? 'Total Figures' : 'Total Balance')"
               :icon="{
                 name: 'credit_card',
@@ -38,7 +38,7 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Transactions', value: '£'+(totalTransactions ? totalTransactions :0)  }"
+              :title="{ text: 'Transactions', value: '£'+formattedPrice(totalTransactions ? totalTransactions :0)  }"
               detail="Total Transactions"
               :icon="{
                 name: 'weekend',

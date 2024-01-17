@@ -18,6 +18,7 @@ import AddOrganizations from '../views/organizations/add.vue'
 import EditOrganization from '../views/organizations/edit.vue'
 import Trips from '../views/trips/trips.vue'
 import AddTrips from '../views/trips/add.vue'
+import EditTrips from '../views/trips/edit.vue'
 import TransactionHistory from '../views/transaction_history/transaction_history.vue'
 import Shop from '../views/shop/shop.vue'
 import AddShopItem from '../views/shop/add.vue'
@@ -221,6 +222,7 @@ const routes = [
     children: [
       { path: '/trips', name: 'list-trips', component: Trips },
       { path: '/add-trips', name: 'add-trips', component: AddTrips },
+      { path: '/edit-trips/:id', name: 'edit-trips', component: EditTrips },
     ],
   },
   //---------------COURSES---------------

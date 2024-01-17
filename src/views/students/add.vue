@@ -81,18 +81,13 @@
                         <div class="mb-1">
                           <label class="input-label" for="phone">Attribute</label>
                           <br />
-                          <select class="select-box" v-model="newStudent.attribute_id" id="attribute" type="select" placeholder="Attribute" name="attribute">
-                            <option v-for="(item, index) in allAttributes" :key="index" :value="item.id">
-                              {{ item.name }}
-                            </option>
-                          </select>
+                          <MultiSelect
+                            label="Attributes"
+                            :options="allAttributes"
+                            @input="handleAttributes"
+                            placeholder="Attributes"
+                          />
                         </div>
-                        <MultiSelect
-                          label="Attributes"
-                          :options="allAttributes"
-                          @input="handleAttributes"
-                          placeholder="Attributes"
-                        />
                       </form>
                     </div>
                   </div>
@@ -113,7 +108,7 @@
                               </option>
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
-                          </div>
+                        </div>
                         <div class="mb-1">
                           <label class="input-label" for="city">City</label>
                           <input class="input-box" id="name" v-model="newStudent.city" type="text" placeholder="City" name="city" />

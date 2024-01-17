@@ -119,6 +119,7 @@ export default {
     overflow-y: auto;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 2;
 }
 .dropdown div {
     padding: 5px;

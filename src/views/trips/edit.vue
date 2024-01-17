@@ -4,7 +4,7 @@
         <div class="col-12">
           <div class="card my-4">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 ">
-                <h6 class="text-dark text-capitalize ps-3">Add Trips</h6>
+                <h6 class="text-dark text-capitalize ps-3">Edit Trip</h6>
                 <router-link :to="{ name: 'list-trips' }">
                   <button style="font-size: 12px; background-color: #573078;" class="me-3 text-white fw-5 w-90 border-0 p-2 border-radius-lg"> Back </button>
                 </router-link>
@@ -18,15 +18,6 @@
                         <div class="card-body">
                           <form role="form">
                             <div class="row mb-1">
-                            <div class="mb-1">
-                              <label class="input-label" for="name">Trip Image</label>
-                              <DropZone 
-                              :maxFiles="Number(1)"
-                              url="http://localhost:8080"
-                              :uploadOnDrop="true"
-                              :multipleUpload="false"
-                              :parallelUpload="1"/>
-                            </div>
                             <div class="mb-1">
                               <label class="input-label" for="name">Trip Title</label>
                               <input v-model="newTrip.title" class="input-box title-input" id="name" type="text" placeholder="Trip to Brazil" name="name" />
@@ -94,6 +85,7 @@
                               <br />
                               <MultiSelect
                                 label="Attributes"
+                                :value="selectedAttrs"
                                 :options="allAttributes"
                                 @input="handleAttributes"
                                 placeholder="Attributes"
@@ -101,7 +93,7 @@
                             </div>
                           </form>
                           <div class="mt-4">
-                            <button @click.prevent="saveNewTrip" style="z-index:1; padding-left:3rem !important ;padding-right:3rem !important ; font-size: 12px; background-color: #573078;" class="btn text-white ms-2 fw-5 border-0  py-2 border-radius-lg"> 
+                            <button @click.prevent="updateTrip" style="z-index:1; padding-left:3rem !important ;padding-right:3rem !important ; font-size: 12px; background-color: #573078;" class="btn text-white ms-2 fw-5 border-0  py-2 border-radius-lg"> 
                               Save 
                             </button>
                           </div>
@@ -122,15 +114,15 @@
   import axiosClient from '../../axios'
   import cloneDeep from 'lodash/cloneDeep';
   import MultiSelect from "../components/MultiSelect.vue"
-  import { DropZone } from 'dropzone-vue';
+  import moment from 'moment';
 
   export default {
     name: '',
     components: {
-      MultiSelect,
-      DropZone
+      MultiSelect
     },
     mounted() {
+      this.editTrip();
       this.getOrganizations();
       this.getAllAttributes();
     },
@@ -140,6 +132,7 @@
       availableOrganizations:"",
       isError:false,
       formValidation:"",
+      selectedAttrs:[],
       newTrip: {
         organization_id:'',
         attributes:[],
@@ -170,6 +163,11 @@
           } catch (error) {
             console.log(error)
           }
+          this.allAttributes.map((item)=>{
+            if(this.newTrip.attributes.includes(item.id)){
+            this.selectedAttrs.push(item)
+            }
+            })
       },
       //------------VALIDATE FORM-------------
       validateForm(){
@@ -185,17 +183,19 @@
             }
         }
         this.formValidation=validate
+        console.log(this.formValidation)
         return status;
       },
       //--------------SAVE NEW TRIP--------------
-      async saveNewTrip(){
+      async updateTrip(){
         if(this.validateForm()){
           return;
         }
+        let id = this.$route.params.id
         try {
-        await axiosClient.post('/createTrip', this.newTrip)
+        await axiosClient.put('/updateTrip/'+id, this.newTrip)
         this.$router.push({ name: 'list-trips' })
-        this.snackbarMsg('Trip Saved Successfuly')
+        this.snackbarMsg('Trip Updated Successfuly')
         } catch (error) {
           console.log(error)
         }
@@ -216,6 +216,35 @@
           console.log(error)
         }
       },
+     //------------EDIT SHOP ITEM------------
+    async editTrip() {
+    let id = this.$route.params.id
+    try {
+        let response= await axiosClient.get('/findTrip/'+id)
+        response=response.data
+        this.setTrip(response)
+    } catch (error) {
+        console.log(error)
+    }
+    },
+    //-------------SET TRIP---------------
+    setTrip(data){
+        this.newTrip.title=data.title
+        this.newTrip.description=data.description
+        this.newTrip.total_seats=data.total_booking
+        this.newTrip.accomodation_details=data.accomodation_details
+        this.newTrip.start_date=this.formatDateString(data.start_date)
+        this.newTrip.end_date=this.formatDateString(data.end_date)
+        this.newTrip.total_funds=data.budget
+        this.newTrip.organization_id=data.organization_id
+        this.newTrip.attributes=data.attributes
+    },
+    //------------FORMAT DATE--------------
+    formatDateString(dateString) {
+    const parsedDate = moment(dateString);
+    const formattedDate = parsedDate.format('YYYY-MM-DD');
+    return formattedDate;
+    },
     }
   }
   </script>

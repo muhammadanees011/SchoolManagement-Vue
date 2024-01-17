@@ -30,9 +30,9 @@
                       <th class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
                         Price
                       </th>
-                      <th v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'" class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
+                      <!-- <th v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'" class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
                         Attribute
-                      </th>
+                      </th> -->
                       <th v-if="user && user.role=='super_admin' || user && user.role=='organization_admin'" class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
                         Shop
                       </th>
@@ -60,9 +60,9 @@
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
                     </td>
-                    <td v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff' "  class="align-middle text-center">
+                    <!-- <td v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff' "  class="align-middle text-center">
                       <span class="text-secondary text-xs ">{{item.attribute ? item.attribute.name:'-' }}</span>
-                    </td>
+                    </td> -->
                     <td v-if="user && user.role=='super_admin' || user.role=='organization_admin'" class="align-middle text-center">
                       <span class="text-secondary text-xs ">{{data.shop_name  ? data.shop_name:'-' }}</span>
                     </td>

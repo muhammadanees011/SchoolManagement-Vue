@@ -38,11 +38,18 @@
                           <div class="mb-1">
                             <label class="input-label" for="phone">Attribute</label>
                             <br />
-                            <select class="select-box" v-model="newItem.attribute_id" id="attribute" type="select" placeholder="Attribute" name="attribute">
+                            <MultiSelect
+                            label="Attributes"
+                            :value="selectedAttrs"
+                            :options="allAttributes"
+                            @input="handleAttributes"
+                            placeholder="Attributes"
+                            />
+                            <!-- <select class="select-box" v-model="newItem.attribute_id" id="attribute" type="select" placeholder="Attribute" name="attribute">
                               <option v-for="(item, index) in allAttributes" :key="index" :value="item.id">
                                 {{ item.name }}
                               </option>
-                            </select>
+                            </select> -->
                           </div>
                           <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="mb-1">
                             <label class="input-label" for="phone">Shop</label>
@@ -77,10 +84,13 @@
   // import MaterialButton from '@/components/MaterialButton.vue'
   import axiosClient from '../../axios'
   import cloneDeep from 'lodash/cloneDeep';
+  import MultiSelect from "../components/MultiSelect.vue";
+
 
   export default {
     name: '',
     components: {
+      MultiSelect
       // MaterialButton,
     },
     mounted() {
@@ -94,9 +104,11 @@
         formValidation:"",
         allAttributes:'',
         allShops:'',
+        selectedAttrs:[],
         user:"",
         newItem: {
             name:'',
+            attributes:[],
             price:'',
             quantity: '',
             detail:'',
@@ -161,7 +173,6 @@
     try {
         let response= await axiosClient.get('/editShopItem/'+id)
         response=response.data
-        console.log('response',response)
         this.setShopItem(response)
     } catch (error) {
         console.log(error)
@@ -174,6 +185,7 @@
         this.newItem.shop_id=data.shop_id
         this.newItem.attribute_id=data.attribute_id
         this.newItem.detail=data.detail
+        this.newItem.attributes=data.attributes
     },
     //-------------GET ALL Attributes----------
     async getAllAttributes(){
@@ -183,6 +195,19 @@
       } catch (error) {
         console.log(error)
       }
+      this.allAttributes.map((item)=>{
+        if(this.newItem.attributes.includes(item.id)){
+          this.selectedAttrs.push(item)
+        }
+      })
+    },
+    //-------------STORE ALL Attributes----------
+    handleAttributes(data){
+      console.log('attrs',data)
+        this.newItem.attributes=[]
+        data.filter((item)=>{
+          this.newItem.attributes.push(item.id);
+        })
     },
     //-------------GET ALL SHOPs----------
     async getAllShops(){
