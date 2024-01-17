@@ -113,7 +113,7 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse @click="navLegacy('shop-items')"  :aria-controls="''" v-bind:collapse="false" collapseRef="shop" navText="Shop">
+        <sidenav-collapse :to="{ name: 'shop-items' }"  :aria-controls="''" v-bind:collapse="false" collapseRef="shop" navText="Shop">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">store</i>
           </template>

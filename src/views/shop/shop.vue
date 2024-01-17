@@ -146,7 +146,7 @@
         this.shopItems.splice(indexToRemove, 1)
       },
       editShopItem(id){
-        this.$router.push(`/edit-item/`+id)
+        this.$router.push({ name: 'edit-shop-items', params: { id } });
       },
       async addToCart(itemId){
         let user=localStorage.getItem('user')

@@ -28,22 +28,27 @@
                           <div class="mb-1">
                             <label class="input-label" for="name">Name</label>
                             <input class="input-box" id="name" v-model="newSchool.title" type="text" placeholder="School Name" name="name" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["title"]!==""'>Name is required</small>
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="email">Email</label>
-                            <input class="input-box" id="name" v-model="newSchool.email" type="email" placeholder="Last Name" name="email" />
+                            <input class="input-box" id="name" v-model="newSchool.email" type="email" placeholder="Email" name="email" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="phone">Phone</label>
                             <input class="input-box" id="name" v-model="newSchool.phone" type="tel" placeholder="Phone" name="phone" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["phone"]!==""'>Phone is required</small>
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="website">Website</label>
                             <input class="input-box" id="name" v-model="newSchool.website" type="url" placeholder="Website" name="website" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["website"]!==""'>Website is required</small>
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="address">Address</label>
                             <input class="input-box" id="name" v-model="newSchool.address" type="text" placeholder="Address" name="address" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>Address is required</small>
                           </div>
                           <div v-if="user.role=='super_admin'" class="mb-1">
                             <label class="input-label" for="phone">Organization</label>
@@ -53,6 +58,7 @@
                                 {{ item.name }}
                               </option>
                             </select>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>Organization is required</small>
                           </div>
                           <div  class="mb-1">
                             <label class="input-label" for="country">Country</label>
@@ -62,30 +68,37 @@
                                 {{ item }}
                               </option>
                             </select>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
                           </div>
                         <div class="mb-1">
                           <label class="input-label" for="city">City</label>
                           <input class="input-box" id="name" v-model="newSchool.city" type="text" placeholder="City" name="city" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="phone">Zip Code</label>
                           <input class="input-box" id="name" v-model="newSchool.zip" type="text" placeholder="Zip Code" name="zip" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>ZIP code is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="teachers_count">Teachers Count</label>
                           <input class="input-box" id="teachers_count" v-model="newSchool.teachers_count" type="number" placeholder="Teachers Count" name="teachers_count" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["teachers_count"]!==""'>Teachers Count is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="students_count">Students Count</label>
                           <input class="input-box" id="students_count" v-model="newSchool.students_count" type="number" placeholder="Teachers Count" name="students_count" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["students_count"]!==""'>Students Count is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="stages">Stages</label>
                           <input class="input-box" id="stages" v-model="newSchool.stages" type="text" placeholder="Stages" name="stages" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["stages"]!==""'>Stages is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="tagLine">Tag Line</label>
                           <input class="input-box" id="name" v-model="newSchool.tagline" type="text" placeholder="Tag Line" name="tagLine" />
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["tagline"]!==""'>Tagline is required</small>
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="phone">Status</label>
@@ -95,6 +108,7 @@
                               {{ item }}
                             </option>
                           </select>
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>Status is required</small>
                         </div>
                         <div class="mt-4">
                           <button @click.prevent="saveNewSchool" style="font-size: 12px; background-color: #573078;" class="btn text-white fw-5 border-0 px-5 py-2 border-radius-lg"> Save </button>
@@ -116,6 +130,8 @@
 <script>
 // import MaterialButton from '@/components/MaterialButton.vue'
 import axiosClient from '../../axios'
+import cloneDeep from 'lodash/cloneDeep';
+
 
 export default {
   name: '',
@@ -129,6 +145,7 @@ export default {
   data() {
     return {
       user:'',
+      formValidation:'',
       availableCountries:['UK','USA','Canada'],
       newSchool: {
         organization_id:'',
@@ -140,9 +157,6 @@ export default {
         city: '',
         zip: '',
         address: '',
-        founded_date: '',
-        password: '',
-        password_confirmation: '',
         tagline: '',
         teachers_count:'',
         students_count:'',
@@ -161,6 +175,22 @@ export default {
         background: 'white',
       })
     },
+    //------------VALIDATE FORM-------------
+    validateForm(){
+      let status=false
+      let validate=''
+      validate=cloneDeep(this.newSchool)
+      for(let item in this.newSchool){
+        if ((this.newSchool[item] === '' || this.newSchool[item] === undefined)) {
+              validate[item]="is required"
+              status=true
+          }else{
+            validate[item]=''
+          }
+      }
+      this.formValidation=validate
+      return status;
+    },
     //------------GET USER----------------
     getUser(){
       let user=localStorage.getItem('user')
@@ -169,6 +199,9 @@ export default {
     },
     //------------SAVE SCHOOL------------
     async saveNewSchool() {
+      if(this.validateForm()){
+        return;
+      }
       try {
         let url='/createSchool'
         if(this.user.role=='organization_admin'){

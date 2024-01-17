@@ -77,8 +77,8 @@ const routes = [
   },
   //------------ORGANIZATION ADMINS---------------
   {
-    path: '/organization-admins',
-    name: 'organizationAdmins',
+    path: '/organizations-admins',
+    name: 'organizations-admins',
     component: DefaultLayout,
     meta: {
       title: 'Organizations Admins',
@@ -102,7 +102,7 @@ const routes = [
     children: [
       { path: '/schools', name: 'list-schools', component: Schools },
       { path: '/add', name: 'add-school', component: AddSchool },
-      { path: '/:id', name: 'edit-school', component: EditSchool },
+      { path: '/edit-schools/:id', name: 'edit-school', component: EditSchool },
     ],
   },
   //------------STUDENTS---------------
@@ -124,8 +124,8 @@ const routes = [
   },
   //----------STUDENT ATTRIBUTES------------
   {
-    path: '/student/attributes',
-    name: 'student-attributes',
+    path: '/attributes',
+    name: 'attributes',
     component: DefaultLayout,
     meta: {
       title: 'Student Attributes',
@@ -196,7 +196,7 @@ const routes = [
   },
   //-------------SHOP----------------
   {
-    path: '/shop',
+    path: '/shop-items',
     name: 'shop',
     component: DefaultLayout,
     meta: {
@@ -205,9 +205,9 @@ const routes = [
     },
     children: [
       { path: '/shop-items', name: 'shop-items', component: Shop },
-      { path: '/add-items', name: 'add-items', component: AddShopItem },
-      { path: '/edit-item/:id', name: 'edit-item', component: EditShopItem },
-      { path: '/checkout/:id', name: 'shop-checkout', component: Checkout },
+      { path: '/add-shop-items', name: 'add-items', component: AddShopItem },
+      { path: '/edit-shop-items/:id', name: 'edit-shop-items', component: EditShopItem },
+      { path: '/shop-checkout/:id', name: 'shop-checkout', component: Checkout },
     ],
   },
   //--------------TRIPS-----------------
