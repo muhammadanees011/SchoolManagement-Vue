@@ -10,9 +10,11 @@
                 <div>
                   <div class="filter-container">
                     <input class="input-box filter-box" id="name" type="text" placeholder="Type to Search..." name="address" />
-                    <router-link :to="{ name: 'add-items' }" v-if="user && user.role=='organization_admin' || user.role=='staff' || user.role=='super_admin'">
-                      <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Item </button>
-                    </router-link>
+                    <template v-if="userPermissions.create">
+                      <router-link :to="{ name: 'add-items' }" v-if="user && user.role=='organization_admin' || user.role=='staff' || user.role=='super_admin'">
+                        <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Item </button>
+                      </router-link>
+                    </template>
                   </div>              
                 </div>
                 <table class="table align-items-center mb-0">
@@ -70,13 +72,13 @@
                       <span class="badge badge-sm bg-gradient-success">{{ item.status }}</span>
                     </td>
                     <td class="align-middle text-center text-sm">
-                      <i @click="addToCart(item.id)" class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i>
-                      <router-link :to="{ name: 'shop-checkout', params: { id: item.id }  }">
+                      <i v-if="user && user.role=='student'" @click="addToCart(item.id)" class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i>
+                      <!-- <router-link :to="{ name: 'shop-checkout', params: { id: item.id }  }">
                         <i v-if="user && user.role=='student'" class="fas fa-shopping-cart text-success me-2" aria-hidden="true"></i>
-                      </router-link>
-                        <span  v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
-                          <i @click="editShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                          <i @click="deleteShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                      </router-link> -->
+                        <span  v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'">
+                          <i v-if="userPermissions.edit" @click="editShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
+                          <i v-if="userPermissions.delete" @click="deleteShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                       </span>
                     </td>
                     </tr>
@@ -93,6 +95,7 @@
   
   <script>
   import axiosClient from '../../axios'
+
   export default {
     name: "tables",
     mounted(){
@@ -101,6 +104,11 @@
         this.user = JSON.parse(userData);
       }
       this.getShopItems();
+    },
+    computed: {
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
     },
     data(){
     return{
@@ -126,7 +134,6 @@
         try {
           const response=await axiosClient.get('/getShopItems')
           this.shopItems=response.data;
-          console.log('shopItems',response);
         } catch (error) {
           console.log(error)
         }

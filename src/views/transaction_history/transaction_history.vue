@@ -81,7 +81,7 @@
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs "
-                          >{{ item.created_at.toString().split("T")[0] }}</span
+                          >{{ formatDate(item.created_at) }}</span
                         >
                       </td>
                       <!-- <td class="align-middle text-center text-sm">
@@ -106,6 +106,7 @@
   
   <script>
   import axiosClient from '../../axios'
+  import moment from 'moment';
 
   export default {
     name: "tables",
@@ -124,7 +125,19 @@
     },
     methods:{
       transactionType(type){
-        return type=='top_up' ? "Top Up":(type=='pos_transaction' ? "Cafeteria Purchase":(type=='pos_refund' ? 'Cafeteria Refund':type))
+        let newType='';
+        if(type=='top_up'){
+          newType="Top Up";
+        }else if(type=='pos_transaction'){
+          newType="Cafeteria Purchase";
+        }else if(type=='pos_refund'){
+          newType="Cafeteria Refund";
+        }else if(type=='trip_funds'){
+          newType="Trip Charges";
+        }else if(type=='school_shop_funds'){
+          newType="Shop Purchase";
+        }
+        return newType;
       },
       formattedPrice(value){
         const formattedValue = parseFloat(value).toFixed(2);
@@ -202,6 +215,11 @@
         removeTransactionFromList(id) {
         const indexToRemove = this.transactionHistoryList.findIndex((item) => item.id === id)
         this.transactionHistoryList.splice(indexToRemove, 1)
+      },
+      //------------FORMAT DATE--------------
+      formatDate(data) {
+        const date = moment(data);
+        return date.format('MMM D, YYYY,   HH:mm:ss');
       },
     },
   };

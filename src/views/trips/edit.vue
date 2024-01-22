@@ -74,9 +74,9 @@
                               </div>
                               <div class="col-xl-4 col-lg-4 col-md-4">
                                   <div class="mb-1">
-                                      <label class="input-label" for="name">Total Funds</label>
-                                      <input  v-model="newTrip.total_funds" class="input-box" id="name" type="number" placeholder="funds" name="name" />
-                                      <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["total_funds"]!==""'>Total Funds is required</small>
+                                      <label class="input-label" for="name">Trip Cost</label>
+                                      <input  v-model="formattedPrice" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Trip Cost" name="name" />
+                                      <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["total_funds"]!==""'>Trip Cost is required</small>
                                   </div>
                               </div>
                             </div>
@@ -125,6 +125,17 @@
       this.editTrip();
       this.getOrganizations();
       this.getAllAttributes();
+    },
+    computed: {
+      formattedPrice: {
+        get() {
+          return this.newTrip.total_funds;
+        },
+        set(value) {
+          const formattedValue = parseFloat(value).toFixed(2);
+          this.newTrip.total_funds = formattedValue;
+        },
+      },
     },
     data() {
       return {

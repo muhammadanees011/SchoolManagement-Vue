@@ -31,26 +31,44 @@
               <i class="material-icons cursor-pointer">shopping_cart</i>
             </a>
             <ul class="cart px-2 py-3 cart-dropdown dropdown-menu dropdown-menu-end me-sm-n4" :class="showCart ? 'show' : ''" aria-labelledby="dropdownMenuButton">
-
-              <li v-for="(item,index) in cartItemsList" :key="index" class="text-white list-group-item bg-gray-100 border-0 d-flex p-4 mb-2 border-radius-lg">
+              <template v-for="(item,index) in cartItemsList" :key="index" >
+                <li  v-if="item.shop_item!==null"  class="text-white list-group-item bg-gray-100 border-0 d-flex p-4 mb-2 border-radius-lg">
+                    <div class="d-flex flex-column">
+                    <h6 class="mb-3 text-sm text-dark">{{ item.shop_item ? item.shop_item.name :'' }} (Shop Item)</h6>
+                    <span class="mb-1 text-xs text-dark">
+                        <!-- {{ item.shop_item ? item.shop_item.detail:'' }} -->
+                    </span>
+                    </div>
+                    <div class="ms-auto text-end">
+                        <span>
+                          <span class="me-2 text-warning text-gradient text-sm font-weight-bold">
+                            £{{formattedPrice(item.shop_item ? item.shop_item.price :0)}}
+                          </span> 
+                            <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </li>
+              </template>
+              <template v-for="(item,index) in cartItemsList" :key="index" >
+              <li  v-if="item.trip!==null" class="text-white list-group-item bg-gray-100 border-0 d-flex p-4 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
-                  <h6 class="mb-3 text-sm text-dark">{{ item.shop_item.name }}</h6>
+                  <h6 class="mb-3 text-sm text-dark">{{ item.trip ? item.trip.title:'' }} (Trip)</h6>
                   <span class="mb-1 text-xs text-dark">
-                      {{ item.shop_item.detail }}
+                      <!-- {{ item.trip ? item.trip.description:'' }} -->
                   </span>
                   </div>
                   <div class="ms-auto text-end">
                       <span>
-                          <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
+                        <span class="me-2 text-warning text-gradient text-sm font-weight-bold">
+                          £{{formattedPrice(item.trip ? item.trip.budget:0)}}
+                        </span> 
+                        <i @click="removeItemFromCart(item.id),updateRemovedItem('trip')" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
                       </span>
-                  <br>
-                  <div class=" d-flex ms-3 me-2 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                      £{{ item.shop_item.price }}
-                  </div>
                   </div>
               </li>
+              </template>
               <li v-if="cartItemsList.length>0" class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                <button style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Checkout </button>
+                <button @click="navCheckout()" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Checkout </button>
               </li>
               <li v-else class="list-group-item border-0 d-flex align-items-center justify-content-center p-4 mb-2 bg-warning-100 text-warning border-radius-lg">
                 <small>Cart is empty</small>
@@ -207,7 +225,8 @@
 <script>
 // import MaterialInput from '@/components/MaterialInput.vue'
 // import Breadcrumbs from '../Breadcrumbs.vue'
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
+
 import axiosClient from '../../axios'
 
 export default {
@@ -231,8 +250,10 @@ export default {
     this.getUser();
     this.isUpdatedRecently();
     this.getOrganizationName();
+    this.getUserPermissions();
   },
   methods: {
+    ...mapActions(['updateRemovedItem','updatePermissions']),
     ...mapMutations(['navbarMinimize', 'toggleConfigurator']),
 
     toggleSidebar() {
@@ -244,14 +265,36 @@ export default {
         this.user = JSON.parse(userData);
       }
     },
+    //----------------GET USER PERMISSIONS------------
+    async getUserPermissions(){
+      let id = this.user.id
+      try {
+          let response= await axiosClient.get('getUserPermissions/'+id)
+          response=response.data
+          this.formattPermissions(response)
+        } catch (error) {
+          console.log(error)
+        }
+    },
+    //-------------FORMAT & SAVE USER PERMISSIONS------------
+    formattPermissions(data){
+      let permissions=[];
+      data.filter((item)=>{
+        permissions.push(item.permission_name)
+      });
+      this.updatePermissions(permissions)
+    },
+    //----------------FORMAT THE PRICE---------------
+    formattedPrice(value){
+        const formattedValue = parseFloat(value).toFixed(2);
+        return formattedValue;
+    },
     //---------CHECK IF PASSWORD UPDATED---------
     isUpdatedRecently() {
       let user = localStorage.getItem('user');
       user = JSON.parse(user);
       const createdDate = new Date(user.created_at);
       const updatedDate = new Date(user.updated_at);
-      console.log(createdDate)
-      console.log(updatedDate)
       if(updatedDate > createdDate){
         this.passwordStatus=true;
       }else{
@@ -281,7 +324,6 @@ export default {
       try {
         const response=await axiosClient.post('/getOrganizationName',data)
         this.organization_name=response.data.organization_name;
-        console.log(response)
       } catch (error) {
         console.log(error)
       }
@@ -312,10 +354,15 @@ export default {
           console.log(error)
         }
     },
+    //----------------REMOVE ITEM FROM CART---------------
     removeItemFromList(id){
       const indexToRemove = this.cartItemsList.findIndex(item => item.id === id);
       this.cartItemsList.splice(indexToRemove,1)
       this.snackbarMsg('Item Removed Successfully')
+    },
+    //----------------REDIRECT TO CHECKOUT PAGE---------------
+    navCheckout(){
+      this.$router.push({ name: 'cart-checkout'});
     }
   },
   components: {
@@ -345,9 +392,6 @@ export default {
   height: 300px !important;
   overflow-y: scroll;
 }
-/* .cart{
-  border: 2px solid #573078 !important;
-} */
 .menu_item{
   height: 35px;
 }

@@ -41,7 +41,7 @@
               </div>
               <!-- other<br> -->
               <span class="mb-1 amount-container" style="display: flex; ">
-                <input @keyup="selected_amount=null" v-model="addedBalance" class="me-1 amount-input" type="text" name="gender" placeholder="1.00"> 
+                <input @keyup="selected_amount=null" v-model="formattedBalance" class="me-1 amount-input" type="text" name="gender" placeholder="1.00"> 
               </span>  
             </div>
           </div>
@@ -90,6 +90,17 @@
       let user=localStorage.getItem('user')
       this.user= JSON.parse(user)
       this.getCustomerPaymentMethods();
+    },
+    computed: {
+      formattedBalance: {
+        get() {
+          return this.addedBalance;
+        },
+        set(value) {
+          const formattedValue = parseFloat(value).toFixed(2);
+          this.addedBalance = formattedValue;
+        },
+      },
     },
     data() {
       return {
@@ -170,7 +181,6 @@
       try {
         const response=await axiosClient.post('/getPaymentMethods',data)
         this.userCards=response.data.data
-        console.log(response)
       } catch (error) {
         console.log(error)
       }

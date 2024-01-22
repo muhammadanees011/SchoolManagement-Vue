@@ -10,6 +10,7 @@ import { SnackbarService, Vue3Snackbar } from 'vue3-snackbar'
 import 'vue3-snackbar/dist/style.css'
 import DropZone from 'dropzone-vue';
 import 'dropzone-vue/dist/dropzone-vue.common.css';
+import permissionsPlugin from './helper/index';
 
 
 const appInstance = createApp(App)
@@ -19,4 +20,5 @@ appInstance.component('vue3-snackbar', Vue3Snackbar)
 appInstance.use(router)
 appInstance.use(MaterialDashboard)
 appInstance.use(DropZone)
+appInstance.use(permissionsPlugin);
 appInstance.mount('#app')

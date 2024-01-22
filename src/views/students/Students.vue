@@ -5,9 +5,11 @@
         <div class="card my-4">
           <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
               <h6 class="text-dark text-capitalize ps-3">Students</h6>
-              <router-link :to="{ name: 'add-student' }">
-                <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Student </button>
-              </router-link>
+              <template v-if="userPermissions.create">
+                <router-link :to="{ name: 'add-student' }">
+                  <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Student </button>
+                </router-link>
+              </template>
             </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
@@ -67,11 +69,11 @@
                         <router-link to="#" title="Transaction">
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5 me-2">swap_horizontal_circle</i>
                         </router-link> -->
-                        <router-link :to="{ name: 'edit-student', params: { id: item.id } }">
+                        <router-link v-if="userPermissions.edit" :to="{ name: 'edit-student', params: { id: item.id } }">
                           <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         </router-link>
                         <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
-                        <i @click="deleteStudent(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                        <i v-if="userPermissions.delete" @click="deleteStudent(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                       </span>
                     </td>
                   </tr>
@@ -101,7 +103,10 @@ export default {
       user:'',
     }
   },
-  components:{
+  computed: {
+    userPermissions() {
+      return this.$permissions.userPermissions.value;
+    },
   },
   methods:{
     snackbarMsg(message) {

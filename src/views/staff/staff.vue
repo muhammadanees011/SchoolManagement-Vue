@@ -42,6 +42,9 @@
                       </td>
                       <td class="align-middle text-center">
                         <span>
+                          <router-link :to="{ name: 'detail-staff', params: { id: item.user.id } }">
+                          <i class="material-icons-round opacity-10 fs-5 me-1 cursor-pointer">info</i>
+                          </router-link>
                           <router-link :to="{ name: 'edit-staff', params: { id: item.id } }">
                             <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                           </router-link>

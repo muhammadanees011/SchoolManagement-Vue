@@ -19,6 +19,7 @@ import EditOrganization from '../views/organizations/edit.vue'
 import Trips from '../views/trips/trips.vue'
 import AddTrips from '../views/trips/add.vue'
 import EditTrips from '../views/trips/edit.vue'
+import TripParticipants from '../views/trips/participants.vue'
 import TransactionHistory from '../views/transaction_history/transaction_history.vue'
 import Shop from '../views/shop/shop.vue'
 import AddShopItem from '../views/shop/add.vue'
@@ -35,6 +36,7 @@ import EditAdmin from '../views/organization_admins/editAdmin.vue'
 import Staff from '../views/staff/staff.vue'
 import AddStaff from '../views/staff/add.vue'
 import EditStaff from '../views/staff/edit.vue'
+import StaffDetail from '../views/staff/details.vue'
 import Parents from '../views/parent/parents.vue'
 import AddParents from '../views/parent/add.vue'
 import EditParents from '../views/parent/edit.vue'
@@ -150,6 +152,7 @@ const routes = [
       { path: '/staff', name: 'list-staff', component: Staff },
       { path: '/staff/add', name: 'add-staff', component: AddStaff },
       { path: '/staff/edit/:id', name: 'edit-staff', component: EditStaff },
+      { path: '/staff/details/:id', name: 'detail-staff', component: StaffDetail },
     ],
   },
   //------------PARENT---------------
@@ -207,7 +210,19 @@ const routes = [
       { path: '/shop-items', name: 'shop-items', component: Shop },
       { path: '/add-shop-items', name: 'add-items', component: AddShopItem },
       { path: '/edit-shop-items/:id', name: 'edit-shop-items', component: EditShopItem },
-      { path: '/shop-checkout/:id', name: 'shop-checkout', component: Checkout },
+    ],
+  },
+  //-------------CHECKOUT----------------
+  {
+    path: '/checkout',
+    name: 'checkout',
+    component: DefaultLayout,
+    meta: {
+      title: 'Checkout',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/cart-checkout', name: 'cart-checkout', component: Checkout },
     ],
   },
   //--------------TRIPS-----------------
@@ -223,6 +238,7 @@ const routes = [
       { path: '/trips', name: 'list-trips', component: Trips },
       { path: '/add-trips', name: 'add-trips', component: AddTrips },
       { path: '/edit-trips/:id', name: 'edit-trips', component: EditTrips },
+      { path: '/participants-trips/:id', name: 'participants-trips', component: TripParticipants },
     ],
   },
   //---------------COURSES---------------

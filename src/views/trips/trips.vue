@@ -3,7 +3,11 @@
       <div class="card-header pb-0 px-3">
         <div class="d-flex justify-content-between">
           <h6 class="mb-0">Trips</h6>
-          <button v-if="user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'" @click="redirectToAddTrips"  :to="{ name: 'add-trips' }" style="font-size: 12px; background-color: #573078;"  class="me-3 trips-btn w-10  text-white fw-5 p-2 border-radius-lg"> Add Trips </button>
+          <template v-if="userPermissions.create" >
+            <template v-if="user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'" >
+              <button @click="redirectToAddTrips"  :to="{ name: 'add-trips' }" style="font-size: 12px; background-color: #573078;"  class="me-3 trips-btn w-10  text-white fw-5 p-2 border-radius-lg">Add Trips</button>
+            </template>
+          </template>
         </div>
       </div>
       <div class="card-body pt-1 p-3">
@@ -32,16 +36,31 @@
                   <br>
                   <span v-if="user.role=='super_admin'"><small class="me-3 trip-dates">Organization: {{ item.organization ? item.organization.name:'-' }}</small></span>
                 <div class="d-flex  align-items-start text-danger text-gradient text-sm font-weight-bold" style="justify-content: flex-start;">
-                  Trip Funds - £{{ item.budget }}
+                  Trip Cost - £{{ formattedAmount(item.budget) }}
                 </div>
                 <br>
-                <div class="mt-5" v-if="user.role=='super_admin' || user.role=='school_user'">
-                <button @click="editTrip(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
-                <button @click="deleteTrip(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
+                <template  v-if="user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'">
+                  <button @click="navLegacy('participants-trips',{id:item.id})" style="font-size: 12px; background-color: #F3F4F6; color: #573078 !important;" class="d-flex justify-content-around align-items-center me-3 trips-btn w-50  text-white fw-5 p-2 border-radius-lg"> Participants
+                  <i class="material-icons-round opacity-10 fs-5 cursor-pointer">arrow_forward</i>
+                  </button>
+                  <br>
+                  <div class="mt-0">
+                  <button v-if="userPermissions.edit" @click="editTrip(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
+                  <button v-if="userPermissions.delete" @click="deleteTrip(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
+                  </div>             
+                </template>
+                <div class="mt-0" v-if="item.cart!==null && user.role=='student'">
+                  <div class="cart-status">Added To Cart</div>
+                </div>
+                <div class="mt-0" v-if="item.cart==null && user.role=='student'">
+                  <button @click="addTripToCart(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45  text-white fw-5 p-2 border-radius-lg"> Add To Cart </button>
                 </div>
                 <br>
                 </div>
               </div>
+          </div>
+          <div v-if="allTrips.length==0" class="row list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+            <small class="d-flex justify-content-center">No trips found!</small>
           </div>
         </div>
       </div>
@@ -51,11 +70,13 @@
   <script>
   import axiosClient from '../../axios'
   import moment from 'moment';
+  import { mapGetters,mapActions } from 'vuex'
+
 
   export default {
     name: "billing-card",
     data(){
-      return{
+      return{  
         user:'',
         allTrips:'',
       }
@@ -64,7 +85,23 @@
       this.getUser();
       this.getAllTrips();
     },
+    watch:{
+      getRemovedItem(newVal,oldVal){
+        console.log(oldVal)
+        if(newVal=='trip'){
+          this.getAllTrips();
+        }
+      },
+    },
+    computed: {
+      ...mapGetters(['getRemovedItem','getPermissions']),
+
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
+    },
     methods:{
+      ...mapActions(['updateRemovedItem']),
       //--------------TOAST MESSAGE--------------
       snackbarMsg(message) {
         this.$snackbar.add({
@@ -72,6 +109,28 @@
           text: message,
           background: 'white',
         })
+      },
+      //--------------NAVIGATE---------------
+      navLegacy(routeName,routeParams){
+        this.$router.push({name:routeName,params:routeParams})
+      },
+      //--------------FORMAT AMOUNT---------------
+      formattedAmount(value){
+        const formattedValue = parseFloat(value).toFixed(2);
+        return formattedValue;
+      },
+      //-------------ADD TRIP TO CART---------------
+      async addTripToCart(id){
+        let data={
+          trip_id:id
+        }
+        try {
+        await axiosClient.post('/addTripToCart',data)
+        await this.getAllTrips();
+        this.snackbarMsg('Successfuly Added Trip To Cart')
+        } catch (error) {
+          console.log(error)
+        }
       },
       //-------------GET LOGGEDIN USER---------------
       getUser(){
@@ -89,6 +148,7 @@
         try {
         const response=await axiosClient.get('/getAllTrips')
         this.allTrips=response.data
+        this.updateRemovedItem(null);
         } catch (error) {
           console.log(error)
         }
@@ -134,6 +194,16 @@
 .trips-btn:hover{
     border:1px solid black !important;
     background-color: #FFFFFF;
+}
+.cart-status{
+  background-color: cadetblue;
+  color: white;
+  font-size: 11px;
+  padding: 2px;
+  border-radius: 5px;
+  width: 100px;
+  display: flex;
+  justify-content: center;
 }
 </style>
   

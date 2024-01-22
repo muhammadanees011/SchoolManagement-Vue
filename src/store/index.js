@@ -1,11 +1,13 @@
 import { createStore } from 'vuex'
 import AuthModule from './modules/auth'
 import organizationModule from './modules/organization'
+import cart from './modules/cart'
 
 export default createStore({
   modules: {
     auth: AuthModule,
     organization: organizationModule,
+    cart: cart,
   },
   state: {
     hideConfigButton: false,
