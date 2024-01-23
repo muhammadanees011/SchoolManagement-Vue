@@ -12,9 +12,17 @@ const permissionsPlugin = {
     });
 
     const checkIfPermission = (allPermissions) => {
-      Object.keys(userPermissions.value).forEach((permission) => {
-        userPermissions.value[permission] = allPermissions.includes(permission);
-      });
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user && user.role === 'super_admin' || user && user.role === 'organization_admin') {
+          Object.keys(userPermissions.value).forEach((permission) => {
+          userPermissions.value[permission] = true;
+        });
+      }else{
+          Object.keys(userPermissions.value).forEach((permission) => {
+          userPermissions.value[permission] = allPermissions.includes(permission);
+        });
+       }
+
     };
 
     app.config.globalProperties.$permissions = {
@@ -23,7 +31,6 @@ const permissionsPlugin = {
     };
 
     app.provide('permissions', app.config.globalProperties.$permissions);
-
     // Watch for changes in Vuex store's getPermissions getter and update userPermissions accordingly
     watch(() => app.config.globalProperties.$store.getters.getPermissions, (newVal, oldVal) => {
       console.log(oldVal);

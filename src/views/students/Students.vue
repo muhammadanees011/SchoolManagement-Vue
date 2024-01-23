@@ -12,7 +12,7 @@
               </template>
             </div>
           <div class="card-body px-0 pb-2">
-            <div class="table-responsive p-0">
+            <div class="table-responsive p-0 student-table">
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
@@ -81,6 +81,31 @@
               </table>
             </div>
           </div>
+          <div class="row">
+                <div class="col-md-12 col-lg-12">
+                  <nav class="page-nav" aria-label="Page navigation">
+                    <ul class="pagination mt-4 mb-4">
+                        <!-- Previous Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                            <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
+                                @click="getAllStudents(currentPage - 1)" tabindex="-1"
+                                aria-disabled="true">arrow_back</i>
+                        </li>
+                        <!-- Page Numbers -->
+                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
+                            :class="{ 'active': currentPage === pageNumber }">
+                            <a class="page-link" href="#" @click="getAllStudents(pageNumber)">{{ pageNumber }}</a>
+                        </li>
+                        <!-- Next Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                            <i class="page-link material-icons-round opacity-10 fs-5"
+                                :disabled="currentPage === totalPages" @click="getAllStudents(currentPage + 1)"
+                                tabindex="-1" aria-disabled="true">arrow_forward</i>
+                        </li>
+                    </ul>
+                  </nav>
+                </div>
+          </div>
         </div>
       </div>
     </div>
@@ -101,6 +126,11 @@ export default {
       allStudents:'',
       schools: 6,
       user:'',
+      totalRows:'',
+      currentPage:'',
+      perPage:'',
+      totalPages:'',
+      allPages:''
     }
   },
   computed: {
@@ -133,14 +163,20 @@ export default {
       this.user=user
     },
     //-------------GET ALL STUDENTS----------
-    async getAllStudents(){
+    async getAllStudents(page=null){
       try {
         let data={
           'user_id':this.user.id,
-          'role':this.user.role
+          'role':this.user.role,
+          'page':''
         }
+        data.page = page;
         const response= await axiosClient.post('getAllStudents',data);
-        this.allStudents=response.data
+        this.allStudents=response.data.data
+        this.totalRows = response.data.total;
+        this.currentPage = response.data.current_page;
+        this.perPage = response.per_page;
+        this.totalPages = response.data.last_page;
       } catch (error) {
         console.log(error)
       }

@@ -194,3 +194,34 @@ input:disabled {
   .error-txt{
     font-size: 11px;
   }
+
+  .page-item .page-link, .page-item span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7b809a;
+    padding: 0;
+    margin: 0 2px !important;
+    border-radius: 50% !important;
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.725rem !important;
+}
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #573078 !important;
+  border-color: #573078 !important;
+}
+.pagination {
+  width: 40%;
+  overflow-x: scroll;
+  margin-left: auto;
+  margin-right: auto;
+}
+.pagination::-webkit-scrollbar {
+  display: none;
+}
+.student-table::-webkit-scrollbar {
+  display: none;
+}

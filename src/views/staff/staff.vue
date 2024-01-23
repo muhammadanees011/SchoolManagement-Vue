@@ -56,6 +56,31 @@
                   </tbody>
                 </table>
               </div>
+              <div class="row">
+                <div class="col-md-12 col-lg-12">
+                  <nav class="page-nav" aria-label="Page navigation">
+                    <ul class="pagination mt-4 mb-4">
+                        <!-- Previous Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                            <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
+                                @click="getAllStaff(currentPage - 1)" tabindex="-1"
+                                aria-disabled="true">arrow_back</i>
+                        </li>
+                        <!-- Page Numbers -->
+                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
+                            :class="{ 'active': currentPage === pageNumber }">
+                            <a class="page-link" href="#" @click="getAllStaff(pageNumber)">{{ pageNumber }}</a>
+                        </li>
+                        <!-- Next Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                            <i class="page-link material-icons-round opacity-10 fs-5"
+                                :disabled="currentPage === totalPages" @click="getAllStaff(currentPage + 1)"
+                                tabindex="-1" aria-disabled="true">arrow_forward</i>
+                        </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -77,6 +102,10 @@
         allStaff:'',
         schools: 6,
         user:'',
+        totalRows:'',
+        currentPage:'',
+        perPage:'',
+        totalPages:'',
       }
     },
     methods:{
@@ -100,14 +129,21 @@
         this.user=user
       },
       //-------------GET ALL STAFF----------
-      async getAllStaff(){
+      async getAllStaff(page){
+        let data={
+          'user_id':null,
+          'page':page
+        }
         try {
-          let url='/getAllStaff'
           if(this.user.role=='organization_admin'){
-            url='/getAllStaff/'+this.user.id
+            data.user_id=this.user.id
           }
-          const response= await axiosClient.get(url)
-          this.allStaff=response.data
+          const response= await axiosClient.post('/getAllStaff',data)
+          this.allStaff=response.data.data
+          this.totalRows = response.data.pagination.total;
+          this.currentPage = response.data.pagination.current_page;
+          this.perPage = response.data.pagination.per_page;
+          this.totalPages = response.data.pagination.last_page;
         } catch (error) {
           console.log(error)
         }
