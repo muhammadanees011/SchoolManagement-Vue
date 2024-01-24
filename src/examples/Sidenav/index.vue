@@ -26,7 +26,7 @@
         <span class="ms-2 font-weight-bold text-white"></span>
       </a>
     </div>
-    <!-- <hr class="horizontal  mt-0 mb-2" style="background-color: #573078 !important;" /> -->
+    <!-- <hr class="horizontal" style="background-color: #573078 !important;" /> -->
     <sidenav-list />
   </aside>
 </template>

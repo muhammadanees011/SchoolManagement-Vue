@@ -192,7 +192,7 @@
                 </div>
                 <div class="d-flex justify-content-center bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                     <div class="">
-                      <button @click="saveNewStudent" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-5 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save Student </button>
+                      <button @click="saveNewStudent" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-5 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save Student</button>
                       </div>
                   </div>
               </div>
@@ -217,10 +217,21 @@ export default {
     // MaterialButton,
   },
   mounted() {
-  this.getUser();
-  this.getSchools();
-  this.getAllAttributes();
-},
+    this.getUser();
+    this.getSchools();
+    this.getAllAttributes();
+  },
+  updated(){
+    if(!this.userPermissions.create){
+      this.$router.go(-1);
+      return;
+    }
+  },
+  computed: {
+    userPermissions() {
+      return this.$permissions.userPermissions.value;
+    },
+  },
   data() {
     return {
       selected: null,
@@ -272,6 +283,10 @@ export default {
     },
     //------------VALIDATE FORM-------------
     validateForm(){
+      if(!this.userPermissions.create){
+        this.$router.go(-1);
+        return;
+      }
       let status=false
       let validate=''
       validate=cloneDeep(this.newStudent)
@@ -300,20 +315,26 @@ export default {
     },
     //------------SAVE STUDENT------------
     async saveNewStudent() {
-      if(this.validateForm()){
-        return;
-      }
-      try {
-        let response=await axiosClient.post('/createStudent', this.newStudent)
-        this.isError=false;
-        response=response.data;
-        this.createCustomer(response.user.id);
-        this.$router.push({ name: 'list-students' })
-        this.snackbarMsg('Student Saved Successfuly')
-      } catch (error) {
-        this.isError=true;
-        this.validationErrors=error.response.data.errors
-      }
+      alert(this.userPermissions.add)
+      return
+      // if(this.userPermissions.add==false){
+      //    this.$router.go(-1);
+      // }
+
+      // if(this.validateForm()){
+      //   return;
+      // }
+      // try {
+      //   let response=await axiosClient.post('/createStudent', this.newStudent)
+      //   this.isError=false;
+      //   response=response.data;
+      //   this.createCustomer(response.user.id);
+      //   this.$router.push({ name: 'list-students' })
+      //   this.snackbarMsg('Student Saved Successfuly')
+      // } catch (error) {
+      //   this.isError=true;
+      //   this.validationErrors=error.response.data.errors
+      // }
     },
     //-------------GET ALL Attributes----------
     async getAllAttributes(){

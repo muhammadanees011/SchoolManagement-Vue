@@ -9,27 +9,27 @@
                   <h6 class="mb-3 text-sm text-white">
                     {{ `${walletData.user?.first_name || '-'} ${walletData.user?.last_name || '-'}` }}
                   </h6>
-                  <span class="text-white mb-1 text-xs font-weight-bold">
+                  <span class="wallet-info text-white mb-1 text-xs font-weight-bold">
                     Current Balance:
-                    <span class="text-white font-weight-bold ms-sm-2">
+                    <span class="wallet-info text-white font-weight-bold ms-sm-2">
                       £{{ formattedPrice(walletData?.ballance || '0') }}
                     </span>
                   </span>
-                  <span class="text-white mb-1 font-weight-bold text-xs">
+                  <span class="wallet-info text-white mb-1 font-weight-bold text-xs">
                     FSM Balance:
-                    <span class="text-white font-weight-bold ms-sm-2">
+                    <span class="wallet-info text-white font-weight-bold ms-sm-2">
                       £{{ formattedPrice(fsmAmount?.fsm_amount || '0') }}
                     </span>
                   </span>
-                  <span class="text-white mb-1 font-weight-bold text-xs">
+                  <span class="wallet-info text-white mb-1 font-weight-bold text-xs">
                     Phone:
-                    <span class="text-white ms-sm-2 font-weight-bold">
+                    <span class="wallet-info text-white ms-sm-2 font-weight-bold">
                       {{ walletData.user?.phone || '-' }}
                     </span>
                   </span>
-                  <span class="text-white mb-1 font-weight-bold text-xs">
+                  <span class="wallet-info text-white mb-1 font-weight-bold text-xs">
                     Email Address:
-                    <span class="text-white ms-sm-2 font-weight-bold">
+                    <span class="wallet-info text-white ms-sm-2 font-weight-bold">
                       {{ walletData.user?.email || '-' }}
                     </span>
                   </span>
@@ -180,6 +180,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.wallet-info{
+  font-size: 0.85rem !important;
 }
 </style>
   

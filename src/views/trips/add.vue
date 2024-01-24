@@ -134,6 +134,11 @@
       this.getOrganizations();
       this.getAllAttributes();
     },
+    updated(){
+      if(!this.userPermissions.create){
+        this.$router.go(-1);
+      }
+    },
     computed: {
       formattedPrice: {
         get() {
@@ -143,6 +148,9 @@
           const formattedValue = parseFloat(value).toFixed(2);
           this.newTrip.total_funds = formattedValue;
         },
+      },
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
       },
     },
     data() {
@@ -184,6 +192,10 @@
       },
       //------------VALIDATE FORM-------------
       validateForm(){
+        if(!this.userPermissions.create){
+          this.$router.go(-1);
+          return;
+        }
         let status=false
         let validate=''
         validate=cloneDeep(this.newTrip)

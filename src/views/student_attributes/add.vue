@@ -62,8 +62,22 @@
       // MaterialButton,
     },
     mounted() {
+    if(!this.userPermissions.add){
+      this.$router.go(-1);
+    }
     this.getUser();
     this.getAllOrganizations();
+    },
+    updated(){
+      if(!this.userPermissions.create){
+        this.$router.go(-1);
+        return;
+      }
+    },
+    computed: {
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
     },
     data() {
       return {
@@ -92,6 +106,10 @@
     },
     //------------VALIDATE FORM-------------
     validateForm(){
+    if(!this.userPermissions.create){
+      this.$router.go(-1);
+      return;
+    }
     let status=false
     let validate=''
     validate=cloneDeep(this.newAttribute)

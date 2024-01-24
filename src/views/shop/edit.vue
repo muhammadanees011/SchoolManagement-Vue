@@ -99,6 +99,17 @@
       this.getAllAttributes();
       this.getAllShops();
     },
+    updated(){
+      if(!this.userPermissions.edit){
+        this.$router.go(-1);
+        return;
+      }
+    },
+    computed: {
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
+    },
     data() {
       return {
         formValidation:"",
@@ -129,6 +140,10 @@
       },
       //------------VALIDATE FORM-------------
       validateForm(){
+        if(!this.userPermissions.edit){
+          this.$router.go(-1);
+          return;
+        }
         let status=false
         let validate=''
         validate=cloneDeep(this.newItem)

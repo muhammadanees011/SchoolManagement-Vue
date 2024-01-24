@@ -66,6 +66,16 @@
     this.getUser();
     this.getAllOrganizations();
     },
+    updated(){
+      if(!this.userPermissions.edit){
+        this.$router.go(-1);
+      }
+    },
+    computed: {
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
+    },
     data() {
       return {
         availableCountries:['UK','USA','Canada'],
@@ -93,6 +103,10 @@
     },
     //------------VALIDATE FORM-------------
     validateForm(){
+      if(!this.userPermissions.edit){
+        this.$router.go(-1);
+        return;
+      }
     let status=false
     let validate=''
     validate=cloneDeep(this.newAttribute)

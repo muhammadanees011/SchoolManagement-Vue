@@ -17,7 +17,7 @@ const appInstance = createApp(App)
 appInstance.use(store)
 appInstance.use(SnackbarService)
 appInstance.component('vue3-snackbar', Vue3Snackbar)
-appInstance.use(router)
+appInstance.use(router,appInstance)
 appInstance.use(MaterialDashboard)
 appInstance.use(DropZone)
 appInstance.use(permissionsPlugin);

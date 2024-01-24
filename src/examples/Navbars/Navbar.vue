@@ -8,13 +8,15 @@
       <div v-if="user.role=='super_admin'" class="organization-name mt-2 me-2">
         <h5>Super Admin</h5>
       </div>
-      <div v-if="!passwordStatus" class="change-pass-alert">
-        <small class="pass-text">For security reasons, we kindly ask you to change your password,
-          <router-link :to="{name:'Profile'}">
-            <span class="click-link">click here</span> 
-          </router-link>
-            to change the password</small>
-      </div>
+      <template v-if="currentRouteName!='Profile'">
+        <div v-if="!passwordStatus" class="change-pass-alert">
+          <small class="pass-text">For security reasons, we kindly ask you to change your password,
+            <router-link :to="{name:'Profile'}">
+              <span class="click-link">click here</span> 
+            </router-link>
+              to change the password</small>
+        </div>
+      </template>
       <div class="mt-2 collapse navbar-collapse mt-sm-0 me-md-0 me-sm-4" :class="isRTL ? 'px-0' : 'me-sm-4'" id="navbar">
         <div class="pe-md-3 d-flex align-items-center" :class="isRTL ? 'me-md-auto' : 'ms-md-auto'">
           <!-- <material-input id="search" label="Search here" /> -->

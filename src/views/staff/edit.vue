@@ -189,7 +189,7 @@
         let validate=''
         validate=cloneDeep(this.newStaff)
         for(let item in this.newStaff){
-          if((this.newStaff[item] === '' || this.newStaff[item] === undefined) && (item !== "phone" && item !== "password" && item !== "password_confirmation")){
+          if((this.newStaff[item] === '' || this.newStaff[item] === null) && (item !== "phone" && item !== "password" && item !== "password_confirmation")){
             validate[item]="is required"
             status=true
           }else{

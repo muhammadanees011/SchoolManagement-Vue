@@ -219,10 +219,19 @@
       // MaterialButton,
     },
     mounted() {
+      if(!this.userPermissions.edit){
+        this.$router.go(-1);
+      }
       this.getUser();
       this.editStudent();
       this.getSchools();
       this.getAllAttributes();
+    },
+    updated(){
+      if(!this.userPermissions.edit){
+        this.$router.go(-1);
+        return;
+      }
     },
     computed: {
       formattedBalance: {
@@ -233,6 +242,9 @@
           const formattedValue = parseFloat(value).toFixed(2);
           this.newStudent.balance = formattedValue;
         },
+      },
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
       },
     },
     data() {
@@ -284,11 +296,15 @@
       },
       //------------VALIDATE FORM-------------
       validateForm(){
+        if(!this.userPermissions.edit){
+          this.$router.go(-1);
+          return;
+        }
         let status=false
         let validate=''
         validate=cloneDeep(this.newStudent)
         for(let item in this.newStudent){
-          if ((this.newStudent[item] === '' || this.newStudent[item] === undefined) && (item !== "phone" && item !== "password" && item !== "password_confirmation" && item !== "attribute_id")) {
+          if ((this.newStudent[item] === '' || this.newStudent[item] === null) && (item !== "phone" && item !== "password" && item !== "password_confirmation" && item !== "attribute_id")) {
                 validate[item]="is required"
                 status=true
             }else{

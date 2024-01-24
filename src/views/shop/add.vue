@@ -91,9 +91,18 @@
       // MaterialButton,
     },
     mounted() {
+      if(!this.userPermissions.add){
+        this.$router.go(-1);
+      }
       this.getUser();
       this.getAllAttributes();
       this.getAllShops();
+    },
+    updated(){
+      if(!this.userPermissions.create){
+        this.$router.go(-1);
+        return;
+      }
     },
     computed: {
       formattedPrice: {
@@ -103,6 +112,11 @@
         set(value) {
           const formattedValue = parseFloat(value).toFixed(2);
           this.newItem.price = formattedValue;
+        },
+      },
+      computed: {
+        userPermissions() {
+          return this.$permissions.userPermissions.value;
         },
       },
     },
@@ -135,6 +149,10 @@
       },
       //------------VALIDATE FORM-------------
       validateForm(){
+        if(!this.userPermissions.create){
+          this.$router.go(-1);
+          return;
+        }
         let status=false
         let validate=''
         validate=cloneDeep(this.newItem)

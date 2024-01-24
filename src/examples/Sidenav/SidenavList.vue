@@ -134,13 +134,6 @@
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
-        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="Help" navText="Help">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">help</i>
-          </template>
-        </sidenav-collapse>
-      </li>
     </ul>
   </div>
 </template>
@@ -183,5 +176,10 @@ export default {
 }
 #sidenav-collapse-main::-webkit-scrollbar {
   width: 0px;
+}
+.sidenav-footer {
+  position: fixed !important;
+  bottom: 0 !important;
+  width: 100%;
 }
 </style>

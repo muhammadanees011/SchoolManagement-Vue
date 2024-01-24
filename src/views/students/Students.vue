@@ -20,7 +20,8 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th>
+                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th> -->
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> FSM </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th>
@@ -43,8 +44,11 @@
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">{{item.school ? item.school.title :'-' }}</span>
                     </td>
-                    <td class="align-middle text-center">
+                    <!-- <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">{{ item.stage }}</span>
+                    </td> -->
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs font-weight-bold" :class="item.fsm_amount === null ? 'text-danger' : 'text-success'">{{ item.fsm_amount ? ('£'+formattedPrice(item.fsm_amount)) :'No FSM'  }}</span>
                     </td>
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.user.balance ? item.user.balance.ballance:0 )}}</span>

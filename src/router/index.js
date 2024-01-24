@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 import Dashboard from '../views/Dashboard.vue'
 import Profile from '../views/Profile.vue'
 import SignIn from '../views/SignIn.vue'
@@ -330,15 +331,37 @@ const router = createRouter({
   linkActiveClass: 'active',
 })
 
-router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || 'StudentPay'
-  if (to.meta.requiresAuth && !localStorage.getItem('token')) {
-    next({ name: 'SignIn' })
-  } else if (localStorage.getItem('token') && (to.name === 'SignIn' || to.name === 'Register')) {
-    next({ name: 'Dashboard' })
-  } else {
-    next()
+export default {
+  install(app, options) {
+    console.log(options)
+    router.install(app)
+    
+    router.beforeEach((to, from, next) => {
+          // let  permissions=''
+          //   permissions = app.config.globalProperties.$permissions;
+          //   if (permissions) {
+          document.title = to.meta.title || 'StudentPay'
+          if (to.meta.requiresAuth && !localStorage.getItem('token')) {
+            next({ name: 'SignIn' })
+          } else if (localStorage.getItem('token') && (to.name === 'SignIn' || to.name === 'Register')) {
+            next({ name: 'Dashboard' })
+          } else {
+              // if (containsKeywords(to.path, ['edit'])) {
+              //   if(permissions.userPermissions.value.edit){
+                  // next()
+                // }else{
+                //   console.log(permissions.userPermissions.value.edit)
+                //   console.log(`you don't have permission for Route ${to.path}`);
+                // }
+                // alert(`Route ${to.path} contains keywords`);
+                next()
+          }
+    })
   }
-})
+}
 
-export default router
+// function containsKeywords(str, keywords) {
+//   return keywords.some(keyword => str.includes(keyword));
+// }
+
+// export default router
