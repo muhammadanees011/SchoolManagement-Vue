@@ -37,7 +37,7 @@
                             <label class="input-label" for="phone">Phone</label>
                             <input class="input-box" id="name" v-model="newParent.phone" type="tel" placeholder="Phone" name="phone" />
                           </div>
-                          <div class="mb-1">
+                          <!-- <div class="mb-1">
                             <label class="input-label" for="phone">Student</label>
                             <br />
                             <select class="select-box" v-model="newParent.student_id" id="student" type="select" placeholder="student" name="student">
@@ -46,7 +46,7 @@
                               </option>
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["student_id"]!==""'>Student ID is required</small>
-                          </div>
+                          </div> -->
                         </form>
                       </div>
                     </div>
@@ -220,20 +220,21 @@
       },
       //------------SAVE STUDENT------------
       async saveNewParent() {
-        if(this.validateForm()){
-          return;
-        }
-        try {
-          let response=await axiosClient.post('/createParent', this.newParent)
-          this.isError=false;
-          response=response.data;
-          this.createCustomer(response.user.id);
-          this.$router.push({ name: 'list-parent' })
-          this.snackbarMsg('Parent Saved Successfuly')
-        } catch (error) {
-          this.isError=true;
-          this.validationErrors=error.response.data.errors
-        }
+        return;
+        // if(this.validateForm()){
+        //   return;
+        // }
+        // try {
+        //   let response=await axiosClient.post('/createParent', this.newParent)
+        //   this.isError=false;
+        //   response=response.data;
+        //   this.createCustomer(response.user.id);
+        //   this.$router.push({ name: 'list-parent' })
+        //   this.snackbarMsg('Parent Saved Successfuly')
+        // } catch (error) {
+        //   this.isError=true;
+        //   this.validationErrors=error.response.data.errors
+        // }
       },
       //-----------CREATE STRIPE CUSTOMER----------
       async createCustomer(id){
