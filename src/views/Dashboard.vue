@@ -3,7 +3,43 @@
     <div class="row mb-4">
       <div class="col-lg-12 position-relative z-index-2">
         <div class="row">
-          <div class="col-lg-3 col-md-6 col-sm-6">
+          <template v-if="user.role=='student'">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+            <mini-statistics-card
+              :title="{ text:'Current Balance', value: '£'+formattedPrice(0) }"
+              detail="Current Balance"
+              :icon="{
+                name: 'credit_card',
+                color: 'text-white',
+                background: 'dark',
+              }"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+            <mini-statistics-card
+              :title="{ text: 'Monthly Transactions', value: '£'+formattedPrice(0)  }"
+              detail="This Month Transactions"
+              :icon="{
+                name: 'leaderboard',
+                color: 'text-white',
+                background: 'primary',
+              }"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+            <mini-statistics-card
+              :title="{ text: 'Weekly Transactions', value: '£'+formattedPrice(0) }"
+              detail="This Week Transactions"
+              :icon="{
+                name: 'person',
+                color: 'text-white',
+                background: 'success',
+              }"
+            />
+          </div>
+          </template>
+          <template v-if="user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'">
+            <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
               :title="{ text:isAdmin ? 'Total Figures':'Total Balance', value: '£'+formattedPrice(userBallance ? userBallance : 0) }"
               :detail="(isAdmin ? 'Total Figures' : 'Total Balance')"
@@ -36,6 +72,7 @@
               }"
             />
           </div>
+          </template>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
               :title="{ text: 'Transactions', value: '£'+formattedPrice(totalTransactions ? totalTransactions :0)  }"
@@ -199,6 +236,12 @@ export default {
     const formattedValue = parseFloat(value).toFixed(2);
     return formattedValue;
    },
+  //------------GET USER----------------
+  getUser(){
+    let user=localStorage.getItem('user')
+    user= JSON.parse(user)
+    this.user=user
+    },
    //--------------GET BALANCE---------------
    async getStudentBalance(){
     let user=localStorage.getItem('user')

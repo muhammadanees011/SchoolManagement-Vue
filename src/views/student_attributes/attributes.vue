@@ -5,9 +5,11 @@
           <div class="card my-4">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
                 <h6 class="text-dark text-capitalize ps-3">Attributes</h6>
-                <router-link v-if="userPermissions.create" :to="{ name: 'add-attribute' }">
+                <template v-if="userPermissions.create">
+                <router-link :to="{ name: 'add-attribute' }">
                   <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Attribute </button>
                 </router-link>
+                </template>
               </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">

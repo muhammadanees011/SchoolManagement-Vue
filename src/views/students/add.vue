@@ -315,26 +315,20 @@ export default {
     },
     //------------SAVE STUDENT------------
     async saveNewStudent() {
-      alert(this.userPermissions.add)
-      return
-      // if(this.userPermissions.add==false){
-      //    this.$router.go(-1);
-      // }
-
-      // if(this.validateForm()){
-      //   return;
-      // }
-      // try {
-      //   let response=await axiosClient.post('/createStudent', this.newStudent)
-      //   this.isError=false;
-      //   response=response.data;
-      //   this.createCustomer(response.user.id);
-      //   this.$router.push({ name: 'list-students' })
-      //   this.snackbarMsg('Student Saved Successfuly')
-      // } catch (error) {
-      //   this.isError=true;
-      //   this.validationErrors=error.response.data.errors
-      // }
+      if(this.validateForm()){
+        return;
+      }
+      try {
+        let response=await axiosClient.post('/createStudent', this.newStudent)
+        this.isError=false;
+        response=response.data;
+        this.createCustomer(response.user.id);
+        this.$router.push({ name: 'list-students' })
+        this.snackbarMsg('Student Saved Successfuly')
+      } catch (error) {
+        this.isError=true;
+        this.validationErrors=error.response.data.errors
+      }
     },
     //-------------GET ALL Attributes----------
     async getAllAttributes(){

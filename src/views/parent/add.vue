@@ -147,6 +147,17 @@
     this.getUser();
     this.getStudents();
   },
+  updated(){
+    if(!this.userPermissions.create){
+      this.$router.go(-1);
+      return;
+    }
+  },
+  computed: {
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
+    },
     data() {
       return {
         availableCountries:['UK','USA','Canada'],
@@ -183,6 +194,10 @@
       },
       //------------VALIDATE FORM-------------
       validateForm(){
+        if(!this.userPermissions.create){
+          this.$router.go(-1);
+          return;
+        }
         let status=false
         let validate=''
         validate=cloneDeep(this.newParent)

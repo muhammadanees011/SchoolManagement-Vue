@@ -62,9 +62,6 @@
       // MaterialButton,
     },
     mounted() {
-    if(!this.userPermissions.add){
-      this.$router.go(-1);
-    }
     this.getUser();
     this.getAllOrganizations();
     },

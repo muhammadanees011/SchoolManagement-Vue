@@ -5,9 +5,11 @@
           <div class="card my-4">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
                 <h6 class="text-dark text-capitalize ps-3">Parents</h6>
-                <router-link :to="{ name: 'add-parent' }">
-                  <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Parent </button>
-                </router-link>
+                <template v-if="userPermissions.create">
+                  <router-link :to="{ name: 'add-parent' }">
+                    <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Parent </button>
+                  </router-link>
+                </template>
               </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
@@ -28,25 +30,29 @@
                         <p class="text-xs  text-center font-weight-bold mb-0"> {{ item.id}}</p>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0"> {{ item.user.first_name }} {{ item.user.last_name }}</p>
+                        <p class="text-xs font-weight-bold mb-0"> {{ item.user ? item.user.first_name:'-' }} {{ item.user ? item.user.last_name:'-' }}</p>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0"> {{ item.user.email }} </p>
+                        <p class="text-xs font-weight-bold mb-0"> {{item.user ? item.user.email :'-' }} </p>
                         <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
                       </td>
                       <td>
                         <p class="text-xs font-weight-bold mb-0"> Student1,Student2,Student3</p>
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success">{{item.user.status}}</span>
+                        <span class="badge badge-sm bg-gradient-success">{{item.user ? item.user.status :'-'}}</span>
                       </td>
                       <td class="align-middle text-center">
                         <span>
+                          <template v-if="userPermissions.edit">
                           <router-link :to="{ name: 'edit-parent', params: { id: item.id } }">
                             <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                           </router-link>
+                          </template>
                           <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
+                          <template v-if="userPermissions.delete">
                           <i @click="deleteParent(item.user.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          </template>
                         </span>
                       </td>
                     </tr>
@@ -75,6 +81,11 @@
         schools: 6,
         user:'',
       }
+    },
+    computed: {
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
     },
     methods:{
       snackbarMsg(message) {
