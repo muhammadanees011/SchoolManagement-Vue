@@ -41,7 +41,7 @@
                             <label class="input-label" for="phone">Student</label>
                             <br />
                             <select class="select-box" v-model="newParent.student_id" id="student" type="select" placeholder="student" name="student">
-                              <option v-for="(item, index) in allStudents" :key="index" :value="item.id">
+                              <option v-for="(item, index) in allStudents" :key="index" :value="item.id ? item.id:''">
                                 {{ item.user ? item.user.first_name :'-'}} {{ item.user ? item.user.last_name :'-' }}
                               </option>
                             </select>
