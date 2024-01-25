@@ -168,7 +168,7 @@
         accomodation_details: '',
         start_date: '',
         end_date: '',
-        total_funds:'0.00',
+        total_funds:'',
       },
       }
     },

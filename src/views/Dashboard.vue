@@ -6,7 +6,7 @@
           <template v-if="user.role=='student'">
             <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
-              :title="{ text:'Current Balance', value: '£'+formattedPrice(0) }"
+              :title="{ text:'Current Balance', value: '£'+formattedPrice(studentHistory.current_balance ?? 0) }"
               detail="Current Balance"
               :icon="{
                 name: 'credit_card',
@@ -17,7 +17,7 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Monthly Transactions', value: '£'+formattedPrice(0)  }"
+              :title="{ text: 'Monthly Transactions', value: '£'+formattedPrice(studentHistory.last_month ?? 0)  }"
               detail="This Month Transactions"
               :icon="{
                 name: 'leaderboard',
@@ -28,7 +28,7 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Weekly Transactions', value: '£'+formattedPrice(0) }"
+              :title="{ text: 'Weekly Transactions', value: '£'+formattedPrice(studentHistory.last_week ?? 0) }"
               detail="This Week Transactions"
               :icon="{
                 name: 'person',
@@ -203,6 +203,7 @@ export default {
   name: 'dashboard-default',
   data() {
     return {
+      studentHistory:'',
       totalTransactions:'',
       totalSchool:'',
       totalStudents:'',
@@ -221,10 +222,12 @@ export default {
     }
   },
   mounted(){
+    this.getUser();
     this.getStudentBalance();
     this.getTotalSchools();
     this.getTotalStudents();
     this.getTotalTransactions();
+    this.getStudentHistory();
   },
   computed:{
     isAdmin(){
@@ -251,6 +254,19 @@ export default {
           let response= await axiosClient.get('/getStudentBalance/'+user.id)
           response=response.data
           this.userBallance=response
+      } catch (error) {
+          console.log(error)
+      }
+    },
+    //--------------GET STUDENTS HISTORY---------------
+    async getStudentHistory(){
+      if(this.user.role!='student'){
+        return
+      }
+      try {
+          let response= await axiosClient.get('/studentDashboard')
+          response=response.data
+          this.studentHistory=response
       } catch (error) {
           console.log(error)
       }
