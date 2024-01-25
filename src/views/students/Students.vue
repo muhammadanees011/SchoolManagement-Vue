@@ -11,6 +11,17 @@
                 </router-link>
               </template>
             </div>
+            <div>
+              <div class="filter-container">
+                <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                  <option v-for="(item, index) in allFields" :key="index" :value="item">
+                    {{ item }}
+                  </option>
+                </select>
+                <i class="fas fa-filter filter-icon me-1"></i>
+              </div>              
+            </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0 student-table">
               <table class="table align-items-center mb-0">
@@ -127,6 +138,9 @@ export default {
   },
   data() {
     return {
+      filterBy:'Name',
+      seachString:'',
+      allFields:['Student Id','Name','Email'],
       allStudents:'',
       schools: 6,
       user:'',
@@ -165,6 +179,30 @@ export default {
       let user=localStorage.getItem('user')
       user= JSON.parse(user)
       this.user=user
+    },
+    //-----------FILTER STUDENTS------------
+    async filterStudents(){
+      if(this.filterBy=='' && this.seachString==''){
+        this.getAllStudents();
+        return;
+      }else if(this.filterBy!='' && this.seachString==''){
+        this.getAllStudents();
+        return;
+      }
+      let data={
+        "type":this.filterBy,
+        "value":this.seachString
+      }
+      try {
+          const response=await axiosClient.post('/filterStudent',data);
+          this.allStudents=response.data.data;
+          this.totalRows = response.data.total;
+          this.currentPage = response.data.current_page;
+          this.perPage = response.per_page;
+          this.totalPages = response.data.last_page;
+        } catch (error) {
+          console.log(error)
+      }
     },
     //-------------GET ALL STUDENTS----------
     async getAllStudents(page=null){

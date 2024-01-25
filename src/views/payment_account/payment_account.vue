@@ -126,6 +126,7 @@
     //------------ADD BALANCE TO THE WALLET--------------
     async addBalance(){
       let user_id;
+      let url=''
       if(this.$route.params.id){
         user_id=this.$route.params.id;
       }else{
@@ -136,9 +137,12 @@
       if(amount==""){
         this.snackbarMsg('Please select the amount','error');
         return
-      }else if(payment_method==""){
-        this.snackbarMsg('No card found','error');
-        return
+      }
+      if((this.user.role=='super_admin' || this.user.role=='organization_admin' || this.user.role=='staff')){
+        url='/adminTopUp';
+        payment_method=null
+      }else{
+        url='/payment/initiate'
       }
       let data={
         "user_id":user_id,
@@ -147,7 +151,7 @@
         "type":'top_up',
       }
       try {
-        await axiosClient.post('/payment/initiate',data)
+        await axiosClient.post(url,data)
         this.snackbarMsg('Balance Added Successfully');
       } catch (error) {
         console.log(error)
