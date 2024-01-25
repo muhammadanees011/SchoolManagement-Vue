@@ -42,7 +42,7 @@
                             <br />
                             <select class="select-box" v-model="newParent.student_id" id="student" type="select" placeholder="student" name="student">
                               <option v-for="(item, index) in allStudents" :key="index" :value="item ? item.id:''">
-                                {{ item.user ? item.user.first_name :'-'}} {{ item.user ? item.user.last_name :'-' }}
+                                {{ item ? item.user.first_name :'-'}} {{ item ? item.user.last_name :'-' }}
                               </option>
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["student_id"]!==""'>Student ID is required</small>
