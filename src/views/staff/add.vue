@@ -12,6 +12,9 @@
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <div class="row py-1 d-flex justify-content-center bg-white form-data border-radius-lg">
+                <div v-if="isError" class="mb-3 change-pass-alert">
+                  <small v-for="(item,index) in validationErrors" :key="index" class="pass-text">{{ item }}<br></small>
+                </div>
                   <div class="bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                     <div class="form-bg container p-4">
                     <p class="text-dark ms-4 font-weight-bold">Personal Information</p>

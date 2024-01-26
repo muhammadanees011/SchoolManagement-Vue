@@ -10,6 +10,9 @@
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <div class="row d-flex justify-content-center bg-white form-data border-radius-lg">
+                <div v-if="isError" class="mb-3 change-pass-alert">
+                  <small v-for="(item,index) in validationErrors" :key="index" class="pass-text">{{ item }}<br></small>
+                </div>
                   <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                     <div class="form-bg container p-4">
                     <p class="text-dark ms-4 font-weight-bold">Personal Information</p>
@@ -170,6 +173,7 @@
           password_confirmation:'',
         },
         validationErrors:"",
+        isError:false,
         formValidation:"",
         availableStatus:['active','pending','blocked'],
         allSchools:'',
@@ -228,7 +232,6 @@
         this.newStaff.phone = data.user.phone
         this.newStaff.country = data.user.country
         this.newStaff.city = data.user.city
-        this.newStaff.state = data.user.state
         this.newStaff.zip = data.user.zip
         this.newStaff.address = data.user.address
         this.newStaff.status=data.user.status
@@ -246,6 +249,8 @@
           this.snackbarMsg('Staff Updated Successfuly')
         } catch (error) {
           console.log(error)
+          this.isError=true;
+          this.validationErrors=error.response.data.errors
         }
       },
       //------------GET SCHOOLS------------

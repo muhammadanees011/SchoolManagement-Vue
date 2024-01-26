@@ -16,7 +16,10 @@
             </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
-              <div class="row py-2 bg-white form-data border-radius-lg">
+              <div class="row py-1 d-flex justify-content-center bg-white form-data border-radius-lg">
+                <div v-if="isError" class="mb-3 change-pass-alert">
+                  <small v-for="(item,index) in validationErrors" :key="index" class="pass-text">{{ item }}<br></small>
+                </div>
                 <div class="bg-white box-shadow-dark border-radius-lg col-xl-12 col-lg-12 col-md-12">
                   <div class="form-bg container p-4 ms-2">
                     <div class="card card-plain">
@@ -99,6 +102,8 @@ export default {
   computed: {},
   data() {
     return {
+      isError:false,
+      validationErrors:'',
       formValidation:'',
       availableCountries:['UK','USA','Canada'],
       newOrganization: {
@@ -178,6 +183,8 @@ export default {
         this.snackbarMsg('Organization Updated')
       } catch (error) {
         console.log(error)
+        this.isError=true;
+        this.validationErrors=error.response.data.errors
       }
     },
   },

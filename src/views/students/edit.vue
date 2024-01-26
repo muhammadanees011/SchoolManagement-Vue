@@ -10,6 +10,9 @@
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <div class="row d-flex justify-content-center bg-white form-data border-radius-lg">
+                  <div v-if="isError" class="mb-3 change-pass-alert">
+                   <small v-for="(item,index) in validationErrors" :key="index" class="pass-text">{{ item }}<br></small>
+                  </div>
                   <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                     <div class="form-bg container p-4">
                     <p class="text-dark ms-4 font-weight-bold">Personal Information</p>
@@ -195,7 +198,7 @@
                   <div class="d-flex justify-content-center bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                       <div class="">
                         <button @click="updateStudent" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-3 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Update Student </button>
-                        </div>
+                      </div>
                     </div>
                 </div>
               </div>
@@ -219,9 +222,6 @@
       // MaterialButton,
     },
     mounted() {
-      if(!this.userPermissions.edit){
-        this.$router.go(-1);
-      }
       this.getUser();
       this.editStudent();
       this.getSchools();
@@ -253,6 +253,7 @@
         availableCountries:['UK','USA','Canada'],
         user:'',
         formValidation:"",
+        isError:false,
         validationErrors:'',
         fsm:[false,true],
         selectedAttrs:[],
@@ -312,6 +313,7 @@
             }
         }
         this.formValidation=validate
+        console.log(this.formValidation)
         return status;
       },
       //------------GET USER--------------
@@ -343,7 +345,6 @@
         this.newStudent.phone = data.user.phone
         this.newStudent.country = data.user.country
         this.newStudent.city = data.user.city
-        this.newStudent.state = data.user.state
         this.newStudent.zip = data.user.zip
         this.newStudent.address = data.user.address
         this.newStudent.date_of_birth= data.dob
@@ -376,6 +377,8 @@
           this.snackbarMsg('Student Saved Successfuly')
         } catch (error) {
           console.log(error)
+          this.isError=true;
+          this.validationErrors=error.response.data.errors
         }
       },
     //------------GET SCHOOLS------------
