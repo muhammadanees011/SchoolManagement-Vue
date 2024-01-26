@@ -26,7 +26,7 @@
         </sidenav-collapse>
       </li>
       </template>
-      <li  v-if="user && user.role=='super_admin'" class="nav-item">
+      <li v-if="user && user.role=='super_admin' || user.role=='organization_admin'" class="nav-item">
         <sidenav-collapse :to="{ name: 'list-organization-admins' }" :aria-controls="''" v-bind:collapse="false" collapseRef="organization-admins" navText="Organization Admins">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">business</i>

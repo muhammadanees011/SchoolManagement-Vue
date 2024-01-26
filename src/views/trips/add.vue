@@ -89,6 +89,158 @@
                                   </div>
                               </div>
                             </div>
+                            <div class="row p-2">
+                              <div class="col-xl-12 col-lg-12 col-md-12">
+                                <h6 class="text-warning">Payment Plan</h6>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                <span class="d-flex justify-space-between align-items-center text-dark font-weight-bold text-xs">
+                                  <small class="mb-2 me-3">Installments</small>
+                                  <div class="checkbox-container mt-2 me-5">
+                                      <input v-model="installmentsPlan.status" type="checkbox" class="checkbox-input" id="installmentsCheckbox">
+                                      <label class="checkbox-label" for="installmentsCheckbox"></label>
+                                  </div>
+                                </span>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                <span class="d-flex justify-space-between align-items-center text-dark font-weight-bold text-xs">
+                                  <small class="mb-2 me-3">Deposit</small>
+                                  <div class="checkbox-container mt-2 me-5">
+                                      <input v-model="depositPlan.status" type="checkbox" class="checkbox-input" id="installmentsCheckbox">
+                                      <label class="checkbox-label" for="installmentsCheckbox"></label>
+                                  </div>
+                                </span>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                <span class="d-flex justify-space-between align-items-center text-dark font-weight-bold text-xs">
+                                  <small class="mb-2 me-3">Manual Payment</small>
+                                  <div class="checkbox-container mt-2 me-5">
+                                      <input v-model="manualPlan.status" type="checkbox" class="checkbox-input" id="installmentsCheckbox">
+                                      <label class="checkbox-label" for="installmentsCheckbox"></label>
+                                  </div>
+                                </span>
+                              </div>
+                            </div>
+                            <div v-if="installmentsPlan.status" class="row p-2">
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                              <div class="mb-1">
+                                  <label class="input-label" for="name">Total Installments</label>
+                                  <input  v-model="installmentsPlan.total" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Total Installments" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["total_seats"]!==""'>Total Seats is required</small>
+                              </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                      <label class="input-label" for="name">Amount Per Installment</label>
+                                      <input   class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Amount Per Installment" name="name" />
+                                      <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["accomodation_details"]!==""'>Accomodation Details is required</small>
+                                  </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                  <label class="input-label" for="enrollment_date">Initial Deposit</label>
+                                  <input  class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Initial Deposit" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                  </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                  <label class="input-label" for="enrollment_date">Deadline For Initial Deposit</label>
+                                  <input  class="input-box" id="name"  type="date" placeholder="Deadline For Initial Deposit" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                  </div>
+                              </div>
+                              <template v-if="installmentsPlan.total>0">
+                                <div v-for="(item,index) in installmentsPlan.total" :key="item" class="col-xl-4 col-lg-4 col-md-4">
+                                    <div class="mb-1">
+                                    <label class="input-label" for="enrollment_date">Deadline For Installment {{ index+1 }}</label>
+                                    <input class="input-box" id="name"  type="date" placeholder="Deadline For Installment {{ index+1 }}" name="name" />
+                                    <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                    </div>
+                                </div>
+                              </template>
+                            </div>
+                            <div v-if="depositPlan.status" class="row p-2">
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                              <div class="mb-1">
+                                  <label class="input-label" for="name">Total Deposit</label>
+                                  <input  v-model="formattedPrice" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Total Deposit" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["total_seats"]!==""'>Total Seats is required</small>
+                              </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                      <label class="input-label" for="name">Initial Deposit</label>
+                                      <input   class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Initial Deposit" name="name" />
+                                      <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["accomodation_details"]!==""'>Accomodation Details is required</small>
+                                  </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                  <label class="input-label" for="enrollment_date">Final Deposit</label>
+                                  <input  class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Final Deposit" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                  </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                  <label class="input-label" for="enrollment_date">Deadline For Initial Deposit</label>
+                                  <input  class="input-box" id="name"  type="date" placeholder="Deadline For Initial Deposit" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                  </div>
+                              </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4">
+                                    <div class="mb-1">
+                                    <label class="input-label" for="enrollment_date">Deadline For Final Deposit</label>
+                                    <input class="input-box" id="name"  type="date" placeholder="Deadline For Final Deposit" name="name" />
+                                    <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="manualPlan.status" class="row p-2">
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                              <div class="mb-1">
+                                  <label class="input-label" for="name">Total Amount</label>
+                                  <input  v-model="formattedPrice" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Total Amount" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["total_seats"]!==""'>Total Seats is required</small>
+                              </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                      <label class="input-label" for="name">Initial Amount</label>
+                                      <input   class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Initial Amount" name="name" />
+                                      <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["accomodation_details"]!==""'>Accomodation Details is required</small>
+                                  </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                  <label class="input-label" for="enrollment_date">Final Amount</label>
+                                  <input  class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Final Amount" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                  </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                  <label class="input-label" for="enrollment_date">Deadline For Initial Amount</label>
+                                  <input  class="input-box" id="name"  type="date" placeholder="Deadline For Initial Deposit" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                  </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                  <label class="input-label" for="enrollment_date">Deadline For Final Amount</label>
+                                  <input class="input-box" id="name"  type="date" placeholder="Deadline For Final Deposit" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                  </div>
+                              </div>
+                              <div class="col-xl-4 col-lg-4 col-md-4">
+                                  <div class="mb-1">
+                                  <label class="input-label" for="enrollment_date">Comments</label>
+                                  <input class="input-box" id="name"  type="text" placeholder="cash and card payments are accepted" name="name" />
+                                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small>
+                                  </div>
+                              </div>
+                            </div>
                             <div class="mb-1">
                               <label class="input-label" for="phone">Attribute</label>
                               <br />
@@ -155,6 +307,24 @@
     },
     data() {
       return {
+      installmentsPlan:{
+        status:false,
+        total:'',
+        amount_per_installment:'',
+        initial_deposit:'',
+      },
+      depositPlan:{
+        status:false,
+        total:'',
+        final_deposit:'',
+        initial_deposit:'',
+      },
+      manualPlan:{
+        status:false,
+        total:'',
+        final_deposit:'',
+        initial_deposit:'',
+      },
       allAttributes:'',
       availableOrganizations:"",
       isError:false,
@@ -306,5 +476,9 @@
     background-color: #f0f0f0;
     color: #999;
   }
+  .checkbox-input{
+    height: auto;
+  }
+  
   </style>
   
