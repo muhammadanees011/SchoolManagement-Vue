@@ -228,10 +228,10 @@
       this.getAllAttributes();
     },
     updated(){
-      if(!this.userPermissions.edit){
-        this.$router.go(-1);
-        return;
-      }
+      // if(!this.userPermissions.edit){
+      //   this.$router.go(-1);
+      //   return;
+      // }
     },
     computed: {
       formattedBalance: {

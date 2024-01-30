@@ -222,10 +222,10 @@ export default {
     this.getAllAttributes();
   },
   updated(){
-    if(!this.userPermissions.create){
-      this.$router.go(-1);
-      return;
-    }
+    // if(!this.userPermissions.create){
+    //   this.$router.go(-1);
+    //   return;
+    // }
   },
   computed: {
     userPermissions() {
