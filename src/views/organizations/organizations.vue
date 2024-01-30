@@ -83,7 +83,7 @@
                 </tbody>
               </table>
               <!-- Pagination -->
-              <nav aria-label="Page navigation">
+              <!-- <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center mt-4">
                   <li class="page-item disabled">
                     <i class="page-link material-icons-round opacity-10 fs-5" href="#" tabindex="-1" aria-disabled="true">arrow_back</i>
@@ -95,7 +95,7 @@
                     <i class="page-link material-icons-round opacity-10 fs-5" href="#" tabindex="-1" aria-disabled="true">arrow_forward</i>
                   </li>
                 </ul>
-              </nav>
+              </nav> -->
             </div>
           </div>
         </div>

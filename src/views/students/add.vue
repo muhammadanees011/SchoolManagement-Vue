@@ -283,10 +283,10 @@ export default {
     },
     //------------VALIDATE FORM-------------
     validateForm(){
-      if(!this.userPermissions.create){
-        this.$router.go(-1);
-        return;
-      }
+      // if(!this.userPermissions.create){
+      //   this.$router.go(-1);
+      //   return;
+      // }
       let status=false
       let validate=''
       validate=cloneDeep(this.newStudent)

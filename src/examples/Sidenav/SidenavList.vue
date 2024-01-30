@@ -41,6 +41,13 @@
           </template>
         </sidenav-collapse>
       </li>
+      <li class="nav-item">
+        <sidenav-collapse :to="{ name: 'list-roles' }" :aria-controls="''" v-bind:collapse="false" collapseRef="schools" navText="Roles & Permissions">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">account_balance</i>
+          </template>
+        </sidenav-collapse>
+      </li>
       </template>
       <template  v-if="user && user.role=='staff' || user.role=='super_admin' || user.role=='organization_admin'">
         <li class="nav-item">

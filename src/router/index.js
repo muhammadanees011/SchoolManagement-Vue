@@ -45,6 +45,7 @@ import Childrens from '../views/childrens/childrens.vue'
 import Attributes from '../views/student_attributes/attributes.vue'
 import AddAttribute from '../views/student_attributes/add.vue'
 import EditAttribute from '../views/student_attributes/edit.vue'
+import Roles from '../views/roles_permissions/roles.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
@@ -240,6 +241,19 @@ const routes = [
       { path: '/add-trips', name: 'add-trips', component: AddTrips },
       { path: '/edit-trips/:id', name: 'edit-trips', component: EditTrips },
       { path: '/participants-trips/:id', name: 'participants-trips', component: TripParticipants },
+    ],
+  },
+  //--------------Roles And Permissions-----------------
+  {
+    path: '/roles',
+    name: 'roles',
+    component: DefaultLayout,
+    meta: {
+      title: 'Roles',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/roles', name: 'list-roles', component: Roles },
     ],
   },
   //---------------COURSES---------------
