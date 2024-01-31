@@ -145,6 +145,9 @@ export default {
   this.getUser();
   this.getOrganizations()
 },
+updated(){
+  this.$permissions.redirectIfNotAllowed('create_school');
+  },
   data() {
     return {
       isError:false,
@@ -182,11 +185,13 @@ export default {
     },
     //------------VALIDATE FORM-------------
     validateForm(){
+      this.$permissions.redirectIfNotAllowed('create_school');
       let status=false
       let validate=''
       validate=cloneDeep(this.newSchool)
       for(let item in this.newSchool){
-        if ((this.newSchool[item] === '' || this.newSchool[item] === undefined)) {
+        if ((this.newSchool[item] === '' || this.newSchool[item] === undefined) 
+        && (item !== 'organization_id')) {
               validate[item]="is required"
               status=true
           }else{
@@ -194,6 +199,7 @@ export default {
           }
       }
       this.formValidation=validate
+      console.log(this.formValidation)
       return status;
     },
     //------------GET USER----------------

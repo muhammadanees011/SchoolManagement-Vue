@@ -17,6 +17,7 @@
                       <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> ID </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Role </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Organization </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
@@ -33,6 +34,9 @@
                       <td>
                         <p class="text-xs font-weight-bold mb-0"> {{ item.email }} </p>
                         <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
+                      </td>
+                      <td class="align-middle text-center">
+                        <p class="text-xs font-weight-bold mb-0"> {{ item.user_role.role.name }} </p>
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ item.organization_admin ? (item.organization_admin.organization ? item.organization_admin.organization.name:'-'):'-' }}</span>
@@ -68,11 +72,19 @@
     mounted(){
       this.getAllAdmins();
     },
+    updated(){
+      this.$permissions.redirectIfNotAllowed('view_admin');
+    },
     data() {
       return {
         allAdmins:'',
         schools: 6,
       }
+    },
+    computed: {
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
     },
     methods:{
       snackbarMsg(message) {

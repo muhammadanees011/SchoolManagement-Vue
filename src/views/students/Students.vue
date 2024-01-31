@@ -5,11 +5,11 @@
         <div class="card my-4">
           <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
               <h6 class="text-dark text-capitalize ps-3">Students</h6>
-              <!-- <template v-if="userPermissions.create"> -->
+              <template v-if="userPermissions.create_student">
                 <router-link :to="{ name: 'add-student' }">
                   <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Student </button>
                 </router-link>
-              <!-- </template> -->
+              </template>
             </div>
             <div>
               <div class="filter-container">
@@ -34,8 +34,8 @@
                     <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th> -->
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> FSM </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th>
+                    <th v-if="userPermissions.transaction_history" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
+                    <th v-if="userPermissions.topup" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
                   </tr>
@@ -64,10 +64,10 @@
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.user.balance ? item.user.balance.ballance:0 )}}</span>
                     </td>
-                    <td class="align-middle text-center">
+                    <td v-if="userPermissions.transaction_history" class="align-middle text-center">
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">swap_horizontal_circle</i>
                     </td>
-                    <td class="align-middle text-center">
+                    <td v-if="userPermissions.topup" class="align-middle text-center">
                         <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">credit_card</i>
                     </td>
                     <td class="align-middle text-center text-sm">
@@ -75,20 +75,22 @@
                     </td>
                     <td class="align-middle text-center">
                       <span>
-                        <router-link :to="{name:'student-balance',params: { id: item.user.id }}" title="Wallet">
-                         <i class="fas fa-donate fs-5 me-2"></i>
-                        </router-link>
+                        <template v-if="userPermissions.wallet">
+                          <router-link :to="{name:'student-balance',params: { id: item.user.id }}" title="Wallet">
+                            <i class="fas fa-donate fs-5 me-2"></i>
+                          </router-link>
+                        </template>
                         <!-- <router-link to="#" title="Topup">
                         <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5 me-2">credit_card</i>
                         </router-link>
                         <router-link to="#" title="Transaction">
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5 me-2">swap_horizontal_circle</i>
                         </router-link> -->
-                        <router-link v-if="userPermissions.edit" :to="{ name: 'edit-student', params: { id: item.id } }">
+                        <router-link v-if="userPermissions.edit_student" :to="{ name: 'edit-student', params: { id: item.id } }">
                           <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         </router-link>
                         <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
-                        <i v-if="userPermissions.delete" @click="deleteStudent(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                        <i v-if="userPermissions.delete_student" @click="deleteStudent(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                       </span>
                     </td>
                   </tr>
@@ -135,6 +137,9 @@ export default {
   mounted(){
     this.getUser();
     this.getAllStudents();
+  },
+  updated(){
+    this.$permissions.redirectIfNotAllowed('view_student');
   },
   data() {
     return {

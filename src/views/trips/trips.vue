@@ -3,7 +3,7 @@
       <div class="card-header pb-0 px-3">
         <div class="d-flex justify-content-between">
           <h6 class="mb-0">Trips</h6>
-          <template v-if="userPermissions.create" >
+          <template v-if="userPermissions.create_trip" >
             <template v-if="user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'" >
               <button @click="redirectToAddTrips"  :to="{ name: 'add-trips' }" style="font-size: 12px; background-color: #573078;"  class="me-3 trips-btn w-10  text-white fw-5 p-2 border-radius-lg">Add Trips</button>
             </template>
@@ -45,8 +45,8 @@
                   </button>
                   <br>
                   <div class="mt-0">
-                  <button v-if="userPermissions.edit" @click="editTrip(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
-                  <button v-if="userPermissions.delete" @click="deleteTrip(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
+                  <button v-if="userPermissions.edit_trip" @click="editTrip(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Edit </button>
+                  <button v-if="userPermissions.delete_trip" @click="deleteTrip(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-25  text-white fw-5 p-2 border-radius-lg"> Delete </button>
                   </div>             
                 </template>
                 <div class="mt-0" v-if="item.cart!==null && user.role=='student'">
@@ -84,6 +84,9 @@
     mounted(){
       this.getUser();
       this.getAllTrips();
+    },
+    updated(){
+      this.$permissions.redirectIfNotAllowed('view_trip');
     },
     watch:{
       getRemovedItem(newVal,oldVal){

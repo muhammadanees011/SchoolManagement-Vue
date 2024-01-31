@@ -66,15 +66,7 @@
     this.getAllOrganizations();
     },
     updated(){
-      if(!this.userPermissions.create){
-        this.$router.go(-1);
-        return;
-      }
-    },
-    computed: {
-      userPermissions() {
-        return this.$permissions.userPermissions.value;
-      },
+      this.$permissions.redirectIfNotAllowed('create_attribute');
     },
     data() {
       return {
@@ -103,10 +95,7 @@
     },
     //------------VALIDATE FORM-------------
     validateForm(){
-    if(!this.userPermissions.create){
-      this.$router.go(-1);
-      return;
-    }
+    this.$permissions.redirectIfNotAllowed('create_attribute');
     let status=false
     let validate=''
     validate=cloneDeep(this.newAttribute)

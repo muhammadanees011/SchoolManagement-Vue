@@ -141,6 +141,9 @@
     this.editSchool()
     this.getOrganizations()
   },
+  updated(){
+    this.$permissions.redirectIfNotAllowed('edit_school');
+  },
     data() {
       return {
         isError:false,
@@ -179,6 +182,7 @@
       },
     //------------VALIDATE FORM-------------
     validateForm(){
+      this.$permissions.redirectIfNotAllowed('edit_school');
       let status=false
       let validate=''
       validate=cloneDeep(this.newSchool)

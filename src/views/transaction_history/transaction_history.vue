@@ -114,6 +114,9 @@
       this.getUser();
       this.getTransactionHistory();
     },
+    updated(){
+      this.$permissions.redirectIfNotAllowed('transaction_history');
+    },
     data(){
       return{
         user:'',

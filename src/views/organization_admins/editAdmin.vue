@@ -50,6 +50,18 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>Organization is required</small>
                           </div>
+                          <div class="mb-1">
+                            <label class="input-label" for="phone">Role</label>
+                            <br />
+                            <select class="select-box" v-model="newAdmin.role" id="role" type="select" placeholder="role" name="role">
+                              <template v-for="(item, index) in allRoles" :key="index" >
+                                <option v-if="item.name=='Admin' || item.name=='Associate Admin'" :value="item.name">
+                                  {{ item.name }}
+                                </option>
+                              </template>
+                            </select>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["role"]!==""'>Admin Role is required</small>
+                          </div>
                         </form>
                       </div>
                     </div>
@@ -151,11 +163,16 @@
       // MaterialButton,
     },
     mounted() {
+      this.getAllRoles();
      this.getAllOrganizations();
      this.editOrganizationAdmin();
     },
+    updated(){
+      this.$permissions.redirectIfNotAllowed('edit_admin');
+    },
     data() {
       return {
+        allRoles:'',
         availableCountries:['UK','USA','Canada'],
         isError:false,
         formValidation:"",
@@ -171,6 +188,7 @@
           zip: '',
           address: '',
           status:'',
+          role:'',
           password:'',
           password_confirmation:'',
         },
@@ -189,6 +207,7 @@
       },
       //------------VALIDATE FORM-------------
       validateForm(){
+        this.$permissions.redirectIfNotAllowed('edit_admin');
         let status=false
         let validate=''
         validate=cloneDeep(this.newAdmin)
@@ -202,6 +221,15 @@
         }
         this.formValidation=validate
         return status;
+      },
+      //------------GET ALL ROLES------------
+      async getAllRoles() {
+        try {
+        const response= await axiosClient.get('getAllRoles')
+        this.allRoles=response.data
+        } catch (error) {
+        console.log(error)
+        }
       },
       //------------EDIT ADMIN------------
       async editOrganizationAdmin() {
@@ -229,6 +257,7 @@
         this.newAdmin.zip = data.zip
         this.newAdmin.address = data.address
         this.newAdmin.status=data.status
+        this.newAdmin.role=data.user_role.role.name
       }
     },
       //------------SAVE ADMIN------------

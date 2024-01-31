@@ -5,9 +5,11 @@
           <div class="card my-4">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
                 <h6 class="text-dark text-capitalize ps-3">Staff</h6>
-                <router-link :to="{ name: 'add-staff' }">
-                  <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Staff </button>
-                </router-link>
+                <template v-if="userPermissions.create_staff">
+                  <router-link :to="{ name: 'add-staff' }">
+                    <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Staff </button>
+                  </router-link>
+                </template>
               </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
@@ -42,14 +44,18 @@
                       </td>
                       <td class="align-middle text-center">
                         <span>
-                          <router-link :to="{ name: 'detail-staff', params: { id: item.user.id } }">
+                          <!-- <router-link :to="{ name: 'detail-staff', params: { id: item.user.id } }">
                           <i class="material-icons-round opacity-10 fs-5 me-1 cursor-pointer">info</i>
-                          </router-link>
-                          <router-link :to="{ name: 'edit-staff', params: { id: item.id } }">
-                            <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                          </router-link>
+                          </router-link> -->
+                          <template v-if="userPermissions.edit_staff">
+                            <router-link :to="{ name: 'edit-staff', params: { id: item.id } }">
+                              <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
+                            </router-link>
+                          </template>
                           <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
-                          <i @click="deleteStaff(item.user.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          <template v-if="userPermissions.delete_staff">
+                            <i @click="deleteStaff(item.user.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          </template>
                         </span>
                       </td>
                     </tr>
@@ -96,6 +102,14 @@
     mounted(){
       this.getUser();
       this.getAllStaff();
+    },
+    updated(){
+      this.$permissions.redirectIfNotAllowed('view_staff');
+    },
+    computed: {
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
     },
     data() {
       return {

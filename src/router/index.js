@@ -345,10 +345,10 @@ const router = createRouter({
   linkActiveClass: 'active',
 })
 
-export default {
-  install(app, options) {
-    console.log(options)
-    router.install(app)
+// export default {
+//   install(app, options) {
+//     console.log(options)
+//     router.install(app)
     
     router.beforeEach((to, from, next) => {
           // let  permissions=''
@@ -371,11 +371,11 @@ export default {
                 next()
           }
     })
-  }
-}
+//   }
+// }
 
 // function containsKeywords(str, keywords) {
 //   return keywords.some(keyword => str.includes(keyword));
 // }
 
-// export default router
+export default router

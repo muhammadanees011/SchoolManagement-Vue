@@ -222,15 +222,7 @@ export default {
     this.getAllAttributes();
   },
   updated(){
-    // if(!this.userPermissions.create){
-    //   this.$router.go(-1);
-    //   return;
-    // }
-  },
-  computed: {
-    userPermissions() {
-      return this.$permissions.userPermissions.value;
-    },
+    this.$permissions.redirectIfNotAllowed('create_student');
   },
   data() {
     return {
@@ -283,10 +275,7 @@ export default {
     },
     //------------VALIDATE FORM-------------
     validateForm(){
-      // if(!this.userPermissions.create){
-      //   this.$router.go(-1);
-      //   return;
-      // }
+      this.$permissions.redirectIfNotAllowed('create_student');
       let status=false
       let validate=''
       validate=cloneDeep(this.newStudent)

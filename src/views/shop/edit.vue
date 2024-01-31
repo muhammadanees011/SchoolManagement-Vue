@@ -100,15 +100,7 @@
       this.getAllShops();
     },
     updated(){
-      if(!this.userPermissions.edit){
-        this.$router.go(-1);
-        return;
-      }
-    },
-    computed: {
-      userPermissions() {
-        return this.$permissions.userPermissions.value;
-      },
+      this.$permissions.redirectIfNotAllowed('edit_shop');
     },
     data() {
       return {
@@ -140,10 +132,7 @@
       },
       //------------VALIDATE FORM-------------
       validateForm(){
-        if(!this.userPermissions.edit){
-          this.$router.go(-1);
-          return;
-        }
+        this.$permissions.redirectIfNotAllowed('edit_shop');
         let status=false
         let validate=''
         validate=cloneDeep(this.newItem)

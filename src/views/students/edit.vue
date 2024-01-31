@@ -228,10 +228,7 @@
       this.getAllAttributes();
     },
     updated(){
-      // if(!this.userPermissions.edit){
-      //   this.$router.go(-1);
-      //   return;
-      // }
+      this.$permissions.redirectIfNotAllowed('edit_student');
     },
     computed: {
       formattedBalance: {
@@ -242,9 +239,6 @@
           const formattedValue = parseFloat(value).toFixed(2);
           this.newStudent.balance = formattedValue;
         },
-      },
-      userPermissions() {
-        return this.$permissions.userPermissions.value;
       },
     },
     data() {
@@ -297,10 +291,7 @@
       },
       //------------VALIDATE FORM-------------
       validateForm(){
-        // if(!this.userPermissions.edit){
-        //   this.$router.go(-1);
-        //   return;
-        // }
+        this.$permissions.redirectIfNotAllowed('edit_student');
         let status=false
         let validate=''
         validate=cloneDeep(this.newStudent)

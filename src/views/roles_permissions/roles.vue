@@ -28,7 +28,7 @@
               <template v-for="(item,index) in allRoles" :key="index">
                 <span :class="{ 'selected-role': isSelected === item.id }" @click="toggleSelection(item.id,$event),getPermissionsOfRole(item.id)" class="mb-1 roles-list d-flex justify-content-between align-items-center text-dark font-weight-bold text-xs">
                     <span class="text-sm fw-5">{{item.name}}</span>
-                    <span class="text-dark ms-2 font-weight-bold">
+                    <span v-if="item.name!='Admin' && item.name!='Associate Admin' && item.name!='Staff'" class="text-dark ms-2 font-weight-bold">
                         <i @click="editRole(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         <i @click="deleteRole(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                     </span>
@@ -42,13 +42,15 @@
             </h6>
             <small class="text-xs">This Role has following permissions</small>
             <div class="permissions-container mt-3">
-              <span v-for="(item,index) in allPermissions" :key="index" class="permission-info d-flex justify-content-between align-items-center text-dark font-weight-bold text-xs">
-                  <div class="switch-container mt-2 me-5">
-                  <input type="checkbox" @change="givePermission(item.name)" :checked="checkIfPermission(item.id)" :id="item.id" class="switch-input">
-                  <label :for="item.id" class="switch-label"></label>
-                  </div>
-                  <span class="permissions text-uppercase">{{item.name}}</span>
-              </span>
+                <template v-for="(item,index) in allPermissions" :key="index">
+                    <span v-if="checkIfAdmin(item)" class="permission-info d-flex justify-content-between align-items-center text-dark font-weight-bold text-xs">
+                        <div class="switch-container mt-2 me-5">
+                        <input type="checkbox" @change="givePermission(item.name)" :checked="checkIfPermission(item.id)" :id="item.id" class="switch-input">
+                        <label :for="item.id" class="switch-label"></label>
+                        </div>
+                        <span class="permissions text-uppercase">{{item.name}}</span>
+                    </span>
+                </template>
             </div>
           </div>
       </div>
@@ -69,6 +71,9 @@ mounted(){
 this.getAllRoles();
 this.getAllPermissions();
 this.getUserPermissions();
+},
+updated(){
+    this.$permissions.redirectIfNotAllowed('roles');
 },
 data() {
     return {
@@ -91,7 +96,7 @@ watch:{
 computed:{
     checkPermissionsOfRole(){
         return this.permissionsOfRole;
-    }
+    },
 },
 methods:{
 snackbarMsg(message) {
@@ -107,6 +112,34 @@ toggleSelection(id,event) {
     return;
     }
     this.isSelected = id;
+},
+//-------------CHECK IF ROLE IS ADMIN--------------
+checkIfAdmin(permission){
+    let status=false;
+    let adminPermissions=['create_admin','view_admin','edit_admin','delete_admin','roles'];
+    let AssociateAdminPermissions=['create_staff','delete_staff','view_staff','edit_staff'];
+    this.allRoles.filter((item)=>{
+        if(item.id==this.isSelected){
+            if(item.name=='Admin'){
+                status=true;
+            }else if(item.name=='Associate Admin'){
+                if(adminPermissions.includes(permission.name)){
+                    status=false;
+                }else{
+                    status=true;
+                }
+            }
+            else{
+                if(adminPermissions.includes(permission.name) 
+                || AssociateAdminPermissions.includes(permission.name)){
+                    status=false;
+                }else{
+                    status=true;
+                }
+            }
+        }
+    })
+    return status;
 },
 //--------------GET ALL ROLES-------------
 async getAllRoles(){
@@ -176,11 +209,7 @@ async getAllPermissions(){
 //--------------GET PERMISSIONS OF A ROLE-------------
 async getPermissionsOfRole(id=null){
     if(id==null){
-        this.allRoles.filter((item,index)=>{
-            if(index==0){
-                id=item.id
-            }
-        })
+        id=this.isSelected
     }
     try {
     const response= await axiosClient.get('getPermissionsOfaRole/'+id)
@@ -199,7 +228,6 @@ async givePermission(permission){
     }
     try {
     await axiosClient.post('givePermission/'+this.isSelected,data)
-    this.getPermissionsOfRole();
     } catch (error) {
     console.log(error)
     }
@@ -265,7 +293,7 @@ padding-left: 10px;
 padding-right:10px ;
 }
 .permissions-container{
-height: 55%;
+height: 20rem;
 overflow-y: scroll;
 }
 .amount-radio{

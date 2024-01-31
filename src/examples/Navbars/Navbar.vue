@@ -252,7 +252,8 @@ export default {
     this.getUser();
     this.isUpdatedRecently();
     this.getOrganizationName();
-    this.getUserPermissions();
+    // this.getUserPermissions();
+    this.getUserRolePermissions();
   },
   methods: {
     ...mapActions(['updateRemovedItem','updatePermissions']),
@@ -278,11 +279,30 @@ export default {
           console.log(error)
         }
     },
+    //----------------GET USER ROLE PERMISSIONS------------
+    async getUserRolePermissions(){
+      let id = this.user.id
+      try {
+          let response= await axiosClient.get('getUserRolePermissions/'+id)
+          response=response.data
+          this.restructurePermissions(response);
+        } catch (error) {
+          console.log(error)
+        }
+    },
     //-------------FORMAT & SAVE USER PERMISSIONS------------
     formattPermissions(data){
       let permissions=[];
       data.filter((item)=>{
         permissions.push(item.permission_name)
+      });
+      this.updatePermissions(permissions)
+    },
+    //-------------Restructure Permissions & SAVE USER PERMISSIONS------------
+    restructurePermissions(data){
+      let permissions=[];
+      data.filter((item)=>{
+        permissions.push(item.name)
       });
       this.updatePermissions(permissions)
     },

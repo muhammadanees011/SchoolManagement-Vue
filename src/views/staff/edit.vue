@@ -58,6 +58,18 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School is required</small>
                           </div>
+                          <div class="mb-1">
+                            <label class="input-label" for="phone">Role</label>
+                            <br />
+                            <select class="select-box" v-model="newStaff.role" id="role" type="select" placeholder="role" name="role">
+                              <template v-for="(item, index) in allRoles" :key="index" >
+                                <option v-if="item.name!=='Admin' && item.name!=='Associate Admin'" :value="item.name">
+                                  {{ item.name }}
+                                </option>
+                              </template>
+                            </select>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["role"]!==""'>Staff Role is required</small>
+                          </div>
                         </form>
                       </div>
                     </div>
@@ -152,9 +164,14 @@
     this.getUser();
     this.editStaff();
     this.getSchools();
+    this.getAllRoles();
+  },
+  updated(){
+    this.$permissions.redirectIfNotAllowed('edit_staff');
   },
     data() {
       return {
+        allRoles:'',
         user:'',
         availableCountries:['UK','USA','Canada'],
         newStaff: {
@@ -171,6 +188,7 @@
           status:'',
           password:'',
           password_confirmation:'',
+          role:'',
         },
         validationErrors:"",
         isError:false,
@@ -189,6 +207,7 @@
       },
     //------------VALIDATE FORM-------------
     validateForm(){
+        this.$permissions.redirectIfNotAllowed('edit_staff');
         let status=false
         let validate=''
         validate=cloneDeep(this.newStaff)
@@ -202,6 +221,15 @@
         }
         this.formValidation=validate
         return status;
+      },
+      //------------GET ALL ROLES------------
+      async getAllRoles() {
+        try {
+        const response= await axiosClient.get('getAllRoles')
+        this.allRoles=response.data
+        } catch (error) {
+        console.log(error)
+        }
       },
       //------------GET USER--------------
       getUser(){
@@ -235,6 +263,7 @@
         this.newStaff.zip = data.user.zip
         this.newStaff.address = data.user.address
         this.newStaff.status=data.user.status
+        this.newStaff.role=data.user.user_role.role.name
       }
     },
       //------------UPDATE STAFF------------

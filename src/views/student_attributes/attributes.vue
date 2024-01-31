@@ -5,7 +5,7 @@
           <div class="card my-4">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
                 <h6 class="text-dark text-capitalize ps-3">Attributes</h6>
-                <template v-if="userPermissions.create">
+                <template v-if="userPermissions.create_attribute">
                 <router-link :to="{ name: 'add-attribute' }">
                   <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Attribute </button>
                 </router-link>
@@ -31,10 +31,10 @@
                       </td>
                       <td class="align-middle text-center">
                         <span>
-                          <router-link v-if="userPermissions.edit" :to="{ name: 'edit-attribute', params: { id: item.id } }">
+                          <router-link v-if="userPermissions.edit_attribute" :to="{ name: 'edit-attribute', params: { id: item.id } }">
                             <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                           </router-link>
-                          <i v-if="userPermissions.delete" @click="deleteAttribute(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          <i v-if="userPermissions.delete_attribute" @click="deleteAttribute(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                         </span>
                       </td>
                     </tr>
@@ -56,6 +56,9 @@
     mounted(){
       this.getUser();
       this.getAllAttributes();
+    },
+    updated(){
+      this.$permissions.redirectIfNotAllowed('view_attribute');
     },
     computed: {
       userPermissions() {

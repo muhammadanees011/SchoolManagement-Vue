@@ -60,6 +60,18 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>School ID is required</small>
                           </div>
+                          <div class="mb-1">
+                            <label class="input-label" for="phone">Role</label>
+                            <br />
+                            <select class="select-box" v-model="newAdmin.role" id="role" type="select" placeholder="role" name="role">
+                              <template v-for="(item, index) in allRoles" :key="index" >
+                                <option v-if="item.name=='Admin' || item.name=='Associate Admin'" :value="item.name">
+                                  {{ item.name }}
+                                </option>
+                              </template>
+                            </select>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["role"]!==""'>Admin Role is required</small>
+                          </div>
                         </form>
                       </div>
                     </div>
@@ -137,9 +149,14 @@
     },
     mounted() {
      this.getAllOrganizations();
+     this.getAllRoles();
+    },
+    updated(){
+      this.$permissions.redirectIfNotAllowed('create_admin');
     },
     data() {
       return {
+        allRoles:'',
         availableCountries:['UK','USA','Canada'],
         isError:false,
         formValidation:"",
@@ -157,6 +174,7 @@
           password: '',
           password_confirmation: '',
           status:'',
+          role:'',
         },
         availableStatus:['active','pending','blocked'],
         allOrganizations:'',
@@ -173,6 +191,7 @@
       },
       //------------VALIDATE FORM-------------
       validateForm(){
+        this.$permissions.redirectIfNotAllowed('create_admin');
         let status=false
         let validate=''
         validate=cloneDeep(this.newAdmin)
@@ -187,6 +206,15 @@
         this.formValidation=validate
         console.log(this.formValidation)
         return status;
+      },
+       //------------GET ALL ROLES------------
+      async getAllRoles() {
+        try {
+        const response= await axiosClient.get('getAllRoles')
+        this.allRoles=response.data
+        } catch (error) {
+        console.log(error)
+        }
       },
       //------------SAVE ADMIN------------
       async saveNewAdmin() {
