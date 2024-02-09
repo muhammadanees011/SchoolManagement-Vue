@@ -22,6 +22,7 @@
         <sidenav-collapse :to="{ name: 'list-organizations' }" :aria-controls="''" v-bind:collapse="false" collapseRef="organizations" navText="Organizations">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">business</i>
+            
           </template>
         </sidenav-collapse>
       </li>
@@ -30,7 +31,7 @@
           <li v-if="userPermissions.view_admin" class="nav-item">
           <sidenav-collapse :to="{ name: 'list-organization-admins' }" :aria-controls="''" v-bind:collapse="false" collapseRef="organization-admins" navText="Organization Admins">
             <template v-slot:icon>
-              <i class="material-icons-round opacity-10 fs-5">business</i>
+              <i class="material-icons-round opacity-10 fs-5">admin_panel_settings</i>
             </template>
           </sidenav-collapse>
         </li>
@@ -46,7 +47,7 @@
       <li v-if="userPermissions.roles" class="nav-item">
         <sidenav-collapse :to="{ name: 'list-roles' }" :aria-controls="''" v-bind:collapse="false" collapseRef="roles" navText="Roles & Permissions">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">account_balance</i>
+            <i class="material-icons-round opacity-10 fs-5">security</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -62,7 +63,7 @@
         <li v-if="userPermissions.view_attribute" class="nav-item">
         <sidenav-collapse :to="{ name: 'list-attributes' }" :aria-controls="''" v-bind:collapse="false" collapseRef="student-attributes" navText="Attributes">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">people</i>
+            <i class="material-icons-round opacity-10 fs-5">apps</i>
           </template>
         </sidenav-collapse>
         </li>
@@ -71,7 +72,7 @@
       <li  v-if="userPermissions.view_staff"  class="nav-item">
         <sidenav-collapse :to="{ name: 'list-staff' }" :aria-controls="''" v-bind:collapse="false" collapseRef="staff" navText="Staff">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">people</i>
+            <i class="material-icons-round opacity-10 fs-5">portrait</i>
           </template>
         </sidenav-collapse>
       </li>

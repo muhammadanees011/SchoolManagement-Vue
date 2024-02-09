@@ -30,7 +30,7 @@
                             </div>
                             <div class="mb-1">
                               <label class="input-label" for="email">Email</label>
-                              <input class="input-box" id="name" v-model="newSchool.email" type="email" placeholder="Last Name" name="email" />
+                              <input class="input-box" id="name" v-model="newSchool.email" type="email" placeholder="Email" name="email" />
                               <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                             </div>
                             <div class="mb-1">

@@ -59,7 +59,7 @@
                       <span class="text-secondary text-xs font-weight-bold">{{ item.stage }}</span>
                     </td> -->
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold" :class="item.fsm_amount === null ? 'text-danger' : 'text-success'">{{ item.fsm_amount ? ('£'+formattedPrice(item.fsm_amount)) :'No FSM'  }}</span>
+                      <span class="text-secondary text-xs font-weight-bold" :class="item.fsm_amount === null ? 'text-danger' : 'text-success'">{{ item.fsm_amount!==null ? ('£'+formattedPrice(item.fsm_amount)) :'No FSM'  }}</span>
                     </td>
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.user.balance ? item.user.balance.ballance:0 )}}</span>
