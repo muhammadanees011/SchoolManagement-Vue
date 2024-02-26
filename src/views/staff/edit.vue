@@ -31,7 +31,7 @@
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="student_id">Staff ID</label>
-                            <input class="input-box" id="student_id" v-model="newStaff.staff_id" type="number" placeholder="ID" name="student_id" />
+                            <input class="input-box" id="student_id" v-model="newStaff.staff_id" type="text" placeholder="ID" name="student_id" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["staff_id"]!==""'>Staff ID is required</small>
                           </div>
                           <div class="mb-1">
