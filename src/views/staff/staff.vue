@@ -11,6 +11,9 @@
                   </router-link>
                 </template>
               </div>
+              <div class="filter-container">
+                <input class="input-box filter-box" @keyup.enter="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+              </div>   
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
@@ -113,6 +116,7 @@
     },
     data() {
       return {
+        seachString:'',
         allStaff:'',
         schools: 6,
         user:'',
@@ -177,6 +181,22 @@
         const indexToRemove = this.allStaff.findIndex((item) => item.id === id)
         this.allStaff.splice(indexToRemove, 1)
       },
+    //-----------FILTER STAFF------------
+    async filterStaff(){
+      let data={
+        "searchString":this.seachString
+      }
+      try {
+          const response=await axiosClient.post('/searchStaff',data);
+          this.allStaff=response.data;
+          this.totalRows = response.data.total;
+          this.currentPage = response.data.current_page;
+          this.perPage = response.per_page;
+          this.totalPages = response.data.last_page;
+        } catch (error) {
+          console.log(error)
+      }
+    },
     }
   }
   </script>
