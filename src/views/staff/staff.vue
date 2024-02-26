@@ -183,6 +183,10 @@
       },
     //-----------FILTER STAFF------------
     async filterStaff(){
+      if(this.seachString==''){
+        this.getAllStaff();
+        return;
+      }
       let data={
         "searchString":this.seachString
       }
