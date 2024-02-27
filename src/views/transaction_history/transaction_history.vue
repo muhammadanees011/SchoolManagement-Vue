@@ -26,7 +26,7 @@
                         Account
                       </th> -->
                       <th v-if="user.role!=='student'" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Student
+                        User
                       </th>
                       <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Type
