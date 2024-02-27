@@ -30,9 +30,14 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["last_name"]!==""'>last name is required</small>
                           </div>
                           <div class="mb-1">
+                            <label class="input-label" for="mifare_id">MIFARE ID</label>
+                            <input class="input-box" id="mifare_id" v-model="newStudent.mifare_id" type="text" placeholder="ID" name="student_id" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["mifare_id"]!==""'> MIFARE ID is required</small>
+                          </div>  
+                          <div class="mb-1">
                             <label class="input-label" for="student_id">Student ID</label>
                             <input class="input-box" id="student_id" v-model="newStudent.student_id" type="text" placeholder="ID" name="student_id" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["student_id"]!==""'> student is required</small>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["student_id"]!==""'> student ID is required</small>
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="email">Email</label>
@@ -254,6 +259,7 @@
         newStudent: {
           school_id:'',
           student_id:'',
+          mifare_id:'',
           attribute_id:'',
           attributes:[],
           first_name: '',
@@ -330,6 +336,7 @@
         data = response.data
         this.newStudent.school_id = data.school_id
         this.newStudent.student_id = data.student_id
+        this.newStudent.mifare_id = data.mifare_id
         this.newStudent.first_name = data.user.first_name
         this.newStudent.last_name = data.user.last_name
         this.newStudent.email = data.user.email

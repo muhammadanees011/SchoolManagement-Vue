@@ -37,6 +37,11 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["staff_id"]!==""'>Student ID is required</small>
                           </div>
                           <div class="mb-1">
+                            <label class="input-label" for="mifare_id">MIFARE ID</label>
+                            <input class="input-box" id="mifare_id" v-model="newStaff.mifare_id" type="text" placeholder="MIFARE ID" name="mifare_id" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["mifare_id"]!==""'>MIFARE ID is required</small>
+                          </div>
+                          <div class="mb-1">
                             <label class="input-label" for="email">Email</label>
                             <input class="input-box" id="name" v-model="newStaff.email" type="email" placeholder="email" name="email" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
@@ -181,6 +186,7 @@
         validationErrors:'',
         newStaff: {
           school_id:'',
+          mifare_id:'',
           staff_id:'',
           first_name: '',
           last_name:'',

@@ -23,6 +23,7 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
                     </tr>
@@ -41,6 +42,9 @@
                       </td>
                       <td>
                         <p class="text-xs font-weight-bold mb-0"> {{item.school.name}} </p>
+                      </td>
+                      <td>
+                        <span class="text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.balance ? item.balance:0 )}}</span>
                       </td>
                       <td class="align-middle text-center text-sm">
                         <span class="badge badge-sm bg-gradient-success">{{item.user.status}}</span>
@@ -140,6 +144,10 @@
       transactionHistoryNav(id){
         this.$router.push('/student-billing/'+id)
       },
+      formattedPrice(value){
+        const formattedValue = parseFloat(value).toFixed(2);
+        return formattedValue;
+    } ,
       //------------GET USER-----------------
       getUser(){
         let user=localStorage.getItem('user')

@@ -35,6 +35,11 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["staff_id"]!==""'>Staff ID is required</small>
                           </div>
                           <div class="mb-1">
+                            <label class="input-label" for="mifare_id">MIFARE ID</label>
+                            <input class="input-box" id="mifare_id" v-model="newStaff.mifare_id" type="text" placeholder="MIFARE ID" name="mifare_id" />
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["mifare_id"]!==""'>MIFARE ID is required</small>
+                          </div>
+                          <div class="mb-1">
                             <label class="input-label" for="email">Email</label>
                             <input class="input-box" id="name" v-model="newStaff.email" type="email" placeholder="email" name="email" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
@@ -70,6 +75,10 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["role"]!==""'>Staff Role is required</small>
                           </div>
+                          <div class="mb-1">
+                            <label class="input-label" for="balance">Balance</label>
+                            <input class="input-box" id="balance" v-model="formattedBalance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
+                        </div>
                         </form>
                       </div>
                     </div>
@@ -169,6 +178,17 @@
   updated(){
     this.$permissions.redirectIfNotAllowed('edit_staff');
   },
+  computed: {
+      formattedBalance: {
+        get() {
+          return this.newStaff.balance;
+        },
+        set(value) {
+          const formattedValue = parseFloat(value).toFixed(2);
+          this.newStaff.balance = formattedValue;
+        },
+      },
+    },
     data() {
       return {
         allRoles:'',
@@ -176,8 +196,10 @@
         availableCountries:['UK','USA','Canada'],
         newStaff: {
           school_id:'',
+          mifare_id:'',
           staff_id:'',
           first_name: '',
+          balance:'',
           last_name:'',
           email: '',
           phone: '',
@@ -254,6 +276,7 @@
         data = response.data
         this.newStaff.school_id = data.school_id
         this.newStaff.staff_id = data.staff_id
+        this.newStaff.mifare_id = data.mifare_id
         this.newStaff.first_name = data.user.first_name
         this.newStaff.last_name = data.user.last_name
         this.newStaff.email = data.user.email
