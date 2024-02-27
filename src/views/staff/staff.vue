@@ -19,7 +19,7 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase  text-center text-secondary text-xxs font-weight-bolder opacity-7">  Staff ID </th>
+                      <th class="text-uppercase  text-center text-secondary text-xxs font-weight-bolder opacity-7">  MIFARE ID </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th>
@@ -30,7 +30,7 @@
                   <tbody>
                     <tr v-for="(item, index) in allStaff" :key="index">
                      <td>
-                        <p class="text-xs  text-center font-weight-bold mb-0"> {{ item.staff_id ? item.staff_id :'-' }}</p>
+                        <p class="text-xs  text-center font-weight-bold mb-0"> {{ item.mifare_id ? item.mifare_id :'-' }}</p>
                       </td>
                       <td>
                         <p class="text-xs font-weight-bold mb-0"> {{ item.user.first_name }} {{ item.user.last_name }}</p>
