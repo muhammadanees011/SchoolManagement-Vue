@@ -30,27 +30,27 @@
                     <div class="card-body">
                       <form role="form">
                         <div class="mb-1">
-                          <label class="input-label" for="name">First Name</label>
+                          <label class="input-label" for="name">First Name <span class="required">*</span></label>
                           <input class="input-box" id="name" v-model="newStudent.first_name" type="text" placeholder="First Name" name="first_name" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["first_name"]!==""'>First Name is required</small>
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="name">Last Name</label>
+                          <label class="input-label" for="name">Last Name <span class="required">*</span></label>
                           <input class="input-box" id="name" v-model="newStudent.last_name" type="text" placeholder="Last Name" name="last_name" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["last_name"]!==""'>Last Name is required</small>
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="student_id">Student ID</label>
+                          <label class="input-label" for="student_id">Student ID <span class="required">*</span></label>
                           <input class="input-box" id="student_id" v-model="newStudent.student_id" type="text" placeholder="Student ID" name="student_id" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["student_id"]!==""'>Student ID is required</small>
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="mifare_id">MIFARE ID</label>
+                          <label class="input-label" for="mifare_id">MIFARE ID <span class="required">*</span></label>
                           <input class="input-box" id="mifare_id" v-model="newStudent.mifare_id" type="text" placeholder="MIFARE ID" name="mifare_id" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["mifare_id"]!==""'>MIFARE ID is required</small>
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="email">Email</label>
+                          <label class="input-label" for="email">Email <span class="required">*</span></label>
                           <input class="input-box" id="name" v-model="newStudent.email" type="email" placeholder="email" name="email" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                         </div>
@@ -61,10 +61,10 @@
                         <div class="mb-1">
                           <label class="input-label" for="date_of_birth">Date Of Birth</label>
                           <input class="input-box" id="date_of_birth" v-model="newStudent.date_of_birth" type="date" placeholder="date of birth" name="date_of_birth" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["date_of_birth"]!==""'>date of birth is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["date_of_birth"]!==""'>date of birth is required</small> -->
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="phone">School</label>
+                          <label class="input-label" for="phone">School <span class="required">*</span></label>
                           <br />
                           <select class="select-box" v-model="newStudent.school_id" id="school" type="select" placeholder="school" name="school">
                             <option v-for="(item, index) in allSchools" :key="index" :value="item.id">
@@ -74,7 +74,7 @@
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School ID is required</small>
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="phone">Free School Meal (FSM)</label>
+                          <label class="input-label" for="phone">Free School Meal (FSM) <span class="required">*</span></label>
                           <br />
                           <select class="select-box" v-model="newStudent.fsm" id="fsm" type="select" placeholder="FSM" name="fsm">
                             <option v-for="(item, index) in fsm" :key="index" :value="item">
@@ -82,6 +82,10 @@
                             </option>
                           </select>
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School ID is required</small>
+                        </div>
+                        <div class="mb-1">
+                            <label class="input-label" for="balance">Balance</label>
+                            <input class="input-box" id="balance" v-model="formattedBalance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="phone">Attribute</label>
@@ -112,37 +116,37 @@
                                 {{ item }}
                               </option>
                             </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
+                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small> -->
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="city">City</label>
                           <input class="input-box" id="name" v-model="newStudent.city" type="text" placeholder="City" name="city" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small> -->
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="phone">Postcode/Zip</label>
                           <input class="input-box" id="name" v-model="newStudent.zip" type="text" placeholder="Zip Code" name="zip" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>zip is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>zip is required</small> -->
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="address">Address</label>
                           <input class="input-box" id="name" v-model="newStudent.address" type="text" placeholder="Address" name="address" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>address is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>address is required</small> -->
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="stage">Stage</label>
                           <input class="input-box" id="stage" v-model="newStudent.stage" type="text" placeholder="Stage" name="stage" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["stage"]!==""'>stage is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["stage"]!==""'>stage is required</small> -->
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="status">Status</label>
+                          <label class="input-label" for="status">Status <span class="required">*</span></label>
                           <br />
                           <select v-model="newStudent.status" class="select-box" id="status" type="select" placeholder="status" name="status">
                             <option v-for="(item, index) in availableStatus" :key="index" :value="item">
                               {{ item }}
                             </option>
                           </select>
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>status is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>status is required</small> -->
                         </div>
                       </form>
                     </div>
@@ -158,37 +162,37 @@
                         <div class="mb-1">
                           <label class="input-label" for="emergency_contact_name">Emergency Contact Name</label>
                           <input class="input-box" id="emergency_contact_name" v-model="newStudent.emergency_contact_name" type="text" placeholder="emergency contact name" name="emergency_contact_name" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["emergency_contact_name"]!==""'>emergency contact name is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["emergency_contact_name"]!==""'>emergency contact name is required</small> -->
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="emergency_contact_phone">Emergency Contact Number</label>
                           <input class="input-box" id="emergency_contact_phone" v-model="newStudent.emergency_contact_phone" type="text" placeholder="emergency contact number" name="emergency_contact_phone" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["emergency_contact_phone"]!==""'>emergency contact phone is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["emergency_contact_phone"]!==""'>emergency contact phone is required</small> -->
                         </div>
                         <div class="mb-1">
                         <label class="input-label" for="phone">Password</label>
                         <input class="input-box" id="name" v-model="newStudent.password" type="password" placeholder="Password" name="password" />
-                        <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>password is required</small>
+                        <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>password is required</small> -->
                       </div>
                       <div class="mb-1">
                         <label class="input-label" for="phone">Confirm Password</label>
                         <input class="input-box" id="name" v-model="newStudent.password_confirmation" type="password" placeholder="Confirm Password" name="password_confirmation" />
-                        <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password_confirmation"]!==""'>confirm password is required</small>
+                        <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password_confirmation"]!==""'>confirm password is required</small> -->
                       </div>
                         <div class="mb-1">
                           <label class="input-label" for="allergies">Allergies</label>
                           <input class="input-box" id="allergies" v-model="newStudent.allergies" type="text" placeholder="Allergies" name="allergies" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["allergies"]!==""'>allergies is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["allergies"]!==""'>allergies is required</small> -->
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="medical_conditions">Medical Conditions</label>
                           <input class="input-box" id="medical_conditions" v-model="newStudent.medical_conditions" type="text" placeholder="Medical Conditions" name="medical_conditions" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["medical_conditions"]!==""'>medical conditions is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["medical_conditions"]!==""'>medical conditions is required</small> -->
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="enrollment_date">Enrollment Date</label>
                           <input class="input-box" id="enrollment_date" v-model="newStudent.enrollment_date" type="date" placeholder="Enrollment Date" name="enrollment_date" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["enrollment_date"]!==""'>enrollment date is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["enrollment_date"]!==""'>enrollment date is required</small> -->
                         </div>
                       </form>
                     </div>
@@ -229,6 +233,17 @@ export default {
   updated(){
     this.$permissions.redirectIfNotAllowed('create_student');
   },
+  computed: {
+    formattedBalance: {
+      get() {
+        return this.newStudent.balance;
+      },
+      set(value) {
+        const formattedValue = parseFloat(value).toFixed(2);
+        this.newStudent.balance = formattedValue;
+      },
+    },
+  },
   data() {
     return {
       selected: null,
@@ -265,6 +280,7 @@ export default {
         allergies:'',
         status:'',
         fsm:'',
+        balance:'',
       },
       availableStatus:['active','pending','blocked'],
       allSchools:'',
@@ -287,7 +303,12 @@ export default {
       validate=cloneDeep(this.newStudent)
       for(let item in this.newStudent){
         if ((this.newStudent[item] === '' || this.newStudent[item] === undefined)
-         && (item !== "phone" && item !== "attribute_id")) {
+         && (item !== "phone" && item !== "attribute_id" && item !== "medical_conditions" 
+          && item !== "allergies" && item !== "enrollment_date"  && item !== "country" && item !== "stage" 
+          && item !== "city" && item !== "balance" && item !== "emergency_contact_phone" && item !== "address"
+          && item !== "emergency_contact_name" && item !== "date_of_birth" && item !== "zip" &&  
+          item !== "add_amount" && item !== "password" && 
+            item !== "password_confirmation")) {
               validate[item]="is required"
               status=true
           }else{
@@ -295,6 +316,7 @@ export default {
           }
       }
       this.formValidation=validate
+      console.log(this.formValidation)
       return status;
     },
     handleAttributes(data){
@@ -468,4 +490,7 @@ input:disabled {
 .error-txt{
   font-size: 11px;
 }
+.required{
+    color:red;
+  }
 </style>

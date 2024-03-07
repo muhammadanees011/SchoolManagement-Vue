@@ -20,27 +20,27 @@
                       <div class="card-body">
                         <form role="form">
                           <div class="mb-1">
-                            <label class="input-label" for="name">First Name</label>
+                            <label class="input-label" for="name">First Name <span class="required">*</span></label>
                             <input class="input-box" id="name" v-model="newStaff.first_name" type="text" placeholder="First Name" name="first_name" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["first_name"]!==""'>First Name is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="name">Last Name</label>
+                            <label class="input-label" for="name">Last Name <span class="required">*</span></label>
                             <input class="input-box" id="name" v-model="newStaff.last_name" type="text" placeholder="Last Name" name="last_name" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["last_name"]!==""'>Last Name is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="student_id">Staff ID</label>
+                            <label class="input-label" for="student_id">Staff ID <span class="required">*</span></label>
                             <input class="input-box" id="student_id" v-model="newStaff.staff_id" type="text" placeholder="ID" name="student_id" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["staff_id"]!==""'>Staff ID is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="mifare_id">MIFARE ID</label>
+                            <label class="input-label" for="mifare_id">MIFARE ID <span class="required">*</span></label>
                             <input class="input-box" id="mifare_id" v-model="newStaff.mifare_id" type="text" placeholder="MIFARE ID" name="mifare_id" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["mifare_id"]!==""'>MIFARE ID is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="email">Email</label>
+                            <label class="input-label" for="email">Email <span class="required">*</span></label>
                             <input class="input-box" id="name" v-model="newStaff.email" type="email" placeholder="email" name="email" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                           </div>
@@ -51,10 +51,10 @@
                           <div class="mb-1">
                             <label class="input-label" for="address">Address</label>
                             <input class="input-box" id="name" v-model="newStaff.address" type="text" placeholder="Address" name="address" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>Address is required</small>
+                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>Address is required</small> -->
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">School</label>
+                            <label class="input-label" for="phone">School <span class="required">*</span></label>
                             <br />
                             <select class="select-box" v-model="newStaff.school_id" id="school" type="select" placeholder="school" name="school">
                               <option v-for="(item, index) in allSchools" :key="index" :value="item.id">
@@ -64,7 +64,7 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">Role</label>
+                            <label class="input-label" for="phone">Role <span class="required">*</span></label>
                             <br />
                             <select class="select-box" v-model="newStaff.role" id="role" type="select" placeholder="role" name="role">
                               <template v-for="(item, index) in allRoles" :key="index" >
@@ -76,8 +76,12 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["role"]!==""'>Staff Role is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="balance">Balance</label>
+                            <label class="input-label" for="balance">Balance </label>
                             <input class="input-box" id="balance" v-model="formattedBalance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
+                        </div>
+                        <div class="mb-1">
+                            <label class="input-label" for="balance">Add Amount</label>
+                            <input class="input-box" id="balance" v-model="formattedAmount" type="number" step="0.01" min="0" placeholder="add amount" name="add_amount" />
                         </div>
                         </form>
                       </div>
@@ -98,17 +102,17 @@
                                 {{ item }}
                               </option>
                             </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
+                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small> -->
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="city">City</label>
                             <input class="input-box" id="name" v-model="newStaff.city" type="text" placeholder="City" name="city" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small>
+                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small> -->
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="phone">Postcode/Zip</label>
                             <input class="input-box" id="name" v-model="newStaff.zip" type="text" placeholder="Zip Code" name="zip" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>Zip is required</small>
+                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>Zip is required</small> -->
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="status">Status</label>
@@ -147,7 +151,7 @@
                   </div>
                   <div class="d-flex justify-content-center bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                     <div class="">
-                        <button @click="updateStaff" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-3 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Update Student </button>
+                        <button @click="updateStaff" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-3 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Update Staff </button>
                     </div>
                   </div>
                 </div>
@@ -179,6 +183,15 @@
     this.$permissions.redirectIfNotAllowed('edit_staff');
   },
   computed: {
+      formattedAmount: {
+        get() {
+          return parseFloat(this.newStaff.add_amount).toFixed(2);
+        },
+        set(value) {
+          const formattedValue = parseFloat(value).toFixed(2);
+          this.newStaff.add_amount = formattedValue;
+        },
+      },
       formattedBalance: {
         get() {
           return this.newStaff.balance;
@@ -200,6 +213,7 @@
           staff_id:'',
           first_name: '',
           balance:'',
+          add_amount:'',
           last_name:'',
           email: '',
           phone: '',
@@ -234,7 +248,9 @@
         let validate=''
         validate=cloneDeep(this.newStaff)
         for(let item in this.newStaff){
-          if((this.newStaff[item] === '' || this.newStaff[item] === null) && (item !== "phone" && item !== "password" && item !== "password_confirmation")){
+          if((this.newStaff[item] === '' || this.newStaff[item] === null) &&
+           (item !== "phone" && item !== "country" && item !== "city" && item !== "address" &&
+            item !== "zip" && item !== "balance" &&  item !== "add_amount" && item !== "password" && item !== "password_confirmation")){
             validate[item]="is required"
             status=true
           }else{
@@ -242,6 +258,7 @@
           }
         }
         this.formValidation=validate
+        console.log(this.formValidation)
         return status;
       },
       //------------GET ALL ROLES------------
@@ -287,6 +304,7 @@
         this.newStaff.address = data.user.address
         this.newStaff.status=data.user.status
         this.newStaff.role=data.user.user_role.role.name
+        this.newStaff.balance=this.formattedPrice(data.balance.ballance)
       }
     },
       //------------UPDATE STAFF------------
@@ -304,6 +322,10 @@
           this.isError=true;
           this.validationErrors=error.response.data.errors
         }
+      },
+      formattedPrice(value){
+        const formattedValue = parseFloat(value).toFixed(2);
+        return formattedValue;
       },
       //------------GET SCHOOLS------------
       async getSchools() {
@@ -403,5 +425,8 @@
   background-color: #F8F9FA;
   border-radius: 15px;
 }
+.required{
+    color:red;
+  }
   </style>
   
