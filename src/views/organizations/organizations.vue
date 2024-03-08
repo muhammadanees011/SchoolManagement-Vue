@@ -26,8 +26,6 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Organization Name </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Email </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Country </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Schools </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Students </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                   </tr>
@@ -60,12 +58,6 @@
                           <!-- <p class="text-xs text-secondary mb-0"> {{ item.city }}</p> -->
                         </div>
                       </div>
-                    </td>
-                    <td class="align-middle text-center">
-                      <p class="text-xs text-secondary font-weight-bold  mb-0"> 0 </p>
-                    </td>
-                    <td class="align-middle text-center">
-                      <p class="text-xs text-secondary font-weight-bold mb-0">0 </p>
                     </td>
                     <td class="align-middle text-center text-sm">
                       <span class="badge badge-sm bg-gradient-success">{{ item.status }}</span>
