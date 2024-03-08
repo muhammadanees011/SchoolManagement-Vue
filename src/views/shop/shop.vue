@@ -99,14 +99,15 @@
   export default {
     name: "tables",
     mounted(){
-      const userData = localStorage.getItem('user');
-      if (userData) {
-        this.user = JSON.parse(userData);
-      }
+      this.getUser();
       this.getShopItems();
     },
     updated(){
-      this.$permissions.redirectIfNotAllowed('view_shop');
+      if(this.user.role=='student'){
+        return
+      }else{
+        this.$permissions.redirectIfNotAllowed('view_shop');
+      }
     },
     computed: {
       userPermissions() {
@@ -129,6 +130,12 @@
         background: 'white',
       })
     },
+    getUser(){
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          this.user = JSON.parse(userData);
+        }
+      },
     formattedPrice(value){
       const formattedValue = parseFloat(value).toFixed(2);
       return formattedValue;
