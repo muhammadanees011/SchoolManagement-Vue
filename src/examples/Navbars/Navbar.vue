@@ -98,7 +98,7 @@
               </router-link>
               </li>
               <li class="menu_item mb-2" >
-                <router-link :to="{name:'student-balance'}">
+                <router-link :to="{name:'balance'}">
                 <a class="dropdown-item border-radius-md" href="javascript:;">
                   <div class="py-1 d-flex">
                     <div class="d-flex flex-column justify-content-center">

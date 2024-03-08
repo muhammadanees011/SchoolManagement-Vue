@@ -86,7 +86,11 @@
       this.getAllTrips();
     },
     updated(){
-      this.$permissions.redirectIfNotAllowed('view_trip');
+      if(this.user.role=='student'){
+        return
+      }else{
+        this.$permissions.redirectIfNotAllowed('view_trip');
+      }
     },
     watch:{
       getRemovedItem(newVal,oldVal){

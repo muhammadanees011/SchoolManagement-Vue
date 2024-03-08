@@ -23,7 +23,9 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
+                      <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
+                      <th v-if="userPermissions.wallet" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Wallet </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> TopUp </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
                     </tr>
@@ -41,10 +43,18 @@
                         <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0"> {{item.school.name}} </p>
+                        <p class="text-xs text-center font-weight-bold mb-0"> {{item.school.name}} </p>
                       </td>
                       <td>
-                        <span class="text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.balance ? item.balance:0 )}}</span>
+                        <span class="ms-4 text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.balance ? item.balance:0 )}}</span>
+                      </td>
+                      <td v-if="userPermissions.wallet" class="align-middle text-center">
+                        <router-link :to="{name:'balance',params: { id: item.user.id }}" title="Wallet">
+                          <i class="fas fa-donate fs-5 me-2"></i>
+                        </router-link>
+                      </td>
+                      <td v-if="userPermissions.topup" class="align-middle text-center">
+                          <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">credit_card</i>
                       </td>
                       <td class="align-middle text-center text-sm">
                         <span class="badge badge-sm bg-gradient-success">{{item.user.status}}</span>

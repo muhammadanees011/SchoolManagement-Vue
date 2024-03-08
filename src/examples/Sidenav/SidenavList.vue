@@ -91,6 +91,13 @@
           </template>
         </sidenav-collapse>
       </li>
+      <li  v-if="user && user.role=='student'"  class="nav-item">
+        <sidenav-collapse :to="{ name: 'transaction-history' }" :aria-controls="''" v-bind:collapse="false" collapseRef="transaction history" navText="Transaction History">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">receipt</i>
+          </template>
+        </sidenav-collapse>
+      </li>
       <li  v-if="userPermissions.transaction_history"  class="nav-item">
         <sidenav-collapse :to="{ name: 'transaction-history' }" :aria-controls="''" v-bind:collapse="false" collapseRef="transaction history" navText="Transaction History">
           <template v-slot:icon>
@@ -122,7 +129,21 @@
           </template>
         </sidenav-collapse>
       </li>
+      <li  v-if="user && user.role=='student'" class="nav-item">
+        <sidenav-collapse :to="{ name: 'list-trips' }" :aria-controls="''" v-bind:collapse="false" collapseRef="trips" navText="Trips">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">directions_bus</i>
+          </template>
+        </sidenav-collapse>
+      </li>
       <li  v-if="userPermissions.view_shop" class="nav-item">
+        <sidenav-collapse :to="{ name: 'shop-items' }"  :aria-controls="''" v-bind:collapse="false" collapseRef="shop" navText="Shop">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">store</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li  v-if="user && user.role=='student'" class="nav-item">
         <sidenav-collapse :to="{ name: 'shop-items' }"  :aria-controls="''" v-bind:collapse="false" collapseRef="shop" navText="Shop">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">store</i>
@@ -138,6 +159,13 @@
       </li>
       </template>
       <li  v-if="userPermissions.support"  class="nav-item">
+        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="support" navText="Support">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">support_agent</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li  v-if="user && user.role=='student'" class="nav-item">
         <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="support" navText="Support">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">support_agent</i>

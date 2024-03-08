@@ -115,7 +115,11 @@
       this.getTransactionHistory();
     },
     updated(){
-      this.$permissions.redirectIfNotAllowed('transaction_history');
+      if(this.user.role=='student'){
+        return
+      }else{
+        this.$permissions.redirectIfNotAllowed('transaction_history');
+      }
     },
     data(){
       return{

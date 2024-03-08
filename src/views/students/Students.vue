@@ -34,7 +34,8 @@
                     <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th> -->
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> FSM </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Balance </th>
-                    <th v-if="userPermissions.transaction_history" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
+                    <!-- <th v-if="userPermissions.transaction_history" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th> -->
+                    <th v-if="userPermissions.wallet" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Wallet </th>
                     <th v-if="userPermissions.topup" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Topup </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
@@ -64,8 +65,13 @@
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.user.balance ? item.user.balance.ballance:0 )}}</span>
                     </td>
-                    <td v-if="userPermissions.transaction_history" class="align-middle text-center">
+                    <!-- <td v-if="userPermissions.transaction_history" class="align-middle text-center">
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">swap_horizontal_circle</i>
+                    </td> -->
+                    <td v-if="userPermissions.wallet" class="align-middle text-center">
+                        <router-link :to="{name:'balance',params: { id: item.user.id }}" title="Wallet">
+                          <i class="fas fa-donate fs-5 me-2"></i>
+                        </router-link>
                     </td>
                     <td v-if="userPermissions.topup" class="align-middle text-center">
                         <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">credit_card</i>
@@ -75,11 +81,11 @@
                     </td>
                     <td class="align-middle text-center">
                       <span>
-                        <template v-if="userPermissions.wallet">
+                        <!-- <template v-if="userPermissions.wallet">
                           <router-link :to="{name:'student-balance',params: { id: item.user.id }}" title="Wallet">
                             <i class="fas fa-donate fs-5 me-2"></i>
                           </router-link>
-                        </template>
+                        </template> -->
                         <!-- <router-link to="#" title="Topup">
                         <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5 me-2">credit_card</i>
                         </router-link>
