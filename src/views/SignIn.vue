@@ -168,7 +168,7 @@ export default {
         localStorage.setItem('primary_color', primary_color)
         localStorage.setItem('secondary_color', secondary_color)
         localStorage.setItem('logo', logo)
-        const newRoute = this.$router.resolve({ name: 'Dashboard' }).href;
+        const newRoute = this.$router.resolve({ name: '/' }).href;
         window.location.href = newRoute;
       } catch (error) {
         if (error.response.status == 401) {
