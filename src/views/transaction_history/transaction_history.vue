@@ -25,16 +25,16 @@
                       <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Account
                       </th> -->
-                      <th v-if="user.role!=='student'" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th v-if="user.role!=='student'" class="text-uppercase text-xxs font-weight-bolder">
                         User
                       </th>
-                      <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
                         Type
                       </th>
-                      <th class=" align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                      <th class=" align-middle text-center text-uppercase text-xxs font-weight-bolder ps-2">
                         Amount
                       </th>
-                      <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
                         Date
                       </th>
                       <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -107,10 +107,12 @@
   <script>
   import axiosClient from '../../axios'
   import moment from 'moment';
+  import { mapGetters } from 'vuex'
 
   export default {
     name: "tables",
     mounted(){
+      this.setColor();
       this.getUser();
       this.getTransactionHistory();
     },
@@ -120,6 +122,9 @@
       }else{
         this.$permissions.redirectIfNotAllowed('transaction_history');
       }
+    },
+    computed:{
+      ...mapGetters(['getBrandingSetting']),
     },
     data(){
       return{
@@ -131,6 +136,11 @@
       }
     },
     methods:{
+      setColor() {
+        let bgColor=this.getBrandingSetting.primary_color ?
+        this.getBrandingSetting.primary_color : '#573078';
+        document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
+      },
       transactionType(type){
         let newType='';
         if(type=='top_up'){
@@ -253,6 +263,15 @@
     transform: translateY(-50%);
     color: #555; /* Adjust the color as needed */
     cursor: pointer;
+  }
+  thead{
+  background-color: var(--navheader-bg-color) !important;
+  }
+  tbody > tr:hover{
+    background-color: #F0F2F5 !important;
+  }
+  thead tr:hover{
+    background-color: var(--navheader-bg-color) !important;
   }
   </style>
   

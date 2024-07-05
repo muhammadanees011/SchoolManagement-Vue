@@ -37,10 +37,6 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">Phone</label>
-                            <input class="input-box" id="name" v-model="newAdmin.phone" type="tel" placeholder="Phone" name="phone" />
-                          </div>
-                          <div class="mb-1">
                             <label class="input-label" for="phone">Organization</label>
                             <br />
                             <select class="select-box" v-model="newAdmin.organization_id" id="school" type="select" placeholder="school" name="school">
@@ -62,47 +58,7 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["role"]!==""'>Admin Role is required</small>
                           </div>
-                        </form>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg  col-xl-10 col-lg-10 col-md-10">
-                    <div class="form-bg container p-4">
-                    <p class="text-dark ms-4 font-weight-bold">Account Information</p>
-                    <div class="card card-plain">
-                      <div class="card-body">
-                        <form role="form"> 
-                          <div class="mb-1">
-                            <label class="input-label" for="status">Country</label>
-                            <br />
-                            <select v-model="newAdmin.country" class="select-box" id="country" type="select" placeholder="country" name="country">
-                              <option v-for="(item, index) in availableCountries" :key="index" :value="item">
-                                {{ item }}
-                              </option>
-                            </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
-                          </div>
-                          <!-- <div class="mb-1">
-                            <label class="input-label" for="last_name">Country</label>
-                            <input class="input-box" id="name" type="text" v-model="newAdmin.country" placeholder="Country" name="country" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
-                          </div> -->
-                          <div class="mb-1">
-                            <label class="input-label" for="city">City</label>
-                            <input class="input-box" id="name" v-model="newAdmin.city" type="text" placeholder="City" name="city" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="phone">Postcode/Zip</label>
-                            <input class="input-box" id="name" v-model="newAdmin.zip" type="text" placeholder="Zip Code" name="zip" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>zip is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="address">Address</label>
-                            <input class="input-box" id="name" v-model="newAdmin.address" type="text" placeholder="Address" name="address" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>address is required</small>
-                          </div>
+                          
                           <div class="mb-1">
                             <label class="input-label" for="status">Status</label>
                             <br />
@@ -113,6 +69,7 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>status is required</small>
                           </div>
+
                         </form>
                       </div>
                     </div>
@@ -182,11 +139,6 @@
           first_name: '',
           last_name:'',
           email: '',
-          phone: '',
-          country: '',
-          city: '',
-          zip: '',
-          address: '',
           status:'',
           role:'',
           password:'',
@@ -212,7 +164,7 @@
         let validate=''
         validate=cloneDeep(this.newAdmin)
         for(let item in this.newAdmin){
-          if ((this.newAdmin[item] === '' || this.newAdmin[item] === undefined) && (item !== "phone" && item !== "password" && item !== "password_confirmation")) {
+          if ((this.newAdmin[item] === '' || this.newAdmin[item] === undefined) && (item !== "password" && item !== "password_confirmation")) {
               validate[item]="is required"
               status=true
           }else{
@@ -250,12 +202,6 @@
         this.newAdmin.first_name = data.first_name
         this.newAdmin.last_name = data.last_name
         this.newAdmin.email = data.email
-        this.newAdmin.phone = data.phone
-        this.newAdmin.country = data.country
-        this.newAdmin.city = data.city
-        this.newAdmin.state = data.state
-        this.newAdmin.zip = data.zip
-        this.newAdmin.address = data.address
         this.newAdmin.status=data.status
         this.newAdmin.role=data.user_role.role.name
       }

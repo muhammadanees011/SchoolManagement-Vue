@@ -22,12 +22,12 @@
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> ID </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Organization Name </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Email </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Country </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                    <th class="text-uppercase text-xxs font-weight-bolder"> ID </th>
+                    <th class="text-uppercase text-xxs font-weight-bolder"> Organization Name </th>
+                    <th class="text-uppercase text-xxs font-weight-bolder ps-2"> Email </th>
+                    <th class="text-uppercase text-xxs font-weight-bolder ps-2"> Country </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Status </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -98,6 +98,7 @@
 
 <script>
 import axiosClient from '../../axios'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'organizations',
@@ -105,9 +106,12 @@ export default {
     title: 'Organizations',
   },
   mounted() {
+    this.setColor()
     this.getOrganizations()
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['getBrandingSetting']),
+  },
   data() {
     return {
       organizationsData: '',
@@ -115,6 +119,11 @@ export default {
     }
   },
   methods: {
+    setColor() {
+      let bgColor=this.getBrandingSetting.primary_color ?
+      this.getBrandingSetting.primary_color : '#573078';
+      document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
+    },
     setListData() {
       this.updateOrganizationList(this.organizationsData)
     },
@@ -152,3 +161,14 @@ export default {
   },
 }
 </script>
+<style>
+thead{
+  background-color: var(--navheader-bg-color) !important;
+}
+tbody > tr:hover{
+  background-color: #F0F2F5 !important;
+}
+thead tr:hover{
+  background-color: var(--navheader-bg-color) !important;
+}
+</style>

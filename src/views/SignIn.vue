@@ -29,13 +29,18 @@
                 <input id="password" v-model="credentials.password" placeholder="Password" type="password" label="Password" name="password" />
                 <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>Password is required</small>
               </div>
-              <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch>
+              <!-- <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch> -->
               <div class="text-center">
                 <material-button class="my-4 mb-2" @click="signIn" style="background-color: #573078;" fullWidth>Sign in</material-button>
               </div>
               <p class="mt-4 text-sm text-success text-center">
                 <!-- <small class="text-success text-gradient font-weight-bold">Forgot Password ?</small> -->
                 <router-link :to="{ name: 'ForgotPassword' }" class="font-weight-bold" style="color: #573078;">Forgot Password ?</router-link>
+                <br>
+                <span @click="MSSignIn" class="mslogin-link">
+                  <img v-on:click="MSSignIn" class="me-2" style="width: 12px; height: 12px;" src="@/assets/img/logos/microsoft.png">
+                  <small class="mslogin">SignIn with Microsoft</small>
+                </span>
               </p>
               <!-- </form> -->
             </div>
@@ -47,9 +52,11 @@
 </template>
 
 <script>
+import { PublicClientApplication } from '@azure/msal-browser';
+// import { mapGetters } from 'vuex'
 import Navbar from '@/examples/PageLayout/Navbar.vue'
 // import MaterialInput from '@/components/MaterialInput.vue'
-import MaterialSwitch from '@/components/MaterialSwitch.vue'
+// import MaterialSwitch from '@/components/MaterialSwitch.vue'
 import MaterialButton from '@/components/MaterialButton.vue'
 import { mapMutations } from 'vuex'
 import axiosClient from '../axios'
@@ -60,7 +67,7 @@ export default {
   components: {
     Navbar,
     // MaterialInput,
-    MaterialSwitch,
+    // MaterialSwitch,
     MaterialButton,
   },
   beforeMount() {
@@ -71,8 +78,30 @@ export default {
     this.toggleEveryDisplay()
     this.toggleHideConfig()
   },
+  async created() {
+    this.$msalInstance = new PublicClientApplication(
+      this.msalConfig,
+    );
+  },
+  mounted() {
+    const accounts = this.$msalInstance.getAllAccounts();
+    if (accounts.length == 0) {
+      return;
+    }
+    this.account = accounts[0];
+    this.$emitter.emit('login', this.account);
+  },
   data() {
     return {
+      msalConfig: {
+        auth: {
+          clientId: '84e7c1e4-cd74-42c8-84fe-5ba42ee2049a',
+          authority: 'https://login.microsoftonline.com/f8cdef31-a31e-4b4a-93e4-5f571e91255a',
+        },
+        cache: {
+          cacheLocation: 'localStorage',
+        },
+      },
       unauthorized: false,
       formValidation:"",
       credentials: {
@@ -83,6 +112,29 @@ export default {
   },
   methods: {
     ...mapMutations(['toggleEveryDisplay', 'toggleHideConfig']),
+    //------------MICROSOFT SIGNIN-------------
+    async MSSignIn() {
+      await this.$msalInstance.loginPopup({})
+      .then(() => {
+        const myAccounts = this.$msalInstance.getAllAccounts();
+        this.account = myAccounts[0];
+        this.$emitter.emit('login', this.account);
+      })
+      .catch(error => {
+        console.error(`error during authentication: ${error}`);
+      });
+    },
+    //------------MICROSOFT SIGNOUT-------------
+    async SignOut() {
+      await this.$msalInstance
+      .logout({})
+      .then(() => {
+        this.$emitter.emit('logout', 'logging out');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    },
     //------------VALIDATE FORM-------------
     validateForm(){
       let status=false
@@ -110,7 +162,14 @@ export default {
         let token = response.data ? response.data.access_token : null
         localStorage.setItem('user',  JSON.stringify(user))
         localStorage.setItem('token', token)
-        this.$router.push({ name: 'Dashboard' })
+        let primary_color=response.data.primary_color;
+        let secondary_color=response.data.secondary_color;
+        let logo=response.data.logo;
+        localStorage.setItem('primary_color', primary_color)
+        localStorage.setItem('secondary_color', secondary_color)
+        localStorage.setItem('logo', logo)
+        const newRoute = this.$router.resolve({ name: 'Dashboard' }).href;
+        window.location.href = newRoute;
       } catch (error) {
         if (error.response.status == 401) {
           this.unauthorized = true
@@ -121,4 +180,11 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.mslogin{
+  font-size: 11px;
+}
+.mslogin-link{
+  cursor: pointer;
+}
+</style>

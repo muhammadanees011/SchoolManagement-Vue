@@ -16,9 +16,9 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase  text-center text-secondary text-xxs font-weight-bolder opacity-7">  ID </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
+                      <th class="text-uppercase  text-center text-xxs font-weight-bolder">  ID </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
+                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Action </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -50,10 +50,12 @@
   
   <script>
   import axiosClient from '../../axios'
+  import { mapGetters } from 'vuex'
   
   export default {
     name: 'tables',
     mounted(){
+      this.setColor();
       this.getUser();
       this.getAllAttributes();
     },
@@ -61,6 +63,7 @@
       this.$permissions.redirectIfNotAllowed('view_attribute');
     },
     computed: {
+      ...mapGetters(['getBrandingSetting']),
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
@@ -73,6 +76,11 @@
       }
     },
     methods:{
+      setColor() {
+        let bgColor=this.getBrandingSetting.primary_color ?
+        this.getBrandingSetting.primary_color : '#573078';
+        document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
+      },
       snackbarMsg(message) {
         this.$snackbar.add({
           type: 'success',
@@ -118,6 +126,15 @@
   .hover-pointer:hover {
     cursor: pointer;
     color: red;
+  }
+  thead{
+  background-color: var(--navheader-bg-color) !important;
+  }
+  tbody > tr:hover{
+    background-color: #F0F2F5 !important;
+  }
+  thead tr:hover{
+    background-color: var(--navheader-bg-color) !important;
   }
   </style>
   

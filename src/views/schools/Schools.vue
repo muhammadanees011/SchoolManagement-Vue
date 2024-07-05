@@ -24,15 +24,15 @@
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> ID </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School Name </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Country </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Organization </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Teachers </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Students </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
+                    <th class="text-uppercase text-xxs font-weight-bolder"> ID </th>
+                    <th class="text-uppercase text-xxs font-weight-bolder"> School Name </th>
+                    <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
+                    <th class="text-uppercase text-xxs font-weight-bolder ps-2"> Country </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Organization </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Teachers </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Students </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Status </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Action </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -41,8 +41,12 @@
                       <p class="text-xs font-weight-bold mb-0"> {{ item.id }}</p>
                     </td>
                     <td>
+                      <router-link :to="{ name: 'settings-school', params: { id: item.id }}">
+                      <div class="d-flex">
                       <p class="text-xs font-weight-bold mb-0"> {{ item.title }} </p>
-                      <!-- <p class="text-xs text-secondary mb-0">{{ item.website }}</p> -->
+                      <i class="material-icons-round opacity-10 fs-6 cursor-pointer">arrow_forward</i>
+                      </div>
+                      </router-link>
                     </td>
                     <td>
                       <p class="text-xs font-weight-bold mb-0"> {{ item.email }} </p>
@@ -73,7 +77,7 @@
                         </template>
                         <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
                         <template v-if="userPermissions.delete_school">
-                        <i @click="deleteSchool(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                        <i @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                         </template>
                       </span>
                     </td>
@@ -90,10 +94,13 @@
 
 <script>
 import axiosClient from '../../axios'
+import Swal from 'sweetalert2';
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'tables',
   mounted(){
+    this.setColor()
     this.getUser();
     this.getAllSchools();
   },
@@ -108,11 +115,35 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getBrandingSetting']),
     userPermissions() {
       return this.$permissions.userPermissions.value;
     },
   },
   methods:{
+    setColor() {
+      let bgColor=this.getBrandingSetting.primary_color ?
+      this.getBrandingSetting.primary_color : '#573078';
+      document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
+    },
+    confirmDelete(id) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Item will be archived and you will be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        customClass: {
+          popup: 'custom-swal'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteSchool(id)
+        }
+      });
+    },
     snackbarMsg(message) {
       this.$snackbar.add({
         type: 'success',
@@ -157,3 +188,14 @@ export default {
   }
 }
 </script>
+<style>
+thead{
+  background-color: var(--navheader-bg-color) !important;
+}
+tbody > tr:hover{
+  background-color: #F0F2F5 !important;
+}
+thead tr:hover{
+  background-color: var(--navheader-bg-color) !important;
+}
+</style>

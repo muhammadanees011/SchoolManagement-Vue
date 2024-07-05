@@ -235,6 +235,11 @@ export default {
   name: 'navbar',
   data() {
     return {
+      branding_settings:{
+        primary_color:'',
+        secondary_color:'',
+        logo:''
+      },
       passwordStatus:'',
       cartItemsList:'',
       user:'',
@@ -328,6 +333,9 @@ export default {
       try {
         localStorage.removeItem('user')
         localStorage.removeItem('token')
+        localStorage.removeItem('primary_color')
+        localStorage.removeItem('secondary_color')
+        localStorage.removeItem('logo')
         this.$router.push({ name: 'SignIn' })
         await axiosClient.post('/logout', localStorage.getItem('token'))
       } catch (error) {
@@ -346,6 +354,10 @@ export default {
       try {
         const response=await axiosClient.post('/getOrganizationName',data)
         this.organization_name=response.data.organization_name;
+        // this.branding_settings.primary_color=response.data.primary_color;
+        // this.branding_settings.secondary_color=response.data.secondary_color;
+        // this.branding_settings.logo=response.data.logo;
+        // this.updateBrandingSetting(this.branding_settings);
       } catch (error) {
         console.log(error)
       }

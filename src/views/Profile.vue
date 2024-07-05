@@ -18,7 +18,6 @@
             <h5 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h5>
             <span class="d-flex"><p class="mb-0 font-weight-normal text-sm">Role: {{ user.role }}</p></span>
             <span class="d-flex"><small class="text-xs">Email: {{ user.email ? user.email :'-' }}</small></span>
-            <span class="d-flex"><small class="text-xs">Phone: {{ user.phone ? user.phone:'-' }}</small></span>
           </div>
         </div>
         <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
@@ -143,10 +142,6 @@
                       <label>Email</label>
                       <input v-model="updateData.email" id="card-holder-name" type="email" class="bg-white w-100  mb-2">
                       <small class="err-txt text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
-                      <br>
-                      <label>Phone</label>
-                      <input v-model="updateData.phone" id="card-holder-name" type="tel" class="bg-white w-100  mb-2">
-                      <small class="err-txt text-danger error-txt" v-if='formValidation!=="" && formValidation["phone"]!==""'>Phone is required</small>
                       <br>
                       <button @click="updateSettings()" style="font-size: 12px; background-color: #573078;" class="save-pass-btn p-2 mb-3 trips-btn  text-white fw-5 border-radius-lg">Update Settings </button>
                     </div>
@@ -433,7 +428,7 @@ export default {
         let validate=''
         validate=cloneDeep(this.updateData)
         for(let item in this.updateData){
-          if ((this.updateData[item] === '' || this.updateData[item] === undefined) && (item == "first_name" || item == "last_name" || item == "email" || item == "phone")) {
+          if ((this.updateData[item] === '' || this.updateData[item] === undefined) && (item == "first_name" || item == "last_name" || item == "email")) {
               validate[item]="is required"
               status=true
           }else{
@@ -451,7 +446,6 @@ export default {
             'first_name':this.updateData.first_name,
             'last_name':this.updateData.last_name,
             'email':this.updateData.email,
-            'phone':this.updateData.phone,
           }
           try {
           const response=await axiosClient.post('/profileSettings',data)
@@ -466,14 +460,12 @@ export default {
         this.user.first_name=data.first_name
         this.user.last_name=data.last_name
         this.user.email=data.email
-        this.user.phone=data.phone
 
         let userData = localStorage.getItem('user');
         let user = JSON.parse(userData);
         user.first_name = data.first_name;
         user.last_name = data.last_name;
         user.email = data.email;
-        user.phone = data.phone;
         localStorage.setItem('user', JSON.stringify(user));
         window.location.reload()
       },

@@ -13,17 +13,11 @@
         id="iconSidenav"
       ></i>
       <a class="m-0 navbar-brand" href="/">
-        <img
-          :src="
-            sidebarType === 'bg-white' ||
-            (sidebarType === 'bg-transparent' && !isDarkMode)
-              ? logoDark
-              : StudentPayLogo
-          "
-          class="navbar-brand-img h-100"
-          alt="main_logo"
-        />
-        <span class="ms-2 font-weight-bold text-white"></span>
+        <template v-if="getBrandingSetting.logo!=='null'">
+          <img :src="StudentPayLogo" class="navbar-brand-img h-100" alt="main_logo"/>
+          <span class="ms-2 font-weight-bold text-white">StudentPay Portal</span>
+        </template>
+        <img v-else src="@/assets/img/logos/StudentPay-logo.png" class="navbar-brand-img h-100" alt="main_logo"/>
       </a>
     </div>
     <!-- <hr class="horizontal" style="background-color: #573078 !important;" /> -->
@@ -33,24 +27,33 @@
 <script>
 import SidenavList from "./SidenavList.vue";
 import logo from "@/assets/img/logos/mastercard.png";
-import StudentPayLogo from "@/assets/img/logos/StudentPay-logo.png";
+// import StudentPayLogo from "@/assets/img/logos/StudentPay-logo.png";
 import logoDark from "@/assets/img/logos/mastercard.png";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "index",
   components: {
     SidenavList,
   },
+  mounted(){
+    this.setLogo()
+  },
   data() {
     return {
       logo,
       logoDark,
-      StudentPayLogo,
+      StudentPayLogo:'',
     };
   },
   computed: {
+    ...mapGetters(['getBrandingSetting']),
     ...mapState(["isRTL", "sidebarType", "isDarkMode"]),
+  },
+  methods:{
+    setLogo(){
+      this.StudentPayLogo = 'https://stagingapi.student-pay.co.uk' + this.getBrandingSetting.logo
+    }
   },
 };
 </script>

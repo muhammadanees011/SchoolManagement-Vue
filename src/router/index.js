@@ -7,9 +7,12 @@ import ForgotPassword from '../views/ForgotPassword.vue'
 import ResetPassword from '../views/ResetPassword.vue'
 import SignUp from '../views/SignUp.vue'
 import Schools from '../views/schools/Schools.vue'
+import ArchivedSchools from '../views/schools/archived_schools.vue'
 import AddSchool from '../views/schools/add.vue'
 import EditSchool from '../views/schools/edit.vue'
+import SchoolSettings from '../views/schools/settings.vue'
 import Students from '../views/students/Students.vue'
+import ArchivedStudents from '../views/students/archived_students.vue'
 import AddStudent from '../views/students/add.vue'
 import EditStudent from '../views/students/edit.vue'
 import StudentBilling from '../views/students/billing.vue'
@@ -35,6 +38,7 @@ import OrganizationAdmins from '../views/organization_admins/admins.vue'
 import AddAdmin from '../views/organization_admins/addAdmin.vue'
 import EditAdmin from '../views/organization_admins/editAdmin.vue'
 import Staff from '../views/staff/staff.vue'
+import ArchivedStaff from '../views/staff/archived_staff.vue'
 import AddStaff from '../views/staff/add.vue'
 import EditStaff from '../views/staff/edit.vue'
 import StaffDetail from '../views/staff/details.vue'
@@ -107,6 +111,8 @@ const routes = [
       { path: '/schools', name: 'list-schools', component: Schools },
       { path: '/add', name: 'add-school', component: AddSchool },
       { path: '/edit-schools/:id', name: 'edit-school', component: EditSchool },
+      { path: '/archived/schools', name: 'archived-schools', component: ArchivedSchools },
+      { path: '/settings/:id', name: 'settings-school', component: SchoolSettings },
     ],
   },
   //------------STUDENTS---------------
@@ -122,6 +128,7 @@ const routes = [
       { path: '/students', name: 'list-students', component: Students },
       { path: '/add/student', name: 'add-student', component: AddStudent },
       { path: '/:id', name: 'edit-student', component: EditStudent },
+      { path: '/archived/students', name: 'archived-students', component: ArchivedStudents },
       { path: '/student-billing/:id', name: 'student-billing', component: StudentBilling },
     ],
   },
@@ -154,6 +161,7 @@ const routes = [
       { path: '/staff', name: 'list-staff', component: Staff },
       { path: '/staff/add', name: 'add-staff', component: AddStaff },
       { path: '/staff/edit/:id', name: 'edit-staff', component: EditStaff },
+      { path: '/archived/staff', name: 'archived-staff', component: ArchivedStaff },
       { path: '/staff/details/:id', name: 'detail-staff', component: StaffDetail },
     ],
   },

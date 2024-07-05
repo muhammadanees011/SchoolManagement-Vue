@@ -45,15 +45,6 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">Phone</label>
-                            <input class="input-box" id="name" v-model="newStaff.phone" type="tel" placeholder="Phone" name="phone" />
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="address">Address</label>
-                            <input class="input-box" id="name" v-model="newStaff.address" type="text" placeholder="Address" name="address" />
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>Address is required</small> -->
-                          </div>
-                          <div class="mb-1">
                             <label class="input-label" for="phone">School <span class="required">*</span></label>
                             <br />
                             <select class="select-box" v-model="newStaff.school_id" id="school" type="select" placeholder="school" name="school">
@@ -83,38 +74,8 @@
                             <label class="input-label" for="balance">Add Amount</label>
                             <input class="input-box" id="balance" v-model="formattedAmount" type="number" step="0.01" min="0" placeholder="add amount" name="add_amount" />
                         </div>
-                        </form>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
-                    <div class="form-bg container p-4">
-                    <p class="text-dark ms-4 font-weight-bold">Account Information</p>
-                    <div class="card card-plain">
-                      <div class="card-body">
-                        <form role="form"> 
-                          <div class="mb-1">
-                            <label class="input-label" for="status">Country</label>
-                            <br />
-                            <select v-model="newStaff.country" class="select-box" id="country" type="select" placeholder="country" name="country">
-                              <option v-for="(item, index) in availableCountries" :key="index" :value="item">
-                                {{ item }}
-                              </option>
-                            </select>
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small> -->
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="city">City</label>
-                            <input class="input-box" id="name" v-model="newStaff.city" type="text" placeholder="City" name="city" />
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small> -->
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="phone">Postcode/Zip</label>
-                            <input class="input-box" id="name" v-model="newStaff.zip" type="text" placeholder="Zip Code" name="zip" />
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>Zip is required</small> -->
-                          </div>
-                          <div class="mb-1">
+                        
+                        <div class="mb-1">
                             <label class="input-label" for="status">Status</label>
                             <br />
                             <select v-model="newStaff.status" class="select-box" id="status" type="select" placeholder="status" name="status">

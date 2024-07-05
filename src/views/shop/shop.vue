@@ -20,28 +20,28 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
                         ID
                       </th>
-                      <th class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
                         Item
                       </th>
-                      <th class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
                         Quantity
                       </th>
-                      <th class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
                         Price
                       </th>
                       <!-- <th v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'" class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
                         Attribute
                       </th> -->
-                      <th v-if="user && user.role=='super_admin' || user && user.role=='organization_admin'" class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th v-if="user && user.role=='super_admin' || user && user.role=='organization_admin'" class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
                         Shop
                       </th>
-                      <th class="text-center align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
                         Status
                       </th>
-                      <th class="text-center align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
                         Action
                       </th>                  
                     </tr>
@@ -95,10 +95,13 @@
   
   <script>
   import axiosClient from '../../axios'
+  import { mapGetters } from 'vuex'
+
 
   export default {
     name: "tables",
     mounted(){
+      this.setColor();
       this.getUser();
       this.getShopItems();
     },
@@ -110,6 +113,7 @@
       }
     },
     computed: {
+      ...mapGetters(['getBrandingSetting']),
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
@@ -123,6 +127,11 @@
     }
     },
     methods:{
+      setColor() {
+        let bgColor=this.getBrandingSetting.primary_color ?
+        this.getBrandingSetting.primary_color : '#573078';
+        document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
+      },
       snackbarMsg(message) {
       this.$snackbar.add({
         type: 'success',
@@ -204,6 +213,15 @@
     transform: translateY(-50%);
     color: #555; /* Adjust the color as needed */
     cursor: pointer;
+  }
+  thead{
+  background-color: var(--navheader-bg-color) !important;
+  }
+  tbody > tr:hover{
+    background-color: #F0F2F5 !important;
+  }
+  thead tr:hover{
+    background-color: var(--navheader-bg-color) !important;
   }
   
   </style>

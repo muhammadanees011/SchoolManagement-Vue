@@ -14,13 +14,13 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> ID </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Role </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Organization </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
+                      <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder"> ID </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
+                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Role </th>
+                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Organization </th>
+                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Status </th>
+                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Action </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -50,7 +50,7 @@
                             <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                           </router-link>
                           <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
-                          <i @click="deleteOrganizationAdmin(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          <i @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                         </span>
                       </td>
                     </tr>
@@ -66,10 +66,13 @@
   
   <script>
   import axiosClient from '../../axios'
+  import Swal from 'sweetalert2';
+  import { mapGetters } from 'vuex'
   
   export default {
     name: 'tables',
     mounted(){
+      this.setColor();
       this.getAllAdmins();
     },
     updated(){
@@ -82,11 +85,35 @@
       }
     },
     computed: {
+      ...mapGetters(['getBrandingSetting']),
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
     },
     methods:{
+      setColor() {
+        let bgColor=this.getBrandingSetting.primary_color ?
+        this.getBrandingSetting.primary_color : '#573078';
+        document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
+      },
+      confirmDelete(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Item will be archived and you will be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
+          customClass: {
+            popup: 'custom-swal'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.confirmDelete(id)
+          }
+        });
+      },
       snackbarMsg(message) {
         this.$snackbar.add({
           type: 'success',
@@ -132,6 +159,15 @@
   .hover-pointer:hover {
     cursor: pointer;
     color: red;
+  }
+  thead{
+  background-color: var(--navheader-bg-color) !important;
+  }
+  tbody > tr:hover{
+    background-color: #F0F2F5 !important;
+  }
+  thead tr:hover{
+    background-color: var(--navheader-bg-color) !important;
   }
   </style>
   

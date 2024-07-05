@@ -47,10 +47,6 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">Phone</label>
-                            <input class="input-box" id="name" v-model="newStaff.phone" type="tel" placeholder="Phone" name="phone" />
-                          </div>
-                          <div class="mb-1">
                             <label class="input-label" for="phone">School <span class="required">*</span></label>
                             <br />
                             <select class="select-box" v-model="newStaff.school_id" id="school" type="select" placeholder="school" name="school">
@@ -76,42 +72,7 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["role"]!==""'>Staff Role is required</small>
                           </div>
-                        </form>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg  col-xl-10 col-lg-10 col-md-10">
-                    <div class="form-bg container p-4">
-                    <p class="text-dark ms-4 font-weight-bold">Account Information</p>
-                    <div class="card card-plain">
-                      <div class="card-body">
-                        <form role="form"> 
-                          <div class="mb-1">
-                            <label class="input-label" for="status">Country</label>
-                            <br />
-                            <select v-model="newStaff.country" class="select-box" id="country" type="select" placeholder="country" name="country">
-                              <option v-for="(item, index) in availableCountries" :key="index" :value="item">
-                                {{ item }}
-                              </option>
-                            </select>
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small> -->
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="city">City</label>
-                            <input class="input-box" id="name" v-model="newStaff.city" type="text" placeholder="City" name="city" />
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small> -->
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="phone">Postcode/Zip</label>
-                            <input class="input-box" id="name" v-model="newStaff.zip" type="text" placeholder="Zip Code" name="zip" />
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>zip is required</small> -->
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="address">Address</label>
-                            <input class="input-box" id="name" v-model="newStaff.address" type="text" placeholder="Address" name="address" />
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>address is required</small> -->
-                          </div>
+  
                           <div class="mb-1">
                             <label class="input-label" for="status">Status <span class="required">*</span></label>
                             <br />
@@ -122,27 +83,6 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>status is required</small>
                           </div>
-                        </form>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
-                    <div class="form-bg container p-4">
-                    <p class="text-dark ms-4 font-weight-bold">Password Information</p>
-                    <div class="card card-plain">
-                      <div class="card-body">
-                        <form role="form">
-                          <div class="mb-1">
-                          <label class="input-label" for="phone">Password</label>
-                          <input class="input-box" id="name" v-model="newStaff.password" type="password" placeholder="Password" name="password" />
-                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>password is required</small> -->
-                        </div>
-                        <div class="mb-1">
-                          <label class="input-label" for="phone">Confirm Password</label>
-                          <input class="input-box" id="name" v-model="newStaff.password_confirmation" type="password" placeholder="Confirm Password" name="password_confirmation" />
-                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password_confirmation"]!==""'>confirm password is required</small> -->
-                        </div>
                         </form>
                       </div>
                     </div>
@@ -206,13 +146,6 @@
           first_name: '',
           last_name:'',
           email: '',
-          phone: '',
-          country: '',
-          city: '',
-          zip: '',
-          address: '',
-          password: '',
-          password_confirmation: '',
           status:'',
           role:'',
           balance:'',
@@ -238,8 +171,7 @@
         validate=cloneDeep(this.newStaff)
         for(let item in this.newStaff){
           if((this.newStaff[item] === '' || this.newStaff[item] === undefined) 
-          && (item !== "phone" && item !== "country" && item !== "city" && item !== "address" &&
-          item !== "zip" && item !== "balance" && item !== "password" && item !== "password_confirmation")){
+          && (item !== "balance")){
             validate[item]="is required"
             status=true
           }else{
