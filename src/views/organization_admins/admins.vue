@@ -99,7 +99,7 @@
       confirmDelete(id) {
         Swal.fire({
           title: 'Are you sure?',
-          text: "Item will be archived and you will be able to revert this!",
+          text: "Item will be deleted permanently and you will not be able to revert this!",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -110,7 +110,7 @@
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            this.confirmDelete(id)
+            this.deleteOrganizationAdmin(id)
           }
         });
       },

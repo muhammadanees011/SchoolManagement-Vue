@@ -12,6 +12,12 @@
                 </template>
               </div>
             <div>
+
+            <BulkTopup :show="showModal" :task="task" @close="showModal = false" @update-task="updateAmount">
+            <h2>Modal Content</h2>
+            <p>This is the content of the modal.</p>
+            </BulkTopup>
+            
               <div class="filter-container">
                 <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
                 <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
@@ -23,10 +29,23 @@
               </div>              
             </div>
           <div class="card-body px-0 pb-2">
+
+            <div class="icon-container">
+              <div class="icon-label" @click="showModal = true">
+                <span class="label-text bulk_topup">Bulk Topup</span>
+              </div>
+            </div>
+
             <div class="table-responsive p-0 student-table">
               <table class="table align-items-center mb-0">
                 <thead class="thead">
                   <tr>
+                    <th class="pe-5">
+                      <div class="form-check" style="margin-left:0px !important;">
+                          <input @change="selectAll" v-model="selectall" id="" class="form-check-input" type="checkbox" name="">
+                          <label for="" class="custom-control-label"></label>
+                      </div>
+                    </th>
                     <th class="text-uppercase text-xxs font-weight-bolder"> MIFARE ID </th>
                     <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
                     <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
@@ -43,6 +62,12 @@
                 </thead>
                 <tbody>
                   <tr v-for="(item, index) in allStudents" :key="index">
+                    <td class="text-sm">
+                        <div class="form-check"  style="margin-left:17px !important;">
+                            <input :checked="checkIfSelected(item.user.id)" @change="selectRecord(item.user.id)" id="" class="form-check-input" type="checkbox" name="">
+                            <label for="" class="custom-control-label"></label>
+                        </div>
+                    </td>
                     <td class="align-middle text-center text-sm">
                       <p class="text-xs font-weight-bold mb-0"> {{ item.mifare_id }}</p>
                     </td>
@@ -139,6 +164,7 @@
 import axiosClient from '../../axios'
 import Swal from 'sweetalert2';
 import { mapGetters } from 'vuex'
+import BulkTopup from '../students/bulk_topup';
 
 
 export default {
@@ -151,8 +177,15 @@ export default {
   updated(){
     this.$permissions.redirectIfNotAllowed('view_student');
   },
+  components:{
+    BulkTopup
+  },
   data() {
     return {
+      topUpAmount:null,
+      showModal: false,
+      selectall:false,
+      selectedRecords:[],
       filterBy:'Name',
       seachString:'',
       allFields:['Student Id','Name','Email'],
@@ -173,6 +206,59 @@ export default {
     },
   },
   methods:{
+    async updateAmount(amount) {
+      this.topUpAmount = amount;
+      let records=[]
+      this.selectedRecords.filter((item)=>{
+        if(item.value){
+          records.push(item.id)
+        }
+      })
+      let data={
+        'topup_amount':this.topUpAmount,
+        'students':records
+      }
+      if(records.length && this.topUpAmount!=null){
+        try{
+        const response=await axiosClient.post('/bulkTopUp',data);
+        this.snackbarMsg(response.data.message)
+        this.getAllStudents();
+        }catch(error){
+          console.log(error)
+        }
+      }else{
+        this.snackbarMsg("Please select the students and enter amount!")
+      }
+    },
+    //------------SELECT ALL RECORD-----------
+    selectAll(){
+    this.selectedRecords=[]
+    this.allStudents.filter((item)=>{
+        if(this.selectall){
+            this.selectedRecords.push({ id: item.user.id, value: true });
+        }else{
+            this.selectedRecords.push({ id: item.user.id, value: false });
+        }
+    })
+    },
+
+    //---------CHECK IF RECORD IS SELECTED---------
+    checkIfSelected(id){
+    const record = this.selectedRecords.find(record => record.id === id);
+    return record ? record.value : false;
+    },
+
+    //---------SELECT ONE SINGLE RECORD------------
+    selectRecord(id) {
+        const record = this.selectedRecords.find(record => record.id === id);
+        if (record.value) {
+            record.value = false;
+        }else{
+            record.value = true; 
+        }
+    },
+
+
     setColor() {
       let bgColor=this.getBrandingSetting.primary_color ?
       this.getBrandingSetting.primary_color : '#573078';
@@ -339,5 +425,17 @@ table{
 }
 .swal2-icon{
   font-size: 10px !important;
+}
+.form-check{
+    height: 20px !important;
+    width: 20px !important;
+  }
+.form-check-input{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+.bulk_topup{
+  cursor: pointer;
 }
 </style>

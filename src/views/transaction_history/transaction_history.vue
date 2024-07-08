@@ -9,7 +9,7 @@
               <div class="table-responsive p-0">
                 <div>
                   <div class="filter-container">
-                    <input class="input-box filter-box" @keyup.enter="filterTransactionHistory" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                    <input class="input-box filter-box mb-3 ms-3" @keyup.enter="filterTransactionHistory" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
                     <select class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
                       <option value="" disabled selected>Filter</option>
                       <option v-for="(item, index) in allFields" :key="index" :value="item">

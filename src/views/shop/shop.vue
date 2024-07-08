@@ -9,7 +9,7 @@
               <div class="table-responsive p-0">
                 <div>
                   <div class="filter-container">
-                    <input class="input-box filter-box" id="name" type="text" placeholder="Type to Search..." name="address" />
+                    <input class="input-box filter-box mb-3 ms-3" id="name" type="text" placeholder="Type to Search..." name="address" />
                     <template v-if="userPermissions.create_shop">
                       <router-link :to="{ name: 'add-items' }" v-if="user && user.role=='organization_admin' || user.role=='staff' || user.role=='super_admin'">
                         <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Item </button>
@@ -78,7 +78,7 @@
                       </router-link> -->
                         <span  v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'">
                           <i v-if="userPermissions.edit_shop" @click="editShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                          <i v-if="userPermissions.delete_shop" @click="deleteShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          <i v-if="userPermissions.delete_shop" @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                       </span>
                     </td>
                     </tr>
@@ -96,7 +96,7 @@
   <script>
   import axiosClient from '../../axios'
   import { mapGetters } from 'vuex'
-
+  import Swal from 'sweetalert2';
 
   export default {
     name: "tables",
@@ -127,6 +127,25 @@
     }
     },
     methods:{
+      confirmDelete(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Item will be deleted permanently and you will not be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
+          customClass: {
+            popup: 'custom-swal'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.deleteShopItem(id)
+          }
+        });
+      },
+   
       setColor() {
         let bgColor=this.getBrandingSetting.primary_color ?
         this.getBrandingSetting.primary_color : '#573078';
@@ -160,7 +179,7 @@
       async deleteShopItem(id){
         try {
           await axiosClient.delete('/deleteShopItem/'+id)
-          this.removeShopItem(id);
+          this.getShopItems();
           this.snackbarMsg('Item Removed Successfuly')
         } catch (error) {
           console.log(error)

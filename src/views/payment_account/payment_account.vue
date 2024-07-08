@@ -5,7 +5,7 @@
           <div class="col-6 d-flex align-items-center">
             <h6 class="mb-0">Set up Payment Account</h6>
           </div>
-          <div class="col-6 text-end" v-if="user.role=='student' || user.role=='staff' || user.role=='parent'">
+          <div class="col-6 text-end" v-if="user.role=='student' || user.role=='staff' || user.role=='organization_admin' || user.role=='super_admin' || user.role=='parent'">
             <router-link  :to="{name:'add_card'}">
               <button style="font-size: 12px; background-color: #573078;" class="add-card-btn mb-3 trips-btn w-35  text-white fw-5 border-radius-lg">  <i class="fas fa-plus me-2"></i>
               Add New Card </button>
@@ -45,7 +45,7 @@
               </span>  
             </div>
           </div>
-          <div class="col-md-5 ms-auto" v-if="user.role=='student' || user.role=='staff' || user.role=='parent'">
+          <div class="col-md-5 ms-auto" v-if="user.role=='student' || user.role=='staff' || user.role=='organization_admin' || user.role=='super_admin' || user.role=='parent'">
             <template v-for="(item,index) in userCards" :key="index">
               <div :class="{ 'selected': isSelected === index }" @click="toggleSelection(index,$event)"
                 class=" mb-1 card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
@@ -54,7 +54,7 @@
                 <h6 class="mb-0">
                   **** **** **** {{ item.card.last4 }}
                 </h6>
-                <i @click="removePaymentMethod(item.id)"
+                <i @click="confirmDelete(item.id)"
                   class="fas fa-trash-alt ms-auto text-dark cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
@@ -80,6 +80,7 @@
   import img1 from "@/assets/img/logos/mastercard.png";
   import img2 from "@/assets/img/logos/visa.png";
   import axiosClient from '../../axios'
+  import Swal from 'sweetalert2';  
 
   export default {
     name: "payment-card",
@@ -116,6 +117,24 @@
       };
     },
     methods: {
+      confirmDelete(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Item will be deleted permanently and you will not be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
+          customClass: {
+            popup: 'custom-swal'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.removePaymentMethod(id)
+          }
+        });
+    },
       snackbarMsg(message,type='success') {
       this.$snackbar.add({
         type: type,

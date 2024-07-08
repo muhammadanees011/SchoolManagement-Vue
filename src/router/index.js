@@ -32,6 +32,7 @@ import Checkout from '../views/shop/checkout.vue'
 import Meals from '../views/meals/meals.vue'
 import AddMenu from '../views/meals/addMenu.vue'
 import PaymentAccount from '../views/payment_account/payment_account.vue'
+import PaymentMethod from '../views/payment_account/PaymentMethod.vue'
 import AddPaymentCard from '../views/payment_account/add_card.vue'
 import CoursesList from '../views/courses/coursesList.vue'
 import OrganizationAdmins from '../views/organization_admins/admins.vue'
@@ -190,6 +191,7 @@ const routes = [
       requiresAuth: true,
     },
     children: [
+      { path: '/payment_method/:id?', name: 'payment_method', component: PaymentMethod },
       { path: '/payment_account/:id?', name: 'payment_account', component: PaymentAccount },
       { path: '/add_card', name: 'add_card', component: AddPaymentCard },
     ],
