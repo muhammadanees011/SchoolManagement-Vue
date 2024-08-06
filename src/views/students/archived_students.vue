@@ -29,6 +29,9 @@
                         <span class="label-text">Bulk Delete</span>
                         <i class="material-icons-round opacity-10 fs-6 cursor-pointer">delete</i>
                     </div>
+                    <div class="icon-label" @click="exportTableToXLS()">
+                        <span class="label-text">Export To XLS</span>
+                    </div>
                     <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
                     <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
                       <option v-for="(item, index) in allFields" :key="index" :value="item">
@@ -38,7 +41,7 @@
                 </div>
 
               <div class="table-responsive p-0 student-table">
-                <table class="table align-items-center mb-0">
+                <table  ref="table" class="table align-items-center mb-0">
                   <thead>
                     <tr>
                       <th class="">
@@ -146,6 +149,8 @@
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';
   import { mapGetters } from 'vuex'
+  import * as XLSX from 'xlsx';
+
   
   export default {
     name: 'tables',
@@ -182,7 +187,15 @@
       },
     },
     methods:{
-      setColor() {
+
+    exportTableToXLS() {
+      const table = this.$refs.table;
+      const ws = XLSX.utils.table_to_sheet(table);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'archived_students.xlsx');
+    },
+    setColor() {
       let bgColor=this.getBrandingSetting.primary_color ?
       this.getBrandingSetting.primary_color : '#573078';
       document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);

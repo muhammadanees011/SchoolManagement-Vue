@@ -34,10 +34,13 @@
               <div class="icon-label" @click="showModal = true">
                 <span class="label-text bulk_topup">Bulk Topup</span>
               </div>
+              <div class="icon-label" @click="exportTableToXLS()">
+                <span class="label-text bulk_topup">Export To XLS</span>
+              </div>
             </div>
 
             <div class="table-responsive p-0 student-table">
-              <table class="table align-items-center mb-0">
+              <table  ref="table" class="table align-items-center mb-0">
                 <thead class="thead">
                   <tr>
                     <th class="pe-5">
@@ -165,7 +168,7 @@ import axiosClient from '../../axios'
 import Swal from 'sweetalert2';
 import { mapGetters } from 'vuex'
 import BulkTopup from '../students/bulk_topup';
-
+import * as XLSX from 'xlsx';
 
 export default {
   name: 'tables',
@@ -206,6 +209,13 @@ export default {
     },
   },
   methods:{
+    exportTableToXLS() {
+      const table = this.$refs.table;
+      const ws = XLSX.utils.table_to_sheet(table);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'students_table.xlsx');
+    },
     async updateAmount(amount) {
       this.topUpAmount = amount;
       let records=[]

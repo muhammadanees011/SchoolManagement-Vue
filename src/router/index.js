@@ -25,7 +25,14 @@ import AddTrips from '../views/trips/add.vue'
 import EditTrips from '../views/trips/edit.vue'
 import TripParticipants from '../views/trips/participants.vue'
 import TransactionHistory from '../views/transaction_history/transaction_history.vue'
+import PurchaseHistory from '../views/my_purchases/my_purchases.vue'
+import PurchaseAdmin from '../views/my_purchases/purchases_admin.vue'
+import Installments from '../views/installments/my_installments.vue'
+import PayInstallment from '../views/installments/pay_installment.vue'
+import Refund from '../views/my_purchases/refund.vue'
+import Support from '../views/support/support.vue'
 import Shop from '../views/shop/shop.vue'
+import ArchivedShopItems from '../views/shop/archived_shop.vue'
 import AddShopItem from '../views/shop/add.vue'
 import EditShopItem from '../views/shop/edit.vue'
 import Checkout from '../views/shop/checkout.vue'
@@ -46,6 +53,7 @@ import StaffDetail from '../views/staff/details.vue'
 import Parents from '../views/parent/parents.vue'
 import AddParents from '../views/parent/add.vue'
 import EditParents from '../views/parent/edit.vue'
+import AddChildren from '../views/parent/children.vue'
 import Childrens from '../views/childrens/childrens.vue'
 import Attributes from '../views/student_attributes/attributes.vue'
 import AddAttribute from '../views/student_attributes/add.vue'
@@ -179,6 +187,7 @@ const routes = [
       { path: '/parents', name: 'list-parent', component: Parents },
       { path: '/parents/add', name: 'add-parent', component: AddParents },
       { path: '/parents/edit/:id', name: 'edit-parent', component: EditParents },
+      { path: '/childrens/:id', name: 'add-childrens', component: AddChildren },
     ],
   },
   //------------PAYMENTS---------------
@@ -207,6 +216,19 @@ const routes = [
     },
     children: [
       { path: '/transaction-history', name: 'transaction-history', component: TransactionHistory },
+      { path: '/purchase-history', name: 'purchase-history', component: PurchaseHistory },
+      { path: '/purchases', name: 'purchases-admin', component: PurchaseAdmin },
+      { path: '/refunds', name: 'refund', component: Refund },
+      { path: '/installments', name: 'installments', component: Installments },
+      { path: '/pay-installment/:id', name: 'pay-installment', component: PayInstallment },
+    ],
+  },
+  //------------SUPPORT----------
+  {
+    path: '/support',
+    component: DefaultLayout,
+    children: [
+      { path: '', name: 'support', component: Support },
     ],
   },
   //-------------SHOP----------------
@@ -222,6 +244,7 @@ const routes = [
       { path: '/shop-items', name: 'shop-items', component: Shop },
       { path: '/add-shop-items', name: 'add-items', component: AddShopItem },
       { path: '/edit-shop-items/:id', name: 'edit-shop-items', component: EditShopItem },
+      { path: '/archived-shop-items', name: 'archived-shop-items', component: ArchivedShopItems },
     ],
   },
   //-------------CHECKOUT----------------

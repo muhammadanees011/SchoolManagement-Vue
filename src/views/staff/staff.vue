@@ -12,11 +12,14 @@
                 </template>
               </div>
               <div class="filter-container">
-                <input class="input-box filter-box" @keyup.enter="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                <input class="input-box filter-box ms-3" @keyup.enter="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                <div class="icon-label me-3" @click="exportTableToXLS()">
+                <span class="label-text bulk_topup">Export To XLS</span>
+              </div>
               </div>   
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
+                <table  ref="table" class="table align-items-center mb-0">
                   <thead>
                     <tr>
                       <th class="text-uppercase text-center text-xxs font-weight-bolder">  MIFARE ID </th>
@@ -115,6 +118,8 @@
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';
   import { mapGetters } from 'vuex'
+  import * as XLSX from 'xlsx';
+
   
   export default {
     name: 'tables',
@@ -145,6 +150,13 @@
       }
     },
     methods:{
+      exportTableToXLS() {
+      const table = this.$refs.table;
+      const ws = XLSX.utils.table_to_sheet(table);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'staff_table.xlsx');
+      },
       setColor() {
         let bgColor=this.getBrandingSetting.primary_color ?
         this.getBrandingSetting.primary_color : '#573078';

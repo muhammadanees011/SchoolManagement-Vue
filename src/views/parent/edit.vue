@@ -31,56 +31,6 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">Phone</label>
-                            <input class="input-box" id="name" v-model="newParent.phone" type="tel" placeholder="Phone" name="phone" />
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="address">Address</label>
-                            <input class="input-box" id="name" v-model="newParent.address" type="text" placeholder="Address" name="address" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>Address is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="phone">Student</label>
-                            <br />
-                            <select class="select-box" v-model="newParent.student_id" id="student" type="select" placeholder="student" name="student">
-                              <option v-for="(item, index) in allStudents" :key="index" :value="item.id">
-                                {{ item.user.first_name }} {{ item.user.last_name }}
-                              </option>
-                            </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["student_id"]!==""'>Student is required</small>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
-                    <div class="form-bg container p-4">
-                    <p class="text-dark ms-4 font-weight-bold">Account Information</p>
-                    <div class="card card-plain">
-                      <div class="card-body">
-                        <form role="form"> 
-                          <div class="mb-1">
-                            <label class="input-label" for="status">Country</label>
-                            <br />
-                            <select v-model="newParent.country" class="select-box" id="country" type="select" placeholder="country" name="country">
-                              <option v-for="(item, index) in availableCountries" :key="index" :value="item">
-                                {{ item }}
-                              </option>
-                            </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="city">City</label>
-                            <input class="input-box" id="name" v-model="newParent.city" type="text" placeholder="City" name="city" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="phone">Postcode/Zip</label>
-                            <input class="input-box" id="name" v-model="newParent.zip" type="text" placeholder="Zip Code" name="zip" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>Zip is required</small>
-                          </div>
-                          <div class="mb-1">
                             <label class="input-label" for="status">Status</label>
                             <br />
                             <select v-model="newParent.status" class="select-box" id="status" type="select" placeholder="status" name="status">
@@ -160,15 +110,9 @@
         user:'',
         availableCountries:['UK','USA','Canada'],
         newParent: {
-          student_id:'',
           first_name: '',
           last_name:'',
           email: '',
-          phone: '',
-          country: '',
-          city: '',
-          zip: '',
-          address: '',
           password: '',
           password_confirmation: '',
           status:'',
@@ -197,7 +141,7 @@
         let validate=''
         validate=cloneDeep(this.newParent)
         for(let item in this.newParent){
-          if((this.newParent[item] === '' || this.newParent[item] === undefined) && (item !== "phone" &&  item !== "password" && item !== "password_confirmation")){
+          if((this.newParent[item] === '' || this.newParent[item] === undefined) && (item !== "password" && item !== "password_confirmation")){
             validate[item]="is required"
             status=true
           }else{
@@ -229,23 +173,17 @@
       if (response) {
         data = response.data
         this.newParent.student_id = data.student_id
-        this.newParent.first_name = data.user.first_name
-        this.newParent.last_name = data.user.last_name
-        this.newParent.email = data.user.email
-        this.newParent.phone = data.user.phone
-        this.newParent.country = data.user.country
-        this.newParent.city = data.user.city
-        this.newParent.state = data.user.state
-        this.newParent.zip = data.user.zip
-        this.newParent.address = data.user.address
-        this.newParent.status=data.user.status
+        this.newParent.first_name = data.first_name
+        this.newParent.last_name = data.last_name
+        this.newParent.email = data.email
+        this.newParent.status=data.status
       }
     },
       //------------UPDATE PARENT------------
       async updateParent() {
-        if(this.validateForm()){
-          return;
-        }
+        // if(this.validateForm()){
+        //   return;
+        // }
         let id = this.$route.params.id
         try {
           await axiosClient.put('/updateParent/'+id, this.newParent)

@@ -10,16 +10,21 @@
                 <div>
                   <div class="filter-container">
                     <input class="input-box filter-box mb-3 ms-3" @keyup.enter="filterTransactionHistory" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                    <select class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
-                      <option value="" disabled selected>Filter</option>
-                      <option v-for="(item, index) in allFields" :key="index" :value="item">
-                        {{ item }}
-                      </option>
-                    </select>
-                    <i class="fas fa-filter filter-icon me-1"></i>
+                    <div class="d-flex">
+                      <select class="select-box filter-type-btn me-2" v-model="filterBy" style="width: 85px !important;" id="filter" type="select" placeholder="Filter" name="filter">
+                        <option value="" disabled selected>Filter</option>
+                        <option v-for="(item, index) in allFields" :key="index" :value="item">
+                          {{ item }}
+                        </option>
+                      </select>
+                      <div class="icon-label me-4" @click="exportTableToXLS()" style="height: 35px !important;">
+                        <span class="label-text bulk_topup">Export To XLS</span>
+                      </div>
+                    </div>
+
                   </div>              
                 </div>
-                <table class="table align-items-center mb-0">
+                <table  ref="table" class="table align-items-center mb-0">
                   <thead>
                     <tr>
                       <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -74,7 +79,7 @@
                       </td>
                       <td class="align-middle text-center">  
                         <span class="d-flex justify-content-center">
-                          <i v-if="item.type=='top_up'|| item.type=='pos_refund'" class="fas fa-plus fa-xs text-success me-2" aria-hidden="true"></i>
+                          <i v-if="item.type=='top_up'|| item.type=='pos_refund' || item.type=='school_shop_refund'" class="fas fa-plus fa-xs text-success me-2" aria-hidden="true"></i>
                           <i v-else class="fas fa-minus fa-xs text-danger me-2" aria-hidden="true"></i>
                           <p class="text-xs text-secondary mb-0">£{{formattedPrice(item.amount) }}</p>
                         </span>
@@ -97,6 +102,33 @@
                   </tbody>
                 </table>
               </div>
+
+              <div class="row">
+                <div class="col-md-12 col-lg-12">
+                  <nav class="page-nav" aria-label="Page navigation">
+                    <ul class="pagination mt-4 mb-4">
+                        <!-- Previous Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                            <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
+                                @click="getTransactionHistory(currentPage - 1)" tabindex="-1"
+                                aria-disabled="true">arrow_back</i>
+                        </li>
+                        <!-- Page Numbers -->
+                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
+                            :class="{ 'active': currentPage === pageNumber }">
+                            <a class="page-link" href="#" @click="getTransactionHistory(pageNumber)">{{ pageNumber }}</a>
+                        </li>
+                        <!-- Next Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                            <i class="page-link material-icons-round opacity-10 fs-5"
+                                :disabled="currentPage === totalPages" @click="getTransactionHistory(currentPage + 1)"
+                                tabindex="-1" aria-disabled="true">arrow_forward</i>
+                        </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -108,6 +140,8 @@
   import axiosClient from '../../axios'
   import moment from 'moment';
   import { mapGetters } from 'vuex'
+  import * as XLSX from 'xlsx';
+
 
   export default {
     name: "tables",
@@ -133,14 +167,28 @@
         filterBy:'',
         seachString:'',
         allFields:['Type','Amount','Date'],
+        totalRows:'',
+        currentPage:'',
+        perPage:'',
+        totalPages:'',
       }
     },
     methods:{
+
       setColor() {
         let bgColor=this.getBrandingSetting.primary_color ?
         this.getBrandingSetting.primary_color : '#573078';
         document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
       },
+
+      exportTableToXLS() {
+        const table = this.$refs.table;
+        const ws = XLSX.utils.table_to_sheet(table);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, 'transaction_history.xlsx');
+      },
+
       transactionType(type){
         let newType='';
         if(type=='top_up'){
@@ -149,6 +197,8 @@
           newType="Cafeteria Purchase";
         }else if(type=='pos_refund'){
           newType="Cafeteria Refund";
+        }else if(type=='school_shop_refund'){
+          newType="Portal Shop Refund";
         }else if(type=='trip_funds'){
           newType="Trip Charges";
         }else if(type=='school_shop_funds'){
@@ -156,23 +206,27 @@
         }
         return newType;
       },
+
       formattedPrice(value){
         const formattedValue = parseFloat(value).toFixed(2);
         return formattedValue;
       },
+
       getUser(){
         let user=localStorage.getItem('user')
         this.user= JSON.parse(user)
       },
+
       snackbarMsg(message,type='success') {
-      this.$snackbar.add({
-        type: type,
-        text: message,
-        background: 'white',
-      })
-    },
+        this.$snackbar.add({
+          type: type,
+          text: message,
+          background: 'white',
+        })
+      },
+
       //-----------GET ALL HISTORY-------------
-      async getTransactionHistory(){
+      async getTransactionHistory(page){
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
         let user_id=null;
@@ -183,6 +237,7 @@
           'user_id':null,
           'admin_id':null,
           'role':null,
+          'page':page,
         }
         data.user_id=user_id
         if(this.user.role=='organization_admin' || this.user.role=='staff' || this.user.role=='parent'){
@@ -191,11 +246,16 @@
         }
         try {
          const response= await axiosClient.post('getTransactionHistory',data);
-         this.transactionHistoryList=response.data;
+         this.transactionHistoryList=response.data.data.data;
+         this.totalRows = response.data.pagination.total;
+         this.currentPage = response.data.pagination.current_page;
+         this.perPage = response.data.pagination.per_page;
+         this.totalPages = response.data.pagination.last_page;
         } catch (error) {
           console.log(error)
         }
       },
+
       //-----------FILTER TRANSACTION HISTORY------------
       async filterTransactionHistory(){
         let user=localStorage.getItem('user')
@@ -218,6 +278,7 @@
             console.log(error)
           }
       },
+
       //-----------DELETE RECORD--------------
       async deleteTransactionHistory(id){
           try {
@@ -228,16 +289,19 @@
             console.log(error)
           }
       },
+
       //------------REMOVE STUDENT FROM LIST-----------
-        removeTransactionFromList(id) {
+      removeTransactionFromList(id) {
         const indexToRemove = this.transactionHistoryList.findIndex((item) => item.id === id)
         this.transactionHistoryList.splice(indexToRemove, 1)
       },
+
       //------------FORMAT DATE--------------
       formatDate(data) {
         const date = moment(data);
         return date.format('MMM D, YYYY,   HH:mm:ss');
       },
+
     },
   };
   </script>

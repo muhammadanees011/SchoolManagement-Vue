@@ -3,7 +3,7 @@
         <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header pb-0 px-3 d-flex justify-content-between">
-                    <h6 class="mb-0">Checkout</h6>
+                    <h6 class="mb-0">Pay Installment</h6>
                 </div>
                 <div class="card-body pt-4 p-3">
                     <div class="row">
@@ -89,7 +89,7 @@
                                 </h6>
                             </div>
                             </template>
-                            <li v-if="cartItems.length>0" class="d-flex align-items-center list-group-item border-0 d-flex p-2 bg-gray-100 border-radius-lg">
+                            <!-- <li v-if="cartItems.length>0" class="d-flex align-items-center list-group-item border-0 d-flex p-2 bg-gray-100 border-radius-lg">
                                 <div class="d-flex flex-column">
                                 <h6 class="d-flex align-items-center text-sm ">Total Amount</h6>
                                 </div>
@@ -98,12 +98,9 @@
                                     <h6 class="d-flex align-items-center text-success fw-bold text-sm ">£{{totalAmount()}}</h6>
                                 </div>
                                 </div>
-                            </li>
-                            <li v-else-if="dataLoaded" class="d-flex justify-content-center align-items-center list-group-item border-0 d-flex p-4 bg-gray-100 border-radius-lg">
-                                <h6 class="text-sm text-warning">You can't checkout while Cart is empty!</h6>
-                            </li>
-                            <button v-if="cartItems.length>0" @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
-                            <button v-if="cartItems.length>0" @click="checkout('wallet_and_card')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet & Card Payment </button>
+                            </li> -->
+                            <button @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
+                            <button @click="checkout('wallet_and_card')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet & Card Payment </button>
                             <p v-if="dataLoaded" class="text-sm text-warning mt-1">In a Wallet & Card Payment, the wallet is charged first, and any remaining amount is charged to the card.</p>
                         </div>
                     </div>
@@ -123,13 +120,11 @@ import axiosClient from '../../axios'
             userCards:'',
             dataLoaded:false,
             user:'',
-            cartItems:'',
             isSelected:0,
         }
     },
     mounted(){
         this.getUser();
-        this.getCartItems();
         this.getCustomerPaymentMethods();
     },
     methods:{
@@ -151,17 +146,6 @@ import axiosClient from '../../axios'
         formattedPrice(value){
             const formattedValue = parseFloat(value).toFixed(2);
             return formattedValue;
-        },
-        //----------------GET CART ITEMS-------------------
-        async getCartItems(){
-            try {
-                let response= await axiosClient.get('/getUserCartItems')
-                response=response.data
-                this.cartItems=response
-                this.dataLoaded=true;
-            } catch (error) {
-                console.log(error)
-            }
         },
         //----------------TOTAL AMOUNT----------------
         totalAmount(){
@@ -208,14 +192,16 @@ import axiosClient from '../../axios'
         //----------------CHECKOUT------------------
         async checkout(type){
             let payment_method=this.userCards[this.isSelected] ? this.userCards[this.isSelected].id :''
+            let installment_id=this.$route.params.id;
             let data={
                 "payment_method":payment_method,
                 "type":type,
+                "installment_id":installment_id,
             };
             try {
-            await axiosClient.post('/checkout',data)
-            this.snackbarMsg('Checkout Successful')
-            this.$router.push({ name: 'Dashboard'});
+            await axiosClient.post('/payInstallment',data)
+            this.snackbarMsg('Payment Successful')
+            this.$router.push({ name: 'installments'});
             } catch (error) {
             console.log(error)
             }

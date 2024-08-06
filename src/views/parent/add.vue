@@ -21,21 +21,39 @@
                           <div class="mb-1">
                             <label class="input-label" for="name">First Name</label>
                             <input class="input-box" id="name" v-model="newParent.first_name" type="text" placeholder="First Name" name="first_name" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["first_name"]!==""'>First Name is required</small>
+                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["first_name"]!==""'>First Name is required</small> -->
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="name">Last Name</label>
                             <input class="input-box" id="name" v-model="newParent.last_name" type="text" placeholder="Last Name" name="last_name" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["last_name"]!==""'>Last Name is required</small>
+                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["last_name"]!==""'>Last Name is required</small> -->
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="email">Email</label>
                             <input class="input-box" id="name" v-model="newParent.email" type="email" placeholder="email" name="email" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
+                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small> -->
                           </div>
+
                           <div class="mb-1">
-                            <label class="input-label" for="phone">Phone</label>
-                            <input class="input-box" id="name" v-model="newParent.phone" type="tel" placeholder="Phone" name="phone" />
+                            <label class="input-label" for="phone">School <span class="required">*</span></label>
+                            <br />
+                            <select class="select-box" v-model="newParent.school_id" id="school" type="select" placeholder="school" name="school">
+                              <option v-for="(item, index) in allSchools" :key="index" :value="item.id">
+                                {{ item.title }}
+                              </option>
+                            </select>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School ID is required</small>
+                          </div>
+
+                          <div class="mb-1">
+                            <label class="input-label" for="status">Status</label>
+                            <br />
+                            <select v-model="newParent.status" class="select-box" id="status" type="select" placeholder="status" name="status">
+                              <option v-for="(item, index) in availableStatus" :key="index" :value="item">
+                                {{ item }}
+                              </option>
+                            </select>
+                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>status is required</small> -->
                           </div>
                           <!-- <div class="mb-1">
                             <label class="input-label" for="phone">Student</label>
@@ -52,52 +70,6 @@
                     </div>
                     </div>
                   </div>
-                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg  col-xl-10 col-lg-10 col-md-10">
-                    <div class="form-bg container p-4">
-                    <p class="text-dark ms-4 font-weight-bold">Account Information</p>
-                    <div class="card card-plain">
-                      <div class="card-body">
-                        <form role="form"> 
-                          <div class="mb-1">
-                            <label class="input-label" for="status">Country</label>
-                            <br />
-                            <select v-model="newParent.country" class="select-box" id="country" type="select" placeholder="country" name="country">
-                              <option v-for="(item, index) in availableCountries" :key="index" :value="item">
-                                {{ item }}
-                              </option>
-                            </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["country"]!==""'>Country is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="city">City</label>
-                            <input class="input-box" id="name" v-model="newParent.city" type="text" placeholder="City" name="city" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["city"]!==""'>City is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="phone">Postcode/Zip</label>
-                            <input class="input-box" id="name" v-model="newParent.zip" type="text" placeholder="Zip Code" name="zip" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>zip is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="address">Address</label>
-                            <input class="input-box" id="name" v-model="newParent.address" type="text" placeholder="Address" name="address" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>address is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="status">Status</label>
-                            <br />
-                            <select v-model="newParent.status" class="select-box" id="status" type="select" placeholder="status" name="status">
-                              <option v-for="(item, index) in availableStatus" :key="index" :value="item">
-                                {{ item }}
-                              </option>
-                            </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>status is required</small>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
                   <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                     <div class="form-bg container p-4">
                     <p class="text-dark ms-4 font-weight-bold">Password Information</p>
@@ -107,12 +79,12 @@
                           <div class="mb-1">
                           <label class="input-label" for="phone">Password</label>
                           <input class="input-box" id="name" v-model="newParent.password" type="password" placeholder="Password" name="password" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>password is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>password is required</small> -->
                         </div>
                         <div class="mb-1">
                           <label class="input-label" for="phone">Confirm Password</label>
                           <input class="input-box" id="name" v-model="newParent.password_confirmation" type="password" placeholder="Confirm Password" name="password_confirmation" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password_confirmation"]!==""'>confirm password is required</small>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password_confirmation"]!==""'>confirm password is required</small> -->
                         </div>
                         </form>
                       </div>
@@ -145,7 +117,8 @@
     },
     mounted() {
     this.getUser();
-    this.getStudents();
+    // this.getStudents();
+    this.getSchools();
   },
   updated(){
     if(!this.userPermissions.create){
@@ -165,16 +138,13 @@
         isError:false,
         formValidation:"",
         validationErrors:'',
+        allSchools:'',
         newParent: {
           student_id:'',
           first_name: '',
           last_name:'',
           email: '',
-          phone: '',
-          country: '',
-          city: '',
-          zip: '',
-          address: '',
+          school_id:'',
           password: '',
           password_confirmation: '',
           status:'',
@@ -220,21 +190,20 @@
       },
       //------------SAVE STUDENT------------
       async saveNewParent() {
-        return;
         // if(this.validateForm()){
         //   return;
         // }
-        // try {
-        //   let response=await axiosClient.post('/createParent', this.newParent)
-        //   this.isError=false;
-        //   response=response.data;
-        //   this.createCustomer(response.user.id);
-        //   this.$router.push({ name: 'list-parent' })
-        //   this.snackbarMsg('Parent Saved Successfuly')
-        // } catch (error) {
-        //   this.isError=true;
-        //   this.validationErrors=error.response.data.errors
-        // }
+        try {
+          let response=await axiosClient.post('/createParent', this.newParent)
+          this.isError=false;
+          response=response.data;
+          this.createCustomer(response.user.id);
+          this.$router.push({ name: 'list-parent' })
+          this.snackbarMsg('Parent Saved Successfuly')
+        } catch (error) {
+          this.isError=true;
+          this.validationErrors=error.response.data.errors
+        }
       },
       //-----------CREATE STRIPE CUSTOMER----------
       async createCustomer(id){
@@ -263,7 +232,25 @@
           console.log(error)
         }
       },
-    }
+
+      //------------GET SCHOOLS------------
+      async getSchools() {
+        try {
+          let url='/getAllSchools'
+          if(this.user.role=='organization_admin'){
+            url='/getAllSchools/'+this.user.id
+          }else{
+            url='/getAllSchools' 
+          }
+          const response= await axiosClient.get(url)
+          this.allSchools=response.data
+        } catch (error) {
+          console.log(error)
+        }
+      },
+
+
+    },
   }
   </script>
   

@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+     <div class="card">
       <div class="card-body pt-4 p-3">
         <div class="row">
           <div class="col-md-12 col-sm-12">
@@ -48,11 +48,11 @@
                     <small>{{ formatDate(item.created_at) }}</small>
                     </span>
                     <div>
-                      <span class="font-weight-bold me-3" :class="{'text-success': item.type === 'top_up' || item.type === 'pos_refund', 'text-danger': !(item.type === 'top_up' || item.type === 'pos_refund')}">
-                        {{ (item.type === 'top_up' || item.type === 'pos_refund') ? "+" : "-" }} £{{ formattedPrice(item.amount) }}
+                      <span class="font-weight-bold me-3" :class="{'text-success': item.type === 'top_up' || item.type === 'pos_refund' || item.type === 'school_shop_refund', 'text-danger': !(item.type === 'top_up' || item.type === 'pos_refund' || item.type === 'school_shop_refund')}">
+                        {{ (item.type === 'top_up' || item.type === 'pos_refund' || item.type === 'school_shop_refund') ? "+" : "-" }} £{{ formattedPrice(item.amount) }}
                       </span>
                       <br>
-                      <small class="text-dark font-weight-bold me-3">{{ (item.type === 'top_up' || item.type === 'pos_refund') ? "Received" : "Spent" }}</small>
+                      <small class="text-dark font-weight-bold me-3">{{ (item.type === 'top_up' || item.type === 'pos_refund' || item.type === 'school_shop_refund') ? "Received" : "Spent" }}</small>
                     </div>
                   </span>
                   <span v-if="transactions.length==0 && isTransactions" class="recent-transactions mb-1 text-xs">
@@ -103,6 +103,8 @@
           newType="Cafeteria Purchase";
         }else if(type=='pos_refund'){
           newType="Cafeteria Refund";
+        }else if(type=='school_shop_refund'){
+          newType="Portal Shop Refund";
         }else if(type=='trip_funds'){
           newType="Trip Charges";
         }else if(type=='school_shop_funds'){

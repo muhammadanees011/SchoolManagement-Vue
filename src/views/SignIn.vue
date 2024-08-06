@@ -37,7 +37,7 @@
                 <!-- <small class="text-success text-gradient font-weight-bold">Forgot Password ?</small> -->
                 <router-link :to="{ name: 'ForgotPassword' }" class="font-weight-bold" style="color: #573078;">Forgot Password ?</router-link>
                 <br>
-                <span @click="MSSignIn" class="mslogin-link">
+                <span @click="loginWithMicrosoft" class="mslogin-link">
                   <img v-on:click="MSSignIn" class="me-2" style="width: 12px; height: 12px;" src="@/assets/img/logos/microsoft.png">
                   <small class="mslogin">SignIn with Microsoft</small>
                 </span>
@@ -112,6 +112,9 @@ export default {
   },
   methods: {
     ...mapMutations(['toggleEveryDisplay', 'toggleHideConfig']),
+    loginWithMicrosoft() {
+      window.location.href = this.$env_vars.BASE_URL+'/auth/redirect';
+    },
     //------------MICROSOFT SIGNIN-------------
     async MSSignIn() {
       await this.$msalInstance.loginPopup({})

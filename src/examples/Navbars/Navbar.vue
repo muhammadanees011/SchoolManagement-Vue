@@ -36,7 +36,10 @@
               <template v-for="(item,index) in cartItemsList" :key="index" >
                 <li  v-if="item.shop_item!==null"  class="text-white list-group-item bg-gray-100 border-0 d-flex p-4 mb-2 border-radius-lg">
                     <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm text-dark">{{ item.shop_item ? item.shop_item.name :'' }} (Shop Item)</h6>
+                    <h6 class="mb-3 text-sm text-dark">
+                      {{ item.shop_item ? item.shop_item.name :'' }} 
+                      <span v-if="item.shop_item.product_type">({{ item.shop_item.product_type }})</span>
+                    </h6>
                     <span class="mb-1 text-xs text-dark">
                         <!-- {{ item.shop_item ? item.shop_item.detail:'' }} -->
                     </span>

@@ -41,7 +41,8 @@
     "vue-toast-notification": "^3.1.2",
     "vue-toastification": "^1.7.14",
     "vue3-snackbar": "^2.2.0",
-    "vuex": "4.0.2"
+    "vuex": "4.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

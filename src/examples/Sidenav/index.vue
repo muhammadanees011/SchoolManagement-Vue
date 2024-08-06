@@ -14,7 +14,7 @@
       ></i>
       <a class="m-0 navbar-brand" href="/">
         <template v-if="getBrandingSetting.logo!=='null'">
-          <img :src="StudentPayLogo" class="navbar-brand-img h-100" alt="main_logo"/>
+          <img :src="StudentPayLogo" class="navbar-brand-img h-100" alt=""/>
           <span class="ms-2 font-weight-bold text-white">StudentPay Portal</span>
         </template>
         <img v-else src="@/assets/img/logos/StudentPay-logo.png" class="navbar-brand-img h-100" alt="main_logo"/>
@@ -52,7 +52,7 @@ export default {
   },
   methods:{
     setLogo(){
-      this.StudentPayLogo = 'https://stagingapi.student-pay.co.uk' + this.getBrandingSetting.logo
+      this.StudentPayLogo = this.$env_vars.BASE_URL + this.getBrandingSetting.logo
     }
   },
 };

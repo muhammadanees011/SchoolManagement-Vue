@@ -90,7 +90,7 @@
                   </div>
                   <div class="d-flex justify-content-center bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                       <div class="">
-                        <button @click="saveNewStudent" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-5 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save Staff </button>
+                        <button @click="saveNewStaff" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-5 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save Staff </button>
                         </div>
                     </div>
                 </div>
@@ -197,15 +197,13 @@
         this.user=user
       },
       //------------SAVE STUDENT------------
-      async saveNewStudent() {
+      async saveNewStaff() {
         if(this.validateForm()){
           return;
         }
         try {
-          let response=await axiosClient.post('/createStaff', this.newStaff)
+          await axiosClient.post('/createStaff', this.newStaff)
           this.isError=false;
-          response=response.data;
-          this.createCustomer(response.user.id);
           this.$router.push({ name: 'list-staff' })
           this.snackbarMsg('Staff Saved Successfuly')
         } catch (error) {
@@ -215,11 +213,11 @@
       },
       //-----------CREATE STRIPE CUSTOMER----------
       async createCustomer(id){
-        let name=this.newStudent.first_name+' '+this.newStudent.last_name;
+        let name=this.newStaff.first_name+' '+this.newStaff.last_name;
         let data={
           'user_id':id,
           'name':name,
-          'email':this.newStudent.email
+          'email':this.newStaff.email
         }
         try {
           await axiosClient.post('/createCustomer',data)

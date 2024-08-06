@@ -12,14 +12,9 @@
                     <input class="input-box filter-box mb-3 ms-3" id="name" type="text" placeholder="Type to Search..." name="address" />
                     <div class="d-flex me-2">
                     
-                      <div class="icon-label me-2" @click="exportTableToXLS()" style="height: 35px;">
+                      <div class="icon-label me-3" @click="exportTableToXLS()" style="height: 35px;">
                         <span class="label-text bulk_topup">Export To XLS</span>
                       </div>
-                      <template v-if="userPermissions.create_shop">
-                        <router-link :to="{ name: 'add-items' }" v-if="user && user.role=='organization_admin' || user.role=='staff' || user.role=='super_admin'">
-                          <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Item </button>
-                        </router-link>
-                      </template>
                     </div>
                   </div>              
                 </div>
@@ -29,62 +24,60 @@
                       <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
                         ID
                       </th>
+                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                        Buyer
+                      </th>
                       <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
                         Item
                       </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
+                      <!-- <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
                         Quantity
-                      </th>
+                      </th> -->
                       <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
                         Price
                       </th>
-                      <th v-if="user && user.role=='super_admin' || user && user.role=='organization_admin'" class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Shop
+                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                        Amount Paid
                       </th>
                       <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Status
+                        Payment Status
                       </th>
                       <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Action
+                        Date
                       </th>                  
                     </tr>
                   </thead>
                   <tbody>
-                    <template v-for="(data,index) in shopItems" :key="index">
 
-                    <tr v-for="(item,index) in data.shop_items" :key="index">
+                    <tr v-for="(item,index) in shopItems" :key="index">
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">{{ item.id }}</span>
                     </td>
+                    <td class="align-middle text-center d-flex flex-column">
+                      <span class="text-secondary text-xs">{{ item.buyer_name }} ,</span>
+                      <small class="text-secondary text-xs">{{ item.buyer_email }}</small>
+                    </td>
                     <td class="align-middle text-center">
-                      <img v-if="item.image" :src=" $env_vars.BASE_URL + item.image" style="height: 20px; width: 20px; margin-right: 10px;">
+                      <img v-if="item.image" :src="$env_vars.BASE_URL + item.image" style="height: 20px; width: 20px; margin-right: 10px;">
                       <span class="text-secondary text-xs ">{{item.name  }}</span>
                     </td>
-                    <td class="align-middle text-center">
+                    <!-- <td class="align-middle text-center">
                       <span class="text-secondary text-xs ">{{ item.quantity }}</span>
+                    </td> -->
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs">£{{ formattedPrice(item.price) }}</span>
                     </td>
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
-                    </td>
-                    <td v-if="user && user.role=='super_admin' || user.role=='organization_admin'" class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{data.shop_name  ? data.shop_name:'-' }}</span>
+                      <span class="text-secondary text-xs">£{{formattedPrice(item.amount_paid) }}</span>
                     </td>
                     <td class="align-middle text-center text-sm">
-                      <span v-if="item.quantity > 0 " class="badge badge-sm bg-gradient-success">Available</span>
-                      <span v-if="item.quantity == 0 " class="badge badge-sm bg-gradient-danger">Not Available</span>
+                      <span v-if="item.payment_status == 'partially_paid'" class="badge badge-sm bg-gradient-danger">Partially Paid</span>
+                      <span v-if="item.payment_status == 'fully_paid' " class="badge badge-sm bg-gradient-success">Fully Paid</span>
                     </td>
                     <td class="align-middle text-center text-sm">
-                      <!-- <i v-if="user && user.role=='student'" @click="addToCart(item.id)" class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i> -->
-                      <!-- <router-link :to="{ name: 'shop-checkout', params: { id: item.id }  }">
-                        <i v-if="user && user.role=='student'" class="fas fa-shopping-cart text-success me-2" aria-hidden="true"></i>
-                      </router-link> -->
-                        <span  v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'">
-                          <i v-if="userPermissions.edit_shop" @click="editShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                          <i v-if="userPermissions.delete_shop" @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                      </span>
+                        {{ formatDateString(item.created_at) }}
                     </td>
                     </tr>
-                  </template>
                   </tbody>
                 </table>
               </div>
@@ -127,7 +120,7 @@
   import { mapGetters } from 'vuex'
   import Swal from 'sweetalert2';
   import * as XLSX from 'xlsx';
-
+  import moment from 'moment';
 
   export default {
     name: "tables",
@@ -186,7 +179,7 @@
         const ws = XLSX.utils.table_to_sheet(table);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, 'shop_items.xlsx');
+        XLSX.writeFile(wb, 'purchase_history.xlsx');
       },
       setColor() {
         let bgColor=this.getBrandingSetting.primary_color ?
@@ -210,14 +203,13 @@
       const formattedValue = parseFloat(value).toFixed(2);
       return formattedValue;
     },
-
       async getShopItems(page){
         let data={
           'page':page
         }
         try {
-          const response=await axiosClient.post('/getShopItems',data)
-          this.shopItems=response.data.data.data;
+          const response=await axiosClient.post('/getMyPurchases',data)
+          this.shopItems=response.data.data;
           this.totalRows = response.data.pagination.total;
           this.currentPage = response.data.pagination.current_page;
           this.perPage = response.data.pagination.per_page;
@@ -243,6 +235,12 @@
       editShopItem(id){
         this.$router.push({ name: 'edit-shop-items', params: { id } });
       },
+        //------------FORMAT DATE--------------
+        formatDateString(dateString) {
+        const parsedDate = moment(dateString);
+        const formattedDate = parsedDate.format('DD MMMM YYYY, HH:mm');
+        return formattedDate;
+        },
       async addToCart(itemId){
         let user=localStorage.getItem('user')
         user= JSON.parse(user)

@@ -19,7 +19,6 @@
                       <th class="text-uppercase  text-center text-secondary text-xxs font-weight-bolder opacity-7">  ID </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Student </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
                     </tr>
@@ -30,17 +29,19 @@
                         <p class="text-xs  text-center font-weight-bold mb-0"> {{ item.id}}</p>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0"> {{ item.user ? item.user.first_name:'-' }} {{ item.user ? item.user.last_name:'-' }}</p>
+                        <router-link :to="{ name: 'add-childrens', params: { id: item.id }}">
+                        <div class="d-flex">
+                          <p class="text-xs font-weight-bold mb-0"> {{item.first_name }} {{item.last_name }} </p>
+                          <i class="material-icons-round opacity-10 fs-6 cursor-pointer">arrow_forward</i>
+                        </div>
+                        </router-link>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0"> {{item.user ? item.user.email :'-' }} </p>
+                        <p class="text-xs font-weight-bold mb-0"> {{item.email }} </p>
                         <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
                       </td>
-                      <td>
-                        <p class="text-xs font-weight-bold mb-0"> Student1,Student2,Student3</p>
-                      </td>
                       <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success">{{item.user ? item.user.status :'-'}}</span>
+                        <span class="badge badge-sm bg-gradient-success">{{item.status}}</span>
                       </td>
                       <td class="align-middle text-center">
                         <span>
@@ -51,7 +52,7 @@
                           </template>
                           <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
                           <template v-if="userPermissions.delete">
-                          <i @click="deleteParent(item.user.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          <i @click="deleteParent(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                           </template>
                         </span>
                       </td>
@@ -59,6 +60,33 @@
                   </tbody>
                 </table>
               </div>
+
+              <div class="row">
+                <div class="col-md-12 col-lg-12">
+                  <nav class="page-nav" aria-label="Page navigation">
+                    <ul class="pagination mt-4 mb-4">
+                        <!-- Previous Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                            <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
+                                @click="getAllParents(currentPage - 1)" tabindex="-1"
+                                aria-disabled="true">arrow_back</i>
+                        </li>
+                        <!-- Page Numbers -->
+                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
+                            :class="{ 'active': currentPage === pageNumber }">
+                            <a class="page-link" href="#" @click="getAllParents(pageNumber)">{{ pageNumber }}</a>
+                        </li>
+                        <!-- Next Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                            <i class="page-link material-icons-round opacity-10 fs-5"
+                                :disabled="currentPage === totalPages" @click="getAllParents(currentPage + 1)"
+                                tabindex="-1" aria-disabled="true">arrow_forward</i>
+                        </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -80,6 +108,10 @@
         allParent:'',
         schools: 6,
         user:'',
+        totalRows:'',
+        currentPage:'',
+        perPage:'',
+        totalPages:'',
       }
     },
     computed: {
@@ -102,14 +134,21 @@
         this.user=user
       },
       //-------------GET ALL STAFF----------
-      async getAllParents(){
+      async getAllParents(page){
+        let data={
+          'page':page
+        }
         try {
           let url='/getAllParents'
           if(this.user.role=='organization_admin'){
             url='/getAllParents/'+this.user.id
           }
-          const response= await axiosClient.get(url)
-          this.allParent=response.data
+          const response= await axiosClient.post(url,data)
+          this.allParent=response.data.data.data
+          this.totalRows = response.data.pagination.total;
+          this.currentPage = response.data.pagination.current_page;
+          this.perPage = response.data.pagination.per_page;
+          this.totalPages = response.data.pagination.last_page;
         } catch (error) {
           console.log(error)
         }

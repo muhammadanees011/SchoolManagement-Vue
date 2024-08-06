@@ -12,7 +12,7 @@ import 'vue3-snackbar/dist/style.css'
 import DropZone from 'dropzone-vue';
 import 'dropzone-vue/dist/dropzone-vue.common.css';
 import permissionsPlugin from './helper/index';
-import barandingPlugin from './helper/branding';
+import envPlugin from './helper/envPlugin';
 
 
 const appInstance = createApp(App)
@@ -25,5 +25,5 @@ appInstance.use(router,appInstance)
 appInstance.use(MaterialDashboard)
 appInstance.use(DropZone)
 appInstance.use(permissionsPlugin);
-appInstance.use(barandingPlugin);
+appInstance.use(envPlugin);
 appInstance.mount('#app')

@@ -20,11 +20,14 @@
                     <span class="label-text">Bulk Delete</span>
                     <i class="material-icons-round opacity-10 fs-6 cursor-pointer">delete</i>
                 </div>
+                <div class="icon-label" @click="exportTableToXLS()">
+                <span class="label-text bulk_topup">Export To XLS</span>
+              </div>
                 <input class="input-box filter-box" @keyup.enter="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
               </div>
 
               <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
+                <table  ref="table" class="table align-items-center mb-0">
                   <thead>
                     <tr>
                       <th class="">
@@ -131,6 +134,8 @@
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';
   import { mapGetters } from 'vuex'
+  import * as XLSX from 'xlsx';
+
 
   
   export default {
@@ -165,6 +170,13 @@
       }
     },
     methods:{
+      exportTableToXLS() {
+      const table = this.$refs.table;
+      const ws = XLSX.utils.table_to_sheet(table);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'archived_staff.xlsx');
+    },
       setColor() {
       let bgColor=this.getBrandingSetting.primary_color ?
       this.getBrandingSetting.primary_color : '#573078';
