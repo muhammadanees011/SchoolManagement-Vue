@@ -37,7 +37,8 @@
                 <!-- <small class="text-success text-gradient font-weight-bold">Forgot Password ?</small> -->
                 <router-link :to="{ name: 'ForgotPassword' }" class="font-weight-bold" style="color: #573078;">Forgot Password ?</router-link>
                 <br>
-                <span @click="loginWithMicrosoft" class="mslogin-link">
+                <hr/>
+                <span @click="loginWithMicrosoft" class="mslogin-link mt-3">
                   <img v-on:click="MSSignIn" class="me-2" style="width: 12px; height: 12px;" src="@/assets/img/logos/microsoft.png">
                   <small class="mslogin">SignIn with Microsoft</small>
                 </span>
