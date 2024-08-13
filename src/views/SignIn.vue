@@ -33,15 +33,16 @@
               <div class="text-center">
                 <material-button class="my-4 mb-2" @click="signIn" style="background-color: #573078;" fullWidth>Sign in</material-button>
               </div>
-              <span class="mt-4 text-sm text-success text-center">
+              <p class="mt-4 text-sm text-success text-center">
                 <!-- <small class="text-success text-gradient font-weight-bold">Forgot Password ?</small> -->
                 <router-link :to="{ name: 'ForgotPassword' }" class="font-weight-bold" style="color: #573078;">Forgot Password ?</router-link>
-                <hr/>
+                <br>
+                <br>
                 <span @click="loginWithMicrosoft" class="mslogin-link mt-3">
                   <img v-on:click="MSSignIn" class="me-2" style="width: 12px; height: 12px;" src="@/assets/img/logos/microsoft.png">
                   <small class="mslogin">SignIn with Microsoft</small>
                 </span>
-              </span>
+              </p>
               <!-- </form> -->
             </div>
           </div>
