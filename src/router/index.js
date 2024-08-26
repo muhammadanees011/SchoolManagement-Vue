@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import Profile from '../views/Profile.vue'
 import SignIn from '../views/SignIn.vue'
+import AuthCallback from '../views/auth_callback.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
 import ResetPassword from '../views/ResetPassword.vue'
 import SignUp from '../views/SignUp.vue'
@@ -41,7 +42,10 @@ import AddMenu from '../views/meals/addMenu.vue'
 import PaymentAccount from '../views/payment_account/payment_account.vue'
 import PaymentMethod from '../views/payment_account/PaymentMethod.vue'
 import AddPaymentCard from '../views/payment_account/add_card.vue'
-import CoursesList from '../views/courses/coursesList.vue'
+import Courses from '../views/courses/coursesList.vue'
+import AddCourse from '../views/courses/add.vue'
+import EditCourse from '../views/courses/edit.vue'
+import EnrolledStudents from '../views/courses/EnrolledStudents.vue'
 import OrganizationAdmins from '../views/organization_admins/admins.vue'
 import AddAdmin from '../views/organization_admins/addAdmin.vue'
 import EditAdmin from '../views/organization_admins/editAdmin.vue'
@@ -62,6 +66,11 @@ import Roles from '../views/roles_permissions/roles.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
 
 const routes = [
+  {
+    path: '/auth/callback',
+    name: 'AuthCallback',
+    component: AuthCallback
+  },
   {
     path: '/',
     name: '/',
@@ -190,6 +199,22 @@ const routes = [
       { path: '/childrens/:id', name: 'add-childrens', component: AddChildren },
     ],
   },
+    //------------PARENT---------------
+    {
+      path: '/course',
+      name: 'course',
+      component: DefaultLayout,
+      meta: {
+        title: 'Course',
+        requiresAuth: true,
+      },
+      children: [
+        { path: '/courses', name: 'list-courses', component: Courses },
+        { path: '/course/add', name: 'add-course', component: AddCourse },
+        { path: '/course/edit/:id', name: 'edit-course', component: EditCourse },
+        { path: '/course/enrolled-students/:id', name: 'enrolled-students', component: EnrolledStudents },
+      ],
+    },
   //------------PAYMENTS---------------
   {
     path: '/payment',
@@ -287,19 +312,6 @@ const routes = [
     },
     children: [
       { path: '/roles', name: 'list-roles', component: Roles },
-    ],
-  },
-  //---------------COURSES---------------
-  {
-    path: '/courses',
-    name: 'courses',
-    component: DefaultLayout,
-    meta: {
-      title: 'Courses',
-      requiresAuth: true,
-    },
-    children: [
-      { path: '/courses', name: 'list-courses', component: CoursesList },
     ],
   },
   //----------------MEALS-------------------

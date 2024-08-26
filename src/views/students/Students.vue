@@ -50,13 +50,11 @@
                       </div>
                     </th>
                     <th class="text-uppercase text-xxs font-weight-bolder"> MIFARE ID </th>
+                    <th class="text-uppercase text-xxs font-weight-bolder"> Student ID </th>
                     <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
-                    <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> School </th>
-                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th> -->
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> FSM </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Balance </th>
-                    <!-- <th v-if="userPermissions.transaction_history" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th> -->
                     <th v-if="userPermissions.wallet" class="text-center text-uppercase text-xxs font-weight-bolder"> Wallet </th>
                     <th v-if="userPermissions.topup" class="text-center text-uppercase text-xxs font-weight-bolder"> Topup </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Status </th>
@@ -75,18 +73,15 @@
                       <p class="text-xs font-weight-bold mb-0"> {{ item.mifare_id }}</p>
                     </td>
                     <td>
-                      <p class="text-xs font-weight-bold mb-0"> {{ item.user.first_name }} {{ item.user.last_name }}</p>
+                      <p class="text-xs font-weight-bold mb-0">{{ item.student_id }} </p>
                     </td>
                     <td>
-                      <p class="text-xs font-weight-bold mb-0"> {{ item.user.email }} </p>
-                      <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
+                      <p class="text-xs font-weight-bold mb-0"> {{ item.user.first_name }} {{ item.user.last_name }}</p>
+                      <p class="text-xs mb-0" style="font-size: 8px;"> {{ item.user.email }} </p>
                     </td>
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">{{item.school ? item.school.title :'-' }}</span>
                     </td>
-                    <!-- <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">{{ item.stage }}</span>
-                    </td> -->
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold" :class="item.fsm_amount === null ? 'text-danger' : 'text-success'">{{ item.fsm_amount!==null ? ('£'+formattedPrice(item.fsm_amount)) :'No FSM'  }}</span>
                     </td>

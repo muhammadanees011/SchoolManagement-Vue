@@ -98,7 +98,7 @@
                               <br />
                               <MultiSelect
                               label="Visibility Options"
-                              :options="visibilityOptions"
+                              :options="coursesList"
                               @input="handleCourses"
                               placeholder="Limit Courses"
                               />
@@ -263,9 +263,9 @@
     },
     mounted() {
       this.getUser();
-      // this.getAllAttributes();
       this.getAllShops();
-      this.getSchoolsCourses();
+      this.getSchools();
+      this.getAllCourses();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('create_shop');
@@ -292,6 +292,7 @@
           other_installments_due_date:[],
         },
         schoolsList:null,
+        coursesList:null,
         imageFileName:"",
         imageFileUrl:"",
         selectedImageFile:null,
@@ -302,27 +303,16 @@
           {"name": "Available to Students",},
           {"name": "Available to Parents",}
         ],
-        limitColleges:[
-          {"name": "Available to Staff",},
-          {"name": "Available to Students",},
-          {"name": "Available to Parents",}
-        ],
-        limitCourses:[
-          {"name": "Available to Staff",},
-          {"name": "Available to Students",},
-          {"name": "Available to Parents",}
-        ],
+        limitCourses:'',
         allShops:"",
         productTypes:['Trip','Resources','Uniforms','Print Credit','Exams','Bus Passes'],
         user:"",
         newItem: {
             name:'',
-            // attributes:[],
             price:'',
             quantity: '',
             product_type:'',
             detail:'',
-            // attribute_id:'',
             shop_id:'',
             image:'',
             valid_from:'',
@@ -349,13 +339,6 @@
             reader.readAsDataURL(file);
             this.selectedImageFile=file;
         }
-
-        // const file = event.target.files[0];
-        //   if (file) {
-        //       this.imageFileName = file.name;
-        //       this.imageFileUrl = URL.createObjectURL(file);
-        //       this.selectedImageFile = file;
-        //   }
       },
       snackbarMsg(message) {
         this.$snackbar.add({
@@ -364,8 +347,19 @@
           background: 'white',
         })
       },
+
+      //-------------GET ALL COURSE----------
+      async getAllCourses(){
+        try {
+          let url='/getCoursesForDropdown'
+          const response= await axiosClient.get(url)
+          this.coursesList=response.data
+        } catch (error) {
+          console.log(error)
+        }
+      },
       //------------GET SCHOOLS AND COURSES-------------
-      async getSchoolsCourses(){
+      async getSchools(){
         try {
           let response=await axiosClient.get('/getAllSchoolsCourses')
           this.schoolsList=response.data.schools ? response.data.schools :null
@@ -431,7 +425,7 @@
         formData.append('valid_to', this.newItem.valid_to);
         formData.append('visibility_options', JSON.stringify(this.newItem.visibility_options));
         formData.append('limitColleges', JSON.stringify(this.newItem.limitColleges));
-        formData.append('limitCourses', JSON.stringify(this.limitCourses));
+        formData.append('limitCourses', JSON.stringify(this.newItem.limitCourses));
 
 
         // if(this.validateForm()){
@@ -462,8 +456,11 @@
         }
       },
       //-------------HANDLE THE COURSES------
-      handleCourses(){
-
+      handleCourses(data){
+        this.newItem.limitCourses=[]
+        data.filter((item)=>{
+          this.newItem.limitCourses.push({name: item.name});
+        })
       },
       //-------------HANDLE THE COLLEGES------
       handleColleges(data){

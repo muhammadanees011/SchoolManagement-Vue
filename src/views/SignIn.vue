@@ -118,15 +118,16 @@ export default {
     },
     //------------MICROSOFT SIGNIN-------------
     async MSSignIn() {
-      await this.$msalInstance.loginPopup({})
-      .then(() => {
-        const myAccounts = this.$msalInstance.getAllAccounts();
-        this.account = myAccounts[0];
-        this.$emitter.emit('login', this.account);
-      })
-      .catch(error => {
-        console.error(`error during authentication: ${error}`);
-      });
+      return
+      // await this.$msalInstance.loginPopup({})
+      // .then(() => {
+      //   const myAccounts = this.$msalInstance.getAllAccounts();
+      //   this.account = myAccounts[0];
+      //   this.$emitter.emit('login', this.account);
+      // })
+      // .catch(error => {
+      //   console.error(`error during authentication: ${error}`);
+      // });
     },
     //------------MICROSOFT SIGNOUT-------------
     async SignOut() {

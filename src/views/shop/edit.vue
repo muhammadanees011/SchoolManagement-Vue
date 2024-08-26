@@ -63,17 +63,6 @@
                             <input class="input-box" id="name" v-model="newItem.detail" type="text" placeholder="Detail" name="detail" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["detail"]!==""'>Detail is required</small>
                           </div>
-                          <!-- <div class="mb-1">
-                            <label class="input-label" for="phone">Attribute</label>
-                            <br />
-                            <MultiSelect
-                            label="Attributes"
-                            :value="selectedAttrs"
-                            :options="allAttributes"
-                            @input="handleAttributes"
-                            placeholder="Attributes"
-                            />
-                          </div> -->
 
                           <div class="row mb-1">
                             <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
@@ -106,7 +95,8 @@
                               <br />
                               <MultiSelect
                               label="Visibility Options"
-                              :options="visibilityOptions"
+                              :value="newItem.limitCourses"
+                              :options="coursesList"
                               @input="handleCourses"
                               placeholder="Limit Courses"
                               />
@@ -272,9 +262,9 @@
     mounted() {
       this.getUser();
       this.editItem();
-      // this.getAllAttributes();
       this.getAllShops();
-      this.getSchoolsCourses();
+      this.getAllCourses();
+      this.getSchools();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('edit_shop');
@@ -291,6 +281,7 @@
         },
         productTypes:['Trip','Resources','Uniforms','Print Credit','Exams','Bus Passes'],
         schoolsList:null,
+        coursesList:null,
         imageFileName:"",
         imageFileUrl:"",
         selectedImageFile:"",
@@ -309,19 +300,13 @@
           {"name": "Available to Students",},
           {"name": "Available to Parents",}
         ],
-        limitCourses:[
-          {"name": "Available to Staff",},
-          {"name": "Available to Students",},
-          {"name": "Available to Parents",}
-        ],
+        limitCourses:'',
         newItem: {
             name:'',
-            // attributes:[],
             product_type:'',
             price:'',
             quantity: '',
             detail:'',
-            // attribute_id:'',
             image:'',
             shop_id:'',
             valid_from:'',
@@ -393,7 +378,7 @@
         formData.append('valid_to', this.newItem.valid_to);
         formData.append('visibility_options', JSON.stringify(this.newItem.visibility_options));
         formData.append('limitColleges', JSON.stringify(this.newItem.limitColleges));
-        formData.append('limitCourses', JSON.stringify(this.limitCourses));
+        formData.append('limitCourses', JSON.stringify(this.newItem.limitCourses));
 
         let id = this.$route.params.id
         try {
@@ -429,6 +414,7 @@
         this.newItem.valid_to=data.valid_to
         this.newItem.visibility_options=data.visibility_options ? data.visibility_options : []
         this.newItem.limitColleges=data.limit_colleges ? data.limit_colleges : []
+        this.newItem.limitCourses=data.limit_courses ? data.limit_courses : []
         this.newItem.payment_plan=data.payment_plan
         this.imageFileUrl=this.$env_vars.BASE_URL + data.image
         if(data.payment)
@@ -452,19 +438,15 @@
           this.selectedImageFile=file;
       }
     },
-    //-------------GET ALL Attributes----------
-    async getAllAttributes(){
+    //-------------GET ALL COURSE----------
+    async getAllCourses(){
       try {
-        const response= await axiosClient.get('/getAllAttributes')
-        this.allAttributes=response.data
+        let url='/getCoursesForDropdown'
+        const response= await axiosClient.get(url)
+        this.coursesList=response.data
       } catch (error) {
         console.log(error)
       }
-      this.allAttributes.map((item)=>{
-        if(this.newItem.attributes.includes(item.id)){
-          this.selectedAttrs.push(item)
-        }
-      })
     },
 
     //------------PAYMENT PLAN-------------
@@ -477,7 +459,7 @@
     },
 
     //------------GET SCHOOLS AND COURSES-------------
-    async getSchoolsCourses(){
+    async getSchools(){
       try {
         let response=await axiosClient.get('/getAllSchoolsCourses')
         console.log(response)
@@ -495,8 +477,11 @@
         })
     },
     //-------------HANDLE THE COURSES------
-    handleCourses(){
-
+    handleCourses(data){
+      this.newItem.limitCourses=[]
+      data.filter((item)=>{
+        this.newItem.limitCourses.push({name: item.name});
+      })
     },
     //-------------HANDLE THE COLLEGES------
     handleColleges(data){

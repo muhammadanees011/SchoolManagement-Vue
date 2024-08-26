@@ -1,188 +1,178 @@
 <template>
-    <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12">
-            <div class="card">
-                <div class="card-header pb-0 px-3 d-flex justify-content-between">
-                    <h6 class="mb-0">Courses</h6>
-                    <!-- <router-link to="/add-menu">
-                        <button style="font-size: 12px; background-color: #f513ca;" class="me-3 text-white fw-5 border-0 p-2 border-radius-lg"> Add Course </button>
-                    </router-link> -->
-                </div>
-                <div class="card-body pt-4 p-3">
-                    <ul class="list-group">
-                    <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                        <div class="d-flex flex-column">
-                        <h6 class="mb-3 text-sm">Isa - Maths 9-1 GCSE Revision Guide</h6>
-                        <span class="mb-1 text-xs">
-                            Isa - Maths 9-1 GCSE Revision Guide - £3.
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
+                <h6 class="text-dark text-capitalize ps-3">Courses</h6>
+                <template v-if="userPermissions.create">
+                  <router-link :to="{ name: 'add-course' }">
+                    <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Course </button>
+                  </router-link>
+                </template>
+              </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase  text-center text-secondary text-xxs font-weight-bolder opacity-7">  ID </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Course Code </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Course Name </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Course Description </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in allCourse" :key="index">
+                     <td>
+                        <p class="text-xs  text-center font-weight-bold mb-0"> {{ item.id}}</p>
+                      </td>
+                      <td>
+                        <router-link :to="{ name: 'enrolled-students', params: { id: item.CourseCode }}">
+                        <div class="d-flex">
+                          <p class="text-xs font-weight-bold mb-0"> {{item.CourseCode }}</p>
+                          <i class="material-icons-round opacity-10 fs-6 cursor-pointer">arrow_forward</i>
+                        </div>
+                        </router-link>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0"> {{item.CourseLevel }} </p>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0"> {{item.CourseDescription }} </p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">{{item.status}}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span>
+                          <template v-if="userPermissions.edit">
+                          <router-link :to="{ name: 'edit-course', params: { id: item.id } }">
+                            <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
+                          </router-link>
+                          </template>
+                          <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
+                          <template v-if="userPermissions.delete">
+                          <i @click="deleteCourse(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          </template>
                         </span>
-                        </div>
-                        <div class="ms-auto text-end">
-                            <span>
-                            <template v-if="user.role=='super_admin'||user.role=='school_user'">
-                                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-                                <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>
-                            </template>
-                            <i class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i>
-                            </span>
-                        <br>
-                        <div class="d-flex me-3 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                            - £5
-                        </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                        <div class="d-flex flex-column">
-                        <h6 class="mb-3 text-sm">Nisam - Maths Algebra and Shape Grade 7</h6>
-                        <span class="mb-1 text-xs">
-                            Maths Algebra and Shape Grade 7
-                        </span>
-                        </div>
-                        <div class="ms-auto text-end">
-                            <span>
-                            <template v-if="user.role=='super_admin'||user.role=='school_user'">
-                                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-                                <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>
-                            </template>
-                            <i class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i>
-                            </span>
-                        <br>
-                        <div class="d-flex me-3 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                            - £5
-                        </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                        <div class="d-flex flex-column">
-                        <h6 class="mb-3 text-sm">Isa - Maths 9-1 GCSE Revision Guide</h6>
-                        <span class="mb-1 text-xs">
-                            Isa - Maths 9-1 GCSE Revision Guide - £3.
-                        </span>
-                        </div>
-                        <div class="ms-auto text-end">
-                            <span>
-                            <template v-if="user.role=='super_admin'||user.role=='school_user'">
-                                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-                                <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>
-                            </template>
-                            <i class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i>
-                            </span>
-                        <br>
-                        <div class="d-flex me-3 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                            - £5
-                        </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                        <div class="d-flex flex-column">
-                        <h6 class="mb-3 text-sm">Nisam - Maths Algebra and Shape Grade 7</h6>
-                        <span class="mb-1 text-xs">
-                            Maths Algebra and Shape Grade 7
-                        </span>
-                        </div>
-                        <div class="ms-auto text-end">
-                            <span>
-                            <template v-if="user.role=='super_admin'||user.role=='school_user'">
-                                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-                                <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>
-                            </template>
-                            <i class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i>
-                            </span>
-                        <br>
-                        <div class="d-flex me-3 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                            - £5
-                        </div>
-                        </div>
-                    </li>
-   
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- <div class="col-xl-4 col-lg-4 col-md-4">
-            <div class="card">
-                <div class="card-header pb-0 px-3">
-                    <h6 class="mb-0">Favourite</h6>
-                </div>
-                <div class="card-body pt-4 p-3">
-                    <ul class="list-group">
-                    <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                        <div class="d-flex flex-column">
-                        <h6 class="mb-3 text-sm">Puff-Puff</h6>
-                        <span class="mb-1 text-xs">
-                            Boiled Egg and wrapped in a ground meat mixture coated in breadcrumbs, and deep-fried.
-                        </span>
-                        </div>
-                        <div class="ms-auto text-end">
-                            <span>
-                                <i class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
-                            </span>
-                        <br>
-                        <div class="d-flex ms-3 me-2 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                            £5
-                        </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                        <div class="d-flex flex-column">
-                        <h6 class="mb-3 text-sm">Scotch Egg</h6>
-                        <span class="mb-1 text-xs">
-                            Boiled Egg and wrapped in a ground meat mixture coated in breadcrumbs, and deep-fried.
-                        </span>
-                        </div>
-                        <div class="ms-auto text-end">
-                            <span>
-                                <i class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
-                            </span>
-                        <br>
-                        <div class="d-flex ms-3 me-2 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                            £5
-                        </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                        <div class="d-flex flex-column">
-                        <h6 class="mb-3 text-sm">Rice and DODO</h6>
-                        <span class="mb-1 text-xs">
-                            Boiled Egg and wrapped in a ground meat mixture coated in breadcrumbs, and deep-fried.
-                        </span>
-                        </div>
-                        <div class="ms-auto text-end">
-                            <span>
-                                <i class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
-                            </span>
-                        <br>
-                        <div class="d-flex ms-3 me-2 mt-2 align-items-center text-warning text-gradient text-sm font-weight-bold" style="justify-content: flex-end;">
-                            £5
-                        </div>
-                        </div>
-                    </li>
-                    </ul>
-                </div>
-            </div>
-        </div> -->
-    </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
+              <div class="row">
+                <div class="col-md-12 col-lg-12">
+                  <nav class="page-nav" aria-label="Page navigation">
+                    <ul class="pagination mt-4 mb-4">
+                        <!-- Previous Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                            <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
+                                @click="getAllParents(currentPage - 1)" tabindex="-1"
+                                aria-disabled="true">arrow_back</i>
+                        </li>
+                        <!-- Page Numbers -->
+                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
+                            :class="{ 'active': currentPage === pageNumber }">
+                            <a class="page-link" href="#" @click="getAllParents(pageNumber)">{{ pageNumber }}</a>
+                        </li>
+                        <!-- Next Page -->
+                        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                            <i class="page-link material-icons-round opacity-10 fs-5"
+                                :disabled="currentPage === totalPages" @click="getAllParents(currentPage + 1)"
+                                tabindex="-1" aria-disabled="true">arrow_forward</i>
+                        </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </template>
   
   <script>
+  import axiosClient from '../../axios'
+  
   export default {
-    name: "billing-card",
-    data(){
-        return{
-            user:'',
-        }
-    },
+    name: 'tables',
     mounted(){
-        this.getUser();
+      this.getUser();
+      this.getAllCourses();
+    },
+    data() {
+      return {
+        allCourse:'',
+        schools: 6,
+        user:'',
+        totalRows:'',
+        currentPage:'',
+        perPage:'',
+        totalPages:'',
+      }
+    },
+    computed: {
+      userPermissions() {
+        return this.$permissions.userPermissions.value;
+      },
     },
     methods:{
-        getUser(){
-            let user=localStorage.getItem('user')
-            user= JSON.parse(user)
-            this.user=user;
+      snackbarMsg(message) {
+        this.$snackbar.add({
+          type: 'success',
+          text: message,
+          background: 'white',
+        })
+      },
+      //------------GET USER-----------------
+      getUser(){
+        let user=localStorage.getItem('user')
+        user= JSON.parse(user)
+        this.user=user
+      },
+      //-------------GET ALL COURSE----------
+      async getAllCourses(){
+        try {
+          let url='/getAllCourses'
+          const response= await axiosClient.get(url)
+          this.allCourse=response.data.data.data
+          this.totalRows = response.data.pagination.total;
+          this.currentPage = response.data.pagination.current_page;
+          this.perPage = response.data.pagination.per_page;
+          this.totalPages = response.data.pagination.last_page;
+        } catch (error) {
+          console.log(error)
         }
+      },
+      //-------------DELETE COURSE---------
+      async deleteCourse(id){
+        try {
+          await axiosClient.delete('/deleteCourse/' + id)
+          this.removeCourseFromList(id)
+          this.snackbarMsg('Course Successfully Deleted')
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      //------------REMOVE COURSE FROM LIST-----------
+      removeCourseFromList(id) {
+        const indexToRemove = this.allCourse.findIndex((item) => item.id === id)
+        this.allCourse.splice(indexToRemove, 1)
+      },
     }
-  };
+  }
   </script>
+  
+  <style>
+  .hover-pointer:hover {
+    cursor: pointer;
+    color: red;
+  }
+  </style>
   

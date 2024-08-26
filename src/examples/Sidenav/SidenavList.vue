@@ -199,6 +199,33 @@
           </template>
         </sidenav-collapse>
       </li> -->
+
+      <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
+      <li  v-if="userPermissions.view_shop" class="nav-item">
+        <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#courses">
+          <i class="material-icons-round opacity-10 fs-5">store</i>
+          <span class="sidenav-normal me-3 ms-2 ps-1">Courses <b class="caret"></b></span>
+        </a>
+        <div id="courses" class="collapse">
+          <ul class="nav nav-sm flex-column">
+            <li class="nav-item">
+              <router-link :to="{ name: 'list-courses' }" class="nav-link">
+                <i class="material-icons-round small-dot">fiber_manual_record</i>
+                <span class="sidenav-normal me-3 ms-3 ps-1 text-white">All Courses</span>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link :to="{ name: 'archived-shop-items' }" class="nav-link">
+                <i class="material-icons-round small-dot">fiber_manual_record</i>
+                <span class="sidenav-normal me-3 ms-3 ps-1 text-white">Archived courses</span>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+
+      </li>
+      </template>
+
       <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
       <li  v-if="userPermissions.view_shop" class="nav-item">
         <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#shop">
