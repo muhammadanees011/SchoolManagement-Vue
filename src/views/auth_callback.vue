@@ -132,7 +132,7 @@
       //------------SignIn---------------
       async signIn(data) {
         try {
-          const response = await axiosClient.post('/auth_callback', {data})
+          const response = await axiosClient.post('/auth_callback', {code:data})
           let user = response.data ? response.data.user : null
           let token = response.data ? response.data.access_token : null
           localStorage.setItem('user',  JSON.stringify(user))
