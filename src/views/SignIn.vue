@@ -39,7 +39,7 @@
                 <br>
                 <br>
                 <span @click="loginWithMicrosoft" class="mslogin-link mt-3">
-                  <img v-on:click="MSSignIn" class="me-2" style="width: 12px; height: 12px;" src="@/assets/img/logos/microsoft.png">
+                  <img class="me-2" style="width: 12px; height: 12px;" src="@/assets/img/logos/microsoft.png">
                   <small class="mslogin">SignIn with Microsoft</small>
                 </span>
               </p>
@@ -54,10 +54,7 @@
 
 <script>
 import { PublicClientApplication } from '@azure/msal-browser';
-// import { mapGetters } from 'vuex'
 import Navbar from '@/examples/PageLayout/Navbar.vue'
-// import MaterialInput from '@/components/MaterialInput.vue'
-// import MaterialSwitch from '@/components/MaterialSwitch.vue'
 import MaterialButton from '@/components/MaterialButton.vue'
 import { mapMutations } from 'vuex'
 import axiosClient from '../axios'
@@ -67,8 +64,6 @@ export default {
   name: 'sign-in',
   components: {
     Navbar,
-    // MaterialInput,
-    // MaterialSwitch,
     MaterialButton,
   },
   beforeMount() {
@@ -115,19 +110,6 @@ export default {
     ...mapMutations(['toggleEveryDisplay', 'toggleHideConfig']),
     loginWithMicrosoft() {
       window.location.href = this.$env_vars.BASE_URL+'/auth/redirect';
-    },
-    //------------MICROSOFT SIGNIN-------------
-    async MSSignIn() {
-      return
-      // await this.$msalInstance.loginPopup({})
-      // .then(() => {
-      //   const myAccounts = this.$msalInstance.getAllAccounts();
-      //   this.account = myAccounts[0];
-      //   this.$emitter.emit('login', this.account);
-      // })
-      // .catch(error => {
-      //   console.error(`error during authentication: ${error}`);
-      // });
     },
     //------------MICROSOFT SIGNOUT-------------
     async SignOut() {

@@ -63,8 +63,6 @@
     name: 'sign-in',
     components: {
       Navbar,
-      // MaterialInput,
-      // MaterialSwitch,
       MaterialButton,
     },
     beforeMount() {
@@ -129,6 +127,14 @@
           console.error(error);
         });
       },
+      //----------TOASTS---------------------
+      snackbarMsg(message) {
+        this.$snackbar.add({
+          type: 'error',
+          text: message,
+          background: 'white',
+        })
+      },
       //------------SignIn---------------
       async signIn(data) {
         try {
@@ -146,8 +152,10 @@
           const newRoute = this.$router.resolve({ name: '/' }).href;
           window.location.href = newRoute;
         } catch (error) {
-          if (error.response.status == 401) {
-            this.unauthorized = true
+          if (error.response.status == 500) {
+            this.snackbarMsg('User was not found!')
+            const newRoute = this.$router.resolve({ name: 'SignIn' }).href;
+            window.location.href = newRoute;
           }
         }
       },
