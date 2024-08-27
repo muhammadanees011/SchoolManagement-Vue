@@ -214,12 +214,12 @@
                 <span class="sidenav-normal me-3 ms-3 ps-1 text-white">All Courses</span>
               </router-link>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <router-link :to="{ name: 'archived-shop-items' }" class="nav-link">
                 <i class="material-icons-round small-dot">fiber_manual_record</i>
                 <span class="sidenav-normal me-3 ms-3 ps-1 text-white">Archived courses</span>
               </router-link>
-            </li>
+            </li> -->
           </ul>
         </div>
 

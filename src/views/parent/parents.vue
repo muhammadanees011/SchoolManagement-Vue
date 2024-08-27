@@ -52,7 +52,7 @@
                           </template>
                           <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
                           <template v-if="userPermissions.delete">
-                          <i @click="deleteParent(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          <i @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                           </template>
                         </span>
                       </td>
@@ -97,7 +97,7 @@
   <script>
   import axiosClient from '../../axios'
   import { mapGetters } from 'vuex'
-
+  import Swal from 'sweetalert2';
   
   export default {
     name: 'tables',
@@ -128,6 +128,24 @@
         let bgColor=this.getBrandingSetting.primary_color ?
         this.getBrandingSetting.primary_color : '#573078';
         document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
+      },
+      confirmDelete(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Item will be archived and you will be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
+          customClass: {
+            popup: 'custom-swal'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.deleteParent(id)
+          }
+        });
       },
       snackbarMsg(message) {
         this.$snackbar.add({

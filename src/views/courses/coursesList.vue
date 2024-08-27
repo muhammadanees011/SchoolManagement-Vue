@@ -55,7 +55,7 @@
                           </template>
                           <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
                           <template v-if="userPermissions.delete">
-                          <i @click="deleteCourse(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          <i @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                           </template>
                         </span>
                       </td>
@@ -98,9 +98,10 @@
   </template>
   
   <script>
-    import { mapGetters } from 'vuex'
+  import { mapGetters } from 'vuex'
   import axiosClient from '../../axios'
-  
+  import Swal from 'sweetalert2';
+
   export default {
     name: 'tables',
     mounted(){
@@ -132,6 +133,24 @@
           text: message,
           background: 'white',
         })
+      },
+      confirmDelete(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Item will be archived and you will be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
+          customClass: {
+            popup: 'custom-swal'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.deleteCourse(id)
+          }
+        });
       },
       //------------GET USER-----------------
       getUser(){
