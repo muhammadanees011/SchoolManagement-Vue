@@ -14,13 +14,13 @@
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
-                  <thead>
+                  <thead class="thead">
                     <tr>
-                      <th class="text-uppercase  text-center text-secondary text-xxs font-weight-bolder opacity-7">  ID </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder">  ID </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder"> Status </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder"> Action </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -96,10 +96,13 @@
   
   <script>
   import axiosClient from '../../axios'
+  import { mapGetters } from 'vuex'
+
   
   export default {
     name: 'tables',
     mounted(){
+      this.setColor();
       this.getUser();
       this.getAllParents();
     },
@@ -115,11 +118,17 @@
       }
     },
     computed: {
+      ...mapGetters(['getBrandingSetting']),
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
     },
     methods:{
+      setColor() {
+        let bgColor=this.getBrandingSetting.primary_color ?
+        this.getBrandingSetting.primary_color : '#573078';
+        document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
+      },
       snackbarMsg(message) {
         this.$snackbar.add({
           type: 'success',
@@ -173,9 +182,75 @@
   </script>
   
   <style>
-  .hover-pointer:hover {
+.hover-pointer:hover {
     cursor: pointer;
     color: red;
+  }
+  td, th{
+    border:1px solid black !important;
+  }
+  thead{
+    background-color: var(--navheader-bg-color) !important;
+  }
+  tbody > tr:hover{
+    background-color: #F0F2F5 !important;
+  }
+  thead tr:hover{
+    background-color: var(--navheader-bg-color) !important;
+  }
+  td > p{
+    font-size: 5px !important;
+  }
+  th{
+    /* background-color: var(--navheader-bg-color) !important; */
+    color: white !important;
+  }
+  .page-nav{
+    margin-left: 230px !important;
+  }
+  table{
+    margin:15px;
+    margin-top:0px;
+  }
+  .filter-type-btn, .filter-box{
+    border-radius: 0px !important;
+  }
+  
+  .custom-swal {
+    width: 350px !important; /* Adjust the width as needed */
+    padding: 1rem !important; /* Adjust the padding as needed */
+  }
+  
+  .custom-swal .swal2-title {
+    font-size: 0.9rem !important; /* Adjust the title font size */
+  }
+  
+  .custom-swal .swal2-content {
+    font-size: 0rem !important; /* Adjust the content font size */
+  }
+  .custom-swal .swal2-actions {
+    margin-top: 0.2rem !important; /* Adjust the margin between content and buttons */
+  }
+  .swal2-confirm{
+    font-size: 10px !important;
+  }
+  .swal2-cancel{
+    font-size: 10px !important;
+  }
+  .swal2-icon{
+    font-size: 10px !important;
+  }
+  .form-check{
+      height: 20px !important;
+      width: 20px !important;
+    }
+  .form-check-input{
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+  }
+  .bulk_topup{
+    cursor: pointer;
   }
   </style>
   

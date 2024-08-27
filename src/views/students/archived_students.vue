@@ -471,11 +471,9 @@
   background-color: lightgray ;
 }
 .input-box , .select-box{
-  height: 32px !important;
+  /* height: 32px !important;
   border: 1px solid black;
-  border-radius: 4px !important;
-}
-.select-box{
+  border-radius: 4px !important; */
 }
   </style>
   
