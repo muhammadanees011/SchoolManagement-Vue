@@ -155,8 +155,8 @@
           if (error.response.status == 500) {
             this.snackbarMsg('user was not found in StudentPay Portal!')
             window.location.href = 'https://login.microsoftonline.com/cb811789-d752-4ec2-8215-356e22c04d4f/oauth2/v2.0/logout?post_logout_redirect_uri=' + encodeURIComponent('https://staging.student-pay.co.uk/sign-in');
-            const newRoute = this.$router.resolve({ name: 'SignIn' }).href;
-            window.location.href = newRoute;
+            // const newRoute = this.$router.resolve({ name: 'SignIn' }).href;
+            // window.location.href = newRoute;
           }
         }
       },
