@@ -420,8 +420,8 @@ export default {
       // document.querySelector('.navbar-nav .active') ? 
       // document.querySelector('.navbar-nav .active').style.setProperty('--active-bg-color', activeColor):'';
 
-      let bgColor=this.getBrandingSetting.primary_color ?
-      this.getBrandingSetting.primary_color : '#573078';
+      let bgColor=this.getBrandingSetting.primary_color !='null' ? this.getBrandingSetting.primary_color : '#010A21';
+      // bgColor='#010A21'
       document.querySelector('.sidenav-header').style.setProperty('--navheader-bg-color', bgColor);
 
       document.querySelector('.navbar-nav').style.setProperty('--nav-bg-color', bgColor);
@@ -429,7 +429,7 @@ export default {
       document.querySelector('#sidenav-collapse-main').style.setProperty('--nav-bg-color', bgColor);
 
       // document.querySelector('thead tr th').style.setProperty('--nav-bg-color', bgColor);
-      bgColor = '#573078'; // Example color value
+      bgColor = '#010A21'; // Example color value
       document.querySelectorAll('thead tr th').forEach(function(th) {
         th.style.setProperty('--nav-bg-color', bgColor);
       });

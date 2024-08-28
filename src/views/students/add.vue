@@ -83,18 +83,6 @@
                             <input class="input-box" id="balance" v-model="formattedBalance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="phone">Attribute</label>
-                          <br />
-                          <MultiSelect
-                            label="Attributes"
-                            :options="allAttributes"
-                            @input="handleAttributes"
-                            placeholder="Attributes"
-                          />
-                        </div>
-
-                        
-                        <div class="mb-1">
                           <label class="input-label" for="status">Status <span class="required">*</span></label>
                           <br />
                           <select v-model="newStudent.status" class="select-box" id="status" type="select" placeholder="status" name="status">
@@ -145,13 +133,10 @@
 // import MaterialButton from '@/components/MaterialButton.vue'
 import axiosClient from '../../axios'
 import cloneDeep from 'lodash/cloneDeep';
-import MultiSelect from "../components/MultiSelect.vue"
 
 export default {
   name: '',
   components: {
-    MultiSelect
-    // MaterialButton,
   },
   mounted() {
     this.getUser();

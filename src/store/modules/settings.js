@@ -1,8 +1,8 @@
 // ----------SETTING MODULE----------
 const state = {
     brandingSetting:{
-        primary_color: localStorage.getItem('primary_color'),
-        secondary_color: localStorage.getItem('secondary_color'),
+        primary_color: localStorage.getItem('primary_color') !='null' ? localStorage.getItem('primary_color') : '#010A21',
+        secondary_color: localStorage.getItem('secondary_color') !='null' ? localStorage.getItem('secondary_color') : '#010A21',
         logo: localStorage.getItem('logo')
     },
   }

@@ -151,7 +151,7 @@
         }
         try {
         const response= await axiosClient.post('/getTransactionHistory',data);
-        this.transactions=response.data
+        this.transactions=response.data.data.data
         this.isTransactions=true
         } catch (error) {
           console.log(error)
