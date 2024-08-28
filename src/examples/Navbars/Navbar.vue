@@ -339,7 +339,6 @@ export default {
         localStorage.removeItem('primary_color')
         localStorage.removeItem('secondary_color')
         localStorage.removeItem('logo')
-        window.location.href = 'https://login.microsoftonline.com/cb811789-d752-4ec2-8215-356e22c04d4f/oauth2/v2.0/logout?post_logout_redirect_uri=' + encodeURIComponent('https://staging.student-pay.co.uk/sign-in');
         this.$router.push({ name: 'SignIn' })
         await axiosClient.post('/logout', localStorage.getItem('token'))
       } catch (error) {
