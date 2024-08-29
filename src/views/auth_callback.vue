@@ -149,8 +149,8 @@
           localStorage.setItem('primary_color', primary_color)
           localStorage.setItem('secondary_color', secondary_color)
           localStorage.setItem('logo', logo)
-          const newRoute = this.$router.resolve({ name: 'support' }).href;
-          window.location.href = newRoute;
+          // const newRoute = this.$router.resolve({ name: '/' }).href;
+          // window.location.href = newRoute;
         } catch (error) {
           if (error.response.status == 500) {
             this.snackbarMsg('user was not found in StudentPay Portal!')
