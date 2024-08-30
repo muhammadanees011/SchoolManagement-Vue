@@ -31,7 +31,7 @@
                 </div>
                 <!-- <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch> -->
                 <div class="text-center">
-                  <material-button class="my-4 mb-2" @click="signIn" style="background-color: #573078;" fullWidth>Sign in</material-button>
+                  <material-button class="my-4 mb-2" style="background-color: #573078;" fullWidth>Sign in</material-button>
                 </div>
                 <p class="mt-4 text-sm text-success text-center">
                   <!-- <small class="text-success text-gradient font-weight-bold">Forgot Password ?</small> -->
@@ -53,7 +53,6 @@
   </template>
   
   <script>
-  // import { PublicClientApplication } from '@azure/msal-browser';
   import Navbar from '@/examples/PageLayout/Navbar.vue'
   import MaterialButton from '@/components/MaterialButton.vue'
   import { mapMutations } from 'vuex'
@@ -73,34 +72,14 @@
       this.toggleEveryDisplay()
       this.toggleHideConfig()
     },
-    async created() {
-      // this.$msalInstance = new PublicClientApplication(
-      //   this.msalConfig,
-      // );
-    },
     mounted() {
         const code = this.$route.query.code; // Extract the code from query parameters
         if (code) {
         this.signIn(code);
         }
-      // const accounts = this.$msalInstance.getAllAccounts();
-      // if (accounts.length == 0) {
-      //   return;
-      // }
-      // this.account = accounts[0];
-      // this.$emitter.emit('login', this.account);
     },
     data() {
       return {
-        // msalConfig: {
-        //   auth: {
-        //     clientId: 'bc85cade-fe84-4d3f-99b0-47c838bff2b6',
-        //     authority: 'https://login.microsoftonline.com/cb811789-d752-4ec2-8215-356e22c04d4f',
-        //   },
-        //   cache: {
-        //     cacheLocation: 'localStorage',
-        //   },
-        // },
         unauthorized: false,
         formValidation:"",
         credentials: {
@@ -136,17 +115,19 @@
       //------------SignIn---------------
       async signIn(data) {
         try {
-          const response = await axiosClient.post('/auth_callback', {code:data})
-          let user = response.data ? response.data.user : null
-          let token = response.data ? response.data.access_token : null
-          localStorage.setItem('user',  JSON.stringify(user))
-          localStorage.setItem('token', token)
-          let primary_color=response.data.primary_color;
-          let secondary_color=response.data.secondary_color;
-          let logo=response.data.logo;
-          localStorage.setItem('primary_color', primary_color)
-          localStorage.setItem('secondary_color', secondary_color)
-          localStorage.setItem('logo', logo)
+          // const response = await axiosClient.post('/auth_callback', {code:data})
+          await axiosClient.post('/auth_callback', {code:data})
+          return;
+          // let user = response.data ? response.data.user : null
+          // let token = response.data ? response.data.access_token : null
+          // localStorage.setItem('user',  JSON.stringify(user))
+          // localStorage.setItem('token', token)
+          // let primary_color=response.data.primary_color;
+          // let secondary_color=response.data.secondary_color;
+          // let logo=response.data.logo;
+          // localStorage.setItem('primary_color', primary_color)
+          // localStorage.setItem('secondary_color', secondary_color)
+          // localStorage.setItem('logo', logo)
           // const newRoute = this.$router.resolve({ name: '/' }).href;
           // window.location.href = newRoute;
         } catch (error) {
