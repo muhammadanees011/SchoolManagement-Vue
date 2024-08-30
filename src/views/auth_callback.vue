@@ -115,21 +115,19 @@
       //------------SignIn---------------
       async signIn(data) {
         try {
-          // const response = await axiosClient.post('/auth_callback', {code:data})
-          await axiosClient.post('/auth_callback', {code:data})
-          return;
-          // let user = response.data ? response.data.user : null
-          // let token = response.data ? response.data.access_token : null
-          // localStorage.setItem('user',  JSON.stringify(user))
-          // localStorage.setItem('token', token)
-          // let primary_color=response.data.primary_color;
-          // let secondary_color=response.data.secondary_color;
-          // let logo=response.data.logo;
-          // localStorage.setItem('primary_color', primary_color)
-          // localStorage.setItem('secondary_color', secondary_color)
-          // localStorage.setItem('logo', logo)
-          // const newRoute = this.$router.resolve({ name: '/' }).href;
-          // window.location.href = newRoute;
+          const response = await axiosClient.post('/auth_callback', {code:data})
+          let user = response.data ? response.data.user : null
+          let token = response.data ? response.data.access_token : null
+          localStorage.setItem('user',  JSON.stringify(user))
+          localStorage.setItem('token', token)
+          let primary_color=response.data.primary_color;
+          let secondary_color=response.data.secondary_color;
+          let logo=response.data.logo;
+          localStorage.setItem('primary_color', primary_color)
+          localStorage.setItem('secondary_color', secondary_color)
+          localStorage.setItem('logo', logo)
+          const newRoute = this.$router.resolve({ name: '/' }).href;
+          window.location.href = newRoute;
         } catch (error) {
           if (error.response.status == 500) {
             this.snackbarMsg('user was not found in StudentPay Portal!')
