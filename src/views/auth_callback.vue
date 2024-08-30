@@ -53,7 +53,7 @@
   </template>
   
   <script>
-  import { PublicClientApplication } from '@azure/msal-browser';
+  // import { PublicClientApplication } from '@azure/msal-browser';
   import Navbar from '@/examples/PageLayout/Navbar.vue'
   import MaterialButton from '@/components/MaterialButton.vue'
   import { mapMutations } from 'vuex'
@@ -74,35 +74,33 @@
       this.toggleHideConfig()
     },
     async created() {
-      this.$msalInstance = new PublicClientApplication(
-        this.msalConfig,
-      );
+      // this.$msalInstance = new PublicClientApplication(
+      //   this.msalConfig,
+      // );
     },
     mounted() {
         const code = this.$route.query.code; // Extract the code from query parameters
         if (code) {
         this.signIn(code);
         }
-
-
-      const accounts = this.$msalInstance.getAllAccounts();
-      if (accounts.length == 0) {
-        return;
-      }
-      this.account = accounts[0];
-      this.$emitter.emit('login', this.account);
+      // const accounts = this.$msalInstance.getAllAccounts();
+      // if (accounts.length == 0) {
+      //   return;
+      // }
+      // this.account = accounts[0];
+      // this.$emitter.emit('login', this.account);
     },
     data() {
       return {
-        msalConfig: {
-          auth: {
-            clientId: '84e7c1e4-cd74-42c8-84fe-5ba42ee2049a',
-            authority: 'https://login.microsoftonline.com/f8cdef31-a31e-4b4a-93e4-5f571e91255a',
-          },
-          cache: {
-            cacheLocation: 'localStorage',
-          },
-        },
+        // msalConfig: {
+        //   auth: {
+        //     clientId: 'bc85cade-fe84-4d3f-99b0-47c838bff2b6',
+        //     authority: 'https://login.microsoftonline.com/cb811789-d752-4ec2-8215-356e22c04d4f',
+        //   },
+        //   cache: {
+        //     cacheLocation: 'localStorage',
+        //   },
+        // },
         unauthorized: false,
         formValidation:"",
         credentials: {
