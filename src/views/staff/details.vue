@@ -29,9 +29,9 @@
                         </span>
                       </span>
                       <span class="user-info d-flex justify-content-between  align-items-center text-dark font-weight-bold text-xs">
-                        <span class="text-sm fw-5">School:</span>
+                        <span class="text-sm fw-5">Site:</span>
                         <span class="text-dark ms-2 font-weight-bold">
-                          XEPAY School
+                          XEPAY Site
                         </span>
                       </span>
                       <span class="user-info d-flex justify-content-between  align-items-center text-dark font-weight-bold text-xs">

@@ -3,7 +3,14 @@
       <div class="card-header pb-3 p-3">
         <div class="row">
           <div class="col-6 d-flex align-items-center">
-            <h6 class="mb-0">Set up Payment Account</h6>
+            <!-- <h6 class="mb-0">Set up Payment Account</h6> -->
+
+            <span>
+              <h5 class="ms-3 text-sm">TOP-UP</h5>
+              <small class="ms-3 mb-3 page-description">
+                In this section, you can top-up the user's wallet by adding a specified amount to their balance. Additionally, you can add a new payment method, such as a credit or debit card, to the user's account for future transactions. This functionality ensures that users have convenient payment options and sufficient funds available for seamless purchases.</small>
+            </span>
+
           </div>
           <div class="col-6 text-end" v-if="user.role=='student' || user.role=='staff' || user.role=='organization_admin' || user.role=='super_admin' || user.role=='parent'">
             <router-link  :to="{name:'add_card'}">

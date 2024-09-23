@@ -1,16 +1,32 @@
 
 
 <template>
-    <div class=" py-4">
+    <div class="">
       <div class="row">
         <div class="col-12">
-          <div class="card my-4">
+          <div class="card">
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <div>
-                  <div class="filter-container">
-                    <h5 class="ms-3">Pending Installments</h5>
-                    <!-- <input class="input-box filter-box mb-3 ms-4" id="name" type="text" placeholder="Type to Search..." name="address" /> -->
+                  <div class="filter-container mb-3">
+                    <span>
+                      <h6 class="ms-3 text-dark text-capitalize">PENDING INSTALLMENTS</h6>
+                      <small class="ms-3 page-description">
+                        In the Pending Installments section, you can track and manage pending payments for students. This section allows you to view details of pending installments.
+                      </small>
+                    </span>
+
+                    <div class="filter-container me-4 mb-2">
+                      <span style="display: flex;">
+                        <input class="input-box filter-box" @keyup="filterInstallments" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                        <select @change="filterInstallments" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                          <option v-for="(item, index) in allFields" :key="index" :value="item">
+                            {{ item }}
+                          </option>
+                        </select>
+                      </span>
+                    </div> 
+
                   </div>              
                 </div>
     
@@ -64,27 +80,38 @@
 
                     <div class="row">
                       <div class="col-md-12 col-lg-12">
-                        <nav class="page-nav" aria-label="Page navigation">
-                          <ul class="pagination mt-4 mb-4">
-                              <!-- Previous Page -->
-                              <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                                  <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
-                                      @click="getShopItems(currentPage - 1)" tabindex="-1"
-                                      aria-disabled="true">arrow_back</i>
-                              </li>
-                              <!-- Page Numbers -->
-                              <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
-                                  :class="{ 'active': currentPage === pageNumber }">
-                                  <a class="page-link" href="#" @click="getShopItems(pageNumber)">{{ pageNumber }}</a>
-                              </li>
-                              <!-- Next Page -->
-                              <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                                  <i class="page-link material-icons-round opacity-10 fs-5"
-                                      :disabled="currentPage === totalPages" @click="getShopItems(currentPage + 1)"
-                                      tabindex="-1" aria-disabled="true">arrow_forward</i>
-                              </li>
-                          </ul>
-                        </nav>
+
+                        <div class="pagination-container">
+                      <div class="entries-dropdown">
+                        <label for="entries">Entries</label>
+                        <select v-model="itemsPerPage" @change="getShopItems(currentPage)" id="entries">
+                          <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                        </select>
+                        <!-- <span>entries/page</span> -->
+                      </div>
+
+                      <!-- Pagination controls -->
+                      <nav class="pagination-wrapper">
+                        <ul class="pagination">
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getShopItems(1)" href="#">«</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getShopItems(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                          </li>
+                          <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
+                            <a @click="getShopItems(page)" href="#">{{ page }}</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getShopItems(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getShopItems(totalPages)" href="#">»</a>
+                          </li>
+                        </ul>
+                      </nav>
+                  </div>
+
                       </div>
                     </div>
 
@@ -109,24 +136,67 @@
       this.getShopItems();
     },
     updated(){
-      if(this.user.role=='student'){
-        return
-      }else{
-        this.$permissions.redirectIfNotAllowed('view_shop');
-      }
+      this.$permissions.redirectIfNotAllowed('pending_installments');
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
+
+      limitedPages() {
+        let pages = [];
+        
+        // If total pages <= 5, show all pages
+        if (this.totalPages <= 5) {
+          for (let i = 1; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          let startPage, endPage;
+          
+          // Determine the middle page to be currentPage
+          if (this.currentPage <= 3) {
+            startPage = 1;
+            endPage = Math.min(5, this.totalPages);
+          } else if (this.currentPage >= this.totalPages - 2) {
+            startPage = Math.max(this.totalPages - 4, 1);
+            endPage = this.totalPages;
+          } else {
+            startPage = this.currentPage - 2;
+            endPage = this.currentPage + 2;
+          }
+
+          // Ensure the start and end pages are within bounds
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+
+          // Always include the first page if not in range
+          if (startPage > 1) {
+            pages.unshift(1);
+            if (startPage > 2) pages.splice(1, 0, '...');
+          }
+
+          // Always include the last page if not in range
+          if (endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) pages.push('...');
+            pages.push(this.totalPages);
+          }
+        }
+
+        return pages;
+      }
     },
     data(){
     return{
+      perPageOptions: [10,20, 40, 60,100,200,300,400],
+      itemsPerPage:20,
       shopItems:'',
       user:'',
-      filterBy:'',
-      allFields:['Clear','Account','Type','Amount','Date','Status'],
+      seachString:'',
+      filterBy:'Buyer',
+      allFields:['Buyer','Item Name'],
       totalRows:'',
       currentPage:'',
       perPage:'',
@@ -173,9 +243,10 @@
       return formattedValue;
     },
 
-      async getShopItems(page){
+      async getShopItems(page=null){
         let data={
-          'page':page
+          'page':page,
+          'entries_per_page': this.itemsPerPage
         }
         try {
           const response=await axiosClient.post('/getMyInstallments',data)
@@ -188,6 +259,26 @@
           console.log(error)
         }
       },
+
+      //-----------FILTER INSTALLMENTS------------
+      async filterInstallments(){
+        if(this.filterBy=='' && this.seachString==''){
+          this.getShopItems()
+        }else if(this.filterBy!='' && this.seachString==''){
+          this.getShopItems()
+        }
+        let data={
+          "type":this.filterBy,
+          "value":this.seachString
+        }
+        try {
+           const response=await axiosClient.post('/filterInstallments',data);
+           this.shopItems=response.data;
+          } catch (error) {
+            console.log(error)
+          }
+      },
+
 
       async deleteShopItem(id){
         try {

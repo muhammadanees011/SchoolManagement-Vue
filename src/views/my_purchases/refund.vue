@@ -1,16 +1,32 @@
 
 
 <template>
-    <div class=" py-4">
+    <div class="">
       <div class="row">
         <div class="col-12">
-          <div class="card my-4">
+          <div class="card">
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <div>
-                  <div class="filter-container">
-                    <h5 class="ms-3">Refund Requests</h5>
-                    <!-- <input class="input-box filter-box mb-3 ms-4" id="name" type="text" placeholder="Type to Search..." name="address" /> -->
+                  <div class="filter-container mb-3">
+                    <span>
+                      <h6 class="ms-3 text-dark text-capitalize">REFUND REQUESTS</h6>
+                      <small class="ms-3 page-description">
+                        In the Refund Requests section, you can manage and process requests for refunds submitted by students and approve or reject the request as needed. 
+                      </small>
+                    </span>
+
+                    <div class="filter-container me-4 mb-2">
+                      <span style="display: flex;">
+                        <input class="input-box filter-box" @keyup="filterRefunds" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                        <select @change="filterRefunds" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                          <option v-for="(item, index) in allFields" :key="index" :value="item">
+                            {{ item }}
+                          </option>
+                        </select>
+                      </span>
+                    </div> 
+
                   </div>              
                 </div>
     
@@ -35,21 +51,29 @@
                                 <div class="ms-auto text-start">
                                 <span><small class="me-3 trip-dates text-warning">Date {{ formatDateString(data.created_at) }}</small></span>
                                 <br>
-                                <div class="d-flex  align-items-start text-danger text-gradient text-sm font-weight-bold" style="justify-content: flex-start;">
+                                <div class="d-flex align-items-start text-danger text-gradient text-sm font-weight-bold" style="justify-content: flex-start;">
                                 Price - £{{ formattedAmount(data.price) }}
                                 </div>
-                                <br>
+
+                                <div style="font-size: 12px; background-color: #F3F4F6; color: #573078 !important;" class="text-white fw-5 p-2 mb-1">
+                                  <span v-if='data.payment_card!=null' class="text-success text-sm rounded-pill p-1"><small>Card Payment</small></span>
+                                  <span v-if='data.payment_card==null' class="text-warning text-sm rounded-pill p-1"><small>Wallet Payment</small></span>
+                                </div>
+
                                 <div style="font-size: 12px; background-color: #F3F4F6; color: #573078 !important;" class="text-white fw-5 p-2">
                                     <span v-if="data.payment_status=='fully_paid'" class="text-success">Fully Paid: £{{ formattedAmount(data.amount_paid) }}</span>
                                     <span v-if="data.payment_status=='partially_paid'" class="text-success">Partially Paid: £{{ formattedAmount(data.amount_paid) }}</span>
                                 </div>
-                                <br>
-                                <div v-if="data.refund_status=='refund_requested'" class="mt-0 d-flex">
-                                <button @click="refundActions(data.id,'refunded')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45  bg-success text-white fw-5 p-2 border-radius-lg"> Approve Refund </button>
-                                <button @click="refundActions(data.id,'refund_rejected')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45 bg-warning text-white fw-5 p-2 border-radius-lg"> Decline Refund </button>
+                                <template v-if="userPermissions.refunds">
+                                <div v-if="data.refund_status=='refund_requested'" class="mt-0 d-flex mt-2">
+                                <button @click="confirmAction(data.id,'refunded')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45  bg-success text-white fw-5 p-2 border-radius-lg"> Approve Refund </button>
+                                <button @click="confirmAction(data.id,'refund_rejected')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45 bg-warning text-white fw-5 p-2 border-radius-lg"> Decline Refund </button>
                                 </div>
+                                </template>
                                 <div v-else style="font-size: 12px; background-color: #F3F4F6; color: #573078 !important;" class="text-white fw-5 p-2">
-                                    <span class="text-success">{{ data.refund_status }}</span>
+                                    <span v-if="data.refund_status=='not_refunded'" class="text-success">Refund Rejected</span>
+                                    <span v-else class="text-success">{{ data.refund_status }}</span>
+
                                 </div>
                                 <br>
                                 </div>
@@ -64,27 +88,36 @@
 
                     <div class="row">
                       <div class="col-md-12 col-lg-12">
-                        <nav class="page-nav" aria-label="Page navigation">
-                          <ul class="pagination mt-4 mb-4">
-                              <!-- Previous Page -->
-                              <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                                  <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
-                                      @click="getShopItems(currentPage - 1)" tabindex="-1"
-                                      aria-disabled="true">arrow_back</i>
-                              </li>
-                              <!-- Page Numbers -->
-                              <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
-                                  :class="{ 'active': currentPage === pageNumber }">
-                                  <a class="page-link" href="#" @click="getShopItems(pageNumber)">{{ pageNumber }}</a>
-                              </li>
-                              <!-- Next Page -->
-                              <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                                  <i class="page-link material-icons-round opacity-10 fs-5"
-                                      :disabled="currentPage === totalPages" @click="getShopItems(currentPage + 1)"
-                                      tabindex="-1" aria-disabled="true">arrow_forward</i>
-                              </li>
-                          </ul>
-                        </nav>
+                        <div class="pagination-container">
+                      <div class="entries-dropdown">
+                        <label for="entries">Entries</label>
+                        <select v-model="itemsPerPage" @change="getShopItems(currentPage)" id="entries">
+                          <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                        </select>
+                        <!-- <span>entries/page</span> -->
+                      </div>
+
+                      <!-- Pagination controls -->
+                      <nav class="pagination-wrapper">
+                        <ul class="pagination">
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getShopItems(1)" href="#">«</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getShopItems(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                          </li>
+                          <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
+                            <a @click="getShopItems(page)" href="#">{{ page }}</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getShopItems(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getShopItems(totalPages)" href="#">»</a>
+                          </li>
+                        </ul>
+                      </nav>
+                  </div>
                       </div>
                     </div>
 
@@ -109,24 +142,67 @@
       this.getShopItems();
     },
     updated(){
-      if(this.user.role=='student'){
-        return
-      }else{
-        this.$permissions.redirectIfNotAllowed('view_shop');
-      }
+      this.$permissions.redirectIfNotAllowed('refunds');
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
+
+      limitedPages() {
+        let pages = [];
+        
+        // If total pages <= 5, show all pages
+        if (this.totalPages <= 5) {
+          for (let i = 1; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          let startPage, endPage;
+          
+          // Determine the middle page to be currentPage
+          if (this.currentPage <= 3) {
+            startPage = 1;
+            endPage = Math.min(5, this.totalPages);
+          } else if (this.currentPage >= this.totalPages - 2) {
+            startPage = Math.max(this.totalPages - 4, 1);
+            endPage = this.totalPages;
+          } else {
+            startPage = this.currentPage - 2;
+            endPage = this.currentPage + 2;
+          }
+
+          // Ensure the start and end pages are within bounds
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+
+          // Always include the first page if not in range
+          if (startPage > 1) {
+            pages.unshift(1);
+            if (startPage > 2) pages.splice(1, 0, '...');
+          }
+
+          // Always include the last page if not in range
+          if (endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) pages.push('...');
+            pages.push(this.totalPages);
+          }
+        }
+
+        return pages;
+      }
     },
     data(){
     return{
+      perPageOptions: [10,20, 40, 60,100,200,300,400],
+      itemsPerPage:20,
       shopItems:'',
       user:'',
-      filterBy:'',
-      allFields:['Clear','Account','Type','Amount','Date','Status'],
+      filterBy:'Buyer',
+      allFields:['Buyer'],
+      seachString:'',
       totalRows:'',
       currentPage:'',
       perPage:'',
@@ -134,21 +210,21 @@
     }
     },
     methods:{
-      confirmDelete(id) {
+      confirmAction(id,type) {
         Swal.fire({
           title: 'Are you sure?',
-          text: "Item will be deleted permanently and you will not be able to revert this!",
+          text: "",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!',
+          confirmButtonText: 'Proceed!',
           customClass: {
             popup: 'custom-swal'
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            this.deleteShopItem(id)
+            this.refundActions(id,type)
           }
         });
       },
@@ -173,9 +249,10 @@
       return formattedValue;
     },
 
-    async getShopItems(page){
+    async getShopItems(page=null){
         let data={
-          'page':page
+          'page':page,
+          'entries_per_page': this.itemsPerPage
         }
         try {
             const response=await axiosClient.post('/getRefundRequest',data)
@@ -189,6 +266,25 @@
         }
     },
 
+    //-----------FILTER INSTALLMENTS------------
+    async filterRefunds(){
+      if(this.filterBy=='' && this.seachString==''){
+        this.getShopItems()
+      }else if(this.filterBy!='' && this.seachString==''){
+        this.getShopItems()
+      }
+      let data={
+        "type":this.filterBy,
+        "value":this.seachString
+      }
+      try {
+          const response=await axiosClient.post('/filterRefunds',data);
+          this.shopItems=response.data;
+        } catch (error) {
+          console.log(error)
+        }
+    },
+
     async refundActions(id,type){
         let data={
             refund_status:type,
@@ -197,8 +293,10 @@
         try {
         await axiosClient.post('/refundStatus',data)
         this.getShopItems()
+        this.snackbarMsg('Successfuly Refunded!')
         } catch (error) {
-            console.log(error)
+          console.log(error)
+          this.snackbarMsg('Something went wrong!')
         }
     },
 

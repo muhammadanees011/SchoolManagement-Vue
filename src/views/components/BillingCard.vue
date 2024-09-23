@@ -109,7 +109,7 @@
             <span class="mb-1 text-xs">
               Payment Purpose:
               <span class="text-dark font-weight-bold ms-sm-2"
-                >School Shop Funds</span
+                >Site Shop Funds</span
               >
             </span>
             <span class="mb-1 text-xs">

@@ -75,10 +75,7 @@
     this.getUser();
   },
   updated(){
-    if(!this.userPermissions.create){
-      this.$router.go(-1);
-      return;
-    }
+    this.$permissions.redirectIfNotAllowed('create_course');
   },
   computed: {
       userPermissions() {

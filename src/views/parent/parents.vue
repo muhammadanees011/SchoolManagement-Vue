@@ -1,10 +1,16 @@
 <template>
-    <div class="container-fluid py-4">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <div class="card my-4">
+          <div class="card">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                <h6 class="text-dark text-capitalize ps-3">Parents</h6>
+                <!-- <h6 class="text-dark text-capitalize ps-3">PARENTS</h6> -->
+                <span>
+                  <h6 class="ms-3 text-dark text-capitalize">PARENTS</h6>
+                  <small class="ms-3 page-description">
+                    In the Parents section, you can manage parent or carer accounts by adding, editing, or deleting them. Additionally, you can link each parent to <br>the students they are responsible for. This functionality helps keep parent information up to date.
+                  </small>
+                </span>
                 <template v-if="userPermissions.create">
                   <router-link :to="{ name: 'add-parent' }">
                     <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Parent </button>
@@ -24,6 +30,11 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <tr v-if="allParent.length === 0">
+                      <td colspan="5" class="text-center">
+                        No data available.
+                      </td>
+                    </tr>
                     <tr v-for="(item, index) in allParent" :key="index">
                      <td>
                         <p class="text-xs  text-center font-weight-bold mb-0"> {{ item.id}}</p>
@@ -63,27 +74,38 @@
 
               <div class="row">
                 <div class="col-md-12 col-lg-12">
-                  <nav class="page-nav" aria-label="Page navigation">
-                    <ul class="pagination mt-4 mb-4">
-                        <!-- Previous Page -->
-                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                            <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
-                                @click="getAllParents(currentPage - 1)" tabindex="-1"
-                                aria-disabled="true">arrow_back</i>
-                        </li>
-                        <!-- Page Numbers -->
-                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
-                            :class="{ 'active': currentPage === pageNumber }">
-                            <a class="page-link" href="#" @click="getAllParents(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <!-- Next Page -->
-                        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                            <i class="page-link material-icons-round opacity-10 fs-5"
-                                :disabled="currentPage === totalPages" @click="getAllParents(currentPage + 1)"
-                                tabindex="-1" aria-disabled="true">arrow_forward</i>
-                        </li>
-                    </ul>
-                  </nav>
+
+                  <div class="pagination-container">
+                      <div class="entries-dropdown">
+                        <label for="entries">Entries</label>
+                        <select v-model="itemsPerPage" @change="getAllStudents(currentPage)" id="entries">
+                          <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                        </select>
+                        <!-- <span>entries/page</span> -->
+                      </div>
+
+                      <!-- Pagination controls -->
+                      <nav class="pagination-wrapper">
+                        <ul class="pagination">
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getAllStudents(1)" href="#">«</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getAllStudents(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                          </li>
+                          <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
+                            <a @click="getAllStudents(page)" href="#">{{ page }}</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getAllStudents(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getAllStudents(totalPages)" href="#">»</a>
+                          </li>
+                        </ul>
+                      </nav>
+                  </div>
+
                 </div>
               </div>
 
@@ -108,6 +130,9 @@
     },
     data() {
       return {
+        perPageOptions: [10,20, 40, 60,100,200,300,400],
+        itemsPerPage:20,
+
         allParent:'',
         schools: 6,
         user:'',
@@ -122,6 +147,50 @@
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
+
+      limitedPages() {
+        let pages = [];
+        
+        // If total pages <= 5, show all pages
+        if (this.totalPages <= 5) {
+          for (let i = 1; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          let startPage, endPage;
+          
+          // Determine the middle page to be currentPage
+          if (this.currentPage <= 3) {
+            startPage = 1;
+            endPage = Math.min(5, this.totalPages);
+          } else if (this.currentPage >= this.totalPages - 2) {
+            startPage = Math.max(this.totalPages - 4, 1);
+            endPage = this.totalPages;
+          } else {
+            startPage = this.currentPage - 2;
+            endPage = this.currentPage + 2;
+          }
+
+          // Ensure the start and end pages are within bounds
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+
+          // Always include the first page if not in range
+          if (startPage > 1) {
+            pages.unshift(1);
+            if (startPage > 2) pages.splice(1, 0, '...');
+          }
+
+          // Always include the last page if not in range
+          if (endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) pages.push('...');
+            pages.push(this.totalPages);
+          }
+        }
+
+        return pages;
+      }
     },
     methods:{
       setColor() {
@@ -163,7 +232,8 @@
       //-------------GET ALL STAFF----------
       async getAllParents(page){
         let data={
-          'page':page
+          'page':page,
+          'entries_per_page': this.itemsPerPage
         }
         try {
           let url='/getAllParents'

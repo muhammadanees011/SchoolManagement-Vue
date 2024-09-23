@@ -26,7 +26,7 @@
                         Stage
                       </th>
                       <th class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
-                        School
+                        Site
                       </th>
                       <th class="text-center align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Payment Status

@@ -15,53 +15,74 @@
                     <div class="card card-plain">
                       <div class="card-body">
                         <form role="form">
+                          <div v-if="isError" class="row mb-1 validation-errors">
+                            <small v-for="item in validationError" class="text-white">
+                              {{ item }}
+                            </small>
+                          </div>
                           <div class="row mb-1">
-                          <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                            <label class="input-label" for="name">Name</label>
-                            <input class="input-box" id="name" v-model="newItem.name" type="text" placeholder="Name" name="name" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["name"]!==""'>Name is required</small>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                            <label class="input-label" for="name">Price</label>
-                            <input class="input-box" id="price" v-model="newItem.price" type="number" placeholder="price" name="price" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["price"]!==""'>Price is required</small>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                            <label class="input-label" for="name">Quantity</label>
-                            <input class="input-box" id="quantity" v-model="newItem.quantity" type="number" placeholder="Quantity" name="quantity" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["quantity"]!==""'>Quantity is required</small>
-                          </div>
-                          </div>
-
-                          <div class="row mb-1">
-                          <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                            <label class="input-label" for="valid_from">Valid From</label>
-                            <input class="input-box" id="valid_from" v-model="newItem.valid_from" type="date" placeholder="Valid From" name="valid_from" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["valid_from"]!==""'>Valid From is required</small>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                            <label class="input-label" for="valid_to">Valid To</label>
-                            <input class="input-box" id="valid_to" v-model="newItem.valid_to" type="date" placeholder="Valid To" name="valid_to" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["valid_to"]!==""'>Valid To is required</small>
-                          </div>
-
-                          <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                            <label class="input-label" for="phone">Product Type</label>
-                            <br />
-                            <select class="select-box" v-model="newItem.product_type" id="shop" type="select" placeholder="Product Type" name="product_type">
-                              <option v-for="(item, index) in productTypes" :key="index" :value="item">
-                                {{ item }}
-                              </option>
-                            </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["shop_id"]!==""'>Shop is required</small>
-                          </div>
-
+                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                              <label class="input-label" for="name">Name</label>
+                              <input class="input-box" id="name" v-model="newItem.name" type="text" placeholder="Name" name="name" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["name"]!==""'>Name is required</small>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                              <label class="input-label" for="name">Price</label>
+                              <input class="input-box" id="price" v-model="newItem.price" type="number" placeholder="price" name="price" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["price"]!==""'>Price is required</small>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                              <label class="input-label" for="name">Quantity</label>
+                              <input class="input-box" id="quantity" v-model="newItem.quantity" type="number" placeholder="Quantity" name="quantity" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["quantity"]!==""'>Quantity is required</small>
+                            </div>
                           </div>
 
                           <div class="mb-1">
                             <label class="input-label" for="name">Detail</label>
                             <input class="input-box" id="name" v-model="newItem.detail" type="text" placeholder="Detail" name="detail" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["detail"]!==""'>Detail is required</small>
+                          </div>
+
+
+                          <div class="row mb-1">
+                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                              <label class="input-label" for="valid_from">Valid From</label>
+                              <input class="input-box" id="valid_from" v-model="newItem.valid_from" type="date" placeholder="Valid From" name="valid_from" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["valid_from"]!==""'>Valid From is required</small>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                              <label class="input-label" for="valid_to">Valid To</label>
+                              <input class="input-box" id="valid_to" v-model="newItem.valid_to" type="date" placeholder="Valid To" name="valid_to" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["valid_to"]!==""'>Valid To is required</small>
+                            </div>
+                            
+                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                              <label class="input-label" for="expiration_date">Expiration Date</label>
+                              <input class="input-box" id="expiration_date" v-model="newItem.expiration_date" type="date" placeholder="Expiration Date" name="expiration_date" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["expiration_date"]!==""'>Expiration Date is required</small>
+                            </div>
+
+                          </div>
+                          
+                          <div class="row mb-1">
+
+                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                              <label class="input-label" for="phone">Product Type</label>
+                              <br />
+                              <select class="select-box" v-model="newItem.product_type" id="shop" type="select" placeholder="Product Type" name="product_type">
+                                <option v-for="(item, index) in productTypes" :key="index" :value="item">
+                                  {{ item }}
+                                </option>
+                              </select>
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["shop_id"]!==""'>Shop is required</small>
+                            </div>
+                            
+                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                              <label class="input-label" for="quantity_sold">Sold Items</label>
+                              <input class="input-box" id="quantity_sold" v-model="newItem.quantity_sold" type="number" placeholder="Quantity Sold" name="quantity_sold" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["quantity_sold"]!==""'>Quantity Sold is required</small>
+                            </div>
                           </div>
 
                           <div class="row mb-1">
@@ -269,6 +290,25 @@
     updated(){
       this.$permissions.redirectIfNotAllowed('edit_shop');
     },
+    watch: {
+      'newItem.quantity'(value) {
+        if (value < 0) {
+          this.newItem.quantity = 0;
+        } else if (!Number.isInteger(value)) {
+          this.newItem.quantity = Math.floor(value);
+        }
+      },
+      'newItem.quantity_sold'(value) {
+        if (value < 0) {
+          this.newItem.quantity_sold = 0;
+        } else if (!Number.isInteger(value)) {
+          this.newItem.quantity_sold = Math.floor(value);
+        }
+      },
+      'newItem.price'(value) {
+        this.newItem.price = parseFloat(value).toFixed(2);
+      }
+    },
     data() {
       return {
         paymentPlan:'',
@@ -279,7 +319,9 @@
           initial_deposit_due_date:null,
           other_installments_due_date:[],
         },
-        productTypes:['Trip','Resources','Uniforms','Print Credit','Exams','Bus Passes'],
+        validationError:'',
+        isError:false,
+        productTypes:['Trip','Resources','Uniforms','Print Credit','Exams','Bus Passes','Additional'],
         schoolsList:null,
         coursesList:null,
         imageFileName:"",
@@ -316,6 +358,8 @@
             installmentsAndDeposit:null,
             limitCourses:null,
             limitColleges:null,
+            expiration_date:'',
+            quantity_sold:''
         },
         availableStatus:['active','pending','blocked'],
         allSchools:'',
@@ -368,14 +412,14 @@
         formData.append('product_type',this.newItem.product_type);
         formData.append('payment_plan', this.newItem.payment_plan);
         formData.append('name', this.newItem.name);
-        // formData.append('attributes', this.newItem.attributes);
         formData.append('price', this.newItem.price);
         formData.append('quantity', this.newItem.quantity);
         formData.append('detail', this.newItem.detail);
-        // formData.append('attribute_id', this.newItem.attribute_id);
         formData.append('shop_id', this.newItem.shop_id);
         formData.append('valid_from', this.newItem.valid_from);
         formData.append('valid_to', this.newItem.valid_to);
+        formData.append('expiration_date', this.newItem.expiration_date);
+        formData.append('quantity_sold', this.newItem.quantity_sold);
         formData.append('visibility_options', JSON.stringify(this.newItem.visibility_options));
         formData.append('limitColleges', JSON.stringify(this.newItem.limitColleges));
         formData.append('limitCourses', JSON.stringify(this.newItem.limitCourses));
@@ -386,8 +430,10 @@
           await axiosClient.post(apiUrl, formData)
           this.$router.push({ name: 'shop-items' })
           this.snackbarMsg('Item Updated Successfuly')
+          this.isError=false
         } catch (error) {
-          console.log(error)
+          this.validationError=error.response.data.errors
+          this.isError=true
         }
       },
     //------------EDIT SHOP ITEM------------
@@ -412,6 +458,8 @@
         this.newItem.attributes=data.attributes
         this.newItem.valid_from=data.valid_from
         this.newItem.valid_to=data.valid_to
+        this.newItem.expiration_date=data.expiration_date
+        this.newItem.quantity_sold=data.quantity_sold
         this.newItem.visibility_options=data.visibility_options ? data.visibility_options : []
         this.newItem.limitColleges=data.limit_colleges ? data.limit_colleges : []
         this.newItem.limitCourses=data.limit_courses ? data.limit_courses : []

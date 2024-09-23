@@ -38,7 +38,7 @@
                                         <span class="me-2 text-warning text-gradient text-sm font-weight-bold">
                                             £{{formattedPrice(item.shop_item.price)}}
                                         </span> 
-                                        <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
+                                        <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2 remove-icon" aria-hidden="true"></i>
                                         <br>
                                         <span v-if="item.shop_item.payment_plan=='installments'" class="text-success me-3">
                                             £{{formattedPrice(item.shop_item.payment.amount_per_installment) }} Each
@@ -71,7 +71,7 @@
                                         <span class="me-2 text-warning text-gradient text-sm font-weight-bold">
                                             £{{formattedPrice(item.trip.budget)}}
                                         </span> 
-                                        <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
+                                        <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2 remove-icon" aria-hidden="true"></i>
                                     </span>
                                     </div>
                                     </div>
@@ -79,6 +79,7 @@
                             </template>
                         </ul>
                         <div class="col-md-5 ms-auto">
+                            <small v-if="!isPaymentMethod" class="text-danger text-sm">Payment Method Not Found! please add the payment method first.</small>
                             <template v-for="(item,index) in userCards" :key="index">
                             <div :class="{ 'selected': isSelected === index }" @click="toggleSelection(index,$event)"
                                 class=" mb-1 card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
@@ -103,8 +104,8 @@
                                 <h6 class="text-sm text-warning">You can't checkout while Cart is empty!</h6>
                             </li>
                             <button v-if="cartItems.length>0" @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
-                            <button v-if="cartItems.length>0" @click="checkout('wallet_and_card')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet & Card Payment </button>
-                            <p v-if="dataLoaded" class="text-sm text-warning mt-1">In a Wallet & Card Payment, the wallet is charged first, and any remaining amount is charged to the card.</p>
+                            <button v-if="cartItems.length>0" @click="checkout('wallet')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet</button>
+                            <!-- <p v-if="dataLoaded" class="text-sm text-warning mt-1">In a Wallet & Card Payment, the wallet is charged first, and any remaining amount is charged to the card.</p> -->
                         </div>
                     </div>
                 </div>
@@ -120,6 +121,7 @@ import axiosClient from '../../axios'
     name: "billing-card",
     data(){
         return{
+            isPaymentMethod:true,
             userCards:'',
             dataLoaded:false,
             user:'',
@@ -208,6 +210,12 @@ import axiosClient from '../../axios'
         //----------------CHECKOUT------------------
         async checkout(type){
             let payment_method=this.userCards[this.isSelected] ? this.userCards[this.isSelected].id :''
+            if(!payment_method && type=='card'){
+                this.isPaymentMethod=true
+                this.isPaymentMethod=false
+                return
+            }
+            payment_method= type=='wallet' ? null:payment_method
             let data={
                 "payment_method":payment_method,
                 "type":type,
@@ -216,6 +224,7 @@ import axiosClient from '../../axios'
             await axiosClient.post('/checkout',data)
             this.snackbarMsg('Checkout Successful')
             this.$router.push({ name: 'Dashboard'});
+            this.isPaymentMethod=true
             } catch (error) {
             console.log(error)
             }
@@ -247,4 +256,12 @@ import axiosClient from '../../axios'
     }
   };
   </script>
+
+<style scoped>
+
+.remove-icon:hover{
+    cursor: pointer;
+}
+
+</style>
   

@@ -386,6 +386,9 @@ export default {
     user= JSON.parse(user)
     this.user=user
     this.updateData=cloneDeep(this.user)
+    if(this.user.role=='student' || this.user.role=='staff' || this.user.role=='parent'){
+      this.$router.go(-1);
+    }
    },
    //-----------CHANGE USER PASSWORD-------------
    async changeUserPassword(){

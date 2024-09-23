@@ -3,7 +3,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="h5 modal-title">Enroll Student to this Course</h5>
+            <h6 class="h5 text-sm modal-title">Enroll Student to this Course</h6>
             <button type="button" class="btn-close text-dark" @click="closeModal" aria-label="Close"><span aria-hidden="true">×</span></button>
           </div>
           <div class="pt-4 modal-body">

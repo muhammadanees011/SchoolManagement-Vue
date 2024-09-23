@@ -1,10 +1,14 @@
 <template>
-  <div class="container-fluid py-4">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <div class="card my-4">
+        <div class="card px-3">
               <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                <h6 class="text-dark text-capitalize ps-3">Students</h6>
+                <span>
+                <h6 class="text-dark text-capitalize">STUDENTS</h6>
+                <small class="page-description">Here, you can oversee student accounts, add funds to their wallets, and track their transaction history. This functionality ensures effective management <br>of financial interactions and balances for each student.</small>
+                <!-- <hr  class="description-line"> -->
+                </span>
                 <template v-if="userPermissions.create_student">
                   <router-link :to="{ name: 'add-student' }">
                     <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Student </button>
@@ -19,28 +23,30 @@
             </BulkTopup>
             
               <div class="filter-container">
-                <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
-                  <option v-for="(item, index) in allFields" :key="index" :value="item">
-                    {{ item }}
-                  </option>
-                </select>
-                <i class="fas fa-filter filter-icon me-1"></i>
+                <span style="display: flex;">
+                  <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                  <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                    <option v-for="(item, index) in allFields" :key="index" :value="item">
+                      {{ item }}
+                    </option>
+                  </select>
+
+                  <span v-if="userPermissions.topup" class="label-text bulk_topup"  @click="showModal = true">
+                    <i class="fas fa-credit-card payment-icon me-1"></i>
+                    Bulk Topup
+                  </span>
+                  <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                    <i class="fas fa-download download-icon me-1"></i>
+                    Export To XLS
+                  </span>
+                </span>
+
               </div>              
             </div>
           <div class="card-body px-0 pb-2">
 
-            <div class="icon-container">
-              <div class="icon-label" @click="showModal = true">
-                <span class="label-text bulk_topup">Bulk Topup</span>
-              </div>
-              <div class="icon-label" @click="exportTableToXLS()">
-                <span class="label-text bulk_topup">Export To XLS</span>
-              </div>
-            </div>
-
             <div class="table-responsive p-0 student-table">
-              <table  ref="table" class="table align-items-center mb-0">
+              <table  ref="table" class="table align-items-center mb-0" style="margin-left:-2px !important;">
                 <thead class="thead">
                   <tr>
                     <th class="pe-5">
@@ -52,7 +58,7 @@
                     <th class="text-uppercase text-xxs font-weight-bolder"> MIFARE ID </th>
                     <th class="text-uppercase text-xxs font-weight-bolder"> Student ID </th>
                     <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
-                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> School </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Site </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> FSM </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Balance </th>
                     <th v-if="userPermissions.wallet" class="text-center text-uppercase text-xxs font-weight-bolder"> Wallet </th>
@@ -62,6 +68,11 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr v-if="allStudents.length === 0">
+                    <td colspan="11" class="text-center">
+                      No data available.
+                    </td>
+                  </tr>
                   <tr v-for="(item, index) in allStudents" :key="index">
                     <td class="text-sm">
                         <div class="form-check"  style="margin-left:17px !important;">
@@ -129,29 +140,42 @@
           </div>
           <div class="row">
                 <div class="col-md-12 col-lg-12">
-                  <nav class="page-nav" aria-label="Page navigation">
-                    <ul class="pagination mt-4 mb-4">
-                        <!-- Previous Page -->
-                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                            <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
-                                @click="getAllStudents(currentPage - 1)" tabindex="-1"
-                                aria-disabled="true">arrow_back</i>
-                        </li>
-                        <!-- Page Numbers -->
-                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
-                            :class="{ 'active': currentPage === pageNumber }">
-                            <a class="page-link" href="#" @click="getAllStudents(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <!-- Next Page -->
-                        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                            <i class="page-link material-icons-round opacity-10 fs-5"
-                                :disabled="currentPage === totalPages" @click="getAllStudents(currentPage + 1)"
-                                tabindex="-1" aria-disabled="true">arrow_forward</i>
-                        </li>
-                    </ul>
-                  </nav>
+
+                    <div class="pagination-container">
+                        <div class="entries-dropdown">
+                          <label for="entries">Entries</label>
+                          <select v-model="itemsPerPage" @change="getAllStudents(currentPage)" id="entries">
+                            <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                          </select>
+                          <!-- <span>entries/page</span> -->
+                        </div>
+
+                        <!-- Pagination controls -->
+                        <nav class="pagination-wrapper">
+                          <ul class="pagination">
+                            <li :class="{ disabled: currentPage === 1 }">
+                              <a @click="getAllStudents(1)" href="#">«</a>
+                            </li>
+                            <li :class="{ disabled: currentPage === 1 }">
+                              <a @click="getAllStudents(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                            </li>
+                            <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
+                              <a @click="getAllStudents(page)" href="#">{{ page }}</a>
+                            </li>
+                            <li :class="{ disabled: currentPage === totalPages }">
+                              <a @click="getAllStudents(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                            </li>
+                            <li :class="{ disabled: currentPage === totalPages }">
+                              <a @click="getAllStudents(totalPages)" href="#">»</a>
+                            </li>
+                          </ul>
+                        </nav>
+                    </div>
+
                 </div>
           </div>
+
+
         </div>
       </div>
     </div>
@@ -180,13 +204,16 @@ export default {
   },
   data() {
     return {
+      perPageOptions: [10,20, 40, 60,100,200,300,400],
+      itemsPerPage:20,
+
       topUpAmount:null,
       showModal: false,
       selectall:false,
       selectedRecords:[],
       filterBy:'Name',
       seachString:'',
-      allFields:['Student Id','Name','Email'],
+      allFields:['Student Id','MIFare Id','Name','Email'],
       allStudents:'',
       schools: 6,
       user:'',
@@ -202,6 +229,51 @@ export default {
     userPermissions() {
       return this.$permissions.userPermissions.value;
     },
+
+    limitedPages() {
+      let pages = [];
+      
+      // If total pages <= 5, show all pages
+      if (this.totalPages <= 5) {
+        for (let i = 1; i <= this.totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        let startPage, endPage;
+        
+        // Determine the middle page to be currentPage
+        if (this.currentPage <= 3) {
+          startPage = 1;
+          endPage = Math.min(5, this.totalPages);
+        } else if (this.currentPage >= this.totalPages - 2) {
+          startPage = Math.max(this.totalPages - 4, 1);
+          endPage = this.totalPages;
+        } else {
+          startPage = this.currentPage - 2;
+          endPage = this.currentPage + 2;
+        }
+
+        // Ensure the start and end pages are within bounds
+        for (let i = startPage; i <= endPage; i++) {
+          pages.push(i);
+        }
+
+        // Always include the first page if not in range
+        if (startPage > 1) {
+          pages.unshift(1);
+          if (startPage > 2) pages.splice(1, 0, '...');
+        }
+
+        // Always include the last page if not in range
+        if (endPage < this.totalPages) {
+          if (endPage < this.totalPages - 1) pages.push('...');
+          pages.push(this.totalPages);
+        }
+      }
+
+      return pages;
+    }
+
   },
   methods:{
     exportTableToXLS() {
@@ -211,6 +283,7 @@ export default {
       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
       XLSX.writeFile(wb, 'students_table.xlsx');
     },
+
     async updateAmount(amount) {
       this.topUpAmount = amount;
       let records=[]
@@ -235,6 +308,7 @@ export default {
         this.snackbarMsg("Please select the students and enter amount!")
       }
     },
+
     //------------SELECT ALL RECORD-----------
     selectAll(){
     this.selectedRecords=[]
@@ -263,12 +337,12 @@ export default {
         }
     },
 
-
     setColor() {
       let bgColor=this.getBrandingSetting.primary_color ?
       this.getBrandingSetting.primary_color : '#573078';
       document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
     },
+
     confirmDelete(id) {
       Swal.fire({
         title: 'Are you sure?',
@@ -287,6 +361,7 @@ export default {
         }
       });
     },
+
     snackbarMsg(message) {
       this.$snackbar.add({
         type: 'success',
@@ -294,22 +369,27 @@ export default {
         background: 'white',
       })
     },
+
     formattedPrice(value){
-        const formattedValue = parseFloat(value).toFixed(2);
-        return formattedValue;
+      const formattedValue = parseFloat(value).toFixed(2);
+      return formattedValue;
     },
+
     topUps(id){
       this.$router.push('/payment_account/'+id)
     },
+
     transactionHistoryNav(id){
       this.$router.push('/student-billing/'+id)
     },
+
     //------------GET USER-----------------
     getUser(){
       let user=localStorage.getItem('user')
       user= JSON.parse(user)
       this.user=user
     },
+
     //-----------FILTER STUDENTS------------
     async filterStudents(){
       if(this.filterBy=='' && this.seachString==''){
@@ -321,7 +401,8 @@ export default {
       }
       let data={
         "type":this.filterBy,
-        "value":this.seachString
+        "value":this.seachString,
+        "status":'active'
       }
       try {
           const response=await axiosClient.post('/filterStudent',data);
@@ -334,13 +415,15 @@ export default {
           console.log(error)
       }
     },
+
     //-------------GET ALL STUDENTS----------
     async getAllStudents(page=null){
       try {
         let data={
           'user_id':this.user.id,
           'role':this.user.role,
-          'page':''
+          'page':'',
+          'entries_per_page': this.itemsPerPage
         }
         data.page = page;
         const response= await axiosClient.post('getAllStudents',data);
@@ -353,6 +436,7 @@ export default {
         console.log(error)
       }
     },
+
     //-------------DELETE STUDENT---------
     async deleteStudent(id){
       try {
@@ -363,11 +447,13 @@ export default {
         console.log(error)
       }
     },
+
     //------------REMOVE STUDENT FROM LIST-----------
     removeStudentFromList(id) {
       const indexToRemove = this.allStudents.findIndex((item) => item.user.id === id)
       this.allStudents.splice(indexToRemove, 1)
     },
+
   }
 }
 </script>
@@ -400,11 +486,27 @@ th{
   margin-left: 230px !important;
 }
 table{
-  margin:15px;
+  margin:0px;
   margin-top:0px;
 }
-.filter-type-btn, .filter-box{
-  border-radius: 0px !important;
+
+.filter-container {
+  margin-bottom:-20px;
+  margin-left:-8px;
+}
+
+.filter-container .filter-type-btn{
+  border-top-right-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  background-color: #F8F6F7;
+  width: 80px !important;
+}
+
+.filter-container .filter-box{
+  border-top-left-radius: 15px !important;
+  border-bottom-left-radius: 15px !important;
+  background-color: #F8F6F7;
+  width: 200px;
 }
 
 .custom-swal {
@@ -442,5 +544,128 @@ table{
 }
 .bulk_topup{
   cursor: pointer;
+  width: 100px;
+  text-decoration: underline;
+  margin-left: 20px;
+  color: black;
+  margin-top: 15px !important;
 }
+.bulk_topup:hover{
+  color: #040A20;
+  
+}
+.page-description{
+  font-size: 11px;
+  display: block;
+  margin: 0.5rem 0; 
+}
+
+
+
+
+
+/* Align pagination to the right */
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  height: 70px;
+  width: 100% !important; /* Make sure it takes full width */
+  display: grid;
+}
+
+/* Pagination styles similar to Bootstrap */
+.pagination {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  width: 100% !important;
+  padding-right: 20px;
+}
+
+.pagination li {
+  margin: 0;
+  padding-top: 10px;
+  height: 17px;
+  width:24px;
+  font-size: 13px;
+  padding-right: 5px;
+  display: -webkit-inline-box;
+}
+
+.pagination li a {
+  text-decoration: none;
+  padding: 8px 12px;
+  color: #010A21;
+  border: 1px solid #010A21;
+  border-radius: 0px;
+  background-color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Active page styling */
+.pagination li.active a {
+  background-color: #010A21;
+  color: white;
+  pointer-events: none;
+}
+
+/* Disabled page styling */
+.pagination li.disabled a {
+  color: grey;
+  pointer-events: none;
+  background-color: #f1f1f1;
+}
+
+/* Hover effect */
+.pagination li a:hover {
+  background-color: #010A21;
+  color: white;
+}
+
+/* Dropdown styling */
+.entries-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.entries-dropdown select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  outline: none;
+}
+
+.entries-dropdown select:focus {
+  border-color: #010A21 !important;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* Dropdown styling */
+.entries-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.entries-dropdown select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  outline: none;
+}
+
+.entries-dropdown select:focus {
+  border-color: #007bff;
+}
+
 </style>

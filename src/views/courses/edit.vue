@@ -77,10 +77,7 @@
     this.editCourse();
   },
   updated(){
-    if(!this.userPermissions.edit){
-      this.$router.go(-1);
-      return;
-    }
+    this.$permissions.redirectIfNotAllowed('edit_course');
   },
   computed: {
       userPermissions() {

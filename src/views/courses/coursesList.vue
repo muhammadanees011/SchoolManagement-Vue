@@ -1,16 +1,39 @@
 <template>
-    <div class="container-fluid py-4">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <div class="card my-4">
-            <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                <h6 class="text-dark text-capitalize ps-3">Courses</h6>
+          <div class="card">
+
+              <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
+                <span>
+                  <h6 class="ms-3 text-dark text-capitalize">COURSES</h6>
+                  <small class="ms-3 page-description">
+                    In the Courses section, you can manage course information by adding, editing, or deleting courses. Additionally, you can view and update the <br> list of students enrolled in each course. This functionality helps management of courses and enrolled students.
+                  </small>
+                </span>
                 <template v-if="userPermissions.create">
                   <router-link :to="{ name: 'add-course' }">
                     <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Course </button>
                   </router-link>
                 </template>
               </div>
+
+              <div class="filter-container ms-2">
+                <span style="display: flex;">
+                  <input class="input-box filter-box" @keyup="filterCourses" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                  <select @change="filterCourses" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                    <option v-for="(item, index) in allFields" :key="index" :value="item">
+                      {{ item }}
+                    </option>
+                  </select>
+
+                  <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                    <i class="fas fa-download download-icon me-1"></i>
+                    Export To XLS
+                  </span>
+                </span>
+              </div>  
+
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0 student-table">
                 <table ref="table" class="table align-items-center mb-0">
@@ -19,12 +42,17 @@
                       <th class="text-uppercase text-xxs font-weight-bolder">  ID </th>
                       <th class="text-uppercase text-xxs font-weight-bolder">  Course Code </th>
                       <th class="text-uppercase text-xxs font-weight-bolder"> Course Name </th>
-                      <th class="text-uppercase text-xxs font-weight-bolder"> Course Description </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder"> Course Level </th>
                       <th class="text-uppercase  text-xxs font-weight-bolder"> Status </th>
                       <th class="text-uppercase  text-xxs font-weight-bolder"> Action </th>
                     </tr>
                   </thead>
                   <tbody>
+                    <tr v-if="allCourse.length === 0">
+                      <td colspan="6" class="text-center">
+                        No data available.
+                      </td>
+                    </tr>
                     <tr v-for="(item, index) in allCourse" :key="index">
                      <td>
                         <p class="text-xs  text-center font-weight-bold mb-0"> {{ item.id}}</p>
@@ -38,23 +66,23 @@
                         </router-link>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0"> {{item.CourseLevel }} </p>
+                        <p class="text-xs font-weight-bold mb-0"> {{item.CourseDescription }} </p>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0"> {{item.CourseDescription }} </p>
+                        <p class="text-xs font-weight-bold mb-0"> {{item.CourseLevel }} </p>
                       </td>
                       <td class="align-middle text-center text-sm">
                         <span class="badge badge-sm bg-gradient-success">{{item.status}}</span>
                       </td>
                       <td class="align-middle text-center">
                         <span>
-                          <template v-if="userPermissions.edit">
+                          <template v-if="userPermissions.edit_course">
                           <router-link :to="{ name: 'edit-course', params: { id: item.id } }">
                             <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                           </router-link>
                           </template>
                           <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
-                          <template v-if="userPermissions.delete">
+                          <template v-if="userPermissions.delete_course">
                           <i @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                           </template>
                         </span>
@@ -66,27 +94,38 @@
 
               <div class="row">
                 <div class="col-md-12 col-lg-12">
-                  <nav class="page-nav" aria-label="Page navigation">
-                    <ul class="pagination mt-4 mb-4">
-                        <!-- Previous Page -->
-                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                            <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
-                                @click="getAllParents(currentPage - 1)" tabindex="-1"
-                                aria-disabled="true">arrow_back</i>
-                        </li>
-                        <!-- Page Numbers -->
-                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
-                            :class="{ 'active': currentPage === pageNumber }">
-                            <a class="page-link" href="#" @click="getAllParents(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <!-- Next Page -->
-                        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                            <i class="page-link material-icons-round opacity-10 fs-5"
-                                :disabled="currentPage === totalPages" @click="getAllParents(currentPage + 1)"
-                                tabindex="-1" aria-disabled="true">arrow_forward</i>
-                        </li>
-                    </ul>
-                  </nav>
+
+                  <div class="pagination-container">
+                      <div class="entries-dropdown">
+                        <label for="entries">Entries</label>
+                        <select v-model="itemsPerPage" @change="getAllCourses(currentPage)" id="entries">
+                          <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                        </select>
+                        <!-- <span>entries/page</span> -->
+                      </div>
+
+                      <!-- Pagination controls -->
+                      <nav class="pagination-wrapper">
+                        <ul class="pagination">
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getAllCourses(1)" href="#">«</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getAllCourses(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                          </li>
+                          <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
+                            <a @click="getAllCourses(page)" href="#">{{ page }}</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getAllCourses(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getAllCourses(totalPages)" href="#">»</a>
+                          </li>
+                        </ul>
+                      </nav>
+                  </div>
+
                 </div>
               </div>
 
@@ -101,6 +140,7 @@
   import { mapGetters } from 'vuex'
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';
+  import * as XLSX from 'xlsx';
 
   export default {
     name: 'tables',
@@ -109,8 +149,17 @@
       this.getUser();
       this.getAllCourses();
     },
+    updated(){
+      this.$permissions.redirectIfNotAllowed('view_course');
+    },
     data() {
       return {
+        perPageOptions: [10,20, 40, 60,100,200,300,400],
+        itemsPerPage:20,
+
+        seachString:'',
+        filterBy:'Name',
+        allFields:['Course Name','Course Code','Course Level'],
         allCourse:'',
         schools: 6,
         user:'',
@@ -125,8 +174,54 @@
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
+
+      limitedPages() {
+        let pages = [];
+        
+        // If total pages <= 5, show all pages
+        if (this.totalPages <= 5) {
+          for (let i = 1; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          let startPage, endPage;
+          
+          // Determine the middle page to be currentPage
+          if (this.currentPage <= 3) {
+            startPage = 1;
+            endPage = Math.min(5, this.totalPages);
+          } else if (this.currentPage >= this.totalPages - 2) {
+            startPage = Math.max(this.totalPages - 4, 1);
+            endPage = this.totalPages;
+          } else {
+            startPage = this.currentPage - 2;
+            endPage = this.currentPage + 2;
+          }
+
+          // Ensure the start and end pages are within bounds
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+
+          // Always include the first page if not in range
+          if (startPage > 1) {
+            pages.unshift(1);
+            if (startPage > 2) pages.splice(1, 0, '...');
+          }
+
+          // Always include the last page if not in range
+          if (endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) pages.push('...');
+            pages.push(this.totalPages);
+          }
+        }
+
+        return pages;
+      }
+
     },
     methods:{
+
       snackbarMsg(message) {
         this.$snackbar.add({
           type: 'success',
@@ -134,6 +229,7 @@
           background: 'white',
         })
       },
+
       confirmDelete(id) {
         Swal.fire({
           title: 'Are you sure?',
@@ -152,17 +248,59 @@
           }
         });
       },
+
+      exportTableToXLS() {
+        const table = this.$refs.table;
+        const ws = XLSX.utils.table_to_sheet(table);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, 'courses.xlsx');
+      },
+
+      //-----------FILTER COURSES------------
+      async filterCourses(){
+        if(this.filterBy=='' && this.seachString==''){
+          this.getAllCourses();
+          return;
+        }else if(this.filterBy!='' && this.seachString==''){
+          this.getAllCourses();
+          return;
+        }
+        let data={
+          "type":this.filterBy,
+          "value":this.seachString,
+          "status":'Active'
+        }
+        try {
+            const response=await axiosClient.post('/filterCourses',data);
+            this.allCourse=response.data;
+            this.totalRows = response.data.total;
+            this.currentPage = response.data.current_page;
+            this.perPage = response.per_page;
+            this.totalPages = response.data.last_page;
+          } catch (error) {
+            console.log(error)
+        }
+      },
+
+
       //------------GET USER-----------------
       getUser(){
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
         this.user=user
       },
+
       //-------------GET ALL COURSE----------
-      async getAllCourses(){
+      async getAllCourses(page=null){
         try {
+          let data={
+          'page':'',
+          'entries_per_page': this.itemsPerPage
+        }
+        data.page = page;
           let url='/getAllCourses'
-          const response= await axiosClient.get(url)
+          const response= await axiosClient.post(url,data)
           this.allCourse=response.data.data.data
           this.totalRows = response.data.pagination.total;
           this.currentPage = response.data.pagination.current_page;
@@ -172,6 +310,7 @@
           console.log(error)
         }
       },
+
       //-------------DELETE COURSE---------
       async deleteCourse(id){
         try {
@@ -182,6 +321,7 @@
           console.log(error)
         }
       },
+
       //------------REMOVE COURSE FROM LIST-----------
       removeCourseFromList(id) {
         const indexToRemove = this.allCourse.findIndex((item) => item.id === id)
@@ -193,7 +333,6 @@
         this.getBrandingSetting.primary_color : '#573078';
         document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
       },
-
 
     }
   }

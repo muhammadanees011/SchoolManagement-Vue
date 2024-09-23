@@ -9,8 +9,12 @@
               <div class="table-responsive p-0">
                 <div>
                   <div class="filter-container">
-                    <h5 class="ms-3">Purchase History</h5>
-                    <!-- <input class="input-box filter-box mb-3 ms-4" id="name" type="text" placeholder="Type to Search..." name="address" /> -->
+                    
+                    <span>
+                      <h5 class="ms-3 text-sm">PURCHASE HISTORY</h5>
+                      <small class="ms-3 mb-3 page-description">Purchase History section not only provides a clear overview of completed purchases but also allows users to initiate refund requests directly from the purchase history,<br> streamlining the process for resolving payment issues.</small>
+                    </span>
+
                   </div>              
                 </div>
                     <div class="card-body pt-1 p-3">
@@ -19,9 +23,6 @@
 
                           <div class="listNavigation">
                               <div class="listNavigation__lists">
-                                  <!-- <div class="listNavigation__header">
-                                      Very simple List navigation
-                                  </div> -->
                                   <ul class="listNavigation__list">
                                       <li class="list__item">
                                           <a href="#" class="item__link">
@@ -34,15 +35,18 @@
                                                   </p>
                                                   <span v-if="data.payment_status=='fully_paid'" class="text-success text-sm">
                                                     <small>
-                                                    Fully Paid: £{{ formattedAmount(data.amount_paid) }}
+                                                      Fully Paid: £{{ formattedAmount(data.amount_paid) }}
                                                     </small>
                                                   </span>
                                                   <span v-if="data.payment_status=='partially_paid'" class="text-success text-sm"><small>Partially Paid: £{{ formattedAmount(data.amount_paid) }}</small></span>
                                                   
+                                                  <span v-if='data.payment_card!=null' class="ms-5 bg-success text-white text-sm rounded-pill p-1"><small>Card Payment</small></span>
+                                                  <span v-if='data.payment_card==null' class="ms-5 bg-warning text-white text-sm rounded-pill p-1"><small>Wallet Payment</small></span>
+
                                                   <span v-if='data.refund_status=="refund_requested"' class="ms-5 text-warning text-sm"><small>(Refund Requested)</small></span>
                                                   <span v-if="data.refund_status=='refunded'" class="ms-5 text-warning text-sm"><small>(Refunded)</small></span>
                         
-                                                  <div class="description">{{ data.detail }}</div>
+                                                  <div class="description">Detail: {{ data.detail }}</div>
                                                   <span><small class="me-3 trip-dates text-warning">Date {{ formatDateString(data.created_at) }}</small></span>
                                               </div>
                                               <div class="item__metaInfo">
@@ -52,7 +56,7 @@
                                           <div v-if='data.refund_status=="refunded" || data.refund_status=="refund_requested"' class="mt-0">
                                           </div>
                                           <div v-else>
-                                            <button @click="refundRequest(data.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-98  text-white fw-5 p-2 border-radius-lg"> Request Refund {{ data.refund_status }}</button>
+                                            <button @click="confirmDelete(data.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-98  text-white fw-5 p-2 border-radius-lg"> Request Refund {{ data.refund_status }}</button>
                                           </div>
                             
                                         </li>
@@ -111,18 +115,18 @@
       confirmDelete(id) {
         Swal.fire({
           title: 'Are you sure?',
-          text: "Item will be deleted permanently and you will not be able to revert this!",
+          text: "Your refund request will be submitted to the admin for further review.",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!',
+          confirmButtonText: 'Yes, submit!',
           customClass: {
             popup: 'custom-swal'
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            this.deleteShopItem(id)
+            this.refundRequest(id)
           }
         });
       },
@@ -147,10 +151,14 @@
       return formattedValue;
     },
 
-      async getShopItems(){
+      async getShopItems(page=null){
+        let data={
+          'page':page,
+          'entries_per_page': this.itemsPerPage
+        }
         try {
-          const response=await axiosClient.get('/getMyPurchases')
-          this.shopItems=response.data;
+          const response=await axiosClient.post('/getMyPurchases',data)
+          this.shopItems=response.data.data;
         } catch (error) {
           console.log(error)
         }

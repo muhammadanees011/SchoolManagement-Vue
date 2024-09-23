@@ -9,6 +9,12 @@
             <div>
             <div class="row">
                 <div class="col-md-10 col-sm-10">
+                    <span>
+                        <h6 class="ms-3 text-dark text-capitalize">MANAGE ROLES & PERMISSIONS</h6>
+                        <small class="ms-3 page-description">
+                            In the Roles and Permissions section, you can manage user roles and can assign specific permissions to each role. This functionality ensures that users have the appropriate access levels based on their role, improving security and operational efficiency.
+                        </small>
+                    </span>
                     <form role="form">
                         <div class="mb-1">
                         <label class="input-label" for="name">Role Name</label>

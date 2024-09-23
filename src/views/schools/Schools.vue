@@ -1,21 +1,19 @@
 <template>
-  <div class="container-fluid py-4">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <div class="card my-4">
-          <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-            <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
-              <h6 class="text-white text-capitalize ps-3">Schools</h6>
-              <router-link :to="{ name: 'add-school' }">
-                <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Add School </button>
-              </router-link>
-            </div>
-          </div> -->
+        <div class="card">
           <div class="d-flex justify-content-between border-radius-lg pt-4 pb-3">
-            <h6 class="text-dark text-capitalize ps-3">Schools</h6>
-          <template v-if="userPermissions.create_school">
+            <!-- <h6 class="text-dark text-capitalize ps-3">SITES</h6> -->
+            <span>
+              <h6 class="ms-3 text-dark text-capitalize">SITES</h6>
+              <small class="ms-3 page-description">
+                In the Sites section, you can manage school by adding, editing, or deleting them. Additionally, you can track and update the number of teachers and <br>students associated with each site. This functionality ensures accurate and up-to-date information about each site.
+              </small>
+            </span>
+          <template v-if="userPermissions.create_site">
           <router-link :to="{ name: 'add-school' }">
-            <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add School </button>
+            <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Site </button>
           </router-link>
           </template>
           </div>
@@ -25,10 +23,10 @@
                 <thead>
                   <tr>
                     <th class="text-uppercase text-xxs font-weight-bolder"> ID </th>
-                    <th class="text-uppercase text-xxs font-weight-bolder"> School Name </th>
+                    <th class="text-uppercase text-xxs font-weight-bolder"> Site Name </th>
                     <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
                     <th class="text-uppercase text-xxs font-weight-bolder ps-2"> Country </th>
-                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Organization </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Organisation </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Teachers </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Students </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Status </th>
@@ -36,6 +34,11 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr v-if="allSchools.length === 0">
+                    <td colspan="9" class="text-center">
+                      No data available.
+                    </td>
+                  </tr>
                   <tr v-for="(item, index) in allSchools" :key="index">
                     <td class="align-middle text-center text-sm">
                       <p class="text-xs font-weight-bold mb-0"> {{ item.id }}</p>
@@ -54,7 +57,6 @@
                     </td>
                     <td>
                       <p class="text-xs font-weight-bold mb-0"> {{ item.country }} </p>
-                      <!-- <p class="text-xs text-secondary mb-0">{{ item.city }}</p> -->
                     </td>
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">{{ item.organization.name }}</span>
@@ -70,13 +72,13 @@
                     </td>
                     <td class="align-middle text-center">
                       <span>
-                        <template v-if="userPermissions.edit_school">
+                        <template v-if="userPermissions.edit_site">
                         <router-link :to="{ name: 'edit-school', params: { id: item.id } }">
                           <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         </router-link>
                         </template>
                         <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
-                        <template v-if="userPermissions.delete_school">
+                        <template v-if="userPermissions.delete_site">
                         <i @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                         </template>
                       </span>
@@ -105,7 +107,7 @@ export default {
     this.getAllSchools();
   },
   updated(){
-    this.$permissions.redirectIfNotAllowed('view_school');
+    this.$permissions.redirectIfNotAllowed('view_site');
   },
   data() {
     return {

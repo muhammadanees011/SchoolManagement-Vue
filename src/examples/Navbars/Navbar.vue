@@ -85,20 +85,20 @@
             <a href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showMenu ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" @click="showProfile = !showProfile">
               <i class="material-icons cursor-pointer"> account_circle </i>
             </a>
-            <ul class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4" :class="showMenu ? 'show' : ''" aria-labelledby="dropdownMenuButton">
-              <li class="menu_item mb-2">
+            <ul class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4" :class="showMenu ? 'show' : ''" aria-labelledby="dropdownMenuButton" @click="showMenu = !showMenu">
+              <li v-if="user.role=='organization_admin'|| user.role=='super_admin'" class="menu_item mb-2">
                 <router-link :to="{ name: 'Profile' }">
-                <a class="dropdown-item border-radius-md" href="javascript:;">
-                  <div class="py-1 d-flex">
-                    <div class="d-flex flex-column justify-content-center">
-                      <span class="d-flex align-items-center">
-                        <i class="fas fa-user pb-0"></i> 
-                        <h6 class="ms-1 pt-2 text-sm font-weight-normal"> <span class="font-weight-bold">{{ user.first_name}} {{user.last_name}} <small class="">({{ userRole }})</small></span> </h6>
-                        </span>
+                  <a class="dropdown-item border-radius-md" href="javascript:;">
+                    <div class="py-1 d-flex">
+                      <div class="d-flex flex-column justify-content-center">
+                        <span class="d-flex align-items-center">
+                          <i class="fas fa-user pb-0"></i> 
+                          <h6 class="ms-1 pt-2 text-sm font-weight-normal"> <span class="font-weight-bold">{{ user.first_name}} {{user.last_name}} <small class="">({{ userRole }})</small></span> </h6>
+                          </span>
+                      </div>
                     </div>
-                  </div>
-                </a>
-              </router-link>
+                  </a>
+                </router-link>
               </li>
               <li class="menu_item mb-2" >
                 <router-link :to="{name:'balance'}">
@@ -148,7 +148,7 @@
               </i>
             </a>
           </li> -->
-          <li class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
+          <!-- <li class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
             <a href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showMenu ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" @click="showMenu = !showMenu">
               <i class="material-icons cursor-pointer"> notifications </i>
             </a>
@@ -221,7 +221,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>

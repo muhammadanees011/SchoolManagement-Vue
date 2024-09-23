@@ -52,8 +52,8 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Total Schools', value: totalSchool ? totalSchool:0 }"
-              detail="Total Schools"
+              :title="{ text: 'Total Sites', value: totalSchool ? totalSchool:0 }"
+              detail="Total Sites"
               :icon="{
                 name: 'leaderboard',
                 color: 'text-white',
@@ -96,9 +96,6 @@
   </div>
 </template>
 <script>
-// import ChartHolderCard from './components/ChartHolderCard.vue'
-// import ReportsBarChart from '@/examples/Charts/ReportsBarChart.vue'
-// import ReportsLineChart from '@/examples/Charts/ReportsLineChart.vue'
 import MiniStatisticsCard from './components/MiniStatisticsCard.vue'
 import logoXD from '@/assets/img/small-logos/logo-xd.svg'
 import logoAtlassian from '@/assets/img/small-logos/logo-atlassian.svg'
@@ -217,9 +214,6 @@ export default {
     },
   },
   components: {
-    // ChartHolderCard,
-    // ReportsBarChart,
-    // ReportsLineChart,
     MiniStatisticsCard,
     UserShop,
   },

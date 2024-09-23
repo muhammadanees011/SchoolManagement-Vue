@@ -12,7 +12,7 @@
             </div>
           </div> -->
           <div class="d-flex justify-content-between border-radius-lg pt-4">
-              <h6 class="text-dark text-capitalize ps-3">Add Organization</h6>
+              <h6 class="text-dark text-capitalize ps-3">Add Organisation</h6>
               <router-link :to="{ name: 'list-organizations' }">
                 <button style="font-size: 12px;background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Back </button>
               </router-link>

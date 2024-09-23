@@ -40,14 +40,14 @@
                               </div>
                               <div class="col-xl-4 col-lg-4 col-md-4">
                                 <div class="mb-1">
-                                    <label class="input-label" for="status">Organization</label>
+                                    <label class="input-label" for="status">Organisation</label>
                                     <br />
                                     <select v-model="newTrip.organization_id" class="select-box" id="organization" type="select" placeholder="organization" name="organization">
                                       <option v-for="(item, index) in availableOrganizations" :key="index" :value="item.id">
                                         {{ item.name }}
                                       </option>
                                     </select>
-                                    <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>Organization is required</small>
+                                    <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>Organisation is required</small>
                                 </div>
                                   
                               </div>

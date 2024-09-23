@@ -2,27 +2,33 @@
     <div class="row">
         <div class="col-md-12 col-sm-12">
     <div class="support-form-container">
+
       <form class="support-form" @submit.prevent="handleSubmit">
-        <h2>Contact Support</h2>
+        <h5>Contact Support</h5>
         <div class="col-md-6 col-sm-12">
+          <div v-if="isError" class="row mb-1 validation-errors bg-warning rounded p-1">
+            <small v-for="(item,index) in validationErrors" :key="index" class="text-white">
+              {{ item }}
+            </small>
+          </div>
         <div class="form-group">
-          <label for="fullName">Full Name</label>
-          <input v-model="form.fullName" type="text" id="fullName" name="fullName" required>
+          <label for="fullName" class="input-label">Full Name</label>
+          <input v-model="form.fullName" type="text" class="input-box" id="fullName" name="fullName" required>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input v-model="form.email" type="email" id="email" name="email" required>
+          <input v-model="form.email" type="email" class="input-box" id="email" name="email" required>
         </div>
         <div class="form-group">
           <label for="subject">Subject</label>
-          <input v-model="form.subject" type="text" id="subject" name="subject" required>
+          <input v-model="form.subject" type="text" class="input-box" id="subject" name="subject" required>
         </div>
         <div class="form-group">
           <label for="message">Message</label>
-          <textarea v-model="form.message" id="message" name="message" rows="5" required></textarea>
+          <textarea v-model="form.message" id="message" class="input-area" name="message" rows="5" required></textarea>
         </div>
         </div>
-        <button type="submit" class="submit-button">Submit</button>
+        <button type="submit" class="submit-button p-1 text-sm">Submit</button>
       </form>
     </div>
     </div>
@@ -35,6 +41,9 @@
   export default {
     data() {
       return {
+        isError:false,
+        validationErrors:'',
+        user:'',
         form: {
           fullName: '',
           email: '',
@@ -43,7 +52,21 @@
         }
       };
     },
+    mounted(){
+      this.getUser()
+    },
     methods: {
+    //------------GET USER----------------
+    getUser(){
+      let user=localStorage.getItem('user')
+      user= JSON.parse(user)
+      this.user=user
+      if(user.role=='student' || user.role=='staff'){
+        console.log('')
+      }else{
+        this.$router.go(-1);
+      }
+    },
     //--------------TOAST MESSAGE--------------
     snackbarMsg(message) {
         this.$snackbar.add({
@@ -56,9 +79,13 @@
     try {
         await axiosClient.post('/sendSupportEmail',this.form)
         this.snackbarMsg('Message Sent Successfully!')
+        this.isError=false
+        Object.keys(this.form).forEach(key => this.form[key] = '');
     } catch (error) {
-        console.log(error)
-        this.snackbarMsg('Something Went Wrong.')
+      console.log(error)
+        this.isError=true
+        this.validationErrors=error.response.data.errors
+        // this.snackbarMsg('Something Went Wrong.')
     }
     }
     }
@@ -100,14 +127,30 @@
   .form-group {
     margin-bottom: 15px;
   }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #333;
+  .form-group .input-label {
+    font-size: 12px;
   }
-  
+  /* Basic input styles */
+  .form-group .input-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 24px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    font-size: 12px;
+  }
+
+  .form-group .input-area {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 24px;
+    box-sizing: border-box;
+    width: 100%;
+    height:120px;
+    font-size: 12px;
+  }
+
   .form-group input,
   .form-group textarea {
     width: 100%;

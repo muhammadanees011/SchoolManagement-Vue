@@ -1,14 +1,36 @@
 <template>
-    <div class="container-fluid py-4">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <div class="card my-4">
+          <div class="card">
                 <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                  <h6 class="text-dark text-capitalize ps-3">Enrolled Students</h6>
+                  <span>
+                    <h6 class="text-dark text-capitalize ps-3">ENROLLED STUDENTS</h6>
+                    <small class="ms-3 page-description">
+                      In the Enrolled Students section, you can view a list of students currently enrolled in a course. You have the ability to manage course enrollments <br> by adding new students or removing existing ones.
+                    </small>
+                  </span>
                   <template v-if="userPermissions.create_student">
                     <button @click="showModal=true" style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Enroll Student </button>
                   </template>
                 </div>
+
+                <div class="filter-container ms-2">
+                  <span style="display: flex;">
+                    <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                    <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                      <option v-for="(item, index) in allFields" :key="index" :value="item">
+                        {{ item }}
+                      </option>
+                    </select>
+
+                    <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                      <i class="fas fa-download download-icon me-1"></i>
+                      Export To XLS
+                    </span>
+                  </span>
+                </div>  
+
               <div>
               </div>
             <div class="card-body px-0 pb-2">
@@ -19,7 +41,7 @@
                     <tr>
                       <th class="text-uppercase text-xxs font-weight-bolder"> Student ID </th>
                       <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
-                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> School </th>
+                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Site </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Action </th>
                     </tr>
                   </thead>
@@ -47,27 +69,38 @@
             </div>
             <div class="row">
                   <div class="col-md-12 col-lg-12">
-                    <nav class="page-nav" aria-label="Page navigation">
-                      <ul class="pagination mt-4 mb-4">
-                          <!-- Previous Page -->
-                          <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                              <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
-                                  @click="getAllStudents(currentPage - 1)" tabindex="-1"
-                                  aria-disabled="true">arrow_back</i>
-                          </li>
-                          <!-- Page Numbers -->
-                          <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
-                              :class="{ 'active': currentPage === pageNumber }">
-                              <a class="page-link" href="#" @click="getAllStudents(pageNumber)">{{ pageNumber }}</a>
-                          </li>
-                          <!-- Next Page -->
-                          <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                              <i class="page-link material-icons-round opacity-10 fs-5"
-                                  :disabled="currentPage === totalPages" @click="getAllStudents(currentPage + 1)"
-                                  tabindex="-1" aria-disabled="true">arrow_forward</i>
-                          </li>
-                      </ul>
-                    </nav>
+
+                    <div class="pagination-container">
+                        <div class="entries-dropdown">
+                          <label for="entries">Entries</label>
+                          <select v-model="itemsPerPage" @change="getAllStudents(currentPage)" id="entries">
+                            <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                          </select>
+                          <!-- <span>entries/page</span> -->
+                        </div>
+
+                        <!-- Pagination controls -->
+                        <nav class="pagination-wrapper">
+                          <ul class="pagination">
+                            <li :class="{ disabled: currentPage === 1 }">
+                              <a @click="getAllStudents(1)" href="#">«</a>
+                            </li>
+                            <li :class="{ disabled: currentPage === 1 }">
+                              <a @click="getAllStudents(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                            </li>
+                            <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
+                              <a @click="getAllStudents(page)" href="#">{{ page }}</a>
+                            </li>
+                            <li :class="{ disabled: currentPage === totalPages }">
+                              <a @click="getAllStudents(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                            </li>
+                            <li :class="{ disabled: currentPage === totalPages }">
+                              <a @click="getAllStudents(totalPages)" href="#">»</a>
+                            </li>
+                          </ul>
+                        </nav>
+                    </div>
+
                   </div>
             </div>
           </div>
@@ -100,6 +133,9 @@
     },
     data() {
       return {
+        perPageOptions: [10,20, 40, 60,100,200,300,400],
+        itemsPerPage:20,
+
         topUpAmount:null,
         showModal: false,
         selectall:false,
@@ -122,6 +158,51 @@
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
+      
+      limitedPages() {
+        let pages = [];
+        
+        // If total pages <= 5, show all pages
+        if (this.totalPages <= 5) {
+          for (let i = 1; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          let startPage, endPage;
+          
+          // Determine the middle page to be currentPage
+          if (this.currentPage <= 3) {
+            startPage = 1;
+            endPage = Math.min(5, this.totalPages);
+          } else if (this.currentPage >= this.totalPages - 2) {
+            startPage = Math.max(this.totalPages - 4, 1);
+            endPage = this.totalPages;
+          } else {
+            startPage = this.currentPage - 2;
+            endPage = this.currentPage + 2;
+          }
+
+          // Ensure the start and end pages are within bounds
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+
+          // Always include the first page if not in range
+          if (startPage > 1) {
+            pages.unshift(1);
+            if (startPage > 2) pages.splice(1, 0, '...');
+          }
+
+          // Always include the last page if not in range
+          if (endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) pages.push('...');
+            pages.push(this.totalPages);
+          }
+        }
+
+        return pages;
+      }
+
     },
     methods:{
       exportTableToXLS() {
@@ -149,6 +230,7 @@
           }
         });
       },
+
       //------------SELECT ALL RECORD-----------
       selectAll(){
       this.selectedRecords=[]
@@ -183,6 +265,7 @@
         this.getBrandingSetting.primary_color : '#573078';
         document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
       },
+
       snackbarMsg(message) {
         this.$snackbar.add({
           type: 'success',
@@ -190,22 +273,27 @@
           background: 'white',
         })
       },
+
       formattedPrice(value){
           const formattedValue = parseFloat(value).toFixed(2);
           return formattedValue;
       },
+
       topUps(id){
         this.$router.push('/payment_account/'+id)
       },
+
       transactionHistoryNav(id){
         this.$router.push('/student-billing/'+id)
       },
+
       //------------GET USER-----------------
       getUser(){
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
         this.user=user
       },
+
       //-----------FILTER STUDENTS------------
       async filterStudents(){
         if(this.filterBy=='' && this.seachString==''){
@@ -220,8 +308,8 @@
           "value":this.seachString
         }
         try {
-            const response=await axiosClient.post('/filterStudent',data);
-            this.allStudents=response.data.data;
+            const response=await axiosClient.post('/filterCourseStudents',data);
+            this.allStudents=response.data;
             this.totalRows = response.data.total;
             this.currentPage = response.data.current_page;
             this.perPage = response.per_page;
@@ -235,15 +323,16 @@
         try {
           let data={
             'CourseCode':this.$route.params.id,
-            'page':''
+            'page':'',
+            'entries_per_page': this.itemsPerPage
           }
           data.page = page;
           const response= await axiosClient.post('/getCourseStudents',data);
           this.allStudents=response.data.data
-          this.totalRows = response.data.total;
-          this.currentPage = response.data.current_page;
-          this.perPage = response.per_page;
-          this.totalPages = response.data.last_page;
+          this.totalRows = response.data.pagination.total;
+          this.currentPage = response.data.pagination.current_page;
+          this.perPage = response.data.pagination.per_page;
+          this.totalPages = response.data.pagination.last_page;
         } catch (error) {
           console.log(error)
         }

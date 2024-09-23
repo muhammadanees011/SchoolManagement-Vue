@@ -1,21 +1,36 @@
 <template>
-    <div class="container-fluid py-4">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <div class="card my-4">
+          <div class="card px-3">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                <h6 class="text-dark text-capitalize ps-3">Staff</h6>
+                <!-- <h6 class="text-dark text-capitalize ps-3">STAFF</h6> -->
+
+                <span>
+                <h6 class="text-dark text-capitalize">STAFF</h6>
+                <small class="page-description">Here, you can oversee staff accounts, add funds to their wallets, and track their transaction history. This functionality ensures effective management <br>of financial interactions and balances for each staff.</small>
+                </span>
                 <template v-if="userPermissions.create_staff">
                   <router-link :to="{ name: 'add-staff' }">
                     <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Staff </button>
                   </router-link>
                 </template>
               </div>
-              <div class="filter-container">
-                <input class="input-box filter-box ms-3" @keyup.enter="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                <div class="icon-label me-3" @click="exportTableToXLS()">
-                <span class="label-text bulk_topup">Export To XLS</span>
-              </div>
+              <div class="filter-container ms-2">
+                <span style="display: flex;">
+                  <input class="input-box filter-box" @keyup="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                  <select @change="filterStaff" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                    <option v-for="(item, index) in allFields" :key="index" :value="item">
+                      {{ item }}
+                    </option>
+                  </select>
+
+                  <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                    <i class="fas fa-download download-icon me-1"></i>
+                    Export To XLS
+                  </span>
+
+                </span>
               </div>   
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
@@ -25,7 +40,7 @@
                       <th class="text-uppercase text-center text-xxs font-weight-bolder">  MIFARE ID </th>
                       <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
                       <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
-                      <th class="text-uppercase text-xxs font-weight-bolder"> School </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder"> Site </th>
                       <th class="text-uppercase text-center text-xxs font-weight-bolder"> Balance </th>
                       <th v-if="userPermissions.wallet" class="text-center text-uppercase text-xxs font-weight-bolder"> Wallet </th>
                       <th class="text-uppercase text-xxs font-weight-bolder"> TopUp </th>
@@ -34,6 +49,11 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <tr v-if="allStaff.length === 0">
+                      <td colspan="9" class="text-center">
+                        No data available.
+                      </td>
+                    </tr>
                     <tr v-for="(item, index) in allStaff" :key="index">
                      <td>
                         <p class="text-xs  text-center font-weight-bold mb-0"> {{ item.mifare_id ? item.mifare_id :'-' }}</p>
@@ -43,7 +63,6 @@
                       </td>
                       <td>
                         <p class="text-xs font-weight-bold mb-0"> {{ item.user.email }} </p>
-                        <!-- <p class="text-xs text-secondary mb-0">{{ item.user.phone }}</p> -->
                       </td>
                       <td>
                         <p class="text-xs text-center font-weight-bold mb-0"> {{item.school.name}} </p>
@@ -64,15 +83,11 @@
                       </td>
                       <td class="align-middle text-center">
                         <span>
-                          <!-- <router-link :to="{ name: 'detail-staff', params: { id: item.user.id } }">
-                          <i class="material-icons-round opacity-10 fs-5 me-1 cursor-pointer">info</i>
-                          </router-link> -->
                           <template v-if="userPermissions.edit_staff">
                             <router-link :to="{ name: 'edit-staff', params: { id: item.id } }">
                               <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                             </router-link>
                           </template>
-                          <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
                           <template v-if="userPermissions.delete_staff">
                             <i @click="confirmDelete(item.user.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                           </template>
@@ -84,27 +99,36 @@
               </div>
               <div class="row">
                 <div class="col-md-12 col-lg-12">
-                  <nav class="page-nav" aria-label="Page navigation">
-                    <ul class="pagination mt-4 mb-4">
-                        <!-- Previous Page -->
-                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                            <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
-                                @click="getAllStaff(currentPage - 1)" tabindex="-1"
-                                aria-disabled="true">arrow_back</i>
-                        </li>
-                        <!-- Page Numbers -->
-                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
-                            :class="{ 'active': currentPage === pageNumber }">
-                            <a class="page-link" href="#" @click="getAllStaff(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <!-- Next Page -->
-                        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                            <i class="page-link material-icons-round opacity-10 fs-5"
-                                :disabled="currentPage === totalPages" @click="getAllStaff(currentPage + 1)"
-                                tabindex="-1" aria-disabled="true">arrow_forward</i>
-                        </li>
-                    </ul>
-                  </nav>
+                  <div class="pagination-container">
+                      <div class="entries-dropdown">
+                        <label for="entries">Entries</label>
+                        <select v-model="itemsPerPage" @change="getAllStaff(currentPage)" id="entries">
+                          <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                        </select>
+                        <!-- <span>entries/page</span> -->
+                      </div>
+
+                      <!-- Pagination controls -->
+                      <nav class="pagination-wrapper">
+                        <ul class="pagination">
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getAllStaff(1)" href="#">«</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === 1 }">
+                            <a @click="getAllStaff(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                          </li>
+                          <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
+                            <a @click="getAllStaff(page)" href="#">{{ page }}</a>
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getAllStaff(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                          </li>
+                          <li :class="{ disabled: currentPage === totalPages }">
+                            <a @click="getAllStaff(totalPages)" href="#">»</a>
+                          </li>
+                        </ul>
+                      </nav>
+                  </div>
                 </div>
               </div>
             </div>
@@ -136,9 +160,58 @@
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
+
+      limitedPages() {
+        let pages = [];
+        
+        // If total pages <= 5, show all pages
+        if (this.totalPages <= 5) {
+          for (let i = 1; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          let startPage, endPage;
+          
+          // Determine the middle page to be currentPage
+          if (this.currentPage <= 3) {
+            startPage = 1;
+            endPage = Math.min(5, this.totalPages);
+          } else if (this.currentPage >= this.totalPages - 2) {
+            startPage = Math.max(this.totalPages - 4, 1);
+            endPage = this.totalPages;
+          } else {
+            startPage = this.currentPage - 2;
+            endPage = this.currentPage + 2;
+          }
+
+          // Ensure the start and end pages are within bounds
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+
+          // Always include the first page if not in range
+          if (startPage > 1) {
+            pages.unshift(1);
+            if (startPage > 2) pages.splice(1, 0, '...');
+          }
+
+          // Always include the last page if not in range
+          if (endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) pages.push('...');
+            pages.push(this.totalPages);
+          }
+        }
+
+        return pages;
+      }
     },
     data() {
       return {
+        perPageOptions: [10,20, 40, 60,100,200,300,400],
+        itemsPerPage:20,
+
+        filterBy:'Name',
+        allFields:['MIFare Id','Name','Email'],
         seachString:'',
         allStaff:'',
         schools: 6,
@@ -207,7 +280,8 @@
       async getAllStaff(page){
         let data={
           'user_id':null,
-          'page':page
+          'page':page,
+          'entries_per_page': this.itemsPerPage
         }
         try {
           if(this.user.role=='organization_admin'){
@@ -245,7 +319,9 @@
         return;
       }
       let data={
-        "searchString":this.seachString
+        "type":this.filterBy,
+        "value":this.seachString,
+        "status":'active'
       }
       try {
           const response=await axiosClient.post('/searchStaff',data);

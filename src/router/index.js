@@ -12,6 +12,7 @@ import ArchivedSchools from '../views/schools/archived_schools.vue'
 import AddSchool from '../views/schools/add.vue'
 import EditSchool from '../views/schools/edit.vue'
 import SchoolSettings from '../views/schools/settings.vue'
+import SchoolCard from '../views/schools/add_card.vue'
 import Students from '../views/students/Students.vue'
 import ArchivedStudents from '../views/students/archived_students.vue'
 import AddStudent from '../views/students/add.vue'
@@ -131,6 +132,7 @@ const routes = [
       { path: '/edit-schools/:id', name: 'edit-school', component: EditSchool },
       { path: '/archived/schools', name: 'archived-schools', component: ArchivedSchools },
       { path: '/settings/:id', name: 'settings-school', component: SchoolSettings },
+      { path: '/school/addCard/:id', name: 'card-school', component: SchoolCard },
     ],
   },
   //------------STUDENTS---------------

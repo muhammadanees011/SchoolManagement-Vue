@@ -12,7 +12,7 @@
             </div>
           </div> -->
           <div class="d-flex justify-content-between  border-radius-lg pt-4 ">
-              <h6 class="text-dark text-capitalize ps-3">Add School</h6>
+              <h6 class="text-dark text-capitalize ps-3">Add Site</h6>
               <router-link :to="{ name: 'list-schools' }">
                 <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 px-4 py-2 border-radius-lg"> Back </button>
               </router-link>
@@ -30,7 +30,7 @@
                         <form role="form">
                           <div class="mb-1">
                             <label class="input-label" for="name">Name</label>
-                            <input class="input-box" id="name" v-model="newSchool.title" type="text" placeholder="School Name" name="name" />
+                            <input class="input-box" id="name" v-model="newSchool.title" type="text" placeholder="Site Name" name="name" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["title"]!==""'>Name is required</small>
                           </div>
                           <div class="mb-1">
@@ -54,14 +54,14 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>Address is required</small>
                           </div>
                           <div v-if="user.role=='super_admin'" class="mb-1">
-                            <label class="input-label" for="phone">Organization</label>
+                            <label class="input-label" for="phone">Organisation</label>
                             <br />
                             <select class="select-box" v-model="newSchool.organization_id" id="name" type="select" placeholder="Zip" name="zip">
                               <option v-for="(item, index) in availableOrganizations" :key="index" :value="item.id">
                                 {{ item.name }}
                               </option>
                             </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>Organization is required</small>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>Organisation is required</small>
                           </div>
                           <div  class="mb-1">
                             <label class="input-label" for="country">Country</label>
@@ -83,7 +83,7 @@
                           <input class="input-box" id="name" v-model="newSchool.zip" type="text" placeholder="Zip Code" name="zip" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>ZIP code is required</small>
                         </div>
-                        <div class="mb-1">
+                        <!-- <div class="mb-1">
                           <label class="input-label" for="teachers_count">Teachers Count</label>
                           <input class="input-box" id="teachers_count" v-model="newSchool.teachers_count" type="number" placeholder="Teachers Count" name="teachers_count" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["teachers_count"]!==""'>Teachers Count is required</small>
@@ -92,17 +92,7 @@
                           <label class="input-label" for="students_count">Students Count</label>
                           <input class="input-box" id="students_count" v-model="newSchool.students_count" type="number" placeholder="Teachers Count" name="students_count" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["students_count"]!==""'>Students Count is required</small>
-                        </div>
-                        <div class="mb-1">
-                          <label class="input-label" for="stages">Stages</label>
-                          <input class="input-box" id="stages" v-model="newSchool.stages" type="text" placeholder="Stages" name="stages" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["stages"]!==""'>Stages is required</small>
-                        </div>
-                        <div class="mb-1">
-                          <label class="input-label" for="tagLine">Tag Line</label>
-                          <input class="input-box" id="name" v-model="newSchool.tagline" type="text" placeholder="Tag Line" name="tagLine" />
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["tagline"]!==""'>Tagline is required</small>
-                        </div>
+                        </div> -->
                         <div class="mb-1">
                           <label class="input-label" for="phone">Status</label>
                           <br />
@@ -146,7 +136,7 @@ export default {
   this.getOrganizations()
 },
 updated(){
-  this.$permissions.redirectIfNotAllowed('create_school');
+  this.$permissions.redirectIfNotAllowed('create_site');
   },
   data() {
     return {
@@ -165,10 +155,8 @@ updated(){
         city: '',
         zip: '',
         address: '',
-        tagline: '',
-        teachers_count:'',
-        students_count:'',
-        stages:'',
+        // teachers_count:'',
+        // students_count:'',
         status:'',
       },
       availableSchools:['active','pending','blocked'],
@@ -185,7 +173,7 @@ updated(){
     },
     //------------VALIDATE FORM-------------
     validateForm(){
-      this.$permissions.redirectIfNotAllowed('create_school');
+      this.$permissions.redirectIfNotAllowed('create_site');
       let status=false
       let validate=''
       validate=cloneDeep(this.newSchool)
@@ -218,8 +206,7 @@ updated(){
         if(this.user.role=='organization_admin'){
           url='/createSchool/'+this.user.id
         }
-        const response=await axiosClient.post(url, this.newSchool)
-        this.createCustomer(response.data.id);
+        await axiosClient.post(url, this.newSchool)
         this.$router.push({ name: 'list-schools' })
         this.snackbarMsg('School Saved Successfuly')
       } catch (error) {
@@ -228,20 +215,7 @@ updated(){
         this.validationErrors=error.response.data.errors
       }
     },
-    //-----------CREATE STRIPE CUSTOMER----------
-    async createCustomer(id){
-      let name=this.newSchool.title;
-      let data={
-        'user_id':id,
-        'name':name,
-        'email':this.newSchool.email
-      }
-      try {
-        await axiosClient.post('/createCustomer',data)
-      } catch (error) {
-        console.log(error)
-      }
-    },
+
     //------------GET ORGANIZATIONS------------
     async getOrganizations() {
       try {

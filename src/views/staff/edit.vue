@@ -45,14 +45,14 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">School <span class="required">*</span></label>
+                            <label class="input-label" for="phone">Site <span class="required">*</span></label>
                             <br />
                             <select class="select-box" v-model="newStaff.school_id" id="school" type="select" placeholder="school" name="school">
                               <option v-for="(item, index) in allSchools" :key="index" :value="item.id">
                                 {{ item.title }}
                               </option>
                             </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School is required</small>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>Site is required</small>
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="phone">Role <span class="required">*</span></label>

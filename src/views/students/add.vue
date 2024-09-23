@@ -59,7 +59,7 @@
                           <input class="input-box" id="date_of_birth" v-model="newStudent.date_of_birth" type="date" placeholder="date of birth" name="date_of_birth" />
                         </div>
                         <div class="mb-1">
-                          <label class="input-label" for="phone">School <span class="required">*</span></label>
+                          <label class="input-label" for="phone">Site <span class="required">*</span></label>
                           <br />
                           <select class="select-box" v-model="newStudent.school_id" id="school" type="select" placeholder="school" name="school">
                             <option v-for="(item, index) in allSchools" :key="index" :value="item.id">

@@ -2,46 +2,42 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <div class="card my-1">
-                <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                  <h6 class="text-dark text-capitalize ps-3">Archived Students</h6>
-                </div>              
-
-              <!-- <div>
-                <div class="filter-container">
-                  <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                  <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
-                    <option v-for="(item, index) in allFields" :key="index" :value="item">
-                      {{ item }}
-                    </option>
-                  </select>
-                  <i class="fas fa-filter filter-icon me-1"></i>
-                </div>              
-              </div> -->
+          <div class="card px-3">
+                <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-2">
+                  <span>
+                  <h6 class="text-dark text-capitalize">ARCHIVED-STUDENTS</h6>
+                  <small class="page-description">Every archived student can be found in this table. Here, you can manage archived student accounts. You can permanently delete them in bulk,<br> restore them, or export the data to an Excel sheet</small>
+                  <!-- <hr  class="description-line"> -->
+                  </span>
+                </div>  
             <div class="card-body px-0 pb-2">
 
-                <div class="icon-container">
-                    <div class="icon-label" @click="confirmAction('restore')">
-                        <span class="label-text">Bulk Restore</span>
-                        <i class="material-icons-round opacity-10 fs-6 cursor-pointer">restore</i>
-                    </div>
-                    <div class="icon-label" v-if="userPermissions.delete_student" @click="confirmAction('delete')">
-                        <span class="label-text">Bulk Delete</span>
-                        <i class="material-icons-round opacity-10 fs-6 cursor-pointer">delete</i>
-                    </div>
-                    <div class="icon-label" @click="exportTableToXLS()">
-                        <span class="label-text">Export To XLS</span>
-                    </div>
+                <div class="filter-container mb-1" style="margin-top: -11px;">
+                  <span style="display: flex;">
                     <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
                     <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
                       <option v-for="(item, index) in allFields" :key="index" :value="item">
                         {{ item }}
                       </option>
                     </select>
+
+                    <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                      <i class="fas fa-download download-icon me-1"></i>
+                      Export To XLS
+                    </span>
+                    <span class="label-text bulk_topup" @click="confirmAction('restore')">
+                      <i class="fas fa-undo restore-icon me-1"></i>
+                      Bulk Restore
+                    </span>
+                    <span class="label-text bulk_topup" v-if="userPermissions.delete_student" @click="confirmAction('delete')">
+                      <i class="fas fa-trash delete-icon me-1"></i>
+                      Bulk Delete
+                    </span>
+                  </span>
                 </div>
 
               <div class="table-responsive p-0 student-table">
-                <table  ref="table" class="table align-items-center mb-0">
+                <table  ref="table" class="table align-items-center mb-0" style="margin-left:-2px !important;">
                   <thead>
                     <tr>
                       <th class="">
@@ -51,9 +47,9 @@
                         </div>
                       </th>
                       <th class="text-uppercase text-xxs font-weight-bolder"> MIFARE ID </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder"> Student ID </th>
                       <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
-                      <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
-                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> School </th>
+                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Site </th>
                       <!-- <th class="text-center text-uppercase text-xxs font-weight-bolder"> FSM </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Balance </th>
                       <th v-if="userPermissions.wallet" class="text-center text-uppercase text-xxs font-weight-bolder"> Wallet </th>
@@ -63,6 +59,11 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <tr v-if="allStudents.length === 0">
+                      <td colspan="6" class="text-center">
+                        No data available.
+                      </td>
+                    </tr>
                     <tr v-for="(item, index) in allStudents" :key="index">
                     <td class="align-middle text-center text-sm">
                         <div class="form-check">
@@ -74,10 +75,11 @@
                         <p class="text-xs font-weight-bold mb-0"> {{ item.mifare_id }}</p>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0"> {{ item.user.first_name }} {{ item.user.last_name }}</p>
+                        <p class="text-xs font-weight-bold mb-0">{{ item.student_id }} </p>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0"> {{ item.user.email }} </p>
+                        <p class="text-xs font-weight-bold mb-0"> {{ item.user.first_name }} {{ item.user.last_name }}</p>
+                        <p class="text-xs mb-0" style="font-size: 8px;"> {{ item.user.email }} </p>
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{item.school ? item.school.title :'-' }}</span>
@@ -114,29 +116,38 @@
             </div>
 
             <div class="row">
-                  <div class="col-md-12 col-lg-12">
-                    <nav class="page-nav" aria-label="Page navigation">
-                      <ul class="pagination mt-4 mb-4">
-                          <!-- Previous Page -->
-                          <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                              <i class="page-link material-icons-round opacity-10 fs-5" :disabled="currentPage === 1"
-                                  @click="getAllStudents(currentPage - 1)" tabindex="-1"
-                                  aria-disabled="true">arrow_back</i>
-                          </li>
-                          <!-- Page Numbers -->
-                          <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber"
-                              :class="{ 'active': currentPage === pageNumber }">
-                              <a class="page-link" href="#" @click="getAllStudents(pageNumber)">{{ pageNumber }}</a>
-                          </li>
-                          <!-- Next Page -->
-                          <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                              <i class="page-link material-icons-round opacity-10 fs-5"
-                                  :disabled="currentPage === totalPages" @click="getAllStudents(currentPage + 1)"
-                                  tabindex="-1" aria-disabled="true">arrow_forward</i>
-                          </li>
+              <div class="col-md-12 col-lg-12">
+                <div class="pagination-container">
+                    <div class="entries-dropdown">
+                      <label for="entries">Entries</label>
+                      <select v-model="itemsPerPage" @change="getAllStudents(currentPage)" id="entries">
+                        <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                      </select>
+                      <!-- <span>entries/page</span> -->
+                    </div>
+
+                    <!-- Pagination controls -->
+                    <nav class="pagination-wrapper">
+                      <ul class="pagination">
+                        <li :class="{ disabled: currentPage === 1 }">
+                          <a @click="getAllStudents(1)" href="#">«</a>
+                        </li>
+                        <li :class="{ disabled: currentPage === 1 }">
+                          <a @click="getAllStudents(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                        </li>
+                        <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
+                          <a @click="getAllStudents(page)" href="#">{{ page }}</a>
+                        </li>
+                        <li :class="{ disabled: currentPage === totalPages }">
+                          <a @click="getAllStudents(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                        </li>
+                        <li :class="{ disabled: currentPage === totalPages }">
+                          <a @click="getAllStudents(totalPages)" href="#">»</a>
+                        </li>
                       </ul>
                     </nav>
-                  </div>
+                </div>
+              </div>
             </div>
             
           </div>
@@ -165,11 +176,14 @@
     },
     data() {
       return {
+        perPageOptions: [10,20, 40, 60,100,200,300,400],
+        itemsPerPage:20,
+
         selectall:false,
         selectedRecords:[],
         filterBy:'Name',
         seachString:'',
-        allFields:['Student Id','Name','Email'],
+        allFields:['Student Id','MIFare Id','Name','Email'],
         allStudents:'',
         schools: 6,
         user:'',
@@ -185,6 +199,50 @@
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
+
+      limitedPages() {
+        let pages = [];
+        
+        // If total pages <= 5, show all pages
+        if (this.totalPages <= 5) {
+          for (let i = 1; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          let startPage, endPage;
+          
+          // Determine the middle page to be currentPage
+          if (this.currentPage <= 3) {
+            startPage = 1;
+            endPage = Math.min(5, this.totalPages);
+          } else if (this.currentPage >= this.totalPages - 2) {
+            startPage = Math.max(this.totalPages - 4, 1);
+            endPage = this.totalPages;
+          } else {
+            startPage = this.currentPage - 2;
+            endPage = this.currentPage + 2;
+          }
+
+          // Ensure the start and end pages are within bounds
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+
+          // Always include the first page if not in range
+          if (startPage > 1) {
+            pages.unshift(1);
+            if (startPage > 2) pages.splice(1, 0, '...');
+          }
+
+          // Always include the last page if not in range
+          if (endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) pages.push('...');
+            pages.push(this.totalPages);
+          }
+        }
+
+        return pages;
+      }
     },
     methods:{
 
@@ -320,7 +378,8 @@
     }
     let data={
         "type":this.filterBy,
-        "value":this.seachString
+        "value":this.seachString,
+        "status":'deleted'
     }
     try {
         const response=await axiosClient.post('/filterStudent',data);
@@ -339,8 +398,9 @@
         let data={
         'user_id':this.user.id,
         'role':this.user.role,
-        'page':''
-        }
+        'page':'',
+        'entries_per_page': this.itemsPerPage
+      }
         data.page = page;
         const response= await axiosClient.post('archivedStudents',data);
         this.allStudents=response.data.data

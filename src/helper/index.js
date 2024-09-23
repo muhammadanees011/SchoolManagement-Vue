@@ -14,11 +14,11 @@ const permissionsPlugin = {
       delete_admin:false,
       view_admin:false,
       edit_admin:false,
-      //--------school--------
-      create_school: false,
-      delete_school: false,
-      view_school: false,
-      edit_school: false,
+      //--------Site / School--------
+      create_site: false,
+      view_site: false,
+      edit_site: false,
+      delete_site: false,
       //--------stundent--------
       create_student: false,
       delete_student: false,
@@ -29,25 +29,24 @@ const permissionsPlugin = {
       delete_staff: false,
       view_staff: false,
       edit_staff: false,
-      //---------Trips--------
-      edit_trip: false,
-      view_trip: false,
-      delete_trip: false,
-      create_trip: false,
-      //---------Attributes---------
-      create_attribute: false,
-      delete_attribute: false,
-      view_attribute: false,
-      edit_attribute: false,
+      //---------Course--------
+      create_course: false,
+      view_course: false,
+      edit_course: false,
+      delete_course: false,
       //---------Shop---------
       create_shop: false,
       delete_shop: false,
       view_shop: false,
       edit_shop: false,
-      //-----------Support----------
-      support: false,
       //-----------Transaction Hisotry--------
       transaction_history: false,
+      //-----------Purchase History-----------
+      purchase_history: false,
+      //-----------Pending Installments-----------
+      pending_installments: false,
+      //-----------Refunds-----------
+      refunds: false,
       //-----------Roles-----------
       roles: false,
       //-----------Topup-----------

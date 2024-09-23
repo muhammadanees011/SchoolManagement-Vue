@@ -1,26 +1,25 @@
 <template>
-    <div class="container-fluid py-4">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <div class="card my-4">
-            <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
-                <h6 class="text-white text-capitalize ps-3">Schools</h6>
-                <router-link :to="{ name: 'add-school' }">
-                  <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Add School </button>
-                </router-link>
-              </div>
-            </div> -->
+          <div class="card">
+
             <div class="d-flex justify-content-between border-radius-lg pt-4 pb-3">
-              <h6 class="text-dark text-capitalize ps-3">Archived Schools</h6>
+              <span>
+                <h6 class="ms-3 text-dark text-capitalize">ARCHIVED SITES</h6>
+                <small class="ms-3 page-description">
+                  In the Archived Sites section, you can view and restore archived school locations. The details displayed include the student count and teacher count <br> for each archived site. This allows you to manage and review historical site data effectively.
+                </small>
+              </span>
             </div>
+
             <div class="card-body px-0 pb-2">
-                <div class="icon-container">
-                    <div class="icon-label" @click="confirmAction('restore')">
-                        <span class="label-text">Bulk Restore</span>
-                        <i class="material-icons-round opacity-10 fs-6 cursor-pointer">restore</i>
-                    </div>
-                </div>
+
+              <span class="label-text bulk_topup" @click="confirmAction('restore')">
+                <i class="fas fa-undo restore-icon me-1"></i>
+                Bulk Restore
+              </span>
+              
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
                   <thead>
@@ -32,10 +31,10 @@
                         </div>
                         </th>
                       <th class="text-uppercase text-xxs font-weight-bolder"> ID </th>
-                      <th class="text-uppercase text-xxs font-weight-bolder"> School Name </th>
+                      <th class="text-uppercase text-xxs font-weight-bolder"> Site Name </th>
                       <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
                       <th class="text-uppercase text-xxs font-weight-bolder ps-2"> Country </th>
-                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Organization </th>
+                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Organisation </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Teachers </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Students </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Status </th>
@@ -43,6 +42,11 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <tr v-if="allSchools.length === 0">
+                      <td colspan="9" class="text-center">
+                        No data available.
+                      </td>
+                    </tr>
                     <tr v-for="(item, index) in allSchools" :key="index">
                      <td class="align-middle text-center text-sm">
                         <div class="form-check">
@@ -83,12 +87,12 @@
                       </td>
                       <!-- <td class="align-middle text-center">
                         <span>
-                          <template v-if="userPermissions.edit_school">
+                          <template v-if="userPermissions.edit_site">
                           <router-link :to="{ name: 'edit-school', params: { id: item.id } }">
                             <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                           </router-link>
                           </template>
-                          <template v-if="userPermissions.delete_school">
+                          <template v-if="userPermissions.delete_site">
                           <i @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                           </template>
                         </span>
@@ -118,7 +122,7 @@
       await this.selectAll();
     },
     updated(){
-      this.$permissions.redirectIfNotAllowed('view_school');
+      this.$permissions.redirectIfNotAllowed('view_site');
     },
     data() {
       return {

@@ -12,7 +12,7 @@
             </div>
           </div> -->
           <div class="d-flex justify-content-between  border-radius-lg pt-4">
-              <h6 class="text-dark text-capitalize ps-3">Edit Organization</h6>
+              <h6 class="text-dark text-capitalize ps-3">Edit Organisation</h6>
             </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">

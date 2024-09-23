@@ -37,14 +37,14 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">Organization</label>
+                            <label class="input-label" for="phone">Organisation</label>
                             <br />
                             <select class="select-box" v-model="newAdmin.organization_id" id="school" type="select" placeholder="school" name="school">
                               <option v-for="(item, index) in allOrganizations" :key="index" :value="item.id">
                                 {{ item.name }}
                               </option>
                             </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>Organization is required</small>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["organization_id"]!==""'>Organisation is required</small>
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="phone">Role</label>

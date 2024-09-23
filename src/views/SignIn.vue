@@ -25,10 +25,16 @@
                 <input id="email" v-model="credentials.email" placeholder="Email" type="email" label="Email" name="email" />
                 <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
               </div>
-              <div class="mb-3">
-                <input id="password" v-model="credentials.password" placeholder="Password" type="password" label="Password" name="password" />
-                <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>Password is required</small>
+              <div class="d-flex">
+                <input id="password" v-model="credentials.password" 
+                placeholder="Password"
+                :type="showPassword ? 'text' : 'password'" 
+                label="Password" name="password" />
+                <span @click="togglePasswordVisibility" class="eye-icon" style="margin-left: -25px; margin-top: 7px;">
+                  <i :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                </span>
               </div>
+              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>Password is required</small>
               <!-- <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch> -->
               <div class="text-center">
                 <material-button class="my-4 mb-2" @click="signIn" style="background-color: #573078;" fullWidth>Sign in</material-button>
@@ -100,6 +106,7 @@ export default {
       },
       unauthorized: false,
       formValidation:"",
+      showPassword: false,
       credentials: {
         email: '',
         password: '',
@@ -108,8 +115,13 @@ export default {
   },
   methods: {
     ...mapMutations(['toggleEveryDisplay', 'toggleHideConfig']),
+
     loginWithMicrosoft() {
       window.location.href = this.$env_vars.BASE_URL+'/auth/redirect';
+    },
+
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
     },
     //------------MICROSOFT SIGNOUT-------------
     async SignOut() {

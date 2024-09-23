@@ -14,7 +14,7 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Student ID </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">  Name </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Email </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> School </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Site </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Transactions </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Ballance </th>

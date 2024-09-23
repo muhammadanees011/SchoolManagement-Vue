@@ -45,14 +45,14 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>email is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">School <span class="required">*</span></label>
+                            <label class="input-label" for="phone">Site <span class="required">*</span></label>
                             <br />
                             <select class="select-box" v-model="newStudent.school_id" id="school" type="select" placeholder="school" name="school">
                               <option v-for="(item, index) in allSchools" :key="index" :value="item.id">
                                 {{ item.title }}
                               </option>
                             </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>school is required</small>
+                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>Site is required</small>
                           </div>
                         <div class="mb-1">
                           <label class="input-label" for="phone">Free School Meal (FSM) <span class="required">*</span></label>
@@ -62,7 +62,7 @@
                               {{ item }}
                             </option>
                           </select>
-                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School ID is required</small>
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>Site ID is required</small>
                         </div>
                         <div class="mb-1">
                             <label class="input-label" for="balance">Balance</label>

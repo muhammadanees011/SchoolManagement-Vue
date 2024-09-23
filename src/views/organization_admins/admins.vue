@@ -1,14 +1,18 @@
 <template>
-    <div class="container-fluid py-4">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <div class="card my-4">
+          <div class="card">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                <h6 class="text-dark text-capitalize ps-3">Admins</h6>
-                <router-link :to="{ name: 'add-organization-admins' }">
-                  <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Admin </button>
-                </router-link>
-              </div>
+              <h6 class="text-dark text-capitalize ps-3">ADMINS</h6>
+              <router-link :to="{ name: 'add-organization-admins' }">
+                <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Admin </button>
+              </router-link>
+            </div>
+
+            <span class="ps-3">
+              <small class="page-description">Here, you can add organization admins who can manage the entire portal. Multiple admins can be assigned, each with different<br> roles and permissions.</small>
+            </span>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
@@ -18,12 +22,17 @@
                       <th class="text-uppercase text-xxs font-weight-bolder">  Name </th>
                       <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Role </th>
-                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Organization </th>
+                      <th class="text-center text-uppercase text-xxs font-weight-bolder"> Organisation </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Status </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Action </th>
                     </tr>
                   </thead>
                   <tbody>
+                    <tr v-if="allAdmins.length === 0">
+                      <td colspan="7" class="text-center">
+                        No data available.
+                      </td>
+                    </tr>
                     <tr v-for="(item, index) in allAdmins" :key="index">
                       <td class="align-middle text-center text-sm">
                         <p class="text-xs font-weight-bold mb-0"> {{ item.id }}</p>
