@@ -16,7 +16,7 @@
                       <div class="card-body">
                         <form role="form">
                           <div v-if="isError" class="row mb-1 validation-errors">
-                            <small v-for="item in validationError" class="text-white">
+                            <small v-for="(item,index) in validationError" :key="index" class="text-white">
                               {{ item }}
                             </small>
                           </div>
