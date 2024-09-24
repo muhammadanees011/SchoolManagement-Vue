@@ -278,6 +278,7 @@
           await axiosClient.put('/updateStaff/'+id, this.newStaff)
           this.$router.push({ name: 'list-staff' })
           this.snackbarMsg('Staff Updated Successfuly')
+          this.isError=false;
         } catch (error) {
           console.log(error)
           this.isError=true;

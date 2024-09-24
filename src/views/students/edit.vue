@@ -282,6 +282,7 @@
           await axiosClient.put('/updateStudent/'+id, this.newStudent)
           this.$router.push({ name: 'list-students' })
           this.snackbarMsg('Student Saved Successfuly')
+          this.isError=false;
         } catch (error) {
           console.log(error)
           this.isError=true;

@@ -155,8 +155,8 @@ export default {
         await axiosClient.post('/createOrganization', this.newOrganization)
         this.$router.push({ name: 'list-organizations' })
         this.snackbarMsg('Organization Saved')
+        this.isError=false;
       } catch (error) {
-        console.log(error)
         this.isError=true;
         this.validationErrors=error.response.data.errors
       }

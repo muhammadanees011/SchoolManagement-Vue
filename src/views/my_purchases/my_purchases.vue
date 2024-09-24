@@ -91,11 +91,9 @@
       this.getShopItems();
     },
     updated(){
-      if(this.user.role=='student'){
-        return
-      }else{
-        this.$permissions.redirectIfNotAllowed('view_shop');
-      }
+      // if(this.user.role!=='student' && this.user.role!=='staff'){
+      //   this.$permissions.redirectIfNotAllowed('view_shop');
+      // }
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),

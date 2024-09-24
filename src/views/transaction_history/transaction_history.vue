@@ -182,7 +182,9 @@
     //   }
     // },
     updated(){
-      this.$permissions.redirectIfNotAllowed('transaction_history');
+      if(this.user.role!=='student' && this.user.role!=='satff'){
+        this.$permissions.redirectIfNotAllowed('transaction_history');
+      }
     },
     computed:{
       ...mapGetters(['getBrandingSetting']),

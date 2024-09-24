@@ -98,8 +98,8 @@ const routes = [
     },
     children: [
       { path: '/organizations', name: 'list-organizations', component: Organizations },
-      { path: '/add', name: 'add-organizations', component: AddOrganizations },
-      { path: '/:id', name: 'edit-organization', component: EditOrganization },
+      { path: '/organizations/add', name: 'add-organizations', component: AddOrganizations },
+      { path: '/organizations/:id', name: 'edit-organization', component: EditOrganization },
     ],
   },
   //------------ORGANIZATION ADMINS---------------
@@ -128,10 +128,10 @@ const routes = [
     },
     children: [
       { path: '/schools', name: 'list-schools', component: Schools },
-      { path: '/add', name: 'add-school', component: AddSchool },
-      { path: '/edit-schools/:id', name: 'edit-school', component: EditSchool },
+      { path: '/schools/add', name: 'add-school', component: AddSchool },
+      { path: '/schools/edit-schools/:id', name: 'edit-school', component: EditSchool },
       { path: '/archived/schools', name: 'archived-schools', component: ArchivedSchools },
-      { path: '/settings/:id', name: 'settings-school', component: SchoolSettings },
+      { path: '/schools/settings/:id', name: 'settings-school', component: SchoolSettings },
       { path: '/school/addCard/:id', name: 'card-school', component: SchoolCard },
     ],
   },
@@ -146,9 +146,9 @@ const routes = [
     },
     children: [
       { path: '/students', name: 'list-students', component: Students },
-      { path: '/add/student', name: 'add-student', component: AddStudent },
-      { path: '/:id', name: 'edit-student', component: EditStudent },
-      { path: '/archived/students', name: 'archived-students', component: ArchivedStudents },
+      { path: '/student/add', name: 'add-student', component: AddStudent },
+      { path: '/student/:id', name: 'edit-student', component: EditStudent },
+      { path: '/students/archived', name: 'archived-students', component: ArchivedStudents },
       { path: '/student-billing/:id', name: 'student-billing', component: StudentBilling },
     ],
   },
@@ -181,7 +181,7 @@ const routes = [
       { path: '/staff', name: 'list-staff', component: Staff },
       { path: '/staff/add', name: 'add-staff', component: AddStaff },
       { path: '/staff/edit/:id', name: 'edit-staff', component: EditStaff },
-      { path: '/archived/staff', name: 'archived-staff', component: ArchivedStaff },
+      { path: '/staff/archived', name: 'archived-staff', component: ArchivedStaff },
       { path: '/staff/details/:id', name: 'detail-staff', component: StaffDetail },
     ],
   },
@@ -238,7 +238,7 @@ const routes = [
     name: 'transactions',
     component: DefaultLayout,
     meta: {
-      title: 'Transactions',
+      title: 'Purchase',
       requiresAuth: true,
     },
     children: [
@@ -254,6 +254,10 @@ const routes = [
   {
     path: '/support',
     component: DefaultLayout,
+    meta: {
+      title: 'Support',
+      requiresAuth: true,
+    },
     children: [
       { path: '', name: 'support', component: Support },
     ],
@@ -269,9 +273,9 @@ const routes = [
     },
     children: [
       { path: '/shop-items', name: 'shop-items', component: Shop },
-      { path: '/add-shop-items', name: 'add-items', component: AddShopItem },
-      { path: '/edit-shop-items/:id', name: 'edit-shop-items', component: EditShopItem },
-      { path: '/archived-shop-items', name: 'archived-shop-items', component: ArchivedShopItems },
+      { path: '/shop-items/add', name: 'add-items', component: AddShopItem },
+      { path: '/shop-items/edit/:id', name: 'edit-shop-items', component: EditShopItem },
+      { path: '/shop-items/archived', name: 'archived-shop-items', component: ArchivedShopItems },
     ],
   },
   //-------------CHECKOUT----------------

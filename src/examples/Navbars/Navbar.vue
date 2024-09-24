@@ -86,7 +86,7 @@
               <i class="material-icons cursor-pointer"> account_circle </i>
             </a>
             <ul class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4" :class="showMenu ? 'show' : ''" aria-labelledby="dropdownMenuButton" @click="showMenu = !showMenu">
-              <li v-if="user.role=='organization_admin'|| user.role=='super_admin'" class="menu_item mb-2">
+              <li v-if="user.role!=='staff' && user.role=='student' && user.role=='parent'" class="menu_item mb-2">
                 <router-link :to="{ name: 'Profile' }">
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="py-1 d-flex">
@@ -99,6 +99,18 @@
                     </div>
                   </a>
                 </router-link>
+              </li>
+              <li v-else class="menu_item mb-2">
+                  <a class="dropdown-item border-radius-md" href="javascript:;">
+                    <div class="py-1 d-flex">
+                      <div class="d-flex flex-column justify-content-center">
+                        <span class="d-flex align-items-center">
+                          <i class="fas fa-user pb-0"></i> 
+                          <h6 class="ms-1 pt-2 text-sm font-weight-normal"> <span class="font-weight-bold">{{ user.first_name}} {{user.last_name}} <small class="">({{ userRole }})</small></span> </h6>
+                          </span>
+                      </div>
+                    </div>
+                  </a>
               </li>
               <li class="menu_item mb-2" >
                 <router-link :to="{name:'balance'}">

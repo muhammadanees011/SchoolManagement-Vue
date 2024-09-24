@@ -209,6 +209,7 @@ updated(){
         await axiosClient.post(url, this.newSchool)
         this.$router.push({ name: 'list-schools' })
         this.snackbarMsg('School Saved Successfuly')
+        this.isError=false;
       } catch (error) {
         console.log(error)
         this.isError=true;

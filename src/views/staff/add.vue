@@ -206,6 +206,7 @@
           this.isError=false;
           this.$router.push({ name: 'list-staff' })
           this.snackbarMsg('Staff Saved Successfuly')
+          this.isError=false;
         } catch (error) {
           this.isError=true;
           this.validationErrors=error.response.data.errors

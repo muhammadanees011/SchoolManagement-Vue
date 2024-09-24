@@ -184,11 +184,7 @@
       this.getShopItems();
     },
     updated(){
-      if(this.user.role=='student'){
-        return
-      }else{
-        this.$permissions.redirectIfNotAllowed('view_shop');
-      }
+      this.$permissions.redirectIfNotAllowed('view_shop');
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),

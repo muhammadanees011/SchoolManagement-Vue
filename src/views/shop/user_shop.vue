@@ -158,9 +158,7 @@
       this.getShopItems();
     },
     updated(){
-      if(this.user.role=='student'){
-        return
-      }else{
+      if(this.user.role!=='student' && this.user.role!=='staff'){
         this.$permissions.redirectIfNotAllowed('view_shop');
       }
     },

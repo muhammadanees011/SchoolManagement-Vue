@@ -32,9 +32,9 @@
                 Roles List
               </h6>
               <template v-for="(item,index) in allRoles" :key="index">
-                <span :class="{ 'selected-role': isSelected === item.id }" @click="toggleSelection(item.id,$event),getPermissionsOfRole(item.id)" class="mb-1 roles-list d-flex justify-content-between align-items-center text-dark font-weight-bold text-xs">
+                <span v-if="item.name!=='Staff'" :class="{ 'selected-role': isSelected === item.id }" @click="toggleSelection(item.id,$event),getPermissionsOfRole(item.id)" class="mb-1 roles-list d-flex justify-content-between align-items-center text-dark font-weight-bold text-xs">
                     <span class="text-sm fw-5">{{item.name}}</span>
-                    <span v-if="item.name!='Admin' && item.name!='Associate Admin' && item.name!='Staff'" class="text-dark ms-2 font-weight-bold">
+                    <span v-if="item.name=='super_admin'" class="text-dark ms-2 font-weight-bold">
                         <i @click="editRole(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         <i @click="deleteRole(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                     </span>
@@ -123,7 +123,8 @@ toggleSelection(id,event) {
 checkIfAdmin(permission){
     let status=false;
     let adminPermissions=['create_admin','view_admin','edit_admin','delete_admin','roles'];
-    let AssociateAdminPermissions=['create_staff','delete_staff','view_staff','edit_staff'];
+    // let AssociateAdminPermissions=['create_staff','delete_staff','view_staff','edit_staff'];
+    let AssociateAdminPermissions=[];
     this.allRoles.filter((item)=>{
         if(item.id==this.isSelected){
             if(item.name=='Admin'){

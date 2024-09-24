@@ -181,6 +181,7 @@ export default {
         await axiosClient.put('/updateOrganization/' + id, this.newOrganization)
         this.$router.push({ name: 'list-organizations' })
         this.snackbarMsg('Organization Updated')
+        this.isError=false;
       } catch (error) {
         console.log(error)
         this.isError=true;

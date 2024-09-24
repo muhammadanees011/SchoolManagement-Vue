@@ -236,6 +236,7 @@
         await axiosClient.put(url, this.newSchool)
         this.$router.push({ name: 'list-schools' })
         this.snackbarMsg('School Updated')
+        this.isError=false;
         } catch (error) {
         console.log(error)
         this.isError=true;

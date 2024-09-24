@@ -61,7 +61,7 @@
                             <br />
                             <select class="select-box" v-model="newAdmin.role" id="role" type="select" placeholder="role" name="role">
                               <template v-for="(item, index) in allRoles" :key="index" >
-                                <option v-if="item.name=='Admin' || item.name=='Associate Admin'" :value="item.name">
+                                <option v-if="item.name !=='Staff'" :value="item.name">
                                   {{ item.name }}
                                 </option>
                               </template>
@@ -185,6 +185,7 @@
           this.createCustomer(response.user.id);
           this.$router.push({ name: 'list-organization-admins' })
           this.snackbarMsg('Admin Saved Successfuly')
+          this.isError=false;
         } catch (error) {
           this.isError=true;
           this.validationErrors=error.response.data.errors

@@ -243,6 +243,7 @@ export default {
         this.createCustomer(response.user.id);
         this.$router.push({ name: 'list-students' })
         this.snackbarMsg('Student Saved Successfuly')
+        this.isError=false;
       } catch (error) {
         this.isError=true;
         this.validationErrors=error.response.data.errors

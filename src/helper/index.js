@@ -15,9 +15,9 @@ const permissionsPlugin = {
       view_admin:false,
       edit_admin:false,
       //--------Site / School--------
-      create_site: false,
+      create_site: true,
       view_site: false,
-      edit_site: false,
+      edit_site: true,
       delete_site: false,
       //--------stundent--------
       create_student: false,
@@ -35,12 +35,12 @@ const permissionsPlugin = {
       edit_course: false,
       delete_course: false,
       //---------Shop---------
-      create_shop: false,
+      create_shop: true,
       delete_shop: false,
-      view_shop: false,
-      edit_shop: false,
+      view_shop: true,
+      edit_shop: true,
       //-----------Transaction Hisotry--------
-      transaction_history: false,
+      transaction_history: true,
       //-----------Purchase History-----------
       purchase_history: false,
       //-----------Pending Installments-----------

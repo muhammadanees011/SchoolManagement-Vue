@@ -53,7 +53,7 @@
           </sidenav-collapse>
         </li>
       </template>
-      <template  v-if="user && user.role=='super_admin' || user.role=='organization_admin'"> 
+      <!-- <template  v-if="user && user.role=='super_admin' || user.role=='organization_admin'">  -->
       <li v-if="userPermissions.view_site" class="nav-item">
         <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#schools">
           <i class="material-icons-round opacity-10 fs-5">people</i>
@@ -83,9 +83,9 @@
           </template>
         </sidenav-collapse>
       </li>
-      </template>
+      <!-- </template> -->
 
-      <template  v-if="user && user.role=='staff' || user.role=='super_admin' || user.role=='organization_admin'">
+      <!-- <template  v-if="user && user.role=='staff' || user.role=='super_admin' || user.role=='organization_admin'"> -->
       <li v-if="userPermissions.view_student" class="nav-item">
         <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#projectsExample">
           <i class="material-icons-round opacity-10 fs-5">people</i>
@@ -109,32 +109,10 @@
         </div>
       </li>
 
-      <!-- <li v-if="userPermissions.view_attribute" class="nav-item">
-        <sidenav-collapse :to="{ name: 'list-attributes' }" :aria-controls="''" v-bind:collapse="false" collapseRef="student-attributes" navText="Attributes">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">apps</i>
-          </template>
-        </sidenav-collapse>
-        </li> -->
+      <!-- </template> -->
 
-      </template>
-
-      <!-- <template  v-if="user && user.role=='staff' || user.role=='super_admin' || user.role=='organization_admin'">
-        <li v-if="userPermissions.view_student" class="nav-item">
-        <sidenav-collapse :to="{ name: 'list-students' }" :aria-controls="''" v-bind:collapse="false" collapseRef="students" navText="Students">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">people</i>
-          </template>
-        </sidenav-collapse>
-        </li>
-      </template> -->
-      <template  v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
+      <!-- <template  v-if="user && user.role=='super_admin' || user.role=='organization_admin'"> -->
       <li  v-if="userPermissions.view_staff"  class="nav-item">
-        <!-- <sidenav-collapse :to="{ name: 'list-staff' }" :aria-controls="''" v-bind:collapse="false" collapseRef="staff" navText="Staff">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">portrait</i>
-          </template>
-        </sidenav-collapse> -->
 
         <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#staffNav">
           <i class="material-icons-round opacity-10 fs-5">portrait</i>
@@ -160,17 +138,17 @@
       </li>
 
       
-      <li  class="nav-item">
+      <li v-if="user.role!=='staff' && user.role!=='student'"  class="nav-item">
         <sidenav-collapse :to="{ name: 'list-parent' }" :aria-controls="''" v-bind:collapse="false" collapseRef="parents" navText="Parents">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">people</i>
           </template>
         </sidenav-collapse>
       </li>
-      </template>
+      <!-- </template> -->
 
       <template v-if="user && user.role!=='parent'">
-      <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
+      <!-- <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'"> -->
       <li  v-if="userPermissions.view_course" class="nav-item">
         <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#courses">
           <i class="material-icons-round opacity-10 fs-5">store</i>
@@ -188,10 +166,10 @@
         </div>
 
       </li>
-      </template>
+      <!-- </template> -->
 
-      <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
-      <li  v-if="userPermissions.view_shop" class="nav-item">
+      <template v-if="(user && user.role!=='student') && (user && user.role!=='staff')" >
+        <li  v-if="userPermissions.view_shop" class="nav-item">
         <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#shop">
           <i class="material-icons-round opacity-10 fs-5">store</i>
           <span class="sidenav-normal me-3 ms-2 ps-1">Shop <b class="caret"></b></span>
@@ -216,7 +194,7 @@
       </li>
       </template>
 
-      <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
+      <!-- <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'"> -->
       <li v-if="userPermissions.purchase_history" class="nav-item">
         <sidenav-collapse :to="{ name: 'purchases-admin' }" :aria-controls="''" v-bind:collapse="false" collapseRef="purchasesadmin" navText="Purchase History">
           <template v-slot:icon>
@@ -224,9 +202,9 @@
           </template>
         </sidenav-collapse>
       </li>
-      </template>
+      <!-- </template> -->
 
-      <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
+      <!-- <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'"> -->
       <li v-if="userPermissions.pending_installments" class="nav-item">
         <sidenav-collapse :to="{ name: 'installments' }" :aria-controls="''" v-bind:collapse="false" collapseRef="installments" navText="Pending Installments">
           <template v-slot:icon>
@@ -234,9 +212,9 @@
           </template>
         </sidenav-collapse>
       </li>
-      </template>
+      <!-- </template> -->
 
-      <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'">
+      <!-- <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'"> -->
       <li v-if="userPermissions.refunds" class="nav-item">
         <sidenav-collapse :to="{ name: 'refund' }" :aria-controls="''" v-bind:collapse="false" collapseRef="refunds" navText="Refunds">
           <template v-slot:icon>
@@ -244,7 +222,7 @@
           </template>
         </sidenav-collapse>
       </li>
-      </template>
+      <!-- </template> -->
 
       </template>
 
@@ -264,7 +242,7 @@
         </sidenav-collapse>
       </li>
 
-      <li  v-if="user && user.role=='student'"  class="nav-item">
+      <li  v-if="(user && user.role=='student') || (user && user.role=='staff')"  class="nav-item">
         <sidenav-collapse :to="{ name: 'transaction-history' }" :aria-controls="''" v-bind:collapse="false" collapseRef="transaction history" navText="Transaction History">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">receipt</i>
@@ -272,6 +250,7 @@
         </sidenav-collapse>
       </li>
 
+      <template v-if="(user && user.role!=='student') && (user && user.role!=='staff')" >
       <li  v-if="userPermissions.transaction_history"  class="nav-item">
         <sidenav-collapse :to="{ name: 'transaction-history' }" :aria-controls="''" v-bind:collapse="false" collapseRef="transaction history" navText="Transaction History">
           <template v-slot:icon>
@@ -279,6 +258,7 @@
           </template>
         </sidenav-collapse>
       </li>
+    </template>
       <!-- <li  v-if="userPermissions.support"  class="nav-item">
         <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="support" navText="Support">
           <template v-slot:icon>
