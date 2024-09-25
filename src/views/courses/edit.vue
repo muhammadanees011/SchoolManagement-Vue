@@ -32,8 +32,8 @@
                             <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["last_name"]!==""'>Last Name is required</small> -->
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="email">Course Description</label>
-                            <input class="input-box" id="name" v-model="newCourse.CourseDescription" type="email" placeholder="Course Description" name="CourseDescription" />
+                            <label class="input-label" for="email">Course Name</label>
+                            <input class="input-box" id="name" v-model="newCourse.CourseDescription" type="email" placeholder="Course Name" name="CourseDescription" />
                             <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small> -->
                           </div>
 
