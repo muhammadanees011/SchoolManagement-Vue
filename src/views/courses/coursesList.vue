@@ -158,7 +158,7 @@
         itemsPerPage:20,
 
         seachString:'',
-        filterBy:'Name',
+        filterBy:'Course Code',
         allFields:['Course Name','Course Code','Course Level'],
         allCourse:'',
         schools: 6,
