@@ -85,12 +85,12 @@
             />
           </div>
         </div>
-        <div v-if="user.role=='parent'" class="row mt-4">
+        <div v-if="user.role!=='student' && user.role!=='staff'" class="row mt-4">
           <div class="col-lg-12 col-md-12 col-sm-12">
             <img src="../assets/img/dashboard2.jpg" style="width: 100%;height:95% ; border-radius: 20px; box-shadow: 0px 0px 2px #CCCCCC;">
           </div>
         </div>
-        <UserShop v-if="user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff' || user.role=='student'"/>
+        <UserShop v-if="user.role=='staff' || user.role=='student'"/>
       </div>
     </div>
   </div>

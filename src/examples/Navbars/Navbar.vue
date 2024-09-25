@@ -28,7 +28,7 @@
             </router-link>
           </li> -->
 
-          <li class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
+          <li v-if="user.role=='staff' && user.role=='student' && user.role=='parent'" class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
             <a @click="getCartItems" href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showCart ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="material-icons cursor-pointer">shopping_cart</i>
             </a>
@@ -86,7 +86,7 @@
               <i class="material-icons cursor-pointer"> account_circle </i>
             </a>
             <ul class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4" :class="showMenu ? 'show' : ''" aria-labelledby="dropdownMenuButton" @click="showMenu = !showMenu">
-              <li v-if="user.role!=='staff' && user.role=='student' && user.role=='parent'" class="menu_item mb-2">
+              <li v-if="user.role!=='staff' && user.role!=='student' && user.role!=='parent'" class="menu_item mb-2">
                 <router-link :to="{ name: 'Profile' }">
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="py-1 d-flex">

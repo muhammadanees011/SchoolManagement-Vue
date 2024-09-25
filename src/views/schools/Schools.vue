@@ -27,7 +27,7 @@
                     <th class="text-uppercase text-xxs font-weight-bolder"> Email </th>
                     <th class="text-uppercase text-xxs font-weight-bolder ps-2"> Country </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Organisation </th>
-                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Teachers </th>
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder"> Staff </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Students </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Status </th>
                     <th class="text-center text-uppercase text-xxs font-weight-bolder"> Action </th>
