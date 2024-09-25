@@ -140,9 +140,9 @@
         showModal: false,
         selectall:false,
         selectedRecords:[],
-        filterBy:'Name',
+        filterBy:'Student Id',
         seachString:'',
-        allFields:['Student Id','Name','Email'],
+        allFields:['Student Id'],
         allStudents:'',
         schools: 6,
         user:'',
@@ -303,9 +303,11 @@
           this.getAllStudents();
           return;
         }
+        let coursecode=this.$route.params.id
         let data={
           "type":this.filterBy,
-          "value":this.seachString
+          "value":this.seachString,
+          "course_code": coursecode
         }
         try {
             const response=await axiosClient.post('/filterCourseStudents',data);

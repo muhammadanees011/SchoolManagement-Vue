@@ -309,7 +309,7 @@
       },
       //------------REMOVE STAFF FROM LIST-----------
       removeStaffFromList(id) {
-        const indexToRemove = this.allStaff.findIndex((item) => item.id === id)
+        const indexToRemove = this.allStaff.findIndex((item) => item.user.id === id)
         this.allStaff.splice(indexToRemove, 1)
       },
     //-----------FILTER STAFF------------
