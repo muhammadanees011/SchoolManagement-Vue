@@ -28,7 +28,7 @@
             </router-link>
           </li> -->
 
-          <li v-if="user.role=='staff' && user.role=='student' && user.role=='parent'" class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
+          <li v-if="user.role=='staff' || user.role=='student' || user.role=='parent'" class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
             <a @click="getCartItems" href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showCart ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="material-icons cursor-pointer">shopping_cart</i>
             </a>
