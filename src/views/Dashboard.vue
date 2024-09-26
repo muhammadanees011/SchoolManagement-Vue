@@ -38,7 +38,7 @@
             />
           </div>
           </template>
-          <template v-if="user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'">
+          <template v-if="user.role!=='parent' && user.role!=='student'">
             <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
               :title="{ text:isAdmin ? 'Total Figures':'Total Balance', value: '£'+formattedPrice(userBallance ? userBallance : 0) }"
