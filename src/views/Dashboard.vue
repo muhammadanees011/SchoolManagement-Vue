@@ -73,7 +73,7 @@
             />
           </div>
           </template>
-          <div v-if="user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff' || user.role=='student'" class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+          <div v-if="user.role!=='parent'" class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
               :title="{ text: 'Transactions', value: '£'+formattedPrice(totalTransactions ? totalTransactions :0)  }"
               detail="Total Transactions"
