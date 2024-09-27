@@ -73,31 +73,20 @@
                             <input class="input-box" id="balance" v-model="formattedAmount" type="number" step="0.01" min="0" placeholder="add amount" name="add_amount" />
                         </div>
                         <div class="mb-1">
-                            <label class="input-label" for="date_of_birth">Date Of Birth</label>
-                            <input class="input-box" id="date_of_birth" v-model="newStudent.date_of_birth" type="date" placeholder="date of birth" name="date_of_birth" />
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["date_of_birth"]!==""'> date of birth is required</small> -->
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                  <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
-                    <div class="form-bg container p-4">
-                    <p class="text-dark ms-4 font-weight-bold">Password</p>
-                    <div class="card card-plain">
-                      <div class="card-body">
-                        <form role="form">
-                          <div class="mb-1">
-                            <label class="input-label" for="status">Status <span class="required">*</span></label>
-                            <br />
-                            <select v-model="newStudent.status" class="select-box" id="status" type="select" placeholder="status" name="status">
-                              <option v-for="(item, index) in availableStatus" :key="index" :value="item">
-                                {{ item }}
-                              </option>
-                            </select>
-                            <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>status is required</small> -->
-                          </div>
+                          <label class="input-label" for="date_of_birth">Date Of Birth</label>
+                          <input class="input-box" id="date_of_birth" v-model="newStudent.date_of_birth" type="date" placeholder="date of birth" name="date_of_birth" />
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["date_of_birth"]!==""'> date of birth is required</small> -->
+                        </div>
+                        <div class="mb-1">
+                          <label class="input-label" for="status">Status <span class="required">*</span></label>
+                          <br />
+                          <select v-model="newStudent.status" class="select-box" id="status" type="select" placeholder="status" name="status">
+                            <option v-for="(item, index) in availableStatus" :key="index" :value="item">
+                              {{ item }}
+                            </option>
+                          </select>
+                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>status is required</small> -->
+                        </div>
                         </form>
                       </div>
                     </div>

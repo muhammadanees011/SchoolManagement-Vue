@@ -142,7 +142,7 @@ export default {
   },
   computed:{
     isAdmin(){
-      return this.user.role === 'organization_admin' || this.user.role === 'super_admin';
+      return this.user.role !== 'staff' || this.user.role !== 'student';
     }
   },
   methods:{
