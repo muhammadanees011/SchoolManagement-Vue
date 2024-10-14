@@ -93,6 +93,7 @@
     this.getUser();
     this.editParent();
     this.getStudents();
+    this.$globalHelper.buttonColor();
   },
   updated(){
     if(!this.userPermissions.edit){

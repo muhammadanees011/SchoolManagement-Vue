@@ -3,18 +3,11 @@
     <div class="row">
       <div class="col-12">
         <div class="card my-4">
-          <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-            <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
-              <h6 class="text-white text-capitalize ps-3">Add Organization</h6>
-              <router-link :to="{ name: 'list-organizations' }">
-                <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Back </button>
-              </router-link>
-            </div>
-          </div> -->
+        
           <div class="d-flex justify-content-between border-radius-lg pt-4">
               <h6 class="text-dark text-capitalize ps-3">Add Organisation</h6>
               <router-link :to="{ name: 'list-organizations' }">
-                <button style="font-size: 12px;background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Back </button>
+                <button style="font-size: 12px;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Back </button>
               </router-link>
             </div>
           <div class="card-body px-0 pb-2">
@@ -72,7 +65,7 @@
                         <input class="input-box" id="address" v-model="newOrganization.address" type="text" placeholder="Address" name="address" />
                         <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>Address is required</small>
                       </div>
-                        <div class="d-flex align-items-right">
+                        <div class="d-flex justify-content-center">
                           <button @click="saveNewOrganization" style="font-size: 12px;background-color: #573078;" class="btn me-3 mt-4 text-white fw-5 border-0 py-2 px-5 border-radius-lg"> Save </button>
                         </div>
                       </div>
@@ -99,7 +92,9 @@ export default {
   components: {
     // MaterialButton,
   },
-  mounted() {},
+  mounted() {
+    this.$globalHelper.buttonColor();
+  },
   computed: {
     ...mapGetters(['getOrganizationList']),
   },

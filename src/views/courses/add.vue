@@ -70,12 +70,13 @@
   import cloneDeep from 'lodash/cloneDeep';
   
   export default {
-    name: '',
-    components: {
-      // MaterialButton,
-    },
-    mounted() {
+  name: '',
+  components: {
+    // MaterialButton,
+  },
+  mounted() {
     this.getUser();
+    this.$globalHelper.buttonColor();
   },
   updated(){
     this.$permissions.redirectIfNotAllowed('create_course');
@@ -99,7 +100,7 @@
           CourseDescription:'',
           status:'',
         },
-        availableStatus:['active','pending','blocked'],
+        availableStatus:['Active','Inactive'],
         allStudents:'',
       }
     },
@@ -168,10 +169,9 @@
     width: 237px;
     height: 35px;
   }
-  /* Hover effect */
   
   .text-area-box:hover {
-    border-color: #6c757d; /* Change to your preferred hover color */
+    border-color: #6c757d; 
   }
   
   .select-box {
@@ -183,24 +183,22 @@
     height: 40px;
   }
   .select-box:hover {
-    border-color: #6c757d; /* Change to your preferred hover color */
+    border-color: #6c757d;
   }
   .select-box:focus {
     outline: none;
-    border-color: #4caf50; /* Change to your preferred focus color */
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); 
   }
-  /* Focus effect */
   
   .text-area-box:focus {
     outline: none;
-    border-color: #4caf50; /* Change to your preferred focus color */
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
+    border-color: #4caf50; 
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); 
   }
   .input-label {
     font-size: 12px;
   }
-  /* Basic input styles */
   input {
     padding: 10px;
     border: 1px solid #ccc;
@@ -211,24 +209,21 @@
     font-size: 12px;
   }
   
-  /* Hover effect */
+
   input:hover {
-    border-color: #6c757d; /* Change to your preferred hover color */
+    border-color: #6c757d;
   }
   
-  /* Focus effect */
   input:focus {
     outline: none;
-    border-color: #4caf50; /* Change to your preferred focus color */
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); 
   }
   
-  /* Placeholder text style */
   ::placeholder {
     color: #999;
   }
   
-  /* Styling for disabled state */
   input:disabled {
     background-color: #f0f0f0;
     color: #999;

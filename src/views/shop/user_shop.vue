@@ -87,7 +87,7 @@
                                     <div class="cart-status">Added To Cart</div>
                                     </div> -->
                                     <div class="mt-0" v-if="item.quantity > 0 ">
-                                    <button @click="addToCart(item.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45  text-white fw-5 p-2 border-radius-lg"> Add To Cart </button>
+                                    <button @click="addToCart(item.id)" style="font-size: 12px; background-color: #573078;" class="btn me-3 trips-btn w-45  text-white fw-5 p-2 border-radius-lg"> Add To Cart </button>
                                     </div>
                                     <br>
                                     </div>
@@ -156,11 +156,13 @@
     mounted(){
       this.getUser();
       this.getShopItems();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       if(this.user.role!=='student' && this.user.role!=='staff'){
         this.$permissions.redirectIfNotAllowed('view_shop');
       }
+      this.$globalHelper.buttonColor();
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),

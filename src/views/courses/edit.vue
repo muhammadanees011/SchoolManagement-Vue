@@ -78,6 +78,7 @@
     mounted() {
     this.getUser();
     this.editCourse();
+    this.$globalHelper.buttonColor();
   },
   updated(){
     this.$permissions.redirectIfNotAllowed('edit_course');
@@ -100,7 +101,7 @@
         isError:false,
         validationErrors:"",
         formValidation:"",
-        availableStatus:['active','pending','blocked'],
+        availableStatus:['Active','Inactive'],
         allStudents:'',
       }
     },

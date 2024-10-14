@@ -15,7 +15,7 @@
                 <div class="filter-container mb-1" style="margin-top: -11px;">
                   <span style="display: flex;">
                     <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                    <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                    <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                       <option v-for="(item, index) in allFields" :key="index" :value="item">
                         {{ item }}
                       </option>
@@ -37,7 +37,7 @@
                 </div>
 
               <div class="table-responsive p-0 student-table">
-                <table  ref="table" class="table align-items-center mb-0" style="margin-left:-2px !important;">
+                <table  ref="table" class="table align-items-center mb-0" style="margin-left:0px !important;">
                   <thead>
                     <tr>
                       <th class="">

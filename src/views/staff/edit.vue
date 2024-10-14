@@ -6,6 +6,9 @@
             
             <div class="d-flex justify-content-between border-radius-lg pt-4">
                 <h6 class="text-dark text-capitalize ps-3">Edit Staff</h6>
+                <router-link :to="{ name: 'list-staff' }">
+                  <button style="font-size: 12px;background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Back </button>
+                </router-link>
               </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
@@ -55,24 +58,25 @@
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>Site is required</small>
                           </div>
                           <div class="mb-1">
-                            <label class="input-label" for="phone">Role <span class="required">*</span></label>
-                            <br />
-                            <select class="select-box" v-model="newStaff.role" id="role" type="select" placeholder="role" name="role">
-                              <template v-for="(item, index) in allRoles" :key="index" >
-                                <option v-if="item.name!=='Admin' && item.name!=='Associate Admin'" :value="item.name">
-                                  {{ item.name }}
-                                </option>
-                              </template>
-                            </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["role"]!==""'>Staff Role is required</small>
-                          </div>
-                          <div class="mb-1">
                             <label class="input-label" for="balance">Balance </label>
                             <input class="input-box" id="balance" v-model="formattedBalance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
                         </div>
                         <div class="mb-1">
                             <label class="input-label" for="balance">Add Amount</label>
                             <input class="input-box" id="balance" v-model="formattedAmount" type="number" step="0.01" min="0" placeholder="add amount" name="add_amount" />
+                        </div>
+
+                        <div class="mb-1">
+                          <label class="input-label" for="phone">Role <span class="required">*</span></label>
+                          <br />
+                          <select class="select-box" v-model="newStaff.role" id="role" type="select" placeholder="role" name="role">
+                            <template v-for="(item, index) in allRoles" :key="index" >
+                              <option :value="item.name">
+                                {{ item.name }}
+                              </option>
+                            </template>
+                          </select>
+                          <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["role"]!==""'>Staff Role is required</small>
                         </div>
                         
                         <div class="mb-1">
@@ -139,6 +143,7 @@
     this.editStaff();
     this.getSchools();
     this.getAllRoles();
+    this.$globalHelper.buttonColor();
   },
   updated(){
     this.$permissions.redirectIfNotAllowed('edit_staff');

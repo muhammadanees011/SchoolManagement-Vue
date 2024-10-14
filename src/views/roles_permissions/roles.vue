@@ -77,6 +77,7 @@ mounted(){
 this.getAllRoles();
 this.getAllPermissions();
 this.getUserPermissions();
+this.$globalHelper.buttonColor();
 },
 updated(){
     this.$permissions.redirectIfNotAllowed('roles');

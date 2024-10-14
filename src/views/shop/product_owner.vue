@@ -1,27 +1,22 @@
 <template>
     <div v-if="show" class="modal fade show" tabindex="-1" style="display: block;" aria-modal="true" role="dialog">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered" style="width: 28%;">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="h5 modal-title">Bulk Topup</h5>
+            <h5 class="h5 modal-title">Product Owner</h5>
             <button type="button" class="btn-close text-dark" @click="closeModal" aria-label="Close"><span aria-hidden="true">×</span></button>
           </div>
           <div class="pt-4 modal-body">
             <input id="jkanban-task-id" class="d-none">
             <div class="mb-4 input-group">
-              <span class="input-group-text"><i class="far fa-edit" aria-hidden="true"></i></span>
-              <input id="jkanban-task-title" v-model="formattedBalance" class="form-control" placeholder="Topup amount" type="text">
+              <input id="jkanban-task-title" v-model="owner.product_owner_name" type="email" class="form-control border p-1" placeholder="Name">
             </div>
-            <!-- <div class="mb-4 input-group">
-              <span class="input-group-text"><i class="fas fa-user" aria-hidden="true"></i></span>
-              <input id="jkanban-task-assignee" v-model="localTask.assignee" class="form-control" placeholder="Task Assignee" type="text">
+            <div class="mb-4 input-group">
+              <input id="jkanban-task-title" v-model="owner.product_owner_email" type="email" class="form-control border p-1" placeholder="Email">
             </div>
-            <div class="form-group">
-              <textarea id="jkanban-task-description" v-model="localTask.description" class="form-control" placeholder="Task Description" rows="4"></textarea>
-            </div> -->
             <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
             <div class="text-end">
-              <button @click="saveChanges" class="m-1 btn btn-primary"> Topup </button>
+              <button @click="saveChanges" class="m-1 btn btn-primary"> Save </button>
               <button @click="closeModal" class="m-1 btn btn-secondary"> Close </button>
             </div>
           </div>
@@ -31,20 +26,19 @@
   </template>
   
   <script>
+import axiosClient from '../../axios'
+
   export default {
     props: {
       show: {
         type: Boolean,
         required: true
       },
-      task: {
+      ownerData: {
         type: Object,
-        default: () => ({
-          title: '',
-          assignee: '',
-          description: ''
-        })
-      }
+        required: true,
+     },
+
     },
     mounted(){
       this.$globalHelper.buttonColor();
@@ -63,14 +57,17 @@
     data() {
       return {
         addedBalance:null,
-        localTask: { ...this.task },
-        successMessage: ''
+        successMessage: '',
+        owner:{
+            product_owner_name:'',
+            product_owner_email:''
+          },
       };
     },
     watch: {
-      task: {
-        handler(newTask) {
-          this.localTask = { ...newTask };
+        ownerData: {
+        handler(newData) {
+          this.owner = newData;
         },
         deep: true,
         immediate: true
@@ -80,14 +77,16 @@
       closeModal() {
         this.$emit('close');
       },
-      saveChanges() {
-        // this.successMessage = 'Changes saved!';
+      async saveChanges() {
+        try {
+          const apiUrl =`/productsOwner`;
+          await axiosClient.post(apiUrl, this.owner)
+          this.snackbarMsg('Item Updated Successfuly')
+        } catch (error) {
+            console.log(error)
+        }
         this.$emit('update-task', this.addedBalance);
         this.closeModal();
-        // setTimeout(() => {
-        //   this.successMessage = '';
-        //   this.closeModal();
-        // }, 2000);
       }
     }
   };

@@ -23,7 +23,7 @@
                   <div class="filter-container ms-2 mb-2">
                     <span style="display: flex;">
                       <input class="input-box filter-box" @keyup="filterShopItems" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                      <select @change="filterShopItems" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                      <select @change="filterShopItems" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                         <option v-for="(item, index) in allFields" :key="index" :value="item">
                           {{ item }}
                         </option>

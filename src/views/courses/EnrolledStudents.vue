@@ -127,6 +127,7 @@
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('view_student');
+      this.$globalHelper.buttonColor();
     },
     components:{
         Enroll

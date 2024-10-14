@@ -127,6 +127,10 @@
       this.setColor();
       this.getUser();
       this.getAllParents();
+      this.$globalHelper.buttonColor();
+    },
+    updated(){
+      this.$globalHelper.buttonColor();
     },
     data() {
       return {

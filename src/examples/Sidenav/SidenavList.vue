@@ -286,6 +286,9 @@ export default {
   props: {
     cardBg: String,
   },
+  updated(){
+    // this.buttonColor()
+  },
   mounted(){
     const userData = localStorage.getItem('user');
     if (userData) {
@@ -351,11 +354,7 @@ export default {
     },
 
     setActiveColor() {
-      // let activeColor=this.getBrandingSetting.secondary_color ?
-      // this.getBrandingSetting.secondary_color : '#573078';
-      // document.querySelector('.navbar-nav .active') ? 
-      // document.querySelector('.navbar-nav .active').style.setProperty('--active-bg-color', activeColor):'';
-
+      
       let bgColor=this.getBrandingSetting.primary_color !='null' ? this.getBrandingSetting.primary_color : '#010A21';
       // bgColor='#010A21'
       document.querySelector('.sidenav-header').style.setProperty('--navheader-bg-color', bgColor);
@@ -364,12 +363,21 @@ export default {
 
       document.querySelector('#sidenav-collapse-main').style.setProperty('--nav-bg-color', bgColor);
 
-      // document.querySelector('thead tr th').style.setProperty('--nav-bg-color', bgColor);
-      bgColor = '#010A21'; // Example color value
-      document.querySelectorAll('thead tr th').forEach(function(th) {
-        th.style.setProperty('--nav-bg-color', bgColor);
+      document.querySelectorAll('.btn').forEach(function(item) {
+        item.style.setProperty('--btn-bg-color', 'red');
+      });
+
+    },
+
+    buttonColor(){
+      let bgColor=this.getBrandingSetting.primary_color !='null' ? this.getBrandingSetting.primary_color : '#010A21';
+      const buttons = document.querySelectorAll('.btn');
+      console.log('btn',buttons)
+      buttons.forEach(button => {
+          button.style.backgroundColor = bgColor ;
       });
     },
+
     navLegacy(routeName){
       this.$router.push({ name: routeName });
     },

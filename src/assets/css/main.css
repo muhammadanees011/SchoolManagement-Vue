@@ -195,33 +195,6 @@ input:disabled {
     font-size: 11px;
   }
 
-  .page-item .page-link, .page-item span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #7b809a;
-    padding: 0;
-    margin: 0 2px !important;
-    border-radius: 50% !important;
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 0.725rem !important;
-}
-.page-item.active .page-link {
-  z-index: 3;
-  color: #fff;
-  background-color: #573078 !important;
-  border-color: #573078 !important;
-}
-.pagination {
-  width: 40%;
-  overflow-x: scroll;
-  margin-left: auto;
-  margin-right: auto;
-}
-.pagination::-webkit-scrollbar {
-  display: none;
-}
 /* .student-table::-webkit-scrollbar {
   display: none !important;
 } */
@@ -276,4 +249,57 @@ input:disabled {
 
 .swal2-popup{
   width: 280px !important;
+}
+
+.btn{
+  font-size: 12px !important;
+  font-weight: normal !important;
+}
+
+.pagination a {
+  display: block;
+  padding: 8px 12px; /* Adjusts the clickable area size */
+  text-decoration: none; /* Removes underline */
+}
+
+
+
+/* Pagination styles similar to Bootstrap */
+.pagination {
+  padding: 0;
+  display: flex;
+  gap: 1px;
+  width: 100% !important;
+  padding-right: 20px;
+}
+
+.pagination li a {
+  text-decoration: none;
+  padding: 8px 12px;
+  color: #010A21;
+  border: 1px solid #010A21;
+  font-size: 11px;
+  border-radius: 0px;
+  background-color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Active page styling */
+.pagination li.active a {
+  background-color: #010A21;
+  color: white;
+  pointer-events: none;
+}
+
+/* Disabled page styling */
+.pagination li.disabled a {
+  color: grey;
+  pointer-events: none;
+  background-color: #f1f1f1;
+}
+
+/* Hover effect */
+.pagination li a:hover {
+  background-color: #010A21;
+  color: white;
 }

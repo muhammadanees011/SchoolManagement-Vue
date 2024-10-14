@@ -28,7 +28,7 @@
           <textarea v-model="form.message" id="message" class="input-area" name="message" rows="5" required></textarea>
         </div>
         </div>
-        <button type="submit" class="submit-button p-1 text-sm">Submit</button>
+        <button type="submit" class="submit-button btn p-1 text-sm">Submit</button>
       </form>
     </div>
     </div>
@@ -54,6 +54,7 @@
     },
     mounted(){
       this.getUser()
+      this.$globalHelper.buttonColor();
     },
     methods: {
     //------------GET USER----------------

@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="row d-flex justify-content-center">
-        <button @click="submitPaymentMethod" style="font-size: 12px" class="me-3 w-20 mt-3 trips-btn bg-gradient-grey shadow-grey text-dark fw-5 p-2 border-radius-lg"> Save Payment Method </button>
+        <button @click="submitPaymentMethod" style="font-size: 12px" class="btn me-3 w-20 mt-3 trips-btn bg-gradient-grey shadow-grey text-dark fw-5 p-2 border-radius-lg"> Save Payment Method </button>
         </div>
         </div>
       </div>
@@ -39,6 +39,7 @@
           this.configureStripe();
       }.bind(this) );
       this.getUser();
+      this.$globalHelper.buttonColor();
     },
     data(){
         return {

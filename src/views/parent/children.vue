@@ -54,6 +54,7 @@ export default {
 name: "billing-card",
 mounted(){
 this.getChildrens();
+this.$globalHelper.buttonColor();
 },
 updated(){
 },

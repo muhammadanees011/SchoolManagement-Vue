@@ -12,9 +12,9 @@
             </span>
 
           </div>
-          <div class="col-6 text-end" v-if="user.role=='student' || user.role=='staff' || user.role=='organization_admin' || user.role=='super_admin' || user.role=='parent'">
+          <div class="col-6 text-end">
             <router-link  :to="{name:'add_card'}">
-              <button style="font-size: 12px; background-color: #573078;" class="add-card-btn mb-3 trips-btn w-35  text-white fw-5 border-radius-lg">  <i class="fas fa-plus me-2"></i>
+              <button style="font-size: 12px; background-color: #573078;" class="btn add-card-btn mb-3 trips-btn w-35  text-white fw-5 border-radius-lg">  <i class="fas fa-plus me-2"></i>
               Add New Card </button>
             <!-- <button @click="openModal" class="btn-color" variant="gradient">
               <i class="fas fa-plus me-2"></i>
@@ -52,7 +52,7 @@
               </span>  
             </div>
           </div>
-          <div class="col-md-5 ms-auto" v-if="user.role=='student' || user.role=='staff' || user.role=='organization_admin' || user.role=='super_admin' || user.role=='parent'">
+          <div class="col-md-5 ms-auto">
             <template v-for="(item,index) in userCards" :key="index">
               <div :class="{ 'selected': isSelected === index }" @click="toggleSelection(index,$event)"
                 class=" mb-1 card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
@@ -75,7 +75,7 @@
             </template>
           </div>
           <div class="conteiner">
-        <button  @click="addBalance" style="font-size: 12px; background-color: #573078;" class="top-up-btn p-3 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Add Balance </button>
+        <button  @click="addBalance" style="font-size: 12px; background-color: #573078;" class="btn top-up-btn p-3 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Add Balance </button>
       </div>
         </div>
       </div>
@@ -95,6 +95,7 @@
       // MaterialButton,
     },
     mounted(){
+      this.$globalHelper.buttonColor();
       let user=localStorage.getItem('user')
       this.user= JSON.parse(user)
       this.getCustomerPaymentMethods();

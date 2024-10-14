@@ -5,6 +5,9 @@
           <div class="card my-4">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
                 <h6 class="text-dark text-capitalize ps-3">Add Shop Item</h6>
+                <router-link :to="{ name: 'shop-items' }">
+                  <button style="font-size: 12px;background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Back </button>
+                </router-link>
               </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
@@ -15,7 +18,7 @@
                       <div class="card-body">
                         <form role="form">
                           <div v-if="isError" class="row mb-1 validation-errors">
-                            <small v-for="item in validationError" class="text-white">
+                            <small v-for="(item,index) in validationError" :key="index" class="text-white">
                               {{ item }}
                             </small>
                           </div>
@@ -56,15 +59,6 @@
                             </div>
                             
                             <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                              <label class="input-label" for="expiration_date">Expiration Date</label>
-                              <input class="input-box" id="expiration_date" v-model="newItem.expiration_date" type="date" placeholder="Expiration Date" name="expiration_date" />
-                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["expiration_date"]!==""'>Expiration Date is required</small>
-                            </div>
-
-                          </div>
-
-                          <div class="row mb-1">
-                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
                               <label class="input-label" for="phone">Product Type</label>
                               <br />
                               <select class="select-box" v-model="newItem.product_type" id="shop" type="select" placeholder="Product Type" name="product_type">
@@ -72,14 +66,9 @@
                                   {{ item }}
                                 </option>
                               </select>
-                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["shop_id"]!==""'>Shop is required</small>
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["shop_id"]!==""'>Shop is required</small>                            
                             </div>
-                            
-                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                              <label class="input-label" for="quantity_sold">Sold Items</label>
-                              <input class="input-box" id="quantity_sold" v-model="newItem.quantity_sold" min="0" type="number" placeholder="Quantity Sold" name="quantity_sold" />
-                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["quantity_sold"]!==""'>Quantity Sold is required</small>
-                            </div>
+
                           </div>
 
                           <div class="row mb-1">
@@ -215,18 +204,6 @@
                             </template>
                           </div>
 
-
-                          <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="mb-1">
-                            <label class="input-label" for="phone">Shop</label>
-                            <br />
-                            <select class="select-box" v-model="newItem.shop_id" id="shop" type="select" placeholder="shop" name="shop">
-                              <option v-for="(item, index) in allShops" :key="index" :value="item.id">
-                                {{ item.shop_name }}
-                              </option>
-                            </select>
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["shop_id"]!==""'>Shop is required</small>
-                          </div>
-                          
                           <div class="mb-1">
                             <div class="upload-container">
                                 <div v-if="imageFileUrl" class="image-preview">
@@ -262,7 +239,6 @@
   </template>
   
   <script>
-  // import MaterialButton from '@/components/MaterialButton.vue'
   import axiosClient from '../../axios';
   import cloneDeep from 'lodash/cloneDeep';
   import MultiSelect from "../components/MultiSelect.vue";
@@ -271,13 +247,13 @@
     name: '',
     components: {
       MultiSelect
-      // MaterialButton,
     },
     mounted() {
       this.getUser();
       this.getAllShops();
       this.getSchools();
       this.getAllCourses();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('create_shop');
@@ -293,19 +269,13 @@
           this.newItem.quantity = Math.floor(value);
         }
       },
-      'newItem.quantity_sold'(value) {
-        if (value < 0) {
-          this.newItem.quantity_sold = 0;
-        } else if (!Number.isInteger(value)) {
-          this.newItem.quantity_sold = Math.floor(value);
-        }
-      },
-      'newItem.price'(value) {
-        this.newItem.price = parseFloat(value).toFixed(2);
-      }
+      // 'newItem.price'(value) {
+      //   this.newItem.price = parseFloat(value).toFixed(2);
+      // }
     },
     data() {
       return {
+        debounceTimeout:null,
         paymentPlan:'',
         installmentsAndDeposit:{
           total_installments:null,
@@ -347,8 +317,6 @@
             installmentsAndDeposit:null,
             limitColleges:null,
             limitCourses:null,
-            quantity_sold:'',
-            expiration_date:''
         },   
         availableStatus:['active','pending','blocked'],
         allSchools:'',
@@ -448,8 +416,6 @@
         formData.append('shop_id', this.newItem.shop_id);
         formData.append('valid_from', this.newItem.valid_from);
         formData.append('valid_to', this.newItem.valid_to);
-        formData.append('expiration_date', this.newItem.expiration_date);
-        formData.append('quantity_sold', this.newItem.quantity_sold);
         formData.append('visibility_options', JSON.stringify(this.newItem.visibility_options));
         formData.append('limitColleges', JSON.stringify(this.newItem.limitColleges));
         formData.append('limitCourses', JSON.stringify(this.newItem.limitCourses));

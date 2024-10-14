@@ -19,7 +19,7 @@
                     <div class="filter-container me-4 mb-2">
                       <span style="display: flex;">
                         <input class="input-box filter-box" @keyup="filterInstallments" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                        <select @change="filterInstallments" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                        <select @change="filterInstallments" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                           <option v-for="(item, index) in allFields" :key="index" :value="item">
                             {{ item }}
                           </option>
@@ -57,7 +57,7 @@
                                               </div>
                                           </a>
                                           <template v-if="user.role=='student' || user.role=='staff'">
-                                            <button @click="payNow(data.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-15  text-white fw-5 p-2 border-radius-lg"> Pay now</button>                                            
+                                            <button @click="payNow(data.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-15  btn text-white fw-5 p-2 border-radius-lg"> Pay now</button>                                            
                                           </template>
                                           <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="">
                                               <h4 class="label text-sm text-warning">Buyer</h4>
@@ -134,11 +134,13 @@
     mounted(){
       this.getUser();
       this.getShopItems();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       if(this.user.role!=='student' && this.user.role!=='staff'){
       this.$permissions.redirectIfNotAllowed('pending_installments');
       }
+      this.$globalHelper.buttonColor();
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),

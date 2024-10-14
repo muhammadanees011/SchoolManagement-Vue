@@ -3,14 +3,6 @@
     <div class="row">
       <div class="col-12">
         <div class="card px-3">
-          <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-            <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
-              <h6 class="text-white text-capitalize ps-3">Organizations</h6>
-              <router-link :to="{ name: 'add-organizations' }">
-                <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Add Organization </button>
-              </router-link>
-            </div>
-          </div> -->
           <div class="d-flex justify-content-between border-radius-lg pt-4 ">
             <h6 class="text-dark text-capitalize ps-3">ORGANISATIONS</h6>
             <router-link :to="{ name: 'add-organizations' }">
@@ -118,6 +110,7 @@ export default {
   mounted() {
     this.setColor()
     this.getOrganizations()
+    this.$globalHelper.buttonColor();
   },
   computed: {
     ...mapGetters(['getBrandingSetting']),

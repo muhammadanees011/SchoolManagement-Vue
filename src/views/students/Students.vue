@@ -25,7 +25,7 @@
               <div class="filter-container">
                 <span style="display: flex;">
                   <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                  <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                  <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                     <option v-for="(item, index) in allFields" :key="index" :value="item">
                       {{ item }}
                     </option>
@@ -46,7 +46,7 @@
           <div class="card-body px-0 pb-2">
 
             <div class="table-responsive p-0 student-table">
-              <table  ref="table" class="table align-items-center mb-0" style="margin-left:-2px !important;">
+              <table  ref="table" class="table align-items-center mb-0" style="margin-left:0px !important;">
                 <thead class="thead">
                   <tr>
                     <th class="pe-5">
@@ -125,7 +125,7 @@
                         </router-link>
                         <router-link to="#" title="Transaction">
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5 me-2">swap_horizontal_circle</i>
-                        </router-link> -->
+                        </router-link> -->   
                         <router-link v-if="userPermissions.edit_student" :to="{ name: 'edit-student', params: { id: item.id } }">
                           <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                         </router-link>
@@ -195,9 +195,11 @@ export default {
     this.setColor();
     this.getUser();
     this.getAllStudents();
+    this.$globalHelper.buttonColor();
   },
   updated(){
     this.$permissions.redirectIfNotAllowed('view_student');
+    this.$globalHelper.buttonColor();
   },
   components:{
     BulkTopup
@@ -305,7 +307,11 @@ export default {
           console.log(error)
         }
       }else{
-        this.snackbarMsg("Please select the students and enter amount!")
+        this.$snackbar.add({
+          type:'error',
+          text: 'Please select the students and enter amount!',
+          background: 'white',
+        })
       }
     },
 
@@ -364,7 +370,7 @@ export default {
 
     snackbarMsg(message) {
       this.$snackbar.add({
-        type: 'success',
+        type:'success',
         text: message,
         background: 'white',
       })
@@ -560,69 +566,6 @@ table{
   margin: 0.5rem 0; 
 }
 
-
-
-
-
-/* Align pagination to the right */
-.pagination-wrapper {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-  height: 70px;
-  width: 100% !important; /* Make sure it takes full width */
-  display: grid;
-}
-
-/* Pagination styles similar to Bootstrap */
-.pagination {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  width: 100% !important;
-  padding-right: 20px;
-}
-
-.pagination li {
-  margin: 0;
-  padding-top: 10px;
-  height: 17px;
-  width:24px;
-  font-size: 13px;
-  padding-right: 5px;
-  display: -webkit-inline-box;
-}
-
-.pagination li a {
-  text-decoration: none;
-  padding: 8px 12px;
-  color: #010A21;
-  border: 1px solid #010A21;
-  border-radius: 0px;
-  background-color: white;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Active page styling */
-.pagination li.active a {
-  background-color: #010A21;
-  color: white;
-  pointer-events: none;
-}
-
-/* Disabled page styling */
-.pagination li.disabled a {
-  color: grey;
-  pointer-events: none;
-  background-color: #f1f1f1;
-}
-
-/* Hover effect */
-.pagination li a:hover {
-  background-color: #010A21;
-  color: white;
-}
 
 /* Dropdown styling */
 .entries-dropdown {

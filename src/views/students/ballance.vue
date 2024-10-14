@@ -78,6 +78,7 @@
       this.getWallet();
       this.getFSMamount();
       this.getRecentTransactions();
+      this.$globalHelper.buttonColor();
     },
     data() {
       return {

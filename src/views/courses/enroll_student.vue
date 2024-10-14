@@ -4,7 +4,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h6 class="h5 text-sm modal-title">Enroll Student to this Course</h6>
-            <button type="button" class="btn-close text-dark" @click="closeModal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <button type="button" class="btn btn-close text-dark" @click="closeModal" aria-label="Close"><span aria-hidden="true">×</span></button>
           </div>
           <div class="pt-4 modal-body">
             <input id="jkanban-task-id" class="d-none">
@@ -49,6 +49,9 @@
       }
     },
     computed: {
+    },
+    mounted(){
+      this.$globalHelper.buttonColor();
     },
     data() {
       return {

@@ -3,16 +3,11 @@
     <div class="row">
       <div class="col-12">
         <div class="card my-4">
-          <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-            <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
-              <h6 class="text-white text-capitalize ps-3">Edit Organization</h6>
-              <router-link :to="{ name: 'list-organizations' }">
-                <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Back </button>
-              </router-link>
-            </div>
-          </div> -->
           <div class="d-flex justify-content-between  border-radius-lg pt-4">
               <h6 class="text-dark text-capitalize ps-3">Edit Organisation</h6>
+              <router-link :to="{ name: 'list-organizations' }">
+                <button style="font-size: 12px;background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Back </button>
+              </router-link>
             </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
@@ -69,7 +64,7 @@
                         <input class="input-box" id="address" v-model="newOrganization.address" type="text" placeholder="Address" name="address" />
                         <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>Address is required</small>
                       </div>
-                        <div class="d-flex align-items-right">
+                        <div class="d-flex justify-content-center">
                           <button @click="updateOrganization" style="font-size: 12px;background-color: #573078;" class="btn me-3 mt-4 text-white fw-5 border-0 py-2 px-5 border-radius-lg"> Save </button>
                         </div>
                       </div>
@@ -98,6 +93,7 @@ export default {
   },
   mounted() {
     this.editOrganization()
+    this.$globalHelper.buttonColor();
   },
   computed: {},
   data() {
@@ -204,67 +200,37 @@ export default {
   width: 280px;
   height: 105px;
 }
-/* Hover effect */
 
 .text-area-box:hover {
-  border-color: #6c757d; /* Change to your preferred hover color */
+  border-color: #6c757d;
 }
-/* 
-.select-box {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  width: 100%;
-  font-size: 12px;
-  height: 35px;
-} */
 .select-box:hover {
-  border-color: #6c757d; /* Change to your preferred hover color */
+  border-color: #6c757d; 
 }
 .select-box:focus {
   outline: none;
-  border-color: #4caf50; /* Change to your preferred focus color */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
+  border-color: #4caf50; 
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); 
 }
-/* Focus effect */
-
 .text-area-box:focus {
   outline: none;
-  border-color: #4caf50; /* Change to your preferred focus color */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); 
 }
 .input-label {
   font-size: 12px;
 }
-/* Basic input styles */
-/* input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  width: 100%;
-  height: 35px;
-  font-size: 12px;
-} */
-
-/* Hover effect */
 input:hover {
-  border-color: #6c757d; /* Change to your preferred hover color */
+  border-color: #6c757d;
 }
-
-/* Focus effect */
 input:focus {
   outline: none;
-  border-color: #4caf50; /* Change to your preferred focus color */
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Change to your preferred shadow color */
+  border-color: #4caf50; 
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
-
-/* Placeholder text style */
 ::placeholder {
   color: #999;
 }
-
-/* Styling for disabled state */
 input:disabled {
   background-color: #f0f0f0;
   color: #999;

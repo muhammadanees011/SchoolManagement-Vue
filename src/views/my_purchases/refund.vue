@@ -19,7 +19,7 @@
                     <div class="filter-container me-4 mb-2">
                       <span style="display: flex;">
                         <input class="input-box filter-box" @keyup="filterRefunds" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                        <select @change="filterRefunds" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                        <select @change="filterRefunds" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                           <option v-for="(item, index) in allFields" :key="index" :value="item">
                             {{ item }}
                           </option>
@@ -66,8 +66,8 @@
                                 </div>
                                 <template v-if="userPermissions.refunds">
                                 <div v-if="data.refund_status=='refund_requested'" class="mt-0 d-flex mt-2">
-                                <button @click="confirmAction(data.id,'refunded')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45  bg-success text-white fw-5 p-2 border-radius-lg"> Approve Refund </button>
-                                <button @click="confirmAction(data.id,'refund_rejected')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45 bg-warning text-white fw-5 p-2 border-radius-lg"> Decline Refund </button>
+                                <button @click="confirmAction(data.id,'refunded')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45  btn bg-success text-white fw-5 p-2 border-radius-lg"> Approve Refund </button>
+                                <button @click="confirmAction(data.id,'refund_rejected')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn btn w-45 bg-warning text-white fw-5 p-2 border-radius-lg"> Decline Refund </button>
                                 </div>
                                 </template>
                                 <div v-else style="font-size: 12px; background-color: #F3F4F6; color: #573078 !important;" class="text-white fw-5 p-2">
@@ -140,9 +140,11 @@
     mounted(){
       this.getUser();
       this.getShopItems();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('refunds');
+      this.$globalHelper.buttonColor();
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),

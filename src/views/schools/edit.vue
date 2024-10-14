@@ -11,6 +11,9 @@
             </div> -->
             <div class="d-flex justify-content-between border-radius-lg pt-4">
                 <h6 class="text-dark text-capitalize ps-3">Edit Site</h6>
+                <router-link :to="{ name: 'list-schools' }">
+                  <button style="font-size: 12px;background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Back </button>
+                </router-link>
               </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
@@ -78,16 +81,6 @@
                             <input class="input-box" id="name" v-model="newSchool.zip" type="text" placeholder="Zip Code" name="zip" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["zip"]!==""'>Zip is required</small>
                           </div>
-                          <!-- <div class="mb-1">
-                            <label class="input-label" for="teachers_count">Teachers Count</label>
-                            <input class="input-box" id="teachers_count" v-model="newSchool.teachers_count" type="number" placeholder="Teachers Count" name="teachers_count" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["teachers_count"]!==""'>Teachers Count is required</small>
-                          </div>
-                          <div class="mb-1">
-                            <label class="input-label" for="students_count">Students Count</label>
-                            <input class="input-box" id="students_count" v-model="newSchool.students_count" type="number" placeholder="Teachers Count" name="students_count" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["students_count"]!==""'>Students Count is required</small>
-                          </div> -->
                           <div class="mb-1">
                             <label class="input-label" for="phone">Status</label>
                             <br />
@@ -98,7 +91,7 @@
                             </select>
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["status"]!==""'>Status is required</small>
                           </div>
-                          <div class="mt-4">
+                          <div class="mt-4 d-flex justify-content-center">
                             <button @click.prevent="updateData" style="font-size: 12px; background-color: #573078;" class="btn ms-3 text-white fw-5 border-0 px-5 py-2 border-radius-lg"> Save </button>
                           </div>
                           </form>
@@ -129,6 +122,7 @@
     this.getUser()
     this.editSchool()
     this.getOrganizations()
+    this.$globalHelper.buttonColor();
   },
   updated(){
     this.$permissions.redirectIfNotAllowed('edit_site');

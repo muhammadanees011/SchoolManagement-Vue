@@ -112,6 +112,7 @@ export default {
   name: "tables",
   mounted(){
     this.getTransactionHistory();
+    this.$globalHelper.buttonColor();
   },
   data(){
     return{

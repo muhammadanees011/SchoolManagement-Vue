@@ -65,7 +65,7 @@
                             <br />
                             <select class="select-box" v-model="newStaff.role" id="role" type="select" placeholder="role" name="role">
                               <template v-for="(item, index) in allRoles" :key="index" >
-                                <option v-if="item.name!=='Admin' && item.name!=='Associate Admin'" :value="item.name">
+                                <option :value="item.name">
                                   {{ item.name }}
                                 </option>
                               </template>
@@ -116,6 +116,7 @@
     this.getUser();
     this.getSchools()
     this.getAllRoles();
+    this.$globalHelper.buttonColor();
   },
   updated(){
     this.$permissions.redirectIfNotAllowed('create_staff');

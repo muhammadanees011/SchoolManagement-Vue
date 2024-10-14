@@ -112,6 +112,7 @@
     mounted() {
      this.getAllOrganizations();
      this.getAllRoles();
+     this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('create_admin');

@@ -19,7 +19,7 @@
                   <div class="filter-container ms-2 mb-2">
                     <span style="display: flex;">
                       <input class="input-box filter-box" @keyup="filterPurchaseHistory" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                      <select @change="filterPurchaseHistory" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                      <select @change="filterPurchaseHistory" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 110px !important;">
                         <option v-for="(item, index) in allFields" :key="index" :value="item">
                           {{ item }}
                         </option>
@@ -62,12 +62,15 @@
                       </th>
                       <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
                         Date
-                      </th>                  
+                      </th>     
+                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                        Action
+                      </th>               
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-if="shopItems.length === 0">
-                      <td colspan="8" class="text-center">
+                      <td colspan="9" class="text-center">
                         No data available.
                       </td>
                     </tr>
@@ -104,6 +107,10 @@
                     <td class="align-middle text-center text-sm">
                         {{ formatDateString(item.created_at) }}
                     </td>
+                    <td class="align-middle text-center text-sm">
+                      <span v-if="item.refund_status == null" @click="confirmRefund(item.id)" class="badge badge-sm bg-gradient-danger" style="cursor: pointer;">Refund -></span>
+                      <span v-if="item.refund_status == 'refunded'" class="badge badge-sm bg-gradient-success">Refunded</span>
+                    </td>
                     </tr>
                   </tbody>
                 </table>
@@ -114,7 +121,7 @@
                   <div class="pagination-container">
                       <div class="entries-dropdown">
                         <label for="entries">Entries</label>
-                        <select v-model="itemsPerPage" @change="getShopItems(currentPage)" id="entries">
+                        <select v-model="itemsPerPage" @change="getPurchaseHistory(currentPage)" id="entries">
                           <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
                         </select>
                         <!-- <span>entries/page</span> -->
@@ -124,19 +131,19 @@
                       <nav class="pagination-wrapper">
                         <ul class="pagination">
                           <li :class="{ disabled: currentPage === 1 }">
-                            <a @click="getShopItems(1)" href="#">«</a>
+                            <a @click="getPurchaseHistory(1)" href="#">«</a>
                           </li>
                           <li :class="{ disabled: currentPage === 1 }">
-                            <a @click="getShopItems(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                            <a @click="getPurchaseHistory(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
                           </li>
                           <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
-                            <a @click="getShopItems(page)" href="#">{{ page }}</a>
+                            <a @click="getPurchaseHistory(page)" href="#">{{ page }}</a>
                           </li>
                           <li :class="{ disabled: currentPage === totalPages }">
-                            <a @click="getShopItems(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                            <a @click="getPurchaseHistory(currentPage + 1)" href="#">›</a> <!-- Next Page -->
                           </li>
                           <li :class="{ disabled: currentPage === totalPages }">
-                            <a @click="getShopItems(totalPages)" href="#">»</a>
+                            <a @click="getPurchaseHistory(totalPages)" href="#">»</a>
                           </li>
                         </ul>
                       </nav>
@@ -163,10 +170,12 @@
     mounted(){
       this.setColor();
       this.getUser();
-      this.getShopItems();
+      this.getPurchaseHistory();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('purchase_history');
+      this.$globalHelper.buttonColor();
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),
@@ -234,21 +243,21 @@
     }
     },
     methods:{
-      confirmDelete(id) {
+      confirmRefund(id) {
         Swal.fire({
           title: 'Are you sure?',
-          text: "Item will be deleted permanently and you will not be able to revert this!",
+          text: "Paid Amount will be refunded and you will not be able to revert this!",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!',
+          confirmButtonText: 'Yes, refund it!',
           customClass: {
             popup: 'custom-swal'
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            this.deleteShopItem(id)
+            this.refundActions(id)
           }
         });
       },
@@ -260,30 +269,48 @@
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
         XLSX.writeFile(wb, 'purchase_history.xlsx');
       },
+      
       setColor() {
         let bgColor=this.getBrandingSetting.primary_color ?
         this.getBrandingSetting.primary_color : '#573078';
         document.querySelector('thead').style.setProperty('--navheader-bg-color', bgColor);
       },
+
       snackbarMsg(message) {
-      this.$snackbar.add({
-        type: 'success',
-        text: message,
-        background: 'white',
-      })
-    },
-    getUser(){
+        this.$snackbar.add({
+          type: 'success',
+          text: message,
+          background: 'white',
+        })
+      },
+
+      async refundActions(id){
+          let data={
+              purchase_id:id
+          }
+          try {
+          await axiosClient.post('/refundStatus',data)
+          this.snackbarMsg('Successfuly Refunded!')
+          this.getPurchaseHistory()
+          } catch (error) {
+            console.log(error)
+            this.snackbarMsg('Something went wrong!')
+          }
+      },
+
+      getUser(){
         const userData = localStorage.getItem('user');
         if (userData) {
           this.user = JSON.parse(userData);
         }
       },
-    formattedPrice(value){
-      const formattedValue = parseFloat(value).toFixed(2);
-      return formattedValue;
-    },
 
-      async getShopItems(page=null){
+      formattedPrice(value){
+        const formattedValue = parseFloat(value).toFixed(2);
+        return formattedValue;
+      },
+
+      async getPurchaseHistory(page=null){
         let data={
           'page':page,
           'entries_per_page': this.itemsPerPage
@@ -303,10 +330,10 @@
       //-----------FILTER PURCHASE HISTORY------------
       async filterPurchaseHistory(){
         if(this.filterBy=='' && this.seachString==''){
-          this.getShopItems();
+          this.getPurchaseHistory();
           return;
         }else if(this.filterBy!='' && this.seachString==''){
-          this.getShopItems();
+          this.getPurchaseHistory();
           return;
         }
         let data={
@@ -328,26 +355,30 @@
       async deleteShopItem(id){
         try {
           await axiosClient.delete('/deleteShopItem/'+id)
-          this.getShopItems();
+          this.getPurchaseHistory();
           this.snackbarMsg('Item Removed Successfuly')
         } catch (error) {
           console.log(error)
         }
       },
+
       //------------REMOVE Item FROM LIST-----------
       removeShopItem(id) {
         const indexToRemove = this.shopItems.findIndex((item) => item.id === id)
         this.shopItems.splice(indexToRemove, 1)
       },
+
       editShopItem(id){
         this.$router.push({ name: 'edit-shop-items', params: { id } });
       },
-        //------------FORMAT DATE--------------
-        formatDateString(dateString) {
-        const parsedDate = moment(dateString);
-        const formattedDate = parsedDate.format('DD MMMM YYYY, HH:mm');
-        return formattedDate;
-        },
+
+      //------------FORMAT DATE--------------
+      formatDateString(dateString) {
+      const parsedDate = moment(dateString);
+      const formattedDate = parsedDate.format('DD MMMM YYYY, HH:mm');
+      return formattedDate;
+      },
+
       async addToCart(itemId){
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
@@ -362,6 +393,7 @@
           console.log(error)
         }
       },
+
     },
   };
   </script>
@@ -397,7 +429,6 @@
   thead tr:hover{
     background-color: var(--navheader-bg-color) !important;
   }
-  
   </style>
   
     

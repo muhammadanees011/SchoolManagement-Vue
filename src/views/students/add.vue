@@ -96,25 +96,6 @@
                   </div>
                   </div>
                 </div>
-                <!-- <div class="mt-3 bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
-                  <div class="form-bg container p-4">
-                  <p class="text-dark ms-4 font-weight-bold">Contact Information</p>
-                  <div class="card card-plain">
-                    <div class="card-body">
-                      <form role="form">
-                        <div class="mb-1">
-                        <label class="input-label" for="phone">Password</label>
-                        <input class="input-box" id="name" v-model="newStudent.password" type="password" placeholder="Password" name="password" />
-                      </div>
-                      <div class="mb-1">
-                        <label class="input-label" for="phone">Confirm Password</label>
-                        <input class="input-box" id="name" v-model="newStudent.password_confirmation" type="password" placeholder="Confirm Password" name="password_confirmation" />
-                      </div>
-                      </form>
-                    </div>
-                  </div>
-                  </div>
-                </div> -->
                 <div class="d-flex justify-content-center bg-white box-shadow-dark border-radius-lg col-xl-10 col-lg-10 col-md-10">
                     <div class="">
                       <button @click="saveNewStudent" style="font-size: 12px; background-color: #573078;" class="btn mt-3 ms-5 text-white fw-5 border-0 py-2 px-5  border-radius-lg"> Save Student</button>
@@ -130,7 +111,6 @@
 </template>
 
 <script>
-// import MaterialButton from '@/components/MaterialButton.vue'
 import axiosClient from '../../axios'
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -142,6 +122,7 @@ export default {
     this.getUser();
     this.getSchools();
     this.getAllAttributes();
+    this.$globalHelper.buttonColor();
   },
   updated(){
     this.$permissions.redirectIfNotAllowed('create_student');

@@ -43,7 +43,6 @@
                                                   <span v-if='data.payment_card!=null' class="ms-5 bg-success text-white text-sm rounded-pill p-1"><small>Card Payment</small></span>
                                                   <span v-if='data.payment_card==null' class="ms-5 bg-warning text-white text-sm rounded-pill p-1"><small>Wallet Payment</small></span>
 
-                                                  <span v-if='data.refund_status=="refund_requested"' class="ms-5 text-warning text-sm"><small>(Refund Requested)</small></span>
                                                   <span v-if="data.refund_status=='refunded'" class="ms-5 text-warning text-sm"><small>(Refunded)</small></span>
                         
                                                   <div class="description">Detail: {{ data.detail }}</div>
@@ -53,11 +52,6 @@
                                                   <span class="iconUxt arrowSingleRight" aria-hidden="true"></span>
                                               </div>
                                           </a>
-                                          <div v-if='data.refund_status=="refunded" || data.refund_status=="refund_requested"' class="mt-0">
-                                          </div>
-                                          <div v-else>
-                                            <button @click="confirmDelete(data.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-98  text-white fw-5 p-2 border-radius-lg"> Request Refund {{ data.refund_status }}</button>
-                                          </div>
                             
                                         </li>
                                       <!-- Repeat for other list items -->
@@ -81,7 +75,6 @@
   <script>
   import axiosClient from '../../axios'
   import { mapGetters } from 'vuex'
-  import Swal from 'sweetalert2';
   import moment from 'moment';
 
   export default {
@@ -89,11 +82,13 @@
     mounted(){
       this.getUser();
       this.getShopItems();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       // if(this.user.role!=='student' && this.user.role!=='staff'){
       //   this.$permissions.redirectIfNotAllowed('view_shop');
       // }
+      this.$globalHelper.buttonColor();
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),
@@ -110,24 +105,6 @@
     }
     },
     methods:{
-      confirmDelete(id) {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "Your refund request will be submitted to the admin for further review.",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, submit!',
-          customClass: {
-            popup: 'custom-swal'
-          }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.refundRequest(id)
-          }
-        });
-      },
 
       snackbarMsg(message) {
       this.$snackbar.add({
@@ -167,19 +144,6 @@
           await axiosClient.delete('/deleteShopItem/'+id)
           this.getShopItems();
           this.snackbarMsg('Item Removed Successfuly')
-        } catch (error) {
-          console.log(error)
-        }
-      },
-
-      async refundRequest(id){
-        let data={
-          purchase_id:id
-        }
-        try {
-          let response=await axiosClient.post('/refundRequest',data)
-          this.getShopItems();
-          this.snackbarMsg(response.data.message)
         } catch (error) {
           console.log(error)
         }

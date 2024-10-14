@@ -19,7 +19,7 @@
               <div class="filter-container ms-2">
                 <span style="display: flex;">
                   <input class="input-box filter-box" @keyup="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                  <select @change="filterStaff" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                  <select @change="filterStaff" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                     <option v-for="(item, index) in allFields" :key="index" :value="item">
                       {{ item }}
                     </option>
@@ -151,9 +151,11 @@
       this.setColor();
       this.getUser();
       this.getAllStaff();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('view_staff');
+      this.$globalHelper.buttonColor();
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),

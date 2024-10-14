@@ -14,8 +14,11 @@
       ></i>
       <a class="m-0 navbar-brand" href="/">
         <template v-if="getBrandingSetting.logo!=='null'">
-          <img :src="StudentPayLogo" class="navbar-brand-img h-100" alt=""/>
-          <span class="ms-2 font-weight-bold text-white">StudentPay Portal</span>
+          <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: -21px;">
+            <img :src="StudentPayLogo" class="navbar-brand-img branding-logo h-50" alt=""/>
+            <p class="ms-2 font-weight-bold text-white" style="font-size: 15px; margin-right: 20px; margin-top: 4px;">Student-Pay Portal</p>
+            <br>
+          </div>
         </template>
         <img v-else src="@/assets/img/logos/StudentPay-logo.png" class="navbar-brand-img h-100" alt="main_logo"/>
       </a>
@@ -59,4 +62,12 @@ export default {
 </script>
 
 <style>
+ .navbar-vertical .branding-logo {
+    max-width: 100px !important;
+    max-height: 4rem !important;
+}
+.sidenav-header {
+    height: 5.9rem !important;
+    /* margin-bottom: 1px; */
+}
 </style>

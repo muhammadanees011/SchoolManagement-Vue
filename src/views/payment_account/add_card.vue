@@ -39,6 +39,7 @@ export default {
         this.configureStripe();
     }.bind(this) );
     this.getUser();
+    this.$globalHelper.buttonColor();
   },
   data(){
       return {

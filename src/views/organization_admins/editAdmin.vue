@@ -123,6 +123,7 @@
       this.getAllRoles();
      this.getAllOrganizations();
      this.editOrganizationAdmin();
+     this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('edit_admin');

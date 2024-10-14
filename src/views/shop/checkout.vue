@@ -103,9 +103,14 @@
                             <li v-else-if="dataLoaded" class="d-flex justify-content-center align-items-center list-group-item border-0 d-flex p-4 bg-gray-100 border-radius-lg">
                                 <h6 class="text-sm text-warning">You can't checkout while Cart is empty!</h6>
                             </li>
-                            <button v-if="cartItems.length>0" @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
-                            <button v-if="cartItems.length>0" @click="checkout('wallet')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet</button>
+                            <template v-if="isLoading==true">
+                                <p style="color: #59B15D !important;">Checking out, please wait...</p>
+                            </template>
+                            <template v-else>
+                            <button v-if="cartItems.length>0" @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
+                            <button v-if="cartItems.length>0" @click="checkout('wallet')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet</button>
                             <!-- <p v-if="dataLoaded" class="text-sm text-warning mt-1">In a Wallet & Card Payment, the wallet is charged first, and any remaining amount is charged to the card.</p> -->
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -121,6 +126,7 @@ import axiosClient from '../../axios'
     name: "billing-card",
     data(){
         return{
+            isLoading:false,
             isPaymentMethod:true,
             userCards:'',
             dataLoaded:false,
@@ -133,6 +139,10 @@ import axiosClient from '../../axios'
         this.getUser();
         this.getCartItems();
         this.getCustomerPaymentMethods();
+        this.$globalHelper.buttonColor();
+    },
+    updated(){
+        this.$globalHelper.buttonColor();
     },
     methods:{
         //--------------TOAST MESSAGE--------------
@@ -221,11 +231,19 @@ import axiosClient from '../../axios'
                 "type":type,
             };
             try {
+            this.isLoading=true;
             await axiosClient.post('/checkout',data)
+            this.isLoading=false;
             this.snackbarMsg('Checkout Successful')
             this.$router.push({ name: 'Dashboard'});
             this.isPaymentMethod=true
             } catch (error) {
+            this.isLoading=false;
+            this.$snackbar.add({
+            type: 'error',
+            text: 'Something went wrong',
+            background: 'white',
+            })
             console.log(error)
             }
         },

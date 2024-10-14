@@ -28,7 +28,7 @@
                   <div class="filter-container ms-2 mb-2">
                     <span style="display: flex;">
                       <input class="input-box filter-box" @keyup="filterShopItems" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                      <select @change="filterShopItems" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                      <select @change="filterShopItems" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                         <option v-for="(item, index) in allFields" :key="index" :value="item">
                           {{ item }}
                         </option>
@@ -37,6 +37,10 @@
                       <span class="label-text bulk_topup" @click="exportTableToXLS()">
                         <i class="fas fa-download download-icon me-1"></i>
                         Export To XLS
+                      </span>
+                      <span class="label-text bulk_topup" @click="showModal=true" style="width:120px;">
+                        <i class="fas fa-plus plus-icon me-1"></i>
+                        Products Owner
                       </span>
                     </span>
                   </div>  
@@ -97,7 +101,7 @@
                       <span class="text-secondary text-xs ">{{ item.quantity_sold }}</span>
                     </td>
                     <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{ item.expiration_date }}</span>
+                      <span class="text-secondary text-xs ">{{ item.valid_to }}</span>
                     </td>
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
@@ -114,7 +118,7 @@
                       <!-- <router-link :to="{ name: 'shop-checkout', params: { id: item.id }  }">
                         <i v-if="user && user.role=='student'" class="fas fa-shopping-cart text-success me-2" aria-hidden="true"></i>
                       </router-link> -->
-                        <span  v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'">
+                        <span  v-if="user && user.role!='student' && user.role!='parent' && user.role!='staff'">
                           <i v-if="userPermissions.edit_shop" @click="editShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                           <i v-if="userPermissions.delete_shop" @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                       </span>
@@ -125,6 +129,9 @@
                 </table>
               </div>
 
+              <ProductOwner :show="showModal" :ownerData="ownerData" @close="showModal = false" @update-task="updateAmount">
+              
+              </ProductOwner>
               <div class="row">
                 <div class="col-md-12 col-lg-12">
 
@@ -174,17 +181,23 @@
   import { mapGetters } from 'vuex'
   import Swal from 'sweetalert2';
   import * as XLSX from 'xlsx';
+  import ProductOwner from '../shop/product_owner.vue'
 
 
   export default {
+    components:{
+      ProductOwner
+    },
     name: "tables",
     mounted(){
       this.setColor();
       this.getUser();
       this.getShopItems();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('view_shop');
+      this.$globalHelper.buttonColor();
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),
@@ -238,6 +251,8 @@
     },
     data(){
     return{
+      ownerData:'',
+      showModal:false,
       perPageOptions: [10,20, 40, 60,100,200,300,400],
       itemsPerPage:20,
       seachString:'',
@@ -314,6 +329,12 @@
       try {
         const response=await axiosClient.post('/getShopItems',data)
         this.shopItems=response.data.data.data;
+        console.log(this.shopItems)
+        let shop=this.shopItems[0]
+        this.ownerData={
+          product_owner_name:shop.product_owner_name,
+          product_owner_email:shop.product_owner_email
+        }
         this.totalRows = response.data.pagination.total;
         this.currentPage = response.data.pagination.current_page;
         this.perPage = response.data.pagination.per_page;

@@ -83,6 +83,7 @@
     mounted(){
       this.setColor();
       this.getAllAdmins();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('view_admin');

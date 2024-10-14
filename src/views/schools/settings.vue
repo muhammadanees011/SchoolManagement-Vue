@@ -20,7 +20,7 @@
                         <input @change="onFileChange" id="card-holder-name" type="file" class="bg-white w-100  mb-2">
                         <img v-if="imageUrl" :src="imageUrl" height="60" width="60" alt="Selected Image">
                         <br>
-                        <button @click="updateBranding()" style="font-size: 12px; background-color: #573078;" class="save-pass-btn p-2 mb-3 trips-btn  text-white fw-5 border-radius-lg">Update Settings </button>
+                        <button @click="updateBranding()" style="font-size: 12px; background-color: #573078;" class="btn p-2 mb-3 mt-2 trips-btn  text-white fw-5 border-radius-lg">Update Settings </button>
                     </div>
                     </li>
                 </ul>
@@ -40,10 +40,10 @@
                                 <label>Email</label>
                                 <input v-model="finance_coordinator_email" id="card-holder-name" type="text" class="bg-white w-100  mb-2">
                                 <br>
-                                <button @click="updateFinanceCoordiantorEmail()" style="font-size: 12px; background-color: #573078;" class="save-pass-btn p-2 mb-3 trips-btn  text-white fw-5 border-radius-lg">Save </button>
+                                <button @click="updateFinanceCoordiantorEmail()" style="font-size: 12px; background-color: #573078;" class="btn save-pass-btn p-2 mb-3 trips-btn  text-white fw-5 border-radius-lg">Save </button>
                             </div>
                         </li>
-                        <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                        <!-- <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                             <div class="col-md-5 mx-auto bg-white new-pass p-2">
                                 <h6>Payment Method</h6>
                                 
@@ -73,7 +73,7 @@
                                 <small v-if="dataLoaded && userCards==''" @click="addCard()" class="add-payment-method">Add Payment Method &rarr;</small>
                                 <br>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                     </div>
                 </div>
@@ -92,6 +92,7 @@ export default{
     mounted(){
         this.getSettings()
         this.getCustomerPaymentMethods();
+        this.$globalHelper.buttonColor();
     },
     computed: {
         ...mapGetters(['getBrandingSetting']),

@@ -105,6 +105,7 @@ export default {
     this.setColor()
     this.getUser();
     this.getAllSchools();
+    this.$globalHelper.buttonColor();
   },
   updated(){
     this.$permissions.redirectIfNotAllowed('view_site');

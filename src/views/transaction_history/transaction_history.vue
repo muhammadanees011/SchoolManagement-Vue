@@ -19,7 +19,7 @@
                   <div class="filter-container ms-2 mb-2">
                     <span style="display: flex;">
                       <input class="input-box filter-box" @keyup="filterTransactionHistory" v-model="seachString" id="name" type="text" :placeholder="computedPlaceholder" name="address" />
-                      <select @change="filterTransactionHistory" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                      <select @change="filterTransactionHistory" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                         <option v-for="(item, index) in allFields" :key="index" :value="item">
                           {{ item }}
                         </option>
@@ -173,18 +173,13 @@
       this.setColor();
       this.getUser();
       this.getTransactionHistory();
+      this.$globalHelper.buttonColor();
     },
-    // updated(){
-    //   if(this.user.role=='student'){
-    //     return
-    //   }else{
-    //     this.$permissions.redirectIfNotAllowed('transaction_history');
-    //   }
-    // },
     updated(){
       if(this.user.role!=='student' && this.user.role!=='satff'){
         this.$permissions.redirectIfNotAllowed('transaction_history');
       }
+      this.$globalHelper.buttonColor();
     },
     computed:{
       ...mapGetters(['getBrandingSetting']),

@@ -119,6 +119,7 @@
     this.getUser();
     // this.getStudents();
     this.getSchools();
+    this.$globalHelper.buttonColor();
   },
   updated(){
     if(!this.userPermissions.create){

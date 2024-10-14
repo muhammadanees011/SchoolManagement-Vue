@@ -99,8 +99,8 @@
                                 </div>
                                 </div>
                             </li> -->
-                            <button @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
-                            <button @click="checkout('wallet_and_card')" style="font-size: 12px; background-color: #573078;" class="mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet & Card Payment </button>
+                            <button @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
+                            <button @click="checkout('wallet_and_card')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet & Card Payment </button>
                             <p v-if="dataLoaded" class="text-sm text-warning mt-1">In a Wallet & Card Payment, the wallet is charged first, and any remaining amount is charged to the card.</p>
                         </div>
                     </div>
@@ -126,6 +126,10 @@ import axiosClient from '../../axios'
     mounted(){
         this.getUser();
         this.getCustomerPaymentMethods();
+        this.$globalHelper.buttonColor();
+    },
+    updated(){
+        this.$globalHelper.buttonColor();
     },
     methods:{
         //--------------TOAST MESSAGE--------------

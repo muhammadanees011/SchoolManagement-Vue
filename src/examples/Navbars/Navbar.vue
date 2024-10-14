@@ -73,7 +73,7 @@
               </li>
               </template>
               <li v-if="cartItemsList.length>0" class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                <button @click="navCheckout()" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Checkout </button>
+                <button @click="navCheckout()" style="font-size: 12px; background-color: #573078;" class="btn me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Checkout </button>
               </li>
               <li v-else class="list-group-item border-0 d-flex align-items-center justify-content-center p-4 mb-2 bg-warning-100 text-warning border-radius-lg">
                 <small>Cart is empty</small>
@@ -274,6 +274,10 @@ export default {
     this.getOrganizationName();
     // this.getUserPermissions();
     this.getUserRolePermissions();
+    this.$globalHelper.buttonColor();
+  },
+  updated(){
+    this.$globalHelper.buttonColor();
   },
   methods: {
     ...mapActions(['updateRemovedItem','updatePermissions']),

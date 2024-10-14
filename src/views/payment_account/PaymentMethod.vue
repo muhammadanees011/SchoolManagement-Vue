@@ -67,6 +67,7 @@
       }.bind(this) );
       this.getUser();
       this.getCustomerPaymentMethods();
+      this.$globalHelper.buttonColor();
     },
     data(){
         return {

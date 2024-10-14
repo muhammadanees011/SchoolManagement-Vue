@@ -6,6 +6,9 @@
             
             <div class="d-flex justify-content-between border-radius-lg pt-4">
                 <h6 class="text-dark text-capitalize ps-3">Edit Student</h6>
+                <router-link :to="{ name: 'list-students' }">
+                  <button style="font-size: 12px;background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Back </button>
+                </router-link>
               </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
@@ -140,6 +143,7 @@
       this.editStudent();
       this.getSchools();
       this.getAllAttributes();
+      this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('edit_student');
