@@ -58,79 +58,81 @@
                   </div> 
 
                 </div>
-                <table  ref="table" class="table align-items-center mb-0">
-                    
-                  <thead>
-                    <tr>
-                    <th class="">
-                    <div class="form-check" style="margin-left:-20px;">
-                        <input @change="selectAll" v-model="selectall" id="" class="form-check-input" type="checkbox" name="">
-                        <label for="" class="custom-control-label"></label>
-                    </div>
-                    </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        ID
+                <div class="table-responsive p-0">
+                  <table  ref="table" class="table align-items-center mb-0">
+                      
+                    <thead>
+                      <tr>
+                      <th class="">
+                      <div class="form-check" style="margin-left:-20px;">
+                          <input @change="selectAll" v-model="selectall" id="" class="form-check-input" type="checkbox" name="">
+                          <label for="" class="custom-control-label"></label>
+                      </div>
                       </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Item
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
-                        Quantity
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Price
-                      </th>
-                      <!-- <th v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'" class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
-                        Attribute
-                      </th> -->
-                      <th v-if="user && user.role=='super_admin' || user && user.role=='organization_admin'" class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Shop
-                      </th>
-                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Status
-                      </th>                 
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-if="shopItems.length === 0">
-                      <td colspan="7" class="text-center">
-                        No data available.
-                      </td>
-                    </tr>
-                    <template v-for="(data,index) in shopItems" :key="index">
+                        <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                          ID
+                        </th>
+                        <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                          Item
+                        </th>
+                        <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
+                          Quantity
+                        </th>
+                        <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                          Price
+                        </th>
+                        <!-- <th v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff'" class="text-uppercase align-middle text-center text-secondary text-xxs font-weight-bolder opacity-7">
+                          Attribute
+                        </th> -->
+                        <th v-if="user && user.role=='super_admin' || user && user.role=='organization_admin'" class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                          Shop
+                        </th>
+                        <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Status
+                        </th>                 
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-if="shopItems.length === 0">
+                        <td colspan="7" class="text-center">
+                          No data available.
+                        </td>
+                      </tr>
+                      <template v-for="(data,index) in shopItems" :key="index">
 
-                    <tr v-for="(item,index) in data.shop_items" :key="index">
-                    <td class="align-middle text-center text-sm">
-                    <div class="form-check">
-                        <input :checked="checkIfSelected(item.id)" @change="selectRecord(item.id)" id="" class="form-check-input" type="checkbox" name="">
-                        <label for="" class="custom-control-label"></label>
-                    </div>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">{{ item.id }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{item.name  }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{ item.quantity }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
-                    </td>
-                    <!-- <td v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff' "  class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{item.attribute ? item.attribute.name:'-' }}</span>
-                    </td> -->
-                    <td v-if="user && user.role=='super_admin' || user.role=='organization_admin'" class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{data.shop_name  ? data.shop_name:'-' }}</span>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      <span class="badge badge-sm bg-gradient-success">{{ item.status }}</span>
-                    </td>
-                    </tr>
-                  </template>
-                  </tbody>
-                </table>
+                      <tr v-for="(item,index) in data.shop_items" :key="index">
+                      <td class="align-middle text-center text-sm">
+                      <div class="form-check">
+                          <input :checked="checkIfSelected(item.id)" @change="selectRecord(item.id)" id="" class="form-check-input" type="checkbox" name="">
+                          <label for="" class="custom-control-label"></label>
+                      </div>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{ item.id }}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs ">{{item.name  }}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs ">{{ item.quantity }}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
+                      </td>
+                      <!-- <td v-if="user && user.role=='super_admin' || user.role=='organization_admin' || user.role=='staff' "  class="align-middle text-center">
+                        <span class="text-secondary text-xs ">{{item.attribute ? item.attribute.name:'-' }}</span>
+                      </td> -->
+                      <td v-if="user && user.role=='super_admin' || user.role=='organization_admin'" class="align-middle text-center">
+                        <span class="text-secondary text-xs ">{{data.shop_name  ? data.shop_name:'-' }}</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">{{ item.status }}</span>
+                      </td>
+                      </tr>
+                    </template>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               <div class="row">

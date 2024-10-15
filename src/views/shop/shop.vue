@@ -59,88 +59,89 @@
                     </div>
                     
                   </div>  
+                  <div class="table-responsive p-0">
+                    <table  ref="table" class="table align-items-center mb-0">
+                      <thead>
+                        <tr>
+                          <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                            ID
+                          </th>
+                          <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                            Item
+                          </th>
+                          <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
+                            Quantity
+                          </th>
+                          <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
+                            Sold Quantity
+                          </th>
+                          <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
+                            Expiration Date
+                          </th>
+                          <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                            Price
+                          </th>
+                          <th v-if="user && user.role=='super_admin' || user && user.role=='organization_admin'" class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                            Shop
+                          </th>
+                          <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                            Status
+                          </th>
+                          <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                            Action
+                          </th>                  
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-if="shopItems.length === 0">
+                          <td colspan="9" class="text-center">
+                            No data available.
+                          </td>
+                        </tr>
+                        <template v-for="(data,index) in shopItems" :key="index">
 
-                <table  ref="table" class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        ID
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Item
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
-                        Quantity
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
-                        Sold Quantity
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
-                        Expiration Date
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Price
-                      </th>
-                      <th v-if="user && user.role=='super_admin' || user && user.role=='organization_admin'" class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Shop
-                      </th>
-                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Status
-                      </th>
-                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Action
-                      </th>                  
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-if="shopItems.length === 0">
-                      <td colspan="9" class="text-center">
-                        No data available.
-                      </td>
-                    </tr>
-                    <template v-for="(data,index) in shopItems" :key="index">
-
-                    <tr v-for="(item,index) in data.shop_items" :key="index">
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">{{ item.id }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <img v-if="item.image" :src=" $env_vars.BASE_URL + item.image" style="height: 20px; width: 20px; margin-right: 10px;">
-                      <span class="text-secondary text-xs ">{{item.name  }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{ item.quantity }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{ item.quantity_sold }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{ item.valid_to }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
-                    </td>
-                    <td v-if="user && user.role=='super_admin' || user.role=='organization_admin'" class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{data.shop_name  ? data.shop_name:'-' }}</span>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      <span v-if="item.quantity > 0 " class="badge badge-sm bg-gradient-success">Available</span>
-                      <span v-if="item.quantity == 0 " class="badge badge-sm bg-gradient-danger">Not Available</span>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      <!-- <i v-if="user && user.role=='student'" @click="addToCart(item.id)" class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i> -->
-                      <!-- <router-link :to="{ name: 'shop-checkout', params: { id: item.id }  }">
-                        <i v-if="user && user.role=='student'" class="fas fa-shopping-cart text-success me-2" aria-hidden="true"></i>
-                      </router-link> -->
-                        <span  v-if="user && user.role!='student' && user.role!='parent' && user.role!='staff'">
-                          <i v-if="userPermissions.edit_shop" @click="editShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
-                          <i v-if="userPermissions.delete_shop" @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                      </span>
-                    </td>
-                    </tr>
-                  </template>
-                  </tbody>
-                </table>
+                        <tr v-for="(item,index) in data.shop_items" :key="index">
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">{{ item.id }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <img v-if="item.image" :src=" $env_vars.BASE_URL + item.image" style="height: 20px; width: 20px; margin-right: 10px;">
+                          <span class="text-secondary text-xs ">{{item.name  }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs ">{{ item.quantity }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs ">{{ item.quantity_sold }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs ">{{ item.valid_to }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
+                        </td>
+                        <td v-if="user && user.role=='super_admin' || user.role=='organization_admin'" class="align-middle text-center">
+                          <span class="text-secondary text-xs ">{{data.shop_name  ? data.shop_name:'-' }}</span>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                          <span v-if="item.quantity > 0 " class="badge badge-sm bg-gradient-success">Available</span>
+                          <span v-if="item.quantity == 0 " class="badge badge-sm bg-gradient-danger">Not Available</span>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                          <!-- <i v-if="user && user.role=='student'" @click="addToCart(item.id)" class="fas fa-plus-circle text-success me-2" aria-hidden="true"></i> -->
+                          <!-- <router-link :to="{ name: 'shop-checkout', params: { id: item.id }  }">
+                            <i v-if="user && user.role=='student'" class="fas fa-shopping-cart text-success me-2" aria-hidden="true"></i>
+                          </router-link> -->
+                            <span  v-if="user && user.role!='student' && user.role!='parent' && user.role!='staff'">
+                              <i v-if="userPermissions.edit_shop" @click="editShopItem(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
+                              <i v-if="userPermissions.delete_shop" @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                          </span>
+                        </td>
+                        </tr>
+                      </template>
+                      </tbody>
+                    </table>
+                  </div>
               </div>
 
               <ProductOwner :show="showModal" :ownerData="ownerData" @close="showModal = false" @update-task="updateAmount">

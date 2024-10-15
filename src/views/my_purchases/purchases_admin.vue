@@ -17,103 +17,112 @@
                 <div>
                   
                   <div class="filter-container ms-2 mb-2">
-                    <span style="display: flex;">
-                      <input class="input-box filter-box" @keyup="filterPurchaseHistory" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                      <select @change="filterPurchaseHistory" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 110px !important;">
-                        <option v-for="(item, index) in allFields" :key="index" :value="item">
-                          {{ item }}
-                        </option>
-                      </select>
+                    <div class="row" style="width: 100%;">
+                  
+                      <div class="col-4">
+                        <span style="display: flex;">
+                          <input class="input-box filter-box" @keyup="filterPurchaseHistory" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                          <select @change="filterPurchaseHistory" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 110px !important;">
+                            <option v-for="(item, index) in allFields" :key="index" :value="item">
+                              {{ item }}
+                            </option>
+                          </select>
+                        </span>
+                      </div>
 
-                      <span class="label-text bulk_topup" @click="exportTableToXLS()"  style="padding-top: 7px;">
-                        <i class="fas fa-download download-icon me-1"></i>
-                        Export To XLS
-                      </span>
-                    </span>
+                      <div class="col-12 col-md-6 col-sm-6" style="padding-top: 15px;">
+                        <span class="label-text bulk_topup" @click="exportTableToXLS()"  style="padding-top: 7px;">
+                          <i class="fas fa-download download-icon me-1"></i>
+                          Export To XLS
+                        </span>
+                      </div>
+                    </div>
                   </div> 
 
                 </div>
-                <table  ref="table" class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        ID
-                      </th>
-                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Buyer
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Item
-                      </th>
-                      <!-- <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
-                        Quantity
-                      </th> -->
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Price
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Amount Paid
-                      </th>
-                      <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
-                        Payment Method
-                      </th>
-                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Payment Status
-                      </th>
-                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Date
-                      </th>     
-                      <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Action
-                      </th>               
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-if="shopItems.length === 0">
-                      <td colspan="9" class="text-center">
-                        No data available.
-                      </td>
-                    </tr>
+                <div class="table-responsive p-0">
+                  <table  ref="table" class="table align-items-center mb-0">
+                    <thead>
+                      <tr>
+                        <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                          ID
+                        </th>
+                        <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Buyer
+                        </th>
+                        <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                          Item
+                        </th>
+                        <!-- <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder ps-2">
+                          Quantity
+                        </th> -->
+                        <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                          Price
+                        </th>
+                        <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                          Amount Paid
+                        </th>
+                        <th class="text-uppercase align-middle text-center text-xxs font-weight-bolder">
+                          Payment Method
+                        </th>
+                        <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Payment Status
+                        </th>
+                        <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Date
+                        </th>     
+                        <th class="text-center align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Action
+                        </th>               
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-if="shopItems.length === 0">
+                        <td colspan="9" class="text-center">
+                          No data available.
+                        </td>
+                      </tr>
 
-                    <tr v-for="(item,index) in shopItems" :key="index">
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">{{ item.id }}</span>
-                    </td>
-                    <td class="align-middle text-center d-flex flex-column">
-                      <span class="text-secondary text-xs">{{ item.buyer_name }} ,</span>
-                      <small class="text-secondary text-xs">{{ item.buyer_email }}</small>
-                    </td>
-                    <td class="align-middle text-center">
-                      <img v-if="item.image" :src="$env_vars.BASE_URL + item.image" style="height: 20px; width: 20px; margin-right: 10px;">
-                      <span class="text-secondary text-xs ">{{item.name  }}</span>
-                    </td>
-                    <!-- <td class="align-middle text-center">
-                      <span class="text-secondary text-xs ">{{ item.quantity }}</span>
-                    </td> -->
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs">£{{ formattedPrice(item.price) }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs">£{{formattedPrice(item.amount_paid) }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span v-if="item.payment_card!=null" class="text-success text-xs">Card Payment</span>
-                      <span v-if="item.payment_card==null" class="text-warning text-xs">Wallet Payment</span>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      <span v-if="item.payment_status == 'partially_paid'" class="badge badge-sm bg-gradient-danger">Partially Paid</span>
-                      <span v-if="item.payment_status == 'fully_paid' " class="badge badge-sm bg-gradient-success">Fully Paid</span>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                        {{ formatDateString(item.created_at) }}
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      <span v-if="item.refund_status == null" @click="confirmRefund(item.id)" class="badge badge-sm bg-gradient-danger" style="cursor: pointer;">Refund -></span>
-                      <span v-if="item.refund_status == 'refunded'" class="badge badge-sm bg-gradient-success">Refunded</span>
-                    </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      <tr v-for="(item,index) in shopItems" :key="index">
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{ item.id }}</span>
+                      </td>
+                      <td class="align-middle text-center d-flex flex-column">
+                        <span class="text-secondary text-xs">{{ item.buyer_name }} ,</span>
+                        <small class="text-secondary text-xs">{{ item.buyer_email }}</small>
+                      </td>
+                      <td class="align-middle text-center">
+                        <img v-if="item.image" :src="$env_vars.BASE_URL + item.image" style="height: 20px; width: 20px; margin-right: 10px;">
+                        <span class="text-secondary text-xs ">{{item.name  }}</span>
+                      </td>
+                      <!-- <td class="align-middle text-center">
+                        <span class="text-secondary text-xs ">{{ item.quantity }}</span>
+                      </td> -->
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs">£{{ formattedPrice(item.price) }}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs">£{{formattedPrice(item.amount_paid) }}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span v-if="item.payment_card!=null" class="text-success text-xs">Card Payment</span>
+                        <span v-if="item.payment_card==null" class="text-warning text-xs">Wallet Payment</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span v-if="item.payment_status == 'partially_paid'" class="badge badge-sm bg-gradient-danger">Partially Paid</span>
+                        <span v-if="item.payment_status == 'fully_paid' " class="badge badge-sm bg-gradient-success">Fully Paid</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                          {{ formatDateString(item.created_at) }}
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span v-if="item.refund_status == null" @click="confirmRefund(item.id)" class="badge badge-sm bg-gradient-danger" style="cursor: pointer;">Refund -></span>
+                        <span v-if="item.refund_status == 'refunded'" class="badge badge-sm bg-gradient-success">Refunded</span>
+                      </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               <div class="row">

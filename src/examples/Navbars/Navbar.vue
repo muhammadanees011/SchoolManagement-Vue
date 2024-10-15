@@ -9,7 +9,7 @@
         <h5>Super Admin</h5>
       </div>
       <template v-if="currentRouteName!='Profile'">
-        <div v-if="!passwordStatus" class="change-pass-alert">
+        <div v-if="!passwordStatus" class="change-pass-alert pt-1" style="padding-right: 5px; display: flex;">
           <small class="pass-text">For security reasons, we kindly ask you to change your password,
             <router-link :to="{name:'Profile'}">
               <span class="click-link ms-2">click here</span> 

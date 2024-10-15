@@ -17,105 +17,114 @@
                 <div>
 
                   <div class="filter-container ms-2 mb-2">
-                    <span style="display: flex;">
-                      <input class="input-box filter-box" @keyup="filterTransactionHistory" v-model="seachString" id="name" type="text" :placeholder="computedPlaceholder" name="address" />
-                      <select @change="filterTransactionHistory" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
-                        <option v-for="(item, index) in allFields" :key="index" :value="item">
-                          {{ item }}
-                        </option>
-                      </select>
+                    <div class="row" style="width: 100%;">
+                      <div class="col-4">
+                        <span style="display: flex;">
+                          <input class="input-box filter-box" @keyup="filterTransactionHistory" v-model="seachString" id="name" type="text" :placeholder="computedPlaceholder" name="address" />
+                          <select @change="filterTransactionHistory" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                            <option v-for="(item, index) in allFields" :key="index" :value="item">
+                              {{ item }}
+                            </option>
+                          </select>
+                        </span>
+                      </div>
 
-                      <span class="label-text bulk_topup" @click="exportTableToXLS()">
-                        <i class="fas fa-download download-icon me-1"></i>
-                        Export To XLS
-                      </span>
-                    </span>
+                      <div class="col-12 col-md-6 col-sm-6" style="padding-top: 15px;">
+                        <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                          <i class="fas fa-download download-icon me-1"></i>
+                          Export To XLS
+                        </span>
+                      </div>
+
+                    </div>
                   </div> 
 
 
                 </div>
-                <table  ref="table" class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Account
-                      </th> -->
-                      <th v-if="user.role!=='student'" class="text-uppercase text-xxs font-weight-bolder">
-                        User
-                      </th>
-                      <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Type
-                      </th>
-                      <th class=" align-middle text-center text-uppercase text-xxs font-weight-bolder ps-2">
-                        Amount
-                      </th>
-                      <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                        Date
-                      </th>
-                      <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Status
-                      </th> -->
-                      <!-- <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Action
-                      </th>                   -->
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-if="transactionHistoryList.length === 0">
-                      <td colspan="4" class="text-center">
-                        No data available.
-                      </td>
-                    </tr>
-                    <tr v-for="(item,index) in transactionHistoryList" :key="index">
-                      <!-- <td>
-                        <div class="d-flex px-2 py-1">
-                          <div>
+                <div class="table-responsive p-0">
+                  <table  ref="table" class="table align-items-center mb-0">
+                    <thead>
+                      <tr>
+                        <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                          Account
+                        </th> -->
+                        <th v-if="user.role!=='student'" class="text-uppercase text-xxs font-weight-bolder">
+                          User
+                        </th>
+                        <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Type
+                        </th>
+                        <th class=" align-middle text-center text-uppercase text-xxs font-weight-bolder ps-2">
+                          Amount
+                        </th>
+                        <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Date
+                        </th>
+                        <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                          Status
+                        </th> -->
+                        <!-- <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                          Action
+                        </th>                   -->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-if="transactionHistoryList.length === 0">
+                        <td colspan="4" class="text-center">
+                          No data available.
+                        </td>
+                      </tr>
+                      <tr v-for="(item,index) in transactionHistoryList" :key="index">
+                        <!-- <td>
+                          <div class="d-flex px-2 py-1">
+                            <div>
+                            </div>
+                            <div class="d-flex flex-column justify-content-center">
+                              <p class="text-xs text-secondary mb-0">
+                                {{ item.acct_id }}
+                              </p>
+                            </div>
                           </div>
-                          <div class="d-flex flex-column justify-content-center">
-                            <p class="text-xs text-secondary mb-0">
-                              {{ item.acct_id }}
-                            </p>
+                        </td> -->
+                        <td v-if="user.role!=='student'" >
+                          <div class="d-flex px-2 py-1">
+                            <div>
+                            </div>
+                            <div class="d-flex flex-column justify-content-center">
+                              <p class="text-xs text-secondary mb-0">
+                                {{ item.user.first_name }} {{ item.user.last_name }}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      </td> -->
-                      <td v-if="user.role!=='student'" >
-                        <div class="d-flex px-2 py-1">
-                          <div>
-                          </div>
-                          <div class="d-flex flex-column justify-content-center">
-                            <p class="text-xs text-secondary mb-0">
-                              {{ item.user.first_name }} {{ item.user.last_name }}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="align-middle text-center">
-                        <p class="text-xs text-secondary mb-0">{{ transactionType(item.type) }}</p>
-                      </td>
-                      <td class="align-middle text-center">  
-                        <span class="d-flex justify-content-center">
-                          <i v-if="item.type=='top_up'|| item.type=='pos_refund' || item.type=='school_shop_refund'" class="fas fa-plus fa-xs text-success me-2" aria-hidden="true"></i>
-                          <i v-else class="fas fa-minus fa-xs text-danger me-2" aria-hidden="true"></i>
-                          <p class="text-xs text-secondary mb-0">£{{formattedPrice(item.amount) }}</p>
-                        </span>
-                      </td>
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-xs "
-                          >{{ formatDate(item.created_at) }}</span
-                        >
-                      </td>
-                      <!-- <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success"
-                          >success</span
-                        >
-                      </td> -->
-                      
-                      <!-- <td class="align-middle text-center text-sm">
-                        <i @click="deleteTransactionHistory(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                      </td> -->
-                    </tr>           
-                  </tbody>
-                </table>
+                        </td>
+                        <td class="align-middle text-center">
+                          <p class="text-xs text-secondary mb-0">{{ transactionType(item.type) }}</p>
+                        </td>
+                        <td class="align-middle text-center">  
+                          <span class="d-flex justify-content-center">
+                            <i v-if="item.type=='top_up'|| item.type=='pos_refund' || item.type=='school_shop_refund'" class="fas fa-plus fa-xs text-success me-2" aria-hidden="true"></i>
+                            <i v-else class="fas fa-minus fa-xs text-danger me-2" aria-hidden="true"></i>
+                            <p class="text-xs text-secondary mb-0">£{{formattedPrice(item.amount) }}</p>
+                          </span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs "
+                            >{{ formatDate(item.created_at) }}</span
+                          >
+                        </td>
+                        <!-- <td class="align-middle text-center text-sm">
+                          <span class="badge badge-sm bg-gradient-success"
+                            >success</span
+                          >
+                        </td> -->
+                        
+                        <!-- <td class="align-middle text-center text-sm">
+                          <i @click="deleteTransactionHistory(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
+                        </td> -->
+                      </tr>           
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               <div class="row">

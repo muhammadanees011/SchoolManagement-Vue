@@ -303,3 +303,11 @@ input:disabled {
   background-color: #010A21;
   color: white;
 }
+
+.pagination-container{
+  overflow-x: scroll;
+}
+
+.entries-dropdown{
+  margin-right: 25px;
+}
