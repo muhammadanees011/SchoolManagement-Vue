@@ -4,19 +4,23 @@
         <div class="col-12">
           <div class="card">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                <!-- <h6 class="text-dark text-capitalize ps-3">PARENTS</h6> -->
-                <span>
-                  <h6 class="ms-3 text-dark text-capitalize">PARENTS</h6>
-                  <small class="ms-3 page-description">
-                    In the Parents section, you can manage parent or carer accounts by adding, editing, or deleting them. Additionally, you can link each parent to <br>the students they are responsible for. This functionality helps keep parent information up to date.
-                  </small>
-                </span>
+                <h6 class="ms-3 text-dark text-capitalize">PARENTS</h6>
                 <template v-if="userPermissions.create">
                   <router-link :to="{ name: 'add-parent' }">
-                    <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Parent </button>
+                    <!-- <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Parent </button> -->
+                    <button style="font-size: 12px;background-color: #573078;" class="btn me-4 justify-content-between text-white fw-1 border-0 py-2 px-3 border-radius-lg"> 
+                      <i class="fas fa-plus plus-icon"></i>
+                      New
+                    </button>
                   </router-link>
                 </template>
               </div>
+              
+            <span class="ps-0">
+              <small class="ms-3 me-4 page-description">
+                In the Parents section, you can manage parent or carer accounts by adding, editing, or deleting them. Additionally, you can link each parent to <br>the students they are responsible for. This functionality helps keep parent information up to date.
+              </small>
+            </span>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">

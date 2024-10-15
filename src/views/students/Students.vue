@@ -3,43 +3,57 @@
     <div class="row">
       <div class="col-12">
         <div class="card px-3">
-              <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                <span>
+              <div class="d-flex justify-content-between  border-radius-lg pt-4">
                 <h6 class="text-dark text-capitalize">STUDENTS</h6>
-                <small class="page-description">Here, you can oversee student accounts, add funds to their wallets, and track their transaction history. This functionality ensures effective management <br>of financial interactions and balances for each student.</small>
-                <!-- <hr  class="description-line"> -->
-                </span>
+                
                 <template v-if="userPermissions.create_student">
                   <router-link :to="{ name: 'add-student' }">
-                    <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Student </button>
+                    <!-- <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Student </button> -->
+                    <button style="font-size: 12px;background-color: #573078;" class="btn me-2 justify-content-between text-white fw-1 border-0 py-2 px-3 border-radius-lg"> 
+                      <i class="fas fa-plus plus-icon"></i>
+                      New
+                    </button>
                   </router-link>
                 </template>
               </div>
+              <span class="ps-0">
+                  <small class="me-4 page-description">
+                    Here, you can oversee student accounts, add funds to their wallets, and track their transaction history. This functionality ensures effective management <br>of financial interactions and balances for each student.
+                  </small>
+              </span>
             <div>
 
             <BulkTopup :show="showModal" :task="task" @close="showModal = false" @update-task="updateAmount">
-            <h2>Modal Content</h2>
-            <p>This is the content of the modal.</p>
             </BulkTopup>
             
               <div class="filter-container">
-                <span style="display: flex;">
-                  <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                  <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
-                    <option v-for="(item, index) in allFields" :key="index" :value="item">
-                      {{ item }}
-                    </option>
-                  </select>
+                <div class="row">
+                  <div class="col-6">
+                    <span style="display: flex;">
+                      <input class="ms-2 input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address"/>
+                      <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                        <option v-for="(item, index) in allFields" :key="index" :value="item">
+                          {{ item }}
+                        </option>
+                      </select>
+                    </span>
+                  </div>
 
-                  <span v-if="userPermissions.topup" class="label-text bulk_topup"  @click="showModal = true">
-                    <i class="fas fa-credit-card payment-icon me-1"></i>
-                    Bulk Topup
-                  </span>
-                  <span class="label-text bulk_topup" @click="exportTableToXLS()">
-                    <i class="fas fa-download download-icon me-1"></i>
-                    Export To XLS
-                  </span>
-                </span>
+                  <div class="col-12 col-md-3 col-sm-6" style="padding-top: 10px;">
+                    <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                      <i class="fas fa-download download-icon me-1"></i>
+                      Export To XLS
+                    </span>
+                  </div>
+
+                  <div class="col-12 col-md-3 col-sm-6" style="padding-top: 10px;">
+                    <span v-if="userPermissions.topup" class="label-text bulk_topup"  @click="showModal = true">
+                      <i class="fas fa-credit-card payment-icon me-1"></i>
+                      Bulk Topup
+                    </span>
+                  </div>
+
+                </div>
 
               </div>              
             </div>

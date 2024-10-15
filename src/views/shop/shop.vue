@@ -6,46 +6,60 @@
         <div class="col-12">
           <div class="card ps-3">
 
-            <div class="d-flex justify-content-between border-radius-lg pt-4 pb-3">
+            <div class="d-flex justify-content-between border-radius-lg pt-4">
               <!-- <h6 class="text-dark text-capitalize ps-3">SHOP ITEMS</h6> -->
-                <span>
-                  <h6 class="text-dark text-capitalize">SHOP ITEMS</h6>
-                  <small class="page-description">
-                    Here, you can oversee Shop Items. You can add new items, delete or edit existing items, and update their quantity, status, <br> and price. This functionality ensures effective management of the shop items.
-                  </small>
-                </span>
-
-                <template v-if="userPermissions.create_staff">
-                  <router-link :to="{ name: 'add-items' }">
-                    <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Item </button>
-                  </router-link>
-                </template>
+              <h6 class="text-dark text-capitalize">SHOP ITEMS</h6>
+              <template v-if="userPermissions.create_staff">
+                <router-link :to="{ name: 'add-items' }">
+                  <button style="font-size: 12px;background-color: #573078;" class="btn me-3 justify-content-between text-white fw-1 border-0 py-2 px-3 border-radius-lg"> 
+                    <i class="fas fa-plus plus-icon"></i>
+                    New
+                  </button>  
+                </router-link>
+              </template>
             </div>
+
+            <span class="ps-0">
+              <small class="ms-3 me-4 page-description">
+                Here, you can oversee Shop Items. You can add new items, delete or edit existing items, and update their quantity, status, <br> and price. This functionality ensures effective management of the shop items.
+              </small>
+            </span>
+
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
-                <div>
-
                   <div class="filter-container ms-2 mb-2">
-                    <span style="display: flex;">
-                      <input class="input-box filter-box" @keyup="filterShopItems" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                      <select @change="filterShopItems" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
-                        <option v-for="(item, index) in allFields" :key="index" :value="item">
-                          {{ item }}
-                        </option>
-                      </select>
 
-                      <span class="label-text bulk_topup" @click="exportTableToXLS()">
-                        <i class="fas fa-download download-icon me-1"></i>
-                        Export To XLS
-                      </span>
-                      <span class="label-text bulk_topup" @click="showModal=true" style="width:120px;">
-                        <i class="fas fa-plus plus-icon me-1"></i>
-                        Products Owner
-                      </span>
-                    </span>
+                    <div class="row" style="width: 100%;">
+                      
+                      <div class="col-4">
+                        <span style="display: flex;">
+                          <input class="input-box filter-box" @keyup="filterShopItems" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                          <select @change="filterShopItems" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                            <option v-for="(item, index) in allFields" :key="index" :value="item">
+                              {{ item }}
+                            </option>
+                          </select>
+                        </span>
+                      </div>
+
+                      <div class="col-12 col-md-2 col-sm-5" style="padding-top: 15px;">
+                        <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                          <i class="fas fa-download download-icon me-1"></i>
+                          Export To XLS
+                        </span>
+                      </div>
+
+                      <div class="col-12 col-md-2 col-sm-5" style="padding-top: 15px;">
+                        <span class="label-text bulk_topup" @click="showModal=true" style="width:120px;">
+                          <i class="fas fa-plus plus-icon me-1"></i>
+                          Products Owner
+                        </span>
+                      </div>
+
+                    </div>
+                    
                   </div>  
 
-                </div>
                 <table  ref="table" class="table align-items-center mb-0">
                   <thead>
                     <tr>

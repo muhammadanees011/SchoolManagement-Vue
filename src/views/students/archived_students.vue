@@ -13,27 +13,42 @@
             <div class="card-body px-0 pb-2">
 
                 <div class="filter-container mb-1" style="margin-top: -11px;">
-                  <span style="display: flex;">
-                    <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                    <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
-                      <option v-for="(item, index) in allFields" :key="index" :value="item">
-                        {{ item }}
-                      </option>
-                    </select>
 
-                    <span class="label-text bulk_topup" @click="exportTableToXLS()">
-                      <i class="fas fa-download download-icon me-1"></i>
-                      Export To XLS
-                    </span>
-                    <span class="label-text bulk_topup" @click="confirmAction('restore')">
-                      <i class="fas fa-undo restore-icon me-1"></i>
-                      Bulk Restore
-                    </span>
-                    <span class="label-text bulk_topup" v-if="userPermissions.delete_student" @click="confirmAction('delete')">
-                      <i class="fas fa-trash delete-icon me-1"></i>
-                      Bulk Delete
-                    </span>
-                  </span>
+                  <div class="row" style="width: 100%;">
+
+                    <div class="col-4">
+                      <span style="display: flex;">
+                        <input class="ms-2 input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address"/>
+                        <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                          <option v-for="(item, index) in allFields" :key="index" :value="item">
+                            {{ item }}
+                          </option>
+                        </select>
+                      </span>
+                    </div>
+                    
+                    <div class="col-12 col-md-2 col-sm-5" style="padding-top: 10px;">
+                      <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                        <i class="fas fa-download download-icon"></i>
+                        Export To XLS
+                      </span>
+                    </div>
+
+                    <div class="col-12 col-md-2 col-sm-5" style="padding-top: 10px;">
+                      <span class="label-text bulk_topup" @click="confirmAction('restore')">
+                        <i class="fas fa-undo restore-icon"></i>
+                        Bulk Restore
+                      </span>
+                    </div>
+
+                    <div class="col-12 col-md-2 col-sm-6" style="padding-top: 10px;">
+                      <span class="label-text bulk_topup" v-if="userPermissions.delete_student" @click="confirmAction('delete')">
+                        <i class="fas fa-trash delete-icon"></i>
+                        Bulk Delete
+                      </span>
+                    </div>
+
+                  </div>
                 </div>
 
               <div class="table-responsive p-0 student-table">

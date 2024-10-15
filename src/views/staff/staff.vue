@@ -4,33 +4,46 @@
         <div class="col-12">
           <div class="card px-3">
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                <!-- <h6 class="text-dark text-capitalize ps-3">STAFF</h6> -->
-
-                <span>
                 <h6 class="text-dark text-capitalize">STAFF</h6>
-                <small class="page-description">Here, you can oversee staff accounts, add funds to their wallets, and track their transaction history. This functionality ensures effective management <br>of financial interactions and balances for each staff.</small>
-                </span>
                 <template v-if="userPermissions.create_staff">
                   <router-link :to="{ name: 'add-staff' }">
-                    <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Staff </button>
+                    <!-- <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Staff </button> -->
+                    <button style="font-size: 12px;background-color: #573078;" class="btn me-2 justify-content-between text-white fw-1 border-0 py-2 px-3 border-radius-lg"> 
+                      <i class="fas fa-plus plus-icon"></i>
+                      New
+                    </button>
                   </router-link>
                 </template>
               </div>
+              <span class="ps-0">
+                  <small class="ms-3 me-4 page-description">
+                    Here, you can oversee staff accounts, add funds to their wallets, and track their transaction history. This functionality ensures effective management <br>of financial interactions and balances for each staff.
+                  </small>
+              </span>
               <div class="filter-container ms-2">
-                <span style="display: flex;">
-                  <input class="input-box filter-box" @keyup="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                  <select @change="filterStaff" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
-                    <option v-for="(item, index) in allFields" :key="index" :value="item">
-                      {{ item }}
-                    </option>
-                  </select>
 
-                  <span class="label-text bulk_topup" @click="exportTableToXLS()">
-                    <i class="fas fa-download download-icon me-1"></i>
-                    Export To XLS
-                  </span>
+                <div class="row" style="width: 100%;">
+                  
+                  <div class="col-4">
+                    <span style="display: flex;">
+                    <input class="input-box filter-box" @keyup="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                    <select @change="filterStaff" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                      <option v-for="(item, index) in allFields" :key="index" :value="item">
+                        {{ item }}
+                      </option>
+                    </select>
+                    </span>
+                  </div>
 
-                </span>
+                  <div class="col-12 col-md-6 col-sm-6" style="padding-top: 10px;">
+                    <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                      <i class="fas fa-download download-icon me-1"></i>
+                      Export To XLS
+                    </span>
+                  </div>
+
+                </div>
+
               </div>   
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">

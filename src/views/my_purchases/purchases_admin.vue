@@ -6,10 +6,10 @@
         <div class="col-12">
           <div class="card px-3">
 
-            <div class="d-flex justify-content-between border-radius-lg pt-4 pb-3">
+            <div class="d-flex justify-content-between border-radius-lg pt-4">
               <span>
                 <h6 class="text-dark text-capitalize">PURCHASE HISTORY</h6>
-                <small class="page-description">The Purchase History section provides detailed records of each purchase, including the Item Name, Buyer Name, Price, Amount Paid,<br> Payment Status, and Date of Purchase. This feature helps track all transactions, offering a clear and organized overview of past purchases.</small>
+                <small class="page-description ms-3" >The Purchase History section provides detailed records of each purchase, including the Item Name, Buyer Name, Price, Amount Paid,<br> Payment Status, and Date of Purchase. This feature helps track all transactions, offering a clear and organized overview of past purchases.</small>
               </span>
             </div>
             <div class="card-body px-0 pb-2">
@@ -25,7 +25,7 @@
                         </option>
                       </select>
 
-                      <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                      <span class="label-text bulk_topup" @click="exportTableToXLS()"  style="padding-top: 7px;">
                         <i class="fas fa-download download-icon me-1"></i>
                         Export To XLS
                       </span>

@@ -18,11 +18,11 @@
       <div class="row d-flex justify-content-center mt-1">
         <div class="col-md-5 mx-auto bg-white name-row p-2">
           <label>Card Holder Name</label>
-          <input id="card-holder-name" type="text" class="bg-white w-100  mb-2">
+          <input id="card-holder-name" type="text" class="bg-white mb-2">
         </div>
       </div>
       <div class="row d-flex justify-content-center">
-      <button @click="submitPaymentMethod" style="font-size: 12px" class="me-3 w-20 mt-3 trips-btn bg-gradient-grey shadow-grey text-dark fw-5 p-2 border-radius-lg"> Save Payment Method </button>
+      <button @click="submitPaymentMethod" style="font-size: 12px" class="me-3 w-35 mt-3 trips-btn bg-gradient-grey shadow-grey text-dark fw-5 p-2 border-radius-lg"> Save Payment Method </button>
       </div>
       </div>
     </div>
@@ -175,7 +175,7 @@ export default {
     border: 1px solid #ccc;
     border-radius: 6px;
     background-color: white;
-    width: 385px !important;
+    width: 24rem !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   

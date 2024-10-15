@@ -4,31 +4,43 @@
         <div class="col-12">
           <div class="card">
                 <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
-                  <span>
                     <h6 class="text-dark text-capitalize ps-3">ENROLLED STUDENTS</h6>
-                    <small class="ms-3 page-description">
-                      In the Enrolled Students section, you can view a list of students currently enrolled in a course. You have the ability to manage course enrollments <br> by adding new students or removing existing ones.
-                    </small>
-                  </span>
-                  <template v-if="userPermissions.create_student">
-                    <button @click="showModal=true" style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Enroll Student </button>
-                  </template>
+              
+                    <template v-if="userPermissions.create_student">
+                      <!-- <button @click="showModal=true" style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Enroll Student </button> -->
+                      <button @click="showModal=true"  style="font-size: 12px;background-color: #573078;" class="btn me-4 justify-content-between text-white fw-1 border-0 py-2 px-3 border-radius-lg"> 
+                      <i class="fas fa-plus plus-icon"></i>
+                        New
+                      </button>
+                    </template>
                 </div>
 
-                <div class="filter-container ms-2">
-                  <span style="display: flex;">
-                    <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                    <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
-                      <option v-for="(item, index) in allFields" :key="index" :value="item">
-                        {{ item }}
-                      </option>
-                    </select>
+                <span class="ps-0">
+                  <small class="ms-3 me-4 page-description">
+                    In the Enrolled Students section, you can view a list of students currently enrolled in a course. You have the ability to manage course enrollments <br> by adding new students or removing existing ones.
+                  </small>
+                </span>
 
-                    <span class="label-text bulk_topup" @click="exportTableToXLS()">
-                      <i class="fas fa-download download-icon me-1"></i>
-                      Export To XLS
+                <div class="filter-container ms-2">
+                  <div class="row" style="width: 100%;">
+                    <div class="col-4">
+                    <span style="display: flex;">
+                      <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                      <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                        <option v-for="(item, index) in allFields" :key="index" :value="item">
+                          {{ item }}
+                        </option>
+                      </select>
                     </span>
-                  </span>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-sm-6" style="padding-top: 15px;">
+                      <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                        <i class="fas fa-download download-icon me-1"></i>
+                        Export To XLS
+                      </span>
+                    </div>
+                  </div>
                 </div>  
 
               <div>

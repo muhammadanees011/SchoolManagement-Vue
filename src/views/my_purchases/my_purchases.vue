@@ -40,8 +40,8 @@
                                                   </span>
                                                   <span v-if="data.payment_status=='partially_paid'" class="text-success text-sm"><small>Partially Paid: £{{ formattedAmount(data.amount_paid) }}</small></span>
                                                   
-                                                  <span v-if='data.payment_card!=null' class="ms-5 bg-success text-white text-sm rounded-pill p-1"><small>Card Payment</small></span>
-                                                  <span v-if='data.payment_card==null' class="ms-5 bg-warning text-white text-sm rounded-pill p-1"><small>Wallet Payment</small></span>
+                                                  <span v-if='data.payment_card!=null' class="ms-1 text-primary text-sm"><small> (Card Payment)</small></span>
+                                                  <span v-if='data.payment_card==null' class="ms-1 text-warning text-sm"><small> (Wallet Payment)</small></span>
 
                                                   <span v-if="data.refund_status=='refunded'" class="ms-5 text-warning text-sm"><small>(Refunded)</small></span>
                         

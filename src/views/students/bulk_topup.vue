@@ -12,13 +12,6 @@
               <span class="input-group-text"><i class="far fa-edit" aria-hidden="true"></i></span>
               <input id="jkanban-task-title" v-model="formattedBalance" class="form-control" placeholder="Topup amount" type="text">
             </div>
-            <!-- <div class="mb-4 input-group">
-              <span class="input-group-text"><i class="fas fa-user" aria-hidden="true"></i></span>
-              <input id="jkanban-task-assignee" v-model="localTask.assignee" class="form-control" placeholder="Task Assignee" type="text">
-            </div>
-            <div class="form-group">
-              <textarea id="jkanban-task-description" v-model="localTask.description" class="form-control" placeholder="Task Description" rows="4"></textarea>
-            </div> -->
             <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
             <div class="text-end">
               <button @click="saveChanges" class="m-1 btn btn-primary"> Topup </button>

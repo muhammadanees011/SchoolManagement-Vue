@@ -4,14 +4,15 @@
         <div class="col-12">
           <div class="card">
 
-            <div class="d-flex justify-content-between border-radius-lg pt-4 pb-3">
-              <span>
+            <div class="d-flex justify-content-between border-radius-lg pt-4">
                 <h6 class="ms-3 text-dark text-capitalize">ARCHIVED SITES</h6>
-                <small class="ms-3 page-description">
-                  In the Archived Sites section, you can view and restore archived school locations. The details displayed include the student count and teacher count <br> for each archived site. This allows you to manage and review historical site data effectively.
-                </small>
-              </span>
             </div>
+
+            <span class="ps-3">
+              <small class=" me-4 page-description">
+                  In the Archived Sites section, you can view and restore archived school locations. The details displayed include the student count and teacher count <br> for each archived site. This allows you to manage and review historical site data effectively.
+              </small>
+            </span>
 
             <div class="card-body px-0 pb-2">
 

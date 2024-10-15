@@ -7,33 +7,47 @@
                 <!-- <h6 class="text-dark text-capitalize ps-3">ARCHIVED STAFF</h6> -->
                 <span>
                   <h6 class="text-dark text-capitalize">ARCHIVED STAFF</h6>
-                  <small class="page-description">Every archived staff can be found in this table. Here, you can manage archived staff accounts. You can permanently delete them in bulk,<br> restore them, or export the data to an Excel sheet</small>
+                  <small class="page-description ms-2">Every archived staff can be found in this table. Here, you can manage archived staff accounts. You can permanently delete them in bulk,<br> restore them, or export the data to an Excel sheet</small>
                 </span>
               </div>
             <div class="card-body px-0 pb-2">
 
               <div class="filter-container mb-1 ms-2" style="margin-top: -11px;">
-                <span style="display: flex;">
-                  <input class="input-box filter-box" @keyup="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                  <select @change="filterStaff" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
-                    <option v-for="(item, index) in allFields" :key="index" :value="item">
-                      {{ item }}
-                    </option>
-                  </select>
+                <div class="row" style="width: 100%;">
 
-                  <span class="label-text bulk_topup" @click="exportTableToXLS()">
-                    <i class="fas fa-download download-icon me-1"></i>
-                    Export To XLS
+                  <div class="col-4">
+                  <span style="display: flex;">
+                    <input class="input-box filter-box" @keyup="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                    <select @change="filterStaff" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                      <option v-for="(item, index) in allFields" :key="index" :value="item">
+                        {{ item }}
+                      </option>
+                    </select>
                   </span>
-                  <span class="label-text bulk_topup" @click="confirmAction('restore')">
-                    <i class="fas fa-undo restore-icon me-1"></i>
-                    Bulk Restore
-                  </span>
-                  <span class="label-text bulk_topup" v-if="userPermissions.delete_student" @click="confirmAction('delete')">
-                    <i class="fas fa-trash delete-icon me-1"></i>
-                    Bulk Delete
-                  </span>
-                </span>
+                  </div>
+
+                  <div class="col-12 col-md-2 col-sm-6" style="padding-top: 15px;">
+                    <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                      <i class="fas fa-download download-icon me-1"></i>
+                      Export To XLS
+                    </span>
+                  </div>
+
+                  <div class="col-12 col-md-2 col-sm-6" style="padding-top: 15px;">
+                    <span class="label-text bulk_topup" @click="confirmAction('restore')">
+                      <i class="fas fa-undo restore-icon me-1"></i>
+                      Bulk Restore
+                    </span>
+                  </div>
+
+                  <div class="col-12 col-md-2 col-sm-6" style="padding-top: 15px;">
+                    <span class="label-text bulk_topup" v-if="userPermissions.delete_student" @click="confirmAction('delete')">
+                      <i class="fas fa-trash delete-icon me-1"></i>
+                      Bulk Delete
+                    </span>
+                  </div>
+
+                </div>
               </div>
 
               <div class="table-responsive p-0">

@@ -2,11 +2,14 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <div class="card px-3">
+        <div class="card px-1">
           <div class="d-flex justify-content-between border-radius-lg pt-4 ">
             <h6 class="text-dark text-capitalize ps-3">ORGANISATIONS</h6>
             <router-link :to="{ name: 'add-organizations' }">
-              <button style="font-size: 12px;background-color: #573078;" class="btn me-3 justify-content-between text-white fw-5 border-0 py-2 px-3 border-radius-lg"> Add Organisation </button>
+              <button style="font-size: 12px;background-color: #573078;" class="btn me-4 justify-content-between text-white fw-1 border-0 py-2 px-3 border-radius-lg"> 
+                <i class="fas fa-plus plus-icon"></i>
+                New
+              </button>
             </router-link>
           </div>
           <span class="ps-3">

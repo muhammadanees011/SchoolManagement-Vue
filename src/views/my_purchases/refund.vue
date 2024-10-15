@@ -7,29 +7,25 @@
           <div class="card">
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
-                <div>
+                <h6 class="ms-3 text-dark text-capitalize">REFUND REQUESTS</h6>
+                                  
+                  <span class="ps-0">
+                    <small class="ms-3 me-4 page-description">
+                      In the Refund Requests section, you can manage and process requests for refunds submitted by students and approve or <br>reject the request as needed. 
+                    </small>
+                  </span>
+
                   <div class="filter-container mb-3">
-                    <span>
-                      <h6 class="ms-3 text-dark text-capitalize">REFUND REQUESTS</h6>
-                      <small class="ms-3 page-description">
-                        In the Refund Requests section, you can manage and process requests for refunds submitted by students and approve or reject the request as needed. 
-                      </small>
+                    <span style="display: flex; margin-left:20px;">
+                      <input class="input-box filter-box" @keyup="filterRefunds" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                      <select @change="filterRefunds" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                        <option v-for="(item, index) in allFields" :key="index" :value="item">
+                          {{ item }}
+                        </option>
+                      </select>
                     </span>
+                  </div> 
 
-                    <div class="filter-container me-4 mb-2">
-                      <span style="display: flex;">
-                        <input class="input-box filter-box" @keyup="filterRefunds" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                        <select @change="filterRefunds" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
-                          <option v-for="(item, index) in allFields" :key="index" :value="item">
-                            {{ item }}
-                          </option>
-                        </select>
-                      </span>
-                    </div> 
-
-                  </div>              
-                </div>
-    
                     <div class="card-body pt-1 p-3">
                         <div class="container-fluid mt-1">
                         <template v-for="(data,index) in shopItems" :key="index">

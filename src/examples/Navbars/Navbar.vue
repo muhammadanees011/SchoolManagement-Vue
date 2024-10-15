@@ -12,7 +12,7 @@
         <div v-if="!passwordStatus" class="change-pass-alert">
           <small class="pass-text">For security reasons, we kindly ask you to change your password,
             <router-link :to="{name:'Profile'}">
-              <span class="click-link">click here</span> 
+              <span class="click-link ms-2">click here</span> 
             </router-link>
               to change the password</small>
         </div>

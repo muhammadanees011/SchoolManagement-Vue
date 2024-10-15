@@ -6,7 +6,11 @@
             <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-3">
               <h6 class="text-dark text-capitalize ps-3">ADMINS</h6>
               <router-link :to="{ name: 'add-organization-admins' }">
-                <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Admin </button>
+                <!-- <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Admin </button> -->
+                <button style="font-size: 12px;background-color: #573078;" class="btn me-4 justify-content-between text-white fw-1 border-0 py-2 px-3 border-radius-lg"> 
+                  <i class="fas fa-plus plus-icon"></i>
+                  New
+                </button>
               </router-link>
             </div>
 

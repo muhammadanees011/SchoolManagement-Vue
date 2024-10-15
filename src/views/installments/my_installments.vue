@@ -7,28 +7,25 @@
           <div class="card">
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
-                <div>
+                <h6 class="ms-3 text-dark text-capitalize">PENDING INSTALLMENTS</h6>
                   <div class="filter-container mb-3">
                     <span>
-                      <h6 class="ms-3 text-dark text-capitalize">PENDING INSTALLMENTS</h6>
-                      <small class="ms-3 page-description">
+                      <small class="ms-4 page-description">
                         In the Pending Installments section, you can track and manage pending payments for students. This section allows you to view details of pending installments.
                       </small>
                     </span>
-
-                    <div class="filter-container me-4 mb-2">
-                      <span style="display: flex;">
-                        <input class="input-box filter-box" @keyup="filterInstallments" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                        <select @change="filterInstallments" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
-                          <option v-for="(item, index) in allFields" :key="index" :value="item">
-                            {{ item }}
-                          </option>
-                        </select>
-                      </span>
-                    </div> 
-
-                  </div>              
-                </div>
+                  </div>  
+                  
+                  <div class="filter-container ms-3 mb-2">
+                    <span style="display: flex;">
+                      <input class="input-box filter-box" @keyup="filterInstallments" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                      <select @change="filterInstallments" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                        <option v-for="(item, index) in allFields" :key="index" :value="item">
+                          {{ item }}
+                        </option>
+                      </select>
+                    </span>
+                  </div> 
     
                     <div class="card-body pt-1 p-3">
                         <div class="container-fluid mt-1">
@@ -56,16 +53,18 @@
                                                   <span class="iconUxt arrowSingleRight" aria-hidden="true"></span>
                                               </div>
                                           </a>
-                                          <template v-if="user.role=='student' || user.role=='staff'">
-                                            <button @click="payNow(data.id)" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-15  btn text-white fw-5 p-2 border-radius-lg"> Pay now</button>                                            
-                                          </template>
+      
                                           <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="">
                                               <h4 class="label text-sm text-warning">Buyer</h4>
                                               <h4 class="label text-sm"> {{ data.buyer_name }}</h4>
                                               <p class="label text-success">{{ data.buyer_email }}
                                               </p>
-                                          </div>
+                                          </div>   
+                                          <template v-if="user.role=='student' || user.role=='staff'">
+                                            <button @click="payNow(data.id)" style="font-size: 12px; width:25% !important; background-color: #573078;" class="trips-btn btn text-white fw-2 py-2 px-1 border-radius-lg"> Pay now</button>                                            
+                                          </template>                   
                                         </li>
+                                         
                                       <!-- Repeat for other list items -->
                                   </ul>
                               </div>

@@ -1,32 +1,53 @@
 <template>
     <div class="card mt-4 card-height">
       <div class="card-header pb-3 p-3">
-        <div class="row">
-          <div class="col-6 d-flex align-items-center">
-            <!-- <h6 class="mb-0">Set up Payment Account</h6> -->
 
-            <span>
+        <div class="row" style="width: 100%;">
+          <div class="col-12">
+            <div class="d-flex justify-content-between border-radius-lg pt-4">
               <h5 class="ms-3 text-sm">TOP-UP</h5>
-              <small class="ms-3 mb-3 page-description">
-                In this section, you can top-up the user's wallet by adding a specified amount to their balance. Additionally, you can add a new payment method, such as a credit or debit card, to the user's account for future transactions. This functionality ensures that users have convenient payment options and sufficient funds available for seamless purchases.</small>
-            </span>
-
-          </div>
-          <div class="col-6 text-end">
-            <router-link  :to="{name:'add_card'}">
-              <button style="font-size: 12px; background-color: #573078;" class="btn add-card-btn mb-3 trips-btn w-35  text-white fw-5 border-radius-lg">  <i class="fas fa-plus me-2"></i>
-              Add New Card </button>
-            <!-- <button @click="openModal" class="btn-color" variant="gradient">
-              <i class="fas fa-plus me-2"></i>
-              Add New Card
-            </button> -->
-            </router-link>
+              <router-link  :to="{name:'add_card'}">
+                <button style="font-size: 12px; background-color: #573078;" class="btn add-card-btn mb-3 trips-btn w-100  text-white fw-5 border-radius-lg">  <i class="fas fa-plus me-2"></i>
+                Add New Card </button>
+              </router-link>
+            </div>
           </div>
         </div>
+
+        <div class="row" style="width: 100%;">  
+          <div class="col-12 d-flex align-items-center">   
+            <small class="ms-3 mb-3 page-description">
+                  In this section, you can top-up the user's wallet by adding a specified amount to their balance. Additionally, you can add a new payment method, such as a credit or debit card, to the user's account for future transactions. This functionality ensures that users have convenient payment options and sufficient funds available for seamless purchases.
+            </small>
+          </div>
+        </div>
+
       </div>
       <div class="card-body p-3">
-        <div class="row">
+        <div class="row d-flex justify-content-between">
           <div class="col-md-6 mb-md-0 mb-4">
+
+            <template v-for="(item,index) in userCards" :key="index">
+              <div :class="{ 'selected': isSelected === index }" @click="toggleSelection(index,$event)"
+                class="mb-1 card card-body border card-plain border-radius-lg d-flex align-items-right flex-row" style="width:300px;">
+                <img v-if="item.card.brand=='visa'" class="w-10 me-3 mb-0" src="@/assets/img/logos/visa.png" alt="logo"/>
+                <img v-if="item.card.brand=='mastercard'" class="w-10 me-3 mb-0" src="@/assets/img/logos/mastercard.png" alt="logo"/>
+                <h6 class="mb-0">
+                  **** **** **** {{ item.card.last4 }}
+                </h6>
+                <i @click="confirmDelete(item.id)"
+                  class="fas fa-trash-alt ms-auto text-dark cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title
+                  aria-hidden="true"
+                  data-bs-original-title="Edit Card"
+                  aria-label="Edit Card"
+                ></i>
+                <span class="sr-only">Edit Card</span>
+              </div>
+            </template>
+
             <div class="amount-radio">
               <div class="top-up-row">
                 <span class="mb-1" style="display: flex;">
@@ -52,27 +73,7 @@
               </span>  
             </div>
           </div>
-          <div class="col-md-5 ms-auto">
-            <template v-for="(item,index) in userCards" :key="index">
-              <div :class="{ 'selected': isSelected === index }" @click="toggleSelection(index,$event)"
-                class=" mb-1 card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
-                <img v-if="item.card.brand=='visa'" class="w-10 me-3 mb-0" src="@/assets/img/logos/visa.png" alt="logo"/>
-                <img v-if="item.card.brand=='mastercard'" class="w-10 me-3 mb-0" src="@/assets/img/logos/mastercard.png" alt="logo"/>
-                <h6 class="mb-0">
-                  **** **** **** {{ item.card.last4 }}
-                </h6>
-                <i @click="confirmDelete(item.id)"
-                  class="fas fa-trash-alt ms-auto text-dark cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title
-                  aria-hidden="true"
-                  data-bs-original-title="Edit Card"
-                  aria-label="Edit Card"
-                ></i>
-                <span class="sr-only">Edit Card</span>
-              </div>
-            </template>
+          <div class="col-md-5">
           </div>
           <div class="conteiner">
         <button  @click="addBalance" style="font-size: 12px; background-color: #573078;" class="btn top-up-btn p-3 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Add Balance </button>
