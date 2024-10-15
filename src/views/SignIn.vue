@@ -37,7 +37,7 @@
               <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>Password is required</small>
               <!-- <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch> -->
               <div class="text-center">
-                <material-button class="my-4 mb-2" @click="signIn" style="background-color: #573078 !important;" fullWidth>Sign in</material-button>
+                <material-button class="my-4 mb-2 custom-signin-btn" @click="signIn" style="background-color: #573078 !important;" fullWidth>Sign in</material-button>
               </div>
               <p class="mt-4 text-sm text-success text-center">
                 <!-- <small class="text-success text-gradient font-weight-bold">Forgot Password ?</small> -->
@@ -185,5 +185,10 @@ export default {
 }
 .mslogin-link{
   cursor: pointer;
+}
+
+.custom-signin-btn.btn-success {
+  background-color: #573078 !important;
+  border-color: #573078 !important;
 }
 </style>
