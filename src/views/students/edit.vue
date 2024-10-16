@@ -142,7 +142,6 @@
       this.getUser();
       this.editStudent();
       this.getSchools();
-      this.getAllAttributes();
       this.$globalHelper.buttonColor();
     },
     updated(){
@@ -170,21 +169,17 @@
     },
     data() {
       return {
-        allAttributes:'',
         availableCountries:['UK','USA','Canada'],
         user:'',
         formValidation:"",
         isError:false,
         validationErrors:'',
         fsm:[false,true],
-        selectedAttrs:[],
         newStudent: {
           school_id:'',
           student_id:'',
           add_amount:'',
           mifare_id:'',
-          attribute_id:'',
-          attributes:[],
           first_name: '',
           last_name:'',
           email: '',
@@ -215,7 +210,7 @@
         validate=cloneDeep(this.newStudent)
         for(let item in this.newStudent){
           if ((this.newStudent[item] === '' || this.newStudent[item] === null) && 
-          (item !== "attribute_id" && item !== "date_of_birth" && item !== "add_amount" 
+          (item !== "date_of_birth" && item !== "add_amount" 
           && item !== "password" &&  item !== "password_confirmation")) {
                 validate[item]="is required"
                 status=true
@@ -256,9 +251,7 @@
         this.newStudent.date_of_birth= data.dob
         this.newStudent.status=data.user.status
         this.newStudent.fsm = data.fsm_activated==0 ? false:true
-        this.newStudent.attribute_id = data.attribute_id
         this.newStudent.balance =this.formattedPrice(data.balance);
-        this.newStudent.attributes =data.attributes;
       }
     },
     formattedPrice(value){
@@ -294,20 +287,6 @@
       } catch (error) {
         console.log(error)
       }
-    },
-    //-------------GET ALL Attributes----------
-    async getAllAttributes(){
-      try {
-        const response= await axiosClient.get('/getAllAttributes')
-        this.allAttributes=response.data
-      } catch (error) {
-        console.log(error)
-      }
-      this.allAttributes.map((item)=>{
-        if(this.newStudent.attributes.includes(item.id)){
-          this.selectedAttrs.push(item)
-        }
-      })
     },
     //-------------STORE ALL Attributes----------
     handleAttributes(data){

@@ -3,14 +3,6 @@
     <div class="row">
       <div class="col-12">
         <div class="card my-4">
-          <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-            <div class="d-flex justify-content-between bg-gradient-success shadow-success border-radius-lg pt-4 pb-3">
-              <h6 class="text-white text-capitalize ps-3">Add Student</h6>
-              <router-link :to="{ name: 'list-students' }">
-                <button style="font-size: 12px" class="me-3 bg-gradient-white shadow-white text-dark fw-5 border-0 p-2 border-radius-lg"> Back </button>
-              </router-link>
-            </div>
-          </div> -->
           <div class="d-flex justify-content-between  border-radius-lg pt-4 pb-1">
             <h6 class="text-dark text-capitalize ps-3">Add Student</h6>
             <router-link :to="{ name: 'list-students' }">
@@ -121,7 +113,6 @@ export default {
   mounted() {
     this.getUser();
     this.getSchools();
-    this.getAllAttributes();
     this.$globalHelper.buttonColor();
   },
   updated(){
@@ -142,7 +133,6 @@ export default {
     return {
       selected: null,
       fsm:[false,true],
-      allAttributes:'',
       availableCountries:['UK','USA','Canada'],
       user:'',
       isError:false,
@@ -218,39 +208,14 @@ export default {
         return;
       }
       try {
-        let response=await axiosClient.post('/createStudent', this.newStudent)
+        await axiosClient.post('/createStudent', this.newStudent)
         this.isError=false;
-        response=response.data;
-        this.createCustomer(response.user.id);
         this.$router.push({ name: 'list-students' })
         this.snackbarMsg('Student Saved Successfuly')
         this.isError=false;
       } catch (error) {
         this.isError=true;
         this.validationErrors=error.response.data.errors
-      }
-    },
-    //-------------GET ALL Attributes----------
-    async getAllAttributes(){
-        try {
-          const response= await axiosClient.get('/getAllAttributes')
-          this.allAttributes=response.data
-        } catch (error) {
-          console.log(error)
-        }
-    },
-    //-----------CREATE STRIPE CUSTOMER----------
-    async createCustomer(id){
-      let name=this.newStudent.first_name+' '+this.newStudent.last_name;
-      let data={
-        'user_id':id,
-        'name':name,
-        'email':this.newStudent.email
-      }
-      try {
-        await axiosClient.post('/createCustomer',data)
-      } catch (error) {
-        console.log(error)
       }
     },
     //------------GET SCHOOLS------------

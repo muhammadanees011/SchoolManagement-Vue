@@ -213,20 +213,6 @@
           this.validationErrors=error.response.data.errors
         }
       },
-      //-----------CREATE STRIPE CUSTOMER----------
-      async createCustomer(id){
-        let name=this.newStaff.first_name+' '+this.newStaff.last_name;
-        let data={
-          'user_id':id,
-          'name':name,
-          'email':this.newStaff.email
-        }
-        try {
-          await axiosClient.post('/createCustomer',data)
-        } catch (error) {
-          console.log(error)
-        }
-      },
       //------------GET SCHOOLS------------
       async getSchools() {
         try {
