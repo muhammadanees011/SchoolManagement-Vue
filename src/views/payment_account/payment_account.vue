@@ -1,12 +1,17 @@
 <template>
     <div class="card mt-4 card-height">
       <div class="card-header pb-3 p-3">
+        <div class="row">
+            <div class="col text-start">
+                <button @click="$router.go(-1)" style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-2  border-radius-lg"> <i class="fas fa-arrow-left"></i> </button>
+            </div>
+        </div>
 
         <div class="row" style="width: 100%;">
           <div class="col-12">
             <div class="d-flex justify-content-between border-radius-lg pt-4">
               <h5 class="ms-3 text-sm">TOP-UP</h5>
-              <router-link  :to="{name:'add_card'}">
+              <router-link v-if="paymentMethodsLoaded && !checkIfHasCard()" :to="{name:'add_card'}">
                 <button style="font-size: 12px; background-color: #573078;" class="btn add-card-btn mb-3 trips-btn w-100  text-white fw-5 border-radius-lg">  <i class="fas fa-plus me-2"></i>
                 Add New Card </button>
               </router-link>
@@ -89,6 +94,7 @@
   import img2 from "@/assets/img/logos/visa.png";
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';  
+  import { mapGetters } from 'vuex'
 
   export default {
     name: "payment-card",
@@ -101,7 +107,11 @@
       this.user= JSON.parse(user)
       this.getCustomerPaymentMethods();
     },
+    updated(){
+      this.$globalHelper.buttonColor();
+    },
     computed: {
+      ...mapGetters(['getBrandingSetting']),
       formattedBalance: {
         get() {
           return this.addedBalance;
@@ -114,6 +124,7 @@
     },
     data() {
       return {
+        paymentMethodsLoaded:false,
         user:'',
         selected_amount:'',
         externalAccounts:'',
@@ -126,6 +137,7 @@
       };
     },
     methods: {
+
       confirmDelete(id) {
         Swal.fire({
           title: 'Are you sure?',
@@ -144,12 +156,21 @@
           }
         });
     },
-      snackbarMsg(message,type='success') {
+
+    snackbarMsg(message,type='success') {
       this.$snackbar.add({
         type: type,
         text: message,
         background: 'white',
       })
+    },
+
+    checkIfHasCard(){
+      if(this.userCards && this.userCards.length>0){
+        return true
+      }else if(this.userCards.length==undefined){
+        return false
+      }
     },
     //------------ADD BALANCE TO THE WALLET--------------
     async addBalance(){
@@ -229,6 +250,7 @@
       try {
         const response=await axiosClient.post('/getPaymentMethods',data)
         this.userCards=response.data.data
+        this.paymentMethodsLoaded=true
       } catch (error) {
         console.log(error)
       }

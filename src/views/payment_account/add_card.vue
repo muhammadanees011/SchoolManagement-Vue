@@ -3,6 +3,11 @@
   <div>
     <div class="card">
       <div class="card-header">
+        <div class="row">
+            <div class="col text-start">
+                <button @click="$router.go(-1)" style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-2  border-radius-lg"> <i class="fas fa-arrow-left"></i> </button>
+            </div>
+        </div>
       </div>
       <div class="card-body">
         <div class="row d-flex justify-content-center">

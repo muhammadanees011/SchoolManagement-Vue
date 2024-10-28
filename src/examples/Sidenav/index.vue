@@ -16,7 +16,7 @@
         <template v-if="getBrandingSetting.logo!=='null'">
           <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: -21px;">
             <img :src="StudentPayLogo" class="navbar-brand-img branding-logo h-50" alt=""/>
-            <p class="ms-2 font-weight-bold text-white" style="font-size: 15px; margin-right: 20px; margin-top: 4px;">Student-Pay Portal</p>
+            <p class="ms-2 font-weight-bold text-white" style="font-size: 15px; margin-right: 20px; margin-top: 4px;">StudentPay Portal</p>
             <br>
           </div>
         </template>

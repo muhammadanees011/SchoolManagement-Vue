@@ -1,5 +1,12 @@
 <template>
     <div class="container-fluid">
+        <div class="row">
+            <div class="col text-start">
+                <button @click="$router.go(-1)" style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-2  border-radius-lg">
+                  <i class="fas fa-arrow-left me-1"></i>
+                </button>
+            </div>
+        </div>
       <div class="row">
         <div class="col-12">
           <div class="card">

@@ -48,13 +48,13 @@
                           Export To XLS
                         </span>
                       </div>
-
+<!-- 
                       <div class="col-12 col-md-2 col-sm-5" style="padding-top: 15px;">
                         <span class="label-text bulk_topup" @click="showModal=true" style="width:120px;">
                           <i class="fas fa-plus plus-icon me-1"></i>
                           Products Owner
                         </span>
-                      </div>
+                      </div> -->
 
                     </div>
                     

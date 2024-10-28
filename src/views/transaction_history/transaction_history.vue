@@ -52,6 +52,18 @@
                           User
                         </th>
                         <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Charge ID
+                        </th>
+                        <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Name
+                        </th>
+                        <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Card Brand
+                        </th>
+                        <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
+                          Last 4 Digit
+                        </th>
+                        <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
                           Type
                         </th>
                         <th class=" align-middle text-center text-uppercase text-xxs font-weight-bolder ps-2">
@@ -96,6 +108,18 @@
                               </p>
                             </div>
                           </div>
+                        </td>
+                        <td class="align-middle text-center">
+                          <p class="text-xs text-secondary mb-0">{{ item.charge_id ? item.charge_id:'N/A' }}</p>
+                        </td>
+                        <td class="align-middle text-center">
+                          <p class="text-xs text-secondary mb-0">{{ item.card_holder_name ? item.card_holder_name:'N/A' }}</p>
+                        </td>
+                        <td class="align-middle text-center">
+                          <p class="text-xs text-secondary mb-0">{{ item.card_brand ? item.card_brand:'N/A'}}</p>
+                        </td>
+                        <td class="align-middle text-center">
+                          <p class="text-xs text-secondary mb-0">{{ item.last_4 ? item.last_4:'N/A' }}</p>
                         </td>
                         <td class="align-middle text-center">
                           <p class="text-xs text-secondary mb-0">{{ transactionType(item.type) }}</p>

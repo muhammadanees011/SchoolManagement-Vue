@@ -49,16 +49,7 @@
                                     <div class="ms-auto text-start">
                                     <span><small class="me-3 trip-dates">From {{ formatDateString(item.valid_from) }} To {{formatDateString(item.valid_to)}}</small></span>
                                     <br>
-                                    <!-- <span><small class="me-3 trip-dates">Total Seats - {{ item.total_booking ? item.total_booking :0 }}</small></span>
-                                    <span><small class="me-3 trip-dates">Available Seats - {{  item.total_booking ? item.total_booking :0 }}</small></span>
-                                    <br>
-                                    <span><small class="me-3 trip-dates">Age Group - 16-20</small></span>
-                                    <span><small class="me-3 trip-dates">Booking Open</small></span>
-                                    <br>
-                                    <span><small class="me-3 trip-dates">{{ item.accomodation_details ? item.accomodation_details:'-' }}</small></span>
-                                    <br>
-                                    <span v-if="user.role=='super_admin'"><small class="me-3 trip-dates">Organization: {{ item.organization ? item.organization.name:'-' }}</small></span> -->
-                                    <div class="d-flex  align-items-start text-danger text-gradient text-sm font-weight-bold" style="justify-content: flex-start;">
+                                    <div class="d-flex  align-items-start text-success text-gradient text-sm font-weight-bold" style="justify-content: flex-start;">
                                     Price - £{{ formattedAmount(item.price) }}
                                     </div>
                                     <br>
@@ -87,8 +78,9 @@
                                     <div class="cart-status">Added To Cart</div>
                                     </div> -->
                                     <div class="mt-0" v-if="item.quantity > 0 ">
-                                    <button @click="addToCart(item.id)" style="font-size: 12px; background-color: #573078;" class="btn me-3 trips-btn w-45  text-white fw-5 p-2 border-radius-lg"> Add To Cart </button>
+                                      <button @click="addToCart(item.id)" style="font-size: 12px; background-color: #573078;" class="btn me-3 trips-btn w-45  text-white fw-5 p-2 border-radius-lg"> Add To Cart </button>
                                     </div>
+
                                     <br>
                                     </div>
                                 </div>
@@ -147,7 +139,7 @@
   
   <script>
   import axiosClient from '../../axios'
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import Swal from 'sweetalert2';
   import moment from 'moment';
 
@@ -231,6 +223,7 @@
     }
     },
     methods:{
+      ...mapActions(['updateCartItemCounter']),
       confirmDelete(id) {
         Swal.fire({
           title: 'Are you sure?',
@@ -336,6 +329,18 @@
         try {
           await axiosClient.post('/addItemToCart',data)
           this.snackbarMsg('Item Added to Cart')
+          this.countUserCartItems();
+        } catch (error) {
+          console.log(error)
+        }
+      },
+
+      //------------Count Cart Items-----------
+      async countUserCartItems(){
+        try {
+          let response=await axiosClient.get('/countUserCartItems')
+          let counter=response.data ? response.data :null
+          this.updateCartItemCounter(counter);
         } catch (error) {
           console.log(error)
         }

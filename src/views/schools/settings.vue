@@ -1,6 +1,11 @@
 <template>
     <div>
         <div class="row">
+            <div class="col text-end">
+                <button @click="$router.go(-1)" style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4  border-radius-lg"> Back </button>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-12 col-md-6 col-xl-6 position-relative">
             <div class="card card-plain h-100">
                 <div class="p-3 pb-0 card-header">

@@ -22,15 +22,16 @@
           <!-- <material-input id="search" label="Search here" /> -->
         </div>
         <ul class="navbar-nav justify-content-end">
-          <!-- <li class="nav-item d-flex align-items-center">
-            <router-link :to="{ name: 'SignIn' }" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">
-              <i class="material-icons" :class="isRTL ? 'ms-sm-2' : 'me-sm-1'"> account_circle </i>
-            </router-link>
-          </li> -->
 
           <li v-if="user.role=='staff' || user.role=='student' || user.role=='parent'" class="nav-item dropdown d-flex align-items-center" :class="isRTL ? 'ps-2' : 'pe-2'">
             <a @click="getCartItems" href="#" class="p-0 nav-link lh-1" :class="[color ? color : 'text-body', showCart ? 'show' : '']" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="material-icons cursor-pointer">shopping_cart</i>
+              <!-- <i class="material-icons cursor-pointer">shopping_cart</i> -->
+              <div class="position-relative d-inline-block">
+                  <i class="material-icons cursor-pointer">shopping_cart</i>
+                  <span v-if="getCartItemCounter && getCartItemCounter > 0" class="custom-badge position-absolute top-0 start-100 translate-middle rounded-pill bg-danger">
+                      {{ getCartItemCounter }}
+                  </span>
+              </div>
             </a>
             <ul class="cart px-2 py-3 cart-dropdown dropdown-menu dropdown-menu-end me-sm-n4" :class="showCart ? 'show' : ''" aria-labelledby="dropdownMenuButton">
               <template v-for="(item,index) in cartItemsList" :key="index" >
@@ -242,7 +243,7 @@
 <script>
 // import MaterialInput from '@/components/MaterialInput.vue'
 // import Breadcrumbs from '../Breadcrumbs.vue'
-import { mapMutations, mapState, mapActions } from 'vuex'
+import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 
 import axiosClient from '../../axios'
 
@@ -250,11 +251,13 @@ export default {
   name: 'navbar',
   data() {
     return {
+      cartItemsCount:null,
       branding_settings:{
         primary_color:'',
         secondary_color:'',
         logo:''
       },
+      isCartItemsLoaded:false,
       passwordStatus:'',
       cartItemsList:'',
       user:'',
@@ -272,15 +275,15 @@ export default {
     this.getUser();
     this.isUpdatedRecently();
     this.getOrganizationName();
-    // this.getUserPermissions();
     this.getUserRolePermissions();
     this.$globalHelper.buttonColor();
+    this.countUserCartItems();
   },
   updated(){
     this.$globalHelper.buttonColor();
   },
   methods: {
-    ...mapActions(['updateRemovedItem','updatePermissions']),
+    ...mapActions(['updateRemovedItem','updatePermissions', 'updateCartItemCounter']),
     ...mapMutations(['navbarMinimize', 'toggleConfigurator']),
 
     toggleSidebar() {
@@ -292,16 +295,24 @@ export default {
         this.user = JSON.parse(userData);
       }
     },
+
+    snackbarMsg(message) {
+      this.$snackbar.add({
+        type: 'success',
+        text: message,
+        background: 'white',
+      })
+    },
     //----------------GET USER PERMISSIONS------------
     async getUserPermissions(){
       let id = this.user.id
       try {
-          let response= await axiosClient.get('getUserPermissions/'+id)
-          response=response.data
-          this.formattPermissions(response)
-        } catch (error) {
-          console.log(error)
-        }
+        let response= await axiosClient.get('getUserPermissions/'+id)
+        response=response.data
+        this.formattPermissions(response)
+      } catch (error) {
+        console.log(error)
+      }
     },
     //----------------GET USER ROLE PERMISSIONS------------
     async getUserRolePermissions(){
@@ -390,9 +401,20 @@ export default {
         try {
           const response=await axiosClient.get('/getUserCartItems')
           this.cartItemsList=response.data
+          this.isCartItemsLoaded=true
         } catch (error) {
           console.log(error)
         }
+    },
+    //------------Count Cart Items-----------
+    async countUserCartItems(){
+      try {
+        let response=await axiosClient.get('/countUserCartItems')
+        let counter=response.data ? response.data :null
+        this.updateCartItemCounter(counter);
+      } catch (error) {
+        console.log(error)
+      }
     },
     //----------REMOVE ITEM FROM CART-----------
     async removeItemFromCart(id){
@@ -401,11 +423,12 @@ export default {
         "item_id":id
       }
       try {
-          await axiosClient.post('/removeItemFromCart',data)
-          this.removeItemFromList(id)
-        } catch (error) {
-          console.log(error)
-        }
+        await axiosClient.post('/removeItemFromCart',data)
+        this.removeItemFromList(id)
+        this.countUserCartItems();
+      } catch (error) {
+        console.log(error)
+      }
     },
     //----------------REMOVE ITEM FROM CART---------------
     removeItemFromList(id){
@@ -423,6 +446,7 @@ export default {
     // MaterialInput,
   },
   computed: {
+    ...mapGetters(['getCartItemCounter']),
     ...mapState(['isRTL', 'isAbsolute']),
     currentRouteName() {
       return this.$route.name
@@ -471,5 +495,17 @@ export default {
 }
 .organization-name h5{
   font-size: 1rem;
+}
+.custom-badge {
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  line-height: 20px;
+  border-radius: 50%;
+  padding: 0;
+  text-align: center; 
+  display: inline-block;
+  vertical-align: middle; 
+  color: white;
 }
 </style>

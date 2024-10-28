@@ -168,6 +168,26 @@
       </li>
       <!-- </template> -->
 
+      
+      <template v-if="(user && user.role!=='student') && (user && user.role!=='staff') && (user && user.role!=='parent')" >
+        <li class="nav-item">
+          <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#shop">
+            <i class="material-icons-round opacity-10 fs-5">category</i>
+            <span class="sidenav-normal me-3 ms-2 ps-1">Product Types <b class="caret"></b></span>
+          </a>
+          <div id="shop" class="collapse">
+            <ul class="nav nav-sm flex-column">
+              <li class="nav-item">
+                <router-link :to="{ name: 'product-types' }" class="nav-link">
+                  <i class="material-icons-round small-dot">fiber_manual_record</i>
+                  <span class="sidenav-normal me-3 ms-3 ps-1 text-white">Product Types</span>
+                </router-link>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </template>
+
       <template v-if="(user && user.role!=='student') && (user && user.role!=='staff')" >
         <li  v-if="userPermissions.view_shop" class="nav-item">
         <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#shop">
@@ -362,11 +382,7 @@ export default {
       document.querySelector('.navbar-nav').style.setProperty('--nav-bg-color', bgColor);
 
       document.querySelector('#sidenav-collapse-main').style.setProperty('--nav-bg-color', bgColor);
-
-      document.querySelectorAll('.btn').forEach(function(item) {
-        item.style.setProperty('--btn-bg-color', 'red');
-      });
-
+      
     },
 
     buttonColor(){

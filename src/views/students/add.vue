@@ -70,10 +70,10 @@
                           </select>
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>School ID is required</small>
                         </div>
-                        <div class="mb-1">
+                        <!-- <div class="mb-1">
                             <label class="input-label" for="balance">Balance</label>
                             <input class="input-box" id="balance" v-model="formattedBalance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
-                        </div>
+                        </div> -->
                         <div class="mb-1">
                           <label class="input-label" for="status">Status <span class="required">*</span></label>
                           <br />
@@ -153,7 +153,7 @@ export default {
         date_of_birth:'',
         status:'',
         fsm:'',
-        balance:'',
+        // balance:'',
       },
       availableStatus:['active','pending','blocked'],
       allSchools:'',
@@ -176,7 +176,7 @@ export default {
       validate=cloneDeep(this.newStudent)
       for(let item in this.newStudent){
         if ((this.newStudent[item] === '' || this.newStudent[item] === undefined)
-         && (item !== "attribute_id" && item !== "balance" && item !== "date_of_birth" &&
+         && (item !== "attribute_id" && item !== "date_of_birth" &&
           item !== "add_amount"
           //  && item !== "password" &&  item !== "password_confirmation"
           )) {
@@ -187,7 +187,6 @@ export default {
           }
       }
       this.formValidation=validate
-      console.log(this.formValidation)
       return status;
     },
     handleAttributes(data){

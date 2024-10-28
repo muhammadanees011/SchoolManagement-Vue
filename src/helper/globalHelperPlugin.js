@@ -10,6 +10,11 @@ const globalHelperPlugin = {
           button.style.backgroundColor = bgColor;
         });
 
+        const inactivepages = document.querySelectorAll('.pagination li a');
+        inactivepages.forEach(page => {
+          page.style.backgroundColor = 'white';
+        });
+
         const pagination = document.querySelectorAll('.pagination li.active a');
         pagination.forEach(page => {
           page.style.backgroundColor = bgColor;

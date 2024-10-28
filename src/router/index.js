@@ -65,6 +65,9 @@ import AddAttribute from '../views/student_attributes/add.vue'
 import EditAttribute from '../views/student_attributes/edit.vue'
 import Roles from '../views/roles_permissions/roles.vue'
 import DefaultLayout from '../views/DefaultLayout.vue'
+import ProductTypes from '../views/ProductTypes/index.vue'
+import AddProductTypes from '../views/ProductTypes/create.vue'
+import EditProductTypes from '../views/ProductTypes/edit.vue'
 
 const routes = [
   {
@@ -260,6 +263,21 @@ const routes = [
     },
     children: [
       { path: '', name: 'support', component: Support },
+    ],
+  },
+  //-------------PRODUCT TYPES----------------
+  {
+    path: '/product-types',
+    name: 'ProductTypes',
+    component: DefaultLayout,
+    meta: {
+      title: 'ProductTypes',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/product-types', name: 'product-types', component: ProductTypes },
+      { path: '/product-types/add', name: 'add-product-types', component: AddProductTypes },
+      { path: '/product-types/edit/:id', name: 'edit-product-types', component: EditProductTypes },
     ],
   },
   //-------------SHOP----------------

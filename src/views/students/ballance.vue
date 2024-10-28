@@ -1,10 +1,17 @@
 <template>
      <div class="card">
       <div class="card-body pt-4 p-3">
+
+        <div class="row">
+            <div class="col text-start">
+                <button @click="$router.go(-1)" style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-2  border-radius-lg"> <i class="fas fa-arrow-left"></i> </button>
+            </div>
+        </div>
+
         <div class="row">
           <div class="col-md-12 col-sm-12">
             <ul class="list-group">
-              <li style="background-color: #573078 !important;" class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+              <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                 <div class="d-flex flex-column">
                   <h6 class="mb-3 text-sm text-white">
                     {{ `${walletData.user?.first_name || '-'} ${walletData.user?.last_name || '-'}` }}
@@ -63,6 +70,42 @@
             </ul>
           </div>
         </div>
+
+        <div class="row">
+          <div class="col-md-12 col-lg-12">
+            <div class="pagination-container">
+                <div class="entries-dropdown">
+                  <label for="entries">Entries</label>
+                  <select v-model="itemsPerPage" @change="getTransactionHistory(currentPage)" id="entries">
+                    <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                  </select>
+                  <!-- <span>entries/page</span> -->
+                </div>
+
+                <!-- Pagination controls -->
+                <nav class="pagination-wrapper">
+                  <ul class="pagination">
+                    <li :class="{ disabled: currentPage === 1 }">
+                      <a @click="getTransactionHistory(1)" href="#">«</a>
+                    </li>
+                    <li :class="{ disabled: currentPage === 1 }">
+                      <a @click="getTransactionHistory(currentPage - 1)" href="#">‹</a> <!-- Previous Page -->
+                    </li>
+                    <li v-for="page in limitedPages" :key="page" :class="{ active: currentPage === page }">
+                      <a @click="getTransactionHistory(page)" href="#">{{ page }}</a>
+                    </li>
+                    <li :class="{ disabled: currentPage === totalPages }">
+                      <a @click="getTransactionHistory(currentPage + 1)" href="#">›</a> <!-- Next Page -->
+                    </li>
+                    <li :class="{ disabled: currentPage === totalPages }">
+                      <a @click="getTransactionHistory(totalPages)" href="#">»</a>
+                    </li>
+                  </ul>
+                </nav>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </template>
@@ -70,6 +113,7 @@
   <script>
   import axiosClient from '../../axios'
   import moment from 'moment';
+  import { mapGetters } from 'vuex'
 
   export default {
     name: "billing-card",
@@ -77,7 +121,7 @@
       this.getUserId();
       this.getWallet();
       this.getFSMamount();
-      this.getRecentTransactions();
+      this.getTransactionHistory();
       this.$globalHelper.buttonColor();
     },
     data() {
@@ -88,12 +132,63 @@
         user_id:'',
         user:'',
         wallet:'',
+        perPageOptions: [10,20, 40, 60,100,200,300,400],
+        itemsPerPage:20,
+        totalRows:'',
+        currentPage:'',
+        perPage:'',
+        totalPages:'',
       };
     },
     computed:{
+      ...mapGetters(['getBrandingSetting']),
       walletData(){
        return this.wallet;
-      }
+      },
+
+      limitedPages() {
+        let pages = [];
+        
+        // If total pages <= 5, show all pages
+        if (this.totalPages <= 5) {
+          for (let i = 1; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          let startPage, endPage;
+          
+          // Determine the middle page to be currentPage
+          if (this.currentPage <= 3) {
+            startPage = 1;
+            endPage = Math.min(5, this.totalPages);
+          } else if (this.currentPage >= this.totalPages - 2) {
+            startPage = Math.max(this.totalPages - 4, 1);
+            endPage = this.totalPages;
+          } else {
+            startPage = this.currentPage - 2;
+            endPage = this.currentPage + 2;
+          }
+
+          // Ensure the start and end pages are within bounds
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+
+          // Always include the first page if not in range
+          if (startPage > 1) {
+            pages.unshift(1);
+            if (startPage > 2) pages.splice(1, 0, '...');
+          }
+
+          // Always include the last page if not in range
+          if (endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) pages.push('...');
+            pages.push(this.totalPages);
+          }
+        }
+
+        return pages;
+      },
     },
     methods:{
       transactionType(type){
@@ -118,6 +213,9 @@
         return formattedValue;
       },
       getUserId(){
+        let bgColor=this.getBrandingSetting.primary_color !='null' ? this.getBrandingSetting.primary_color : '#010A21';
+        document.querySelector('.list-group .list-group-item').style.setProperty('--nav-bg-color', bgColor);
+
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
         if(this.$route.params.id){
@@ -145,15 +243,21 @@
         }
       },
       //------------USER'S RECENT TRANSACTIONS-----------------
-      async getRecentTransactions(){
+      async getTransactionHistory(page=null){
         let data={
           'user_id':this.user_id,
-          'admin_id':null
+          'admin_id':null,
+          'page':page,
+          'entries_per_page': this.itemsPerPage
         }
         try {
         const response= await axiosClient.post('/getTransactionHistory',data);
         this.transactions=response.data.data.data
         this.isTransactions=true
+        this.totalRows = response.data.pagination.total;
+        this.currentPage = response.data.pagination.current_page;
+        this.perPage = response.data.pagination.per_page;
+        this.totalPages = response.data.pagination.last_page;
         } catch (error) {
           console.log(error)
         }
@@ -186,6 +290,9 @@
 }
 .wallet-info{
   font-size: 0.85rem !important;
+}
+.list-group .list-group-item{
+  background-color: var(--nav-bg-color) !important; 
 }
 </style>
   

@@ -62,7 +62,7 @@
                               <label class="input-label" for="phone">Product Type</label>
                               <br />
                               <select class="select-box" v-model="newItem.product_type" id="shop" type="select" placeholder="Product Type" name="product_type">
-                                <option v-for="(item, index) in productTypes" :key="index" :value="item">
+                                <option v-for="(item, index) in productTypesList" :key="index" :value="item">
                                   {{ item }}
                                 </option>
                               </select>
@@ -72,7 +72,11 @@
                           </div>
 
                           <div class="row mb-1">
-                            <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
+                              <label class="input-label" for="name">Product Owner Email</label>
+                              <input class="input-box" id="name" v-model="newItem.product_owner_email" type="email" placeholder="email" name="detail" />
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
                               <label class="input-label" for="phone">Visibility Options</label>
                               <br />
                               <MultiSelect
@@ -253,6 +257,7 @@
       this.getAllShops();
       this.getSchools();
       this.getAllCourses();
+      this.getProductTypes();
       this.$globalHelper.buttonColor();
     },
     updated(){
@@ -269,9 +274,6 @@
           this.newItem.quantity = Math.floor(value);
         }
       },
-      // 'newItem.price'(value) {
-      //   this.newItem.price = parseFloat(value).toFixed(2);
-      // }
     },
     data() {
       return {
@@ -286,6 +288,7 @@
         },
         schoolsList:null,
         coursesList:null,
+        productTypesList:null,
         imageFileName:"",
         imageFileUrl:"",
         selectedImageFile:null,
@@ -317,6 +320,7 @@
             installmentsAndDeposit:null,
             limitColleges:null,
             limitCourses:null,
+            product_owner_email:null,
         },   
         availableStatus:['active','pending','blocked'],
         allSchools:'',
@@ -349,6 +353,16 @@
           let url='/getCoursesForDropdown'
           const response= await axiosClient.get(url)
           this.coursesList=response.data
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      //-------------GET Product Types----------
+      async getProductTypes(){
+        try {
+          let url='/getProductTypesForDropdown'
+          const response= await axiosClient.get(url)
+          this.productTypesList=response.data
         } catch (error) {
           console.log(error)
         }
@@ -416,6 +430,7 @@
         formData.append('shop_id', this.newItem.shop_id);
         formData.append('valid_from', this.newItem.valid_from);
         formData.append('valid_to', this.newItem.valid_to);
+        formData.append('product_owner_email', this.newItem.product_owner_email);
         formData.append('visibility_options', JSON.stringify(this.newItem.visibility_options));
         formData.append('limitColleges', JSON.stringify(this.newItem.limitColleges));
         formData.append('limitCourses', JSON.stringify(this.newItem.limitCourses));

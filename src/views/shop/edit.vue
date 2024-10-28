@@ -64,7 +64,7 @@
                               <label class="input-label" for="phone">Product Type</label>
                               <br />
                               <select class="select-box" v-model="newItem.product_type" id="shop" type="select" placeholder="Product Type" name="product_type">
-                                <option v-for="(item, index) in productTypes" :key="index" :value="item">
+                                <option v-for="(item, index) in productTypesList" :key="index" :value="item">
                                   {{ item }}
                                 </option>
                               </select>
@@ -75,7 +75,11 @@
                         
 
                           <div class="row mb-1">
-                            <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
+                              <label class="input-label" for="name">Product Owner Email</label>
+                              <input class="input-box" id="name" v-model="newItem.product_owner_email" type="email" placeholder="email" name="detail" />
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
                               <label class="input-label" for="phone">Visibility Options</label>
                               <br />
                               <MultiSelect
@@ -265,6 +269,7 @@
       this.getAllShops();
       this.getAllCourses();
       this.getSchools();
+      this.getProductTypes();
       this.$globalHelper.buttonColor();
     },
     updated(){
@@ -297,6 +302,7 @@
         productTypes:['Trip','Resources','Uniforms','Print Credit','Exams','Bus Passes','Additional'],
         schoolsList:null,
         coursesList:null,
+        productTypesList:null,
         imageFileName:"",
         imageFileUrl:"",
         selectedImageFile:"",
@@ -331,6 +337,7 @@
             installmentsAndDeposit:null,
             limitCourses:null,
             limitColleges:null,
+            product_owner_email:null,
         },
         availableStatus:['active','pending','blocked'],
         allSchools:'',
@@ -371,6 +378,16 @@
         user= JSON.parse(user)
         this.user=user
       },
+      //-------------GET Product Types----------
+      async getProductTypes(){
+        try {
+          let url='/getProductTypesForDropdown'
+          const response= await axiosClient.get(url)
+          this.productTypesList=response.data
+        } catch (error) {
+          console.log(error)
+        }
+      },
       //------------UPDATE ITEM------------
       async updateItem() {
         // if(this.validateForm()){
@@ -389,6 +406,7 @@
         formData.append('shop_id', this.newItem.shop_id);
         formData.append('valid_from', this.newItem.valid_from);
         formData.append('valid_to', this.newItem.valid_to);
+        formData.append('product_owner_email', this.newItem.product_owner_email);
         formData.append('visibility_options', JSON.stringify(this.newItem.visibility_options));
         formData.append('limitColleges', JSON.stringify(this.newItem.limitColleges));
         formData.append('limitCourses', JSON.stringify(this.newItem.limitCourses));
@@ -427,6 +445,7 @@
         this.newItem.attributes=data.attributes
         this.newItem.valid_from=data.valid_from
         this.newItem.valid_to=data.valid_to
+        this.newItem.product_owner_email=data.product_owner_email
         this.newItem.visibility_options=data.visibility_options ? data.visibility_options : []
         this.newItem.limitColleges=data.limit_colleges ? data.limit_colleges : []
         this.newItem.limitCourses=data.limit_courses ? data.limit_courses : []

@@ -67,10 +67,10 @@
                           </select>
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["school_id"]!==""'>Site ID is required</small>
                         </div>
-                        <div class="mb-1">
+                        <!-- <div class="mb-1">
                             <label class="input-label" for="balance">Balance</label>
                             <input class="input-box" id="balance" v-model="formattedBalance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
-                        </div>
+                        </div> -->
                         <div class="mb-1">
                             <label class="input-label" for="balance">Add Amount</label>
                             <input class="input-box" id="balance" v-model="formattedAmount" type="number" step="0.01" min="0" placeholder="add amount" name="add_amount" />
@@ -188,7 +188,7 @@
           password:'',
           password_confirmation:'',
           fsm:'',
-          balance:'',
+          // balance:'',
         },
         availableStatus:['active','pending','blocked'],
         allSchools:'',
@@ -251,7 +251,7 @@
         this.newStudent.date_of_birth= data.dob
         this.newStudent.status=data.user.status
         this.newStudent.fsm = data.fsm_activated==0 ? false:true
-        this.newStudent.balance =this.formattedPrice(data.balance);
+        // this.newStudent.balance =this.formattedPrice(data.balance);
       }
     },
     formattedPrice(value){
