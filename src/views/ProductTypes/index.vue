@@ -6,7 +6,7 @@
 
               <div class="d-flex justify-content-between  border-radius-lg pt-4">
                   <h6 class="ms-3 text-dark text-capitalize">PRODUCT TYPES</h6>
-                  <template v-if="userPermissions.create">
+                  <!-- <template v-if="userPermissions.create"> -->
                     <router-link :to="{ name: 'add-product-types' }">
                       <!-- <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Course </button> -->
                       <button style="font-size: 12px;background-color: #573078;" class="btn me-4 justify-content-between text-white fw-1 border-0 py-2 px-3 border-radius-lg"> 
@@ -14,7 +14,7 @@
                         New
                       </button>
                     </router-link>
-                  </template>
+                  <!-- </template> -->
               </div>
 
               <span class="ps-0">
@@ -72,15 +72,15 @@
                       </td>
                       <td style="width:10%;" class="align-middle text-center">
                         <span>
-                          <template v-if="userPermissions.edit_course">
+                          <!-- <template v-if="userPermissions.edit_course"> -->
                           <router-link :to="{ name: 'edit-product-types', params: { id: item.id } }">
                             <i class="material-icons-round opacity-10 fs-5 cursor-pointer">edit</i>
                           </router-link>
-                          </template>
+                          <!-- </template> -->
                           <!-- <i class="material-icons-round opacity-10 fs-5">info</i> -->
-                          <template v-if="userPermissions.delete_course">
+                          <!-- <template v-if="userPermissions.delete_course"> -->
                           <i @click="confirmDelete(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
-                          </template>
+                          <!-- </template> -->
                         </span>
                       </td>
                     </tr>

@@ -10,7 +10,7 @@
             <input id="jkanban-task-id" class="d-none">
             <div class="mb-4 input-group">
               <span class="input-group-text"><i class="far fa-edit" aria-hidden="true"></i></span>
-              <input id="jkanban-task-title" v-model="formattedBalance" class="form-control" placeholder="Topup amount" type="text">
+              <input id="jkanban-task-title" v-model="addedBalance" class="form-control" placeholder="Topup amount" type="number" min='0'>
             </div>
             <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
             <div class="text-end">
@@ -43,15 +43,15 @@
       this.$globalHelper.buttonColor();
     },
     computed: {
-      formattedBalance: {
-        get() {
-          return this.addedBalance;
-        },
-        set(value) {
-          const formattedValue = parseFloat(value).toFixed(2);
-          this.addedBalance = formattedValue;
-        },
-      },
+      // formattedBalance: {
+      //   get() {
+      //     return this.addedBalance;
+      //   },
+      //   set(value) {
+      //     const formattedValue = parseFloat(value).toFixed(2);
+      //     this.addedBalance = formattedValue;
+      //   },
+      // },
     },
     data() {
       return {
@@ -77,6 +77,7 @@
         // this.successMessage = 'Changes saved!';
         this.$emit('update-task', this.addedBalance);
         this.closeModal();
+        this.addedBalance=null
         // setTimeout(() => {
         //   this.successMessage = '';
         //   this.closeModal();

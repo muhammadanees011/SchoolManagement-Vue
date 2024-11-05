@@ -187,7 +187,7 @@
         this.snackbarMsg('Please select the amount','error');
         return
       }
-      if((this.user.role=='super_admin' || this.user.role=='organization_admin' || this.user.role=='staff'))
+      if((this.user.role!='student' && this.user.role!='parent' && this.user.role!='staff'))
       {
           if(this.user.role=='staff' && this.user.id==user_id)
           {

@@ -90,7 +90,7 @@
                   <tr v-for="(item, index) in allStudents" :key="index">
                     <td class="text-sm">
                         <div class="form-check"  style="margin-left:17px !important;">
-                            <input :checked="checkIfSelected(item.user.id)" @change="selectRecord(item.user.id)" id="" class="form-check-input" type="checkbox" name="">
+                            <input :checked="checkIfSelected(item.user.id)" @change="selectRecord(item.user_id)" id="" class="form-check-input" type="checkbox" name="">
                             <label for="" class="custom-control-label"></label>
                         </div>
                     </td>
@@ -317,6 +317,9 @@ export default {
         const response=await axiosClient.post('/bulkTopUp',data);
         this.snackbarMsg(response.data.message)
         this.getAllStudents();
+        this.selectedRecords=[]
+        this.topUpAmount=null
+        this.selectall=false
         }catch(error){
           console.log(error)
         }
@@ -350,11 +353,13 @@ export default {
     //---------SELECT ONE SINGLE RECORD------------
     selectRecord(id) {
         const record = this.selectedRecords.find(record => record.id === id);
-        if (record.value) {
+        if (record) {
             record.value = false;
         }else{
-            record.value = true; 
+          this.selectedRecords.push({ id: id, value: true });
+            // record.value = true; 
         }
+        console.log('record',record)
     },
 
     setColor() {
