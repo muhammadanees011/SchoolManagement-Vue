@@ -82,7 +82,7 @@
                     </thead>
                     <tbody>
                       <tr v-if="transactionHistoryList.length === 0">
-                        <td colspan="4" class="text-center">
+                        <td colspan="8" class="text-center">
                           No data available.
                         </td>
                       </tr>
