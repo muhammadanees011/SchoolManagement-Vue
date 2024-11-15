@@ -53,7 +53,7 @@
                             <input class="input-box" id="name" v-model="newSchool.address" type="text" placeholder="Address" name="address" />
                             <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["address"]!==""'>Address is required</small>
                           </div>
-                          <div v-if="user.role=='super_admin'" class="mb-1">
+                          <div class="mb-1">
                             <label class="input-label" for="phone">Organisation</label>
                             <br />
                             <select class="select-box" v-model="newSchool.organization_id" id="name" type="select" placeholder="Zip" name="zip">

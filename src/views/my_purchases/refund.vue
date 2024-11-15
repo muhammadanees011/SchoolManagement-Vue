@@ -7,7 +7,7 @@
           <div class="card">
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
-                <h6 class="ms-3 text-dark text-capitalize">REFUND REQUESTS</h6>
+                <h6 class="ms-3 text-dark text-capitalize">REFUNDS</h6>
                                   
                   <span class="ps-0">
                     <small class="ms-3 me-4 page-description">
@@ -16,14 +16,35 @@
                   </span>
 
                   <div class="filter-container mb-3">
-                    <span style="display: flex; margin-left:20px;">
-                      <input class="input-box filter-box" @keyup="filterRefunds" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                      <select @change="filterRefunds" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
-                        <option v-for="(item, index) in allFields" :key="index" :value="item">
-                          {{ item }}
-                        </option>
-                      </select>
-                    </span>
+
+
+
+                    
+                    <div class="row" style="width: 100%;">
+                  
+                      <div class="col-4" style="padding-top: 15px;">  
+                        <span style="display: flex; margin-left:20px;">
+                          <input class="input-box filter-box" @keyup="filterRefunds('string_search')" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                          <select @change="filterRefunds('string_search')" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                            <option v-for="(item, index) in allFields" :key="index" :value="item">
+                              {{ item }}
+                            </option>
+                          </select>
+                        </span>
+                      </div>
+
+                      <div class="col-4 col-md-4 col-sm-6" style="padding-top: 15px;">
+                      </div>
+
+                      <div class="col-4 col-md-4 col-sm-4" style="padding-top: 15px;">
+                        <date-picker @change="filterRefunds('daterange_search')"
+                         @clear="getShopItems" 
+                         v-model:value="time3"
+                         format="DD/MM/YYYY" value-type="format" range></date-picker>
+                      </div>
+
+                    </div>
+
                   </div> 
 
                     <div class="card-body pt-1 p-3">
@@ -130,8 +151,13 @@
   import { mapGetters } from 'vuex'
   import Swal from 'sweetalert2';
   import moment from 'moment';
+  import DatePicker from 'vue-datepicker-next';
+  import 'vue-datepicker-next/index.css';
 
   export default {
+    components: {
+      DatePicker
+    },
     name: "tables",
     mounted(){
       this.getUser();
@@ -194,6 +220,7 @@
     },
     data(){
     return{
+      time3: null,
       perPageOptions: [10,20, 40, 60,100,200,300,400],
       itemsPerPage:20,
       shopItems:'',
@@ -265,16 +292,24 @@
     },
 
     //-----------FILTER INSTALLMENTS------------
-    async filterRefunds(){
-      if(this.filterBy=='' && this.seachString==''){
-        this.getShopItems()
-      }else if(this.filterBy!='' && this.seachString==''){
-        this.getShopItems()
-      }
-      let data={
-        "type":this.filterBy,
-        "value":this.seachString
-      }
+    async filterRefunds(event){
+        let dateRange
+        if(event=="daterange_search"){
+          dateRange={ 
+            fromDate:this.time3[0],
+            toDate:this.time3[1]
+          }
+        }
+
+        if (this.seachString === '' && event =="string_search") {
+          this.getShopItems();
+          return;
+        }
+
+        const data = event === "daterange_search"
+        ? { type: "Date Range", value: dateRange }
+        : { type: this.filterBy, value: this.seachString };
+
       try {
           const response=await axiosClient.post('/filterRefunds',data);
           this.shopItems=response.data;
@@ -337,7 +372,7 @@
     //------------FORMAT DATE--------------
     formatDateString(dateString) {
         const parsedDate = moment(dateString);
-        const formattedDate = parsedDate.format('DD MMMM YYYY, HH:mm');
+        const formattedDate = parsedDate.format("DD/MM/YYYY");
         return formattedDate;
     },
 

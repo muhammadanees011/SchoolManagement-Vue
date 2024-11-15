@@ -178,7 +178,7 @@
     //------------FORMAT DATE--------------
     formatDateString(dateString) {
         const parsedDate = moment(dateString);
-        const formattedDate = parsedDate.format('DD MMMM YYYY, HH:mm');
+        const formattedDate = parsedDate.format("DD/MM/YYYY");
         return formattedDate;
     },
 

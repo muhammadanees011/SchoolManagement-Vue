@@ -113,7 +113,8 @@
   <script>
   import axiosClient from '../../axios'
   import moment from 'moment';
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
 
   export default {
     name: "billing-card",
@@ -124,8 +125,30 @@
       this.getTransactionHistory();
       this.$globalHelper.buttonColor();
     },
+
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.fromRoute=from.name
+      });
+    },
+
+    beforeRouteLeave(to, from, next) {
+      if((to.name === 'list-students' && this.fromRoute === 'list-students') ||
+      (to.name === 'list-staff' && this.fromRoute === 'list-staff')){
+        next(); 
+      }else{
+        let filterString = {
+            filterBy: '',
+            searchString: ''
+          };
+          this.updateFilterString(filterString);
+        next(); 
+      }
+    },
+
     data() {
       return {
+        fromRoute:'',
         fsmAmount:'',
         isTransactions:false,
         transactions:'',
@@ -191,6 +214,8 @@
       },
     },
     methods:{
+      ...mapActions(['updateFilterString']),
+
       transactionType(type){
         let newType='';
         if(type=='top_up'){

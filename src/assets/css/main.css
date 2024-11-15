@@ -311,3 +311,20 @@ input:disabled {
 .entries-dropdown{
   margin-right: 25px;
 }
+
+.cell {
+  border: 0px !important;
+}
+.mx-table th {
+  border: 0px !important;
+}
+.mx-calendar-panel-date{
+  margin-right: 20px !important;
+}
+.mx-input-wrapper{
+  width: 100% !important;
+}
+.mx-input{
+  height:40px !important;
+  border-radius: 20px !important;
+}

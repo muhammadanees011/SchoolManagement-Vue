@@ -30,7 +30,7 @@
                 <div class="row">
                   <div class="col-6">
                     <span style="display: flex;">
-                      <input class="ms-2 input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address"/>
+                      <input class="ms-2 input-box filter-box" @keyup="filterStudents" v-model="searchString" id="name" type="text" placeholder="Type to Search..." name="address"/>
                       <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                         <option v-for="(item, index) in allFields" :key="index" :value="item">
                           {{ item }}
@@ -117,9 +117,9 @@
                         <i @click="transactionHistoryNav(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">swap_horizontal_circle</i>
                     </td> -->
                     <td v-if="userPermissions.wallet" class="align-middle text-center">
-                        <router-link :to="{name:'balance',params: { id: item.user.id }}" title="Wallet">
-                          <i class="fas fa-donate fs-5 me-2"></i>
-                        </router-link>
+                        <!-- <router-link :to="{name:'balance',params: { id: item.user.id }}" title="Wallet"> -->
+                          <i @click="gotoBallance(item.user.id)" class="hover-pointer fas fa-donate fs-5 me-2"></i>
+                        <!-- </router-link> -->
                     </td>
                     <td v-if="userPermissions.topup" class="align-middle text-center">
                         <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">credit_card</i>
@@ -199,7 +199,7 @@
 <script>
 import axiosClient from '../../axios'
 import Swal from 'sweetalert2';
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import BulkTopup from '../students/bulk_topup';
 import * as XLSX from 'xlsx';
 
@@ -208,8 +208,15 @@ export default {
   mounted(){
     this.setColor();
     this.getUser();
-    this.getAllStudents();
+    if(this.getFilterString.filterBy){
+      this.filterBy=this.getFilterString.filterBy
+      this.searchString=this.getFilterString.searchString
+      this.filterStudents()
+    }else{
+      this.getAllStudents();
+    }
     this.$globalHelper.buttonColor();
+
   },
   updated(){
     this.$permissions.redirectIfNotAllowed('view_student');
@@ -218,6 +225,20 @@ export default {
   components:{
     BulkTopup
   },
+
+  beforeRouteLeave(to, from, next) {
+    if (to.name !== 'payment_account' && to.name !== 'balance') {
+      let filterString = {
+        filterBy: '',
+        searchString: ''
+      };
+      this.updateFilterString(filterString);
+      next();
+    } else {
+      next();
+    }
+  },
+
   data() {
     return {
       perPageOptions: [10,20, 40, 60,100,200,300,400],
@@ -228,7 +249,7 @@ export default {
       selectall:false,
       selectedRecords:[],
       filterBy:'Name',
-      seachString:'',
+      searchString:'',
       allFields:['Student Id','MIFare Id','Name','Email'],
       allStudents:'',
       schools: 6,
@@ -241,7 +262,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getBrandingSetting']),
+    ...mapGetters(['getBrandingSetting','getFilterString']),
     userPermissions() {
       return this.$permissions.userPermissions.value;
     },
@@ -292,6 +313,27 @@ export default {
 
   },
   methods:{
+
+    ...mapActions(['updateFilterString']),
+
+    topUps(id){
+      let filterString={
+        filterBy:this.filterBy,
+        searchString:this.searchString
+      }
+      this.updateFilterString(filterString);
+      this.$router.push('/payment_account/'+id)
+    },
+
+    gotoBallance(id){
+      let filterString={
+        filterBy:this.filterBy,
+        searchString:this.searchString
+      }
+      this.updateFilterString(filterString);
+      this.$router.push('/balance/'+id)
+    },
+
     exportTableToXLS() {
       const table = this.$refs.table;
       const ws = XLSX.utils.table_to_sheet(table);
@@ -359,7 +401,6 @@ export default {
           this.selectedRecords.push({ id: id, value: true });
             // record.value = true; 
         }
-        console.log('record',record)
     },
 
     setColor() {
@@ -400,10 +441,6 @@ export default {
       return formattedValue;
     },
 
-    topUps(id){
-      this.$router.push('/payment_account/'+id)
-    },
-
     transactionHistoryNav(id){
       this.$router.push('/student-billing/'+id)
     },
@@ -417,16 +454,16 @@ export default {
 
     //-----------FILTER STUDENTS------------
     async filterStudents(){
-      if(this.filterBy=='' && this.seachString==''){
+      if(this.filterBy=='' && this.searchString==''){
         this.getAllStudents();
         return;
-      }else if(this.filterBy!='' && this.seachString==''){
+      }else if(this.filterBy!='' && this.searchString==''){
         this.getAllStudents();
         return;
       }
       let data={
         "type":this.filterBy,
-        "value":this.seachString,
+        "value":this.searchString,
         "status":'active'
       }
       try {

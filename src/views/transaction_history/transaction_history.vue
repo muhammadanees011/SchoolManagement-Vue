@@ -18,10 +18,11 @@
 
                   <div class="filter-container ms-2 mb-2">
                     <div class="row" style="width: 100%;">
-                      <div class="col-4">
+                  
+                      <div class="col-4" style="padding-top: 15px;">
                         <span style="display: flex;">
-                          <input class="input-box filter-box" @keyup="filterTransactionHistory" v-model="seachString" id="name" type="text" :placeholder="computedPlaceholder" name="address" />
-                          <select @change="filterTransactionHistory" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                          <input class="input-box filter-box" @keyup="filterTransactionHistory('string_search')" v-model="seachString" id="name" type="text" :placeholder="computedPlaceholder" name="address" />
+                          <select @change="filterTransactionHistory('string_search')" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                             <option v-for="(item, index) in allFields" :key="index" :value="item">
                               {{ item }}
                             </option>
@@ -29,11 +30,23 @@
                         </span>
                       </div>
 
-                      <div class="col-12 col-md-6 col-sm-6" style="padding-top: 15px;">
-                        <span class="label-text bulk_topup" @click="exportTableToXLS()">
+                      <div class="col-4 col-md-4 col-sm-6" style="padding-top: 15px;">
+                        <!-- <span class="label-text bulk_topup" @click="exportTableToXLS()"  style="padding-top: 7px;">
                           <i class="fas fa-download download-icon me-1"></i>
                           Export To XLS
-                        </span>
+                        </span> -->
+                      </div>
+
+                      <div class="col-4 col-md-4 col-sm-4 d-flex" style="padding-top: 15px;">
+                        <div class="label-text bulk_topup me-3 d-flex" @click="exportTableToXLS()"  style="padding-top: 1px; width: fit-content;">
+                          <i class="fas fa-download download-icon" title="Export to excel"></i>
+                          <!-- Export -->
+                        </div>
+                        <date-picker @change="filterTransactionHistory('daterange_search')"
+                          @clear="getTransactionHistory" 
+                          v-model:value="time3" 
+                          format="DD/MM/YYYY" value-type="format" range>
+                        </date-picker>
                       </div>
 
                     </div>
@@ -52,16 +65,7 @@
                           User
                         </th>
                         <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                          Charge ID
-                        </th>
-                        <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                          Name
-                        </th>
-                        <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                          Card Brand
-                        </th>
-                        <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
-                          Last 4 Digit
+                          Charge Details
                         </th>
                         <th class="align-middle text-center text-uppercase text-xxs font-weight-bolder">
                           Type
@@ -105,21 +109,20 @@
                             <div class="d-flex flex-column justify-content-center">
                               <p class="text-xs text-secondary mb-0">
                                 {{ item.user.first_name }} {{ item.user.last_name }}
+                                <br>
+                                {{ item.user.email }}
                               </p>
                             </div>
                           </div>
                         </td>
                         <td class="align-middle text-center">
-                          <p class="text-xs text-secondary mb-0">{{ item.charge_id ? item.charge_id:'N/A' }}</p>
-                        </td>
-                        <td class="align-middle text-center">
-                          <p class="text-xs text-secondary mb-0">{{ item.card_holder_name ? item.card_holder_name:'N/A' }}</p>
-                        </td>
-                        <td class="align-middle text-center">
-                          <p class="text-xs text-secondary mb-0">{{ item.card_brand ? item.card_brand:'N/A'}}</p>
-                        </td>
-                        <td class="align-middle text-center">
-                          <p class="text-xs text-secondary mb-0">{{ item.last_4 ? item.last_4:'N/A' }}</p>
+                          <p v-if="item.charge_id" class="text-xs text-secondary mb-0">
+                            <span class="text-bold text-success">Charge ID:</span> {{ item.charge_id ? item.charge_id:'__' }}<br>
+                            <span class="text-bold text-success">Card Brand:</span> {{ item.card_brand ? item.card_brand:'__' }}<br>
+                            <span class="text-bold text-success">Last 4 Digit:</span> {{ item.last_4 ? item.last_4:'__'}}<br>
+                            <span class="text-bold text-success">Card Name:</span> {{ item.card_holder_name ? item.card_holder_name:'__' }}
+                          </p>
+                          <p v-else class="text-xs text-secondary mb-0">Wallet Transaction</p>
                         </td>
                         <td class="align-middle text-center">
                           <p class="text-xs text-secondary mb-0">{{ transactionType(item.type) }}</p>
@@ -136,12 +139,6 @@
                             >{{ formatDate(item.created_at) }}</span
                           >
                         </td>
-                        <!-- <td class="align-middle text-center text-sm">
-                          <span class="badge badge-sm bg-gradient-success"
-                            >success</span
-                          >
-                        </td> -->
-                        
                         <!-- <td class="align-middle text-center text-sm">
                           <i @click="deleteTransactionHistory(item.id)" class="material-icons-round opacity-10 fs-5 cursor-pointer">delete</i>
                         </td> -->
@@ -198,9 +195,13 @@
   import moment from 'moment';
   import { mapGetters } from 'vuex'
   import * as XLSX from 'xlsx';
-
+  import DatePicker from 'vue-datepicker-next';
+  import 'vue-datepicker-next/index.css';
 
   export default {
+    components: {
+      DatePicker
+    },
     name: "tables",
     mounted(){
       this.setColor();
@@ -270,13 +271,14 @@
     },
     data(){
       return{
+        time3: null,
         perPageOptions: [10,20, 40, 60,100,200,300,400],
         itemsPerPage:20,
         user:'',
         transactionHistoryList:'',
         seachString:'',
         filterBy:'User',
-        allFields:['User','Amount','Date'],
+        allFields:['User','Amount'],
         totalRows:'',
         currentPage:'',
         perPage:'',
@@ -368,18 +370,24 @@
       },
 
       //-----------FILTER TRANSACTION HISTORY------------
-      async filterTransactionHistory(){
-        // let user=localStorage.getItem('user')
-        // user= JSON.parse(user)
-        if(this.filterBy=='' && this.seachString==''){
-          this.getTransactionHistory()
-        }else if(this.filterBy!='' && this.seachString==''){
-          this.getTransactionHistory()
+      async filterTransactionHistory(event){
+        let dateRange
+        if(event=="daterange_search"){
+          dateRange={ 
+            fromDate:this.time3[0],
+            toDate:this.time3[1]
+          }
         }
-        let data={
-          "type":this.filterBy,
-          "value":this.seachString
+
+        if (this.seachString === '' && event =="string_search") {
+          this.getTransactionHistory();
+          return;
         }
+
+        const data = event === "daterange_search"
+        ? { type: "Date Range", value: dateRange }
+        : { type: this.filterBy, value: this.seachString };
+
         try {
            const response=await axiosClient.post('/filterTransactionHistory',data);
            this.transactionHistoryList=response.data;
@@ -408,7 +416,7 @@
       //------------FORMAT DATE--------------
       formatDate(data) {
         const date = moment(data);
-        return date.format('MMM D, YYYY,   HH:mm:ss');
+        return date.format("DD/MM/YYYY");
       },
 
     },

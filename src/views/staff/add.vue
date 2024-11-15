@@ -58,7 +58,7 @@
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="balance">Balance </label>
-                            <input class="input-box" id="balance" v-model="formattedBalance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
+                            <input class="input-box" id="balance" v-model="newStaff.balance" type="number" step="0.01" min="0" placeholder="balance" name="balance" />
                           </div>
                           <div class="mb-1">
                             <label class="input-label" for="phone">Role <span class="required">*</span></label>

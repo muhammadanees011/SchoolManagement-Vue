@@ -74,7 +74,7 @@
               </div>
               <!-- other<br> -->
               <span class="mb-1 amount-container" style="display: flex; ">
-                <input @keyup="selected_amount=null" v-model="formattedBalance" class="me-1 amount-input" type="text" name="gender" placeholder="1.00"> 
+                <input @keyup="selected_amount=null" v-model="addedBalance" class="me-1 amount-input" type="number" min="0" name="gender" placeholder="1.00"> 
               </span>  
             </div>
           </div>
@@ -94,7 +94,7 @@
   import img2 from "@/assets/img/logos/visa.png";
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';  
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     name: "payment-card",
@@ -122,8 +122,30 @@
         },
       },
     },
+
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.fromRoute=from.name
+      });
+    },
+
+    beforeRouteLeave(to, from, next) {
+      if((to.name === 'list-students' && this.fromRoute === 'list-students') ||
+      (to.name === 'list-staff' && this.fromRoute === 'list-staff')){
+        next(); 
+      }else{
+        let filterString = {
+            filterBy: '',
+            searchString: ''
+          };
+          this.updateFilterString(filterString);
+        next(); 
+      }
+    },
+
     data() {
       return {
+        fromRoute:'',
         paymentMethodsLoaded:false,
         user:'',
         selected_amount:'',
@@ -137,6 +159,7 @@
       };
     },
     methods: {
+      ...mapActions(['updateFilterString']),
 
       confirmDelete(id) {
         Swal.fire({

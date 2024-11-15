@@ -33,7 +33,7 @@
                   </span>
               </div>
             </a>
-            <ul class="cart px-2 py-3 cart-dropdown dropdown-menu dropdown-menu-end me-sm-n4" :class="showCart ? 'show' : ''" aria-labelledby="dropdownMenuButton">
+            <ul class="cart px-2 py-3 cart-dropdown dropdown-menu dropdown-menu-end me-sm-n4"  aria-labelledby="dropdownMenuButton">
               <template v-for="(item,index) in cartItemsList" :key="index" >
                 <li  v-if="item.shop_item!==null"  class="text-white list-group-item bg-gray-100 border-0 d-flex p-4 mb-2 border-radius-lg">
                     <div class="d-flex flex-column">
@@ -50,7 +50,7 @@
                           <span class="me-2 text-warning text-gradient text-sm font-weight-bold">
                             £{{formattedPrice(item.shop_item ? item.shop_item.price :0)}}
                           </span> 
-                            <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
+                            <i @click.stop="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
                         </span>
                     </div>
                 </li>
@@ -68,7 +68,7 @@
                         <span class="me-2 text-warning text-gradient text-sm font-weight-bold">
                           £{{formattedPrice(item.trip ? item.trip.budget:0)}}
                         </span> 
-                        <i @click="removeItemFromCart(item.id),updateRemovedItem('trip')" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
+                        <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
                       </span>
                   </div>
               </li>
@@ -77,7 +77,8 @@
                 <button @click="navCheckout()" style="font-size: 12px; background-color: #573078;" class="btn me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Checkout </button>
               </li>
               <li v-else class="list-group-item border-0 d-flex align-items-center justify-content-center p-4 mb-2 bg-warning-100 text-warning border-radius-lg">
-                <small>Cart is empty</small>
+                <small v-if="isLoading">Loading......</small>
+                <small v-else>Cart is empty</small>
               </li>
             </ul>
           </li>
@@ -257,7 +258,7 @@ export default {
         secondary_color:'',
         logo:''
       },
-      isCartItemsLoaded:false,
+      isLoading:false,
       passwordStatus:'',
       cartItemsList:'',
       user:'',
@@ -394,17 +395,15 @@ export default {
     },
     //-----------GET CART ITEMS-----------
     async getCartItems(){
-      this.showCart=!this.showCart
-      if(this.showCart==false){
-        return
-      }
+      this.isLoading=true
+      this.cartItemsList=''
         try {
           const response=await axiosClient.get('/getUserCartItems')
           this.cartItemsList=response.data
-          this.isCartItemsLoaded=true
         } catch (error) {
           console.log(error)
         }
+        this.isLoading=false
     },
     //------------Count Cart Items-----------
     async countUserCartItems(){
@@ -418,7 +417,6 @@ export default {
     },
     //----------REMOVE ITEM FROM CART-----------
     async removeItemFromCart(id){
-      this.showCart=true
       let data={
         "item_id":id
       }

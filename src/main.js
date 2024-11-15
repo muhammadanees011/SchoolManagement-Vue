@@ -14,6 +14,7 @@ import 'dropzone-vue/dist/dropzone-vue.common.css';
 import permissionsPlugin from './helper/index';
 import envPlugin from './helper/envPlugin';
 import globalHelperPlugin from './helper/globalHelperPlugin'; 
+import popupHelper from './helper/popupHelper';
 
 
 const appInstance = createApp(App)
@@ -28,4 +29,5 @@ appInstance.use(DropZone)
 appInstance.use(permissionsPlugin);
 appInstance.use(envPlugin);
 appInstance.use(globalHelperPlugin);
+appInstance.use(popupHelper);
 appInstance.mount('#app')

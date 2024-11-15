@@ -6,15 +6,12 @@
 
               <div class="d-flex justify-content-between  border-radius-lg pt-4">
                   <h6 class="ms-3 text-dark text-capitalize">COURSES</h6>
-                  <template v-if="userPermissions.create">
                     <router-link :to="{ name: 'add-course' }">
-                      <!-- <button style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-4 border-radius-lg"> Add Course </button> -->
                       <button style="font-size: 12px;background-color: #573078;" class="btn me-4 justify-content-between text-white fw-1 border-0 py-2 px-3 border-radius-lg"> 
                       <i class="fas fa-plus plus-icon"></i>
                         New
                       </button>
                     </router-link>
-                  </template>
               </div>
 
               <span class="ps-0">
@@ -27,7 +24,7 @@
                 <div class="row" style="width: 100%;">
                   <div class="col-4">
                     <span style="display: flex;">
-                      <input class="input-box filter-box" @keyup="filterCourses" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                      <input class="input-box filter-box" @keyup="filterCourses" v-model="searchString" id="name" type="text" placeholder="Type to Search..." name="address" />
                       <select @change="filterCourses" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                         <option v-for="(item, index) in allFields" :key="index" :value="item">
                           {{ item }}
@@ -69,12 +66,12 @@
                         <p class="text-xs  text-center font-weight-bold mb-0"> {{ item.id}}</p>
                       </td>
                       <td>
-                        <router-link :to="{ name: 'enrolled-students', params: { id: item.CourseCode }}">
+                        <span @click="gotoStudents(item.CourseCode)">
                         <div class="d-flex">
                           <p class="text-xs font-weight-bold mb-0"> {{item.CourseCode }}</p>
                           <i class="material-icons-round opacity-10 fs-6 cursor-pointer">arrow_forward</i>
                         </div>
-                        </router-link>
+                      </span>
                       </td>
                       <td>
                         <p class="text-xs font-weight-bold mb-0"> {{item.CourseDescription }} </p>
@@ -148,7 +145,7 @@
   </template>
   
   <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';
   import * as XLSX from 'xlsx';
@@ -158,19 +155,41 @@
     mounted(){
       this.setColor();
       this.getUser();
-      this.getAllCourses();
+      
+      if(this.getFilterString.filterBy){
+        this.filterBy=this.getFilterString.filterBy
+        this.searchString=this.getFilterString.searchString
+        this.filterCourses()
+      }else{
+        this.getAllCourses();
+      }
+
       this.$globalHelper.buttonColor();
     },
     updated(){
       this.$permissions.redirectIfNotAllowed('view_course');
       this.$globalHelper.buttonColor();
     },
+    
+    beforeRouteLeave(to, from, next) {
+      if (to.name !== 'enrolled-students') {
+        let filterString = {
+          filterBy: '',
+          searchString: ''
+        };
+        this.updateFilterString(filterString);
+        next();
+      } else {
+        next();
+      }
+    },
+
     data() {
       return {
         perPageOptions: [10,20, 40, 60,100,200,300,400],
         itemsPerPage:20,
 
-        seachString:'',
+        searchString:'',
         filterBy:'Course Code',
         allFields:['Course Name','Course Code','Course Level'],
         allCourse:'',
@@ -183,7 +202,7 @@
       }
     },
     computed: {
-      ...mapGetters(['getBrandingSetting']),
+      ...mapGetters(['getBrandingSetting','getFilterString']),
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
@@ -234,6 +253,17 @@
 
     },
     methods:{
+      ...mapActions(['updateFilterString']),
+
+      
+      gotoStudents(id){
+        let filterString={
+          filterBy:this.filterBy,
+          searchString:this.searchString
+        }
+        this.updateFilterString(filterString);
+        this.$router.push('/course/enrolled-students/'+id)
+      },
 
       snackbarMsg(message) {
         this.$snackbar.add({
@@ -272,16 +302,16 @@
 
       //-----------FILTER COURSES------------
       async filterCourses(){
-        if(this.filterBy=='' && this.seachString==''){
+        if(this.filterBy=='' && this.searchString==''){
           this.getAllCourses();
           return;
-        }else if(this.filterBy!='' && this.seachString==''){
+        }else if(this.filterBy!='' && this.searchString==''){
           this.getAllCourses();
           return;
         }
         let data={
           "type":this.filterBy,
-          "value":this.seachString,
+          "value":this.searchString,
           "status":'Active'
         }
         try {

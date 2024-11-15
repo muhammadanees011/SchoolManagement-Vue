@@ -171,11 +171,11 @@
       
       <template v-if="(user && user.role!=='student') && (user && user.role!=='staff') && (user && user.role!=='parent')" >
         <li class="nav-item">
-          <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#shop">
+          <a class="nav-link text-white" data-bs-toggle="collapse" aria-expanded="false" href="#product_types">
             <i class="material-icons-round opacity-10 fs-5">category</i>
             <span class="sidenav-normal me-3 ms-2 ps-1">Product Types <b class="caret"></b></span>
           </a>
-          <div id="shop" class="collapse">
+          <div id="product_types" class="collapse">
             <ul class="nav nav-sm flex-column">
               <li class="nav-item">
                 <router-link :to="{ name: 'product-types' }" class="nav-link">
@@ -226,7 +226,7 @@
 
       <!-- <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'"> -->
       <li v-if="userPermissions.pending_installments" class="nav-item">
-        <sidenav-collapse :to="{ name: 'installments' }" :aria-controls="''" v-bind:collapse="false" collapseRef="installments" navText="Pending Installments">
+        <sidenav-collapse :to="{ name: 'installments' }" :aria-controls="''" v-bind:collapse="false" collapseRef="installments" navText="Pending Instalments">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">payments</i>
           </template>
@@ -247,7 +247,7 @@
       </template>
 
       <li  v-if="user && user.role=='student' || user.role=='staff'"  class="nav-item">
-        <sidenav-collapse :to="{ name: 'installments' }" :aria-controls="''" v-bind:collapse="false" collapseRef="installments" navText="Pending Installments">
+        <sidenav-collapse :to="{ name: 'installments' }" :aria-controls="''" v-bind:collapse="false" collapseRef="installments" navText="Pending Instalments">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">payments</i>
           </template>

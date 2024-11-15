@@ -46,10 +46,10 @@
                           <input class="input-box" id="name" v-model="newStudent.email" type="email" placeholder="email" name="email" />
                           <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
                         </div>
-                        <div class="mb-1">
+                        <!-- <div class="mb-1">
                           <label class="input-label" for="date_of_birth">Date Of Birth</label>
-                          <input class="input-box" id="date_of_birth" v-model="newStudent.date_of_birth" type="date" placeholder="date of birth" name="date_of_birth" />
-                        </div>
+                          <input class="input-box" id="date_of_birth" v-model="newStudent.date_of_birth" type="date" placeholder="DD/MM/YYYY" name="date_of_birth" />
+                        </div> -->
                         <div class="mb-1">
                           <label class="input-label" for="phone">Site <span class="required">*</span></label>
                           <br />
@@ -150,7 +150,7 @@ export default {
         email: '',
         // password: '',
         // password_confirmation: '',
-        date_of_birth:'',
+        // date_of_birth:'',
         status:'',
         fsm:'',
         // balance:'',
@@ -235,6 +235,16 @@ export default {
 </script>
 
 <style scoped>
+.mx-datepicker-popup{
+  position: fixed !important;
+  z-index: 1000;
+}
+::v-deep.mx-input{
+  border-radius: 10px !important;
+}
+.mx-datepicker{
+  width: 100% !important;
+}
 .form-data {
   width: 100%;
 }

@@ -3,7 +3,7 @@
         <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header pb-0 px-3 d-flex justify-content-between">
-                    <h6 class="mb-0">Pay Installment</h6>
+                    <h6 class="mb-0">Pay Instalment</h6>
                 </div>
                 <div class="card-body pt-4 p-3">
                     <div class="row">
@@ -16,10 +16,10 @@
                                         <span v-if="item.shop_item.product_type">({{ item.shop_item.product_type }})</span>
                                         <br>
                                         <span v-if="item.shop_item.payment_plan=='installments'" class="text-success">
-                                            Installments ({{ item.shop_item.payment.total_installments }})
+                                            Instalments ({{ item.shop_item.payment.total_installments }})
                                         </span>
                                         <span v-if="item.shop_item.payment_plan=='installments_and_deposit'" class="text-success">
-                                            Installments And Deposit
+                                            Instalments And Deposit
                                             <br> ({{ item.shop_item.payment.total_installments }} Installments)
                                         </span>
                                     </h6>

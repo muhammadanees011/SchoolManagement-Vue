@@ -73,13 +73,12 @@
                         </div> -->
                         <div class="mb-1">
                             <label class="input-label" for="balance">Add Amount</label>
-                            <input class="input-box" id="balance" v-model="formattedAmount" type="number" step="0.01" min="0" placeholder="add amount" name="add_amount" />
+                            <input class="input-box" id="balance" v-model="newStudent.add_amount" type="number" step="0.01" min="0" placeholder="add amount" name="add_amount" />
                         </div>
-                        <div class="mb-1">
+                        <!-- <div class="mb-1">
                           <label class="input-label" for="date_of_birth">Date Of Birth</label>
                           <input class="input-box" id="date_of_birth" v-model="newStudent.date_of_birth" type="date" placeholder="date of birth" name="date_of_birth" />
-                          <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["date_of_birth"]!==""'> date of birth is required</small> -->
-                        </div>
+                        </div> -->
                         <div class="mb-1">
                           <label class="input-label" for="status">Status <span class="required">*</span></label>
                           <br />
@@ -183,7 +182,7 @@
           first_name: '',
           last_name:'',
           email: '',
-          date_of_birth:'',
+          // date_of_birth:'',
           status:'',
           password:'',
           password_confirmation:'',
@@ -248,7 +247,7 @@
         this.newStudent.first_name = data.user.first_name
         this.newStudent.last_name = data.user.last_name
         this.newStudent.email = data.user.email
-        this.newStudent.date_of_birth= data.dob
+        // this.newStudent.date_of_birth= data.dob
         this.newStudent.status=data.user.status
         this.newStudent.fsm = data.fsm_activated==0 ? false:true
         // this.newStudent.balance =this.formattedPrice(data.balance);

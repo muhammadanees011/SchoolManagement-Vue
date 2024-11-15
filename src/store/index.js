@@ -3,6 +3,7 @@ import AuthModule from './modules/auth'
 import organizationModule from './modules/organization'
 import cart from './modules/cart'
 import settings from './modules/settings'
+import filterstate from './modules/filterstate'
 
 export default createStore({
   modules: {
@@ -10,6 +11,7 @@ export default createStore({
     organization: organizationModule,
     cart: cart,
     settings: settings,
+    filterstate: filterstate,
   },
   state: {
     hideConfigButton: false,

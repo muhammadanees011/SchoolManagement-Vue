@@ -48,13 +48,6 @@
                           Export To XLS
                         </span>
                       </div>
-<!-- 
-                      <div class="col-12 col-md-2 col-sm-5" style="padding-top: 15px;">
-                        <span class="label-text bulk_topup" @click="showModal=true" style="width:120px;">
-                          <i class="fas fa-plus plus-icon me-1"></i>
-                          Products Owner
-                        </span>
-                      </div> -->
 
                     </div>
                     
@@ -115,7 +108,7 @@
                           <span class="text-secondary text-xs ">{{ item.quantity_sold }}</span>
                         </td>
                         <td class="align-middle text-center">
-                          <span class="text-secondary text-xs ">{{ item.valid_to }}</span>
+                          <span class="text-secondary text-xs ">{{ formatDate(item.valid_to) }}</span>
                         </td>
                         <td class="align-middle text-center">
                           <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
@@ -197,6 +190,7 @@
   import Swal from 'sweetalert2';
   import * as XLSX from 'xlsx';
   import ProductOwner from '../shop/product_owner.vue'
+  import moment from 'moment';
 
 
   export default {
@@ -282,6 +276,12 @@
     }
     },
     methods:{
+
+    formatDate(date){
+      const dateString = date;
+      const formattedDate = moment(dateString).format("DD/MM/YYYY");
+      return formattedDate;
+    },
 
     confirmDelete(id) {
       Swal.fire({

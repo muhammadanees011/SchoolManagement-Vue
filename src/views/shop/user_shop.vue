@@ -61,16 +61,16 @@
                                       <span class="text-warning">Active Payment Plan</span>
                                       (
                                       <span v-if="item.payment_plan=='full_payment'">Full Payment</span>
-                                      <span v-if="item.payment_plan=='installments'">Installments</span>
-                                      <span v-if="item.payment_plan=='installments_and_deposit'">Installments And Deposit</span>
+                                      <span v-if="item.payment_plan=='installments'">Instalments</span>
+                                      <span v-if="item.payment_plan=='installments_and_deposit'">Instalments And Deposit</span>
                                       )
                                       <br>
                                       <template v-if="item.payment_plan=='installments' || item.payment_plan=='installments_and_deposit'">
-                                        <span>Total Installments: {{ item.payment.total_installments }}</span>
+                                        <span>Total Installments: {{ item.payment ? item.payment.total_installments:'' }}</span>
                                         <br>
-                                        <span>Amount Per Installment: £{{ formattedAmount(item.payment.amount_per_installment) }}</span>
+                                        <span>Amount Per Instalment: £{{ formattedAmount(item.payment ? item.payment.amount_per_installment:0) }}</span>
                                         <br>
-                                        <span>Initial Deposit: £{{ formattedAmount(item.payment.initial_deposit_installments ?  item.payment.initial_deposit_installments : 0) }}</span>
+                                        <span v-if="item.payment && item.payment.initial_deposit">Initial Deposit: £{{ formattedAmount(item.payment ?  item.payment.initial_deposit : 0) }}</span>
                                       </template>
                                     </div>
                                     <br>

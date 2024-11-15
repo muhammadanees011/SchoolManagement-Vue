@@ -133,7 +133,7 @@
   <script>
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import * as XLSX from 'xlsx';
   import Enroll from './enroll_student.vue'
   
@@ -151,6 +151,20 @@
     components:{
         Enroll
     },
+
+    beforeRouteLeave(to, from, next) {
+      if(to.name !== 'list-courses'){
+        let filterString = {
+            filterBy: '',
+            searchString: ''
+          };
+          this.updateFilterString(filterString);
+        next(); 
+      }else{
+        next(); 
+      }
+    },
+
     data() {
       return {
         perPageOptions: [10,20, 40, 60,100,200,300,400],
@@ -225,6 +239,8 @@
 
     },
     methods:{
+      ...mapActions(['updateFilterString']),
+
       exportTableToXLS() {
         const table = this.$refs.table;
         const ws = XLSX.utils.table_to_sheet(table);

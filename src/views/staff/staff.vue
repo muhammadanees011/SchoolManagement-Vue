@@ -26,7 +26,7 @@
                   
                   <div class="col-4">
                     <span style="display: flex;">
-                    <input class="input-box filter-box" @keyup="filterStaff" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                    <input class="input-box filter-box" @keyup="filterStaff" v-model="searchString" id="name" type="text" placeholder="Type to Search..." name="address" />
                     <select @change="filterStaff" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                       <option v-for="(item, index) in allFields" :key="index" :value="item">
                         {{ item }}
@@ -84,9 +84,7 @@
                         <span class="ms-4 text-secondary text-xs font-weight-bold">£{{ formattedPrice(item.balance ? item.balance:0 )}}</span>
                       </td>
                       <td v-if="userPermissions.wallet" class="align-middle text-center">
-                        <router-link :to="{name:'balance',params: { id: item.user.id }}" title="Wallet">
-                          <i class="fas fa-donate fs-5 me-2"></i>
-                        </router-link>
+                          <i @click="gotoBallance(item.user.id)" class="hover-pointer fas fa-donate fs-5 me-2"></i>
                       </td>
                       <td v-if="userPermissions.topup" class="align-middle text-center">
                           <i @click="topUps(item.user.id)" class="hover-pointer material-icons-round opacity-10 fs-5">credit_card</i>
@@ -154,7 +152,7 @@
   <script>
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import * as XLSX from 'xlsx';
 
   
@@ -163,7 +161,14 @@
     mounted(){
       this.setColor();
       this.getUser();
-      this.getAllStaff();
+
+      if(this.getFilterString.filterBy){
+        this.filterBy=this.getFilterString.filterBy
+        this.searchString=this.getFilterString.searchString
+        this.filterStaff()
+      }else{
+        this.getAllStaff();
+      }
       this.$globalHelper.buttonColor();
     },
     updated(){
@@ -171,7 +176,7 @@
       this.$globalHelper.buttonColor();
     },
     computed: {
-      ...mapGetters(['getBrandingSetting']),
+      ...mapGetters(['getBrandingSetting','getFilterString']),
       userPermissions() {
         return this.$permissions.userPermissions.value;
       },
@@ -220,6 +225,20 @@
         return pages;
       }
     },
+
+    beforeRouteLeave(to, from, next) {
+      if (to.name !== 'payment_account' && to.name !== 'balance') {
+        let filterString = {
+          filterBy: '',
+          searchString: ''
+        };
+        this.updateFilterString(filterString);
+        next();
+      } else {
+        next();
+      }
+    },
+
     data() {
       return {
         perPageOptions: [10,20, 40, 60,100,200,300,400],
@@ -227,7 +246,7 @@
 
         filterBy:'Name',
         allFields:['MIFare Id','Name','Email'],
-        seachString:'',
+        searchString:'',
         allStaff:'',
         schools: 6,
         user:'',
@@ -238,6 +257,9 @@
       }
     },
     methods:{
+
+      ...mapActions(['updateFilterString']),
+
       exportTableToXLS() {
       const table = this.$refs.table;
       const ws = XLSX.utils.table_to_sheet(table);
@@ -267,7 +289,7 @@
           this.deleteStaff(id)
         }
       });
-    },
+      },
       snackbarMsg(message) {
         this.$snackbar.add({
           type: 'success',
@@ -276,8 +298,23 @@
         })
       },
       topUps(id){
+        let filterString={
+          filterBy:this.filterBy,
+          searchString:this.searchString
+        }
+        this.updateFilterString(filterString);
         this.$router.push('/payment_account/'+id)
       },
+
+      gotoBallance(id){
+        let filterString={
+          filterBy:this.filterBy,
+          searchString:this.searchString
+        }
+        this.updateFilterString(filterString);
+        this.$router.push('/balance/'+id)
+      },
+
       transactionHistoryNav(id){
         this.$router.push('/student-billing/'+id)
       },
@@ -329,13 +366,13 @@
       },
     //-----------FILTER STAFF------------
     async filterStaff(){
-      if(this.seachString==''){
+      if(this.searchString==''){
         this.getAllStaff();
         return;
       }
       let data={
         "type":this.filterBy,
-        "value":this.seachString,
+        "value":this.searchString,
         "status":'active'
       }
       try {

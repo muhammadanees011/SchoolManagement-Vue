@@ -50,13 +50,21 @@
 
                           <div class="row mb-1">
                             <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                              <label class="input-label" for="valid_from">Valid From</label>
-                              <input class="input-box" id="valid_from" v-model="newItem.valid_from" type="date" placeholder="Valid From" name="valid_from" />
+                              <label class="input-label" for="valid_from">Valid From</label><br>
+                              <date-picker v-model:value="newItem.valid_from" class="input-box"
+                                format="DD/MM/YYYY" value-type="date" @change="validateExpiryDate()" append-to-body='true'
+                                >
+                              </date-picker>
+                              <!-- <input class="input-box" id="valid_from" v-model="newItem.valid_from" type="date" placeholder="Valid From" name="valid_from" /> -->
                               <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["valid_from"]!==""'>Valid From is required</small>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                              <label class="input-label" for="valid_to">Valid To</label>
-                              <input class="input-box" id="valid_to" v-model="newItem.valid_to" type="date" placeholder="Valid To" name="valid_to" />
+                              <label class="input-label" for="valid_to">Valid To</label><br>
+                              <date-picker v-model:value="newItem.valid_to" class="input-box"
+                                format="DD/MM/YYYY" value-type="date" @change="validateExpiryDate()" append-to-body='true'
+                                >
+                              </date-picker>
+                              <!-- <input class="input-box" id="valid_to" v-model="newItem.valid_to" type="date" placeholder="Valid To" name="valid_to" /> -->
                               <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["valid_to"]!==""'>Valid To is required</small>
                             </div>
                             
@@ -124,7 +132,7 @@
                               </div>
                               <div class="col-xl-4 col-lg-4 col-md-4">
                                 <span class="d-flex justify-space-between align-items-center text-dark font-weight-bold text-xs">
-                                  <small class="mb-2 me-3">Installments</small>
+                                  <small class="mb-2 me-3">Instalments</small>
                                   <div class="checkbox-container mt-2 me-5">
                                       <input :checked="newItem.payment_plan=='installments'" @change="changePaymentPlan('installments')" type="checkbox" class="checkbox-input" id="installmentsCheckbox">
                                       <label class="checkbox-label" for="installmentsCheckbox"></label>
@@ -133,7 +141,7 @@
                               </div>
                               <div class="col-xl-4 col-lg-4 col-md-4">
                                 <span class="d-flex justify-space-between align-items-center text-dark font-weight-bold text-xs">
-                                  <small class="mb-2 me-3">Deposit & Installments</small>
+                                  <small class="mb-2 me-3">Deposit & Instalments</small>
                                   <div class="checkbox-container mt-2 me-5">
                                     <input :checked="newItem.payment_plan=='installments_and_deposit'" @change="changePaymentPlan('installments_and_deposit')" type="checkbox" class="checkbox-input" id="installmentsCheckbox">
                                       <label class="checkbox-label" for="installmentsCheckbox"></label>
@@ -153,23 +161,27 @@
                           <div v-if="newItem.payment_plan=='installments'" class="row p-2">
                             <div class="col-xl-4 col-lg-4 col-md-4">
                               <div class="mb-1">
-                                  <label class="input-label" for="name">Total Installments</label>
-                                  <input  v-model="installmentsAndDeposit.total_installments" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Total Installments" name="name" />
+                                  <label class="input-label" for="name">Total Instalments</label>
+                                  <input  v-model="installmentsAndDeposit.total_installments" @input="handleIntegerInput" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Total Instalments" name="name" />
                                   <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["total_installments"]!==""'>Total Installments is required</small> -->
                               </div>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-4">
                                 <div class="mb-1">
-                                    <label class="input-label" for="name">Amount Per Installment</label>
-                                    <input v-model="installmentsAndDeposit.amount_per_installment" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Amount Per Installment" name="name" />
+                                    <label class="input-label" for="name">Amount Per Instalment</label>
+                                    <input v-model="installmentsAndDeposit.amount_per_installment" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Amount Per Instalment" name="name" />
                                     <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["amount_per_installment"]!==""'>Amount Per Installment is required</small> -->
                                 </div>
                             </div>
                             <template v-if="installmentsAndDeposit.total_installments>0">
                               <div v-for="(item,index) in installmentsAndDeposit.total_installments" :key="item" class="col-xl-4 col-lg-4 col-md-4">
                                   <div class="mb-1">
-                                  <label class="input-label" for="enrollment_date">Due Date For Installment {{ index+1 }}</label>
-                                  <input v-model="installmentsAndDeposit.other_installments_due_date[index]" class="input-box" id="name"  type="date" placeholder="Deadline For Installment {{ index+1 }}" name="name" />
+                                  <label class="input-label" for="enrollment_date">Due Date For Instalment {{ index+1 }}</label>
+                                  <date-picker v-model:value="installmentsAndDeposit.other_installments_due_date[index]" @change="validateInstallmentDate(index)" class="input-box"
+                                    format="DD/MM/YYYY" value-type="date" append-to-body='true'
+                                    >
+                                  </date-picker>
+                                  <!-- <input v-model="installmentsAndDeposit.other_installments_due_date[index]" @input="validateInstallmentDate(index)" class="input-box" id="name"  type="date" placeholder="Deadline For Instalment {{ index+1 }}" name="name" /> -->
                                   <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["due_date"]!==""'>Due Date is required</small> -->
                                   </div>
                               </div>
@@ -178,15 +190,15 @@
                           <div v-if="newItem.payment_plan=='installments_and_deposit'" class="row p-2">
                             <div class="col-xl-4 col-lg-4 col-md-4">
                               <div class="mb-1">
-                                  <label class="input-label" for="name">Total Installments</label>
-                                  <input  v-model="installmentsAndDeposit.total_installments" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Total Installments" name="name" />
+                                  <label class="input-label" for="name">Total Instalments</label>
+                                  <input  v-model="installmentsAndDeposit.total_installments" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Total Instalments" name="name" />
                                   <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["total_seats"]!==""'>Total Seats is required</small> -->
                               </div>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-4">
                                 <div class="mb-1">
-                                    <label class="input-label" for="name">Amount Per Installment</label>
-                                    <input v-model="installmentsAndDeposit.amount_per_installment" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Amount Per Installment" name="name" />
+                                    <label class="input-label" for="name">Amount Per Instalment</label>
+                                    <input v-model="installmentsAndDeposit.amount_per_installment" class="input-box" id="name"  type="number" step="0.01" min="0" placeholder="Amount Per Instalment" name="name" />
                                     <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["accomodation_details"]!==""'>Accomodation Details is required</small> -->
                                 </div>
                             </div>
@@ -199,16 +211,24 @@
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-4">
                                 <div class="mb-1">
-                                <label class="input-label" for="enrollment_date">Due Date For Initial Deposit</label>
-                                <input v-model="installmentsAndDeposit.initial_deposit_due_date" class="input-box" id="name"  type="date" placeholder="Deadline For Initial Deposit" name="name" />
+                                <label class="input-label" for="enrollment_date">Due Date For Initial Deposit</label><br>
+                                <date-picker v-model:value="installmentsAndDeposit.initial_deposit_due_date" class="input-box"
+                                  format="DD/MM/YYYY" value-type="date" append-to-body='true'
+                                  >
+                                </date-picker>
+                                <!-- <input v-model="installmentsAndDeposit.initial_deposit_due_date" class="input-box" id="name"  type="date" placeholder="Deadline For Initial Deposit" name="name" /> -->
                                 <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small> -->
                                 </div>
                             </div>
                             <template v-if="installmentsAndDeposit.total_installments>0">
                               <div v-for="(item,index) in installmentsAndDeposit.total_installments" :key="item" class="col-xl-4 col-lg-4 col-md-4">
                                   <div class="mb-1">
-                                  <label class="input-label" for="enrollment_date">Due Date For Installment {{ index+1 }}</label>
-                                  <input v-model="installmentsAndDeposit.other_installments_due_date[index]" class="input-box" id="name"  type="date" placeholder="Deadline For Installment {{ index+1 }}" name="name" />
+                                  <label class="input-label" for="enrollment_date">Due Date For Instalment {{ index+1 }}</label>
+                                  <date-picker v-model:value="installmentsAndDeposit.other_installments_due_date[index]" @change="validateInstallmentDate(index)" class="input-box"
+                                    format="DD/MM/YYYY" value-type="date" append-to-body='true'
+                                    >
+                                  </date-picker>
+                                  <!-- <input v-model="installmentsAndDeposit.other_installments_due_date[index]" @input="validateInstallmentDate(index)"  class="input-box" id="name"  type="date" placeholder="Deadline For Instalment {{ index+1 }}" name="name" /> -->
                                   <!-- <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["start_date"]!==""'>Start Date is required</small> -->
                                   </div>
                               </div>
@@ -255,13 +275,15 @@
   import axiosClient from '../../axios'
   import cloneDeep from 'lodash/cloneDeep';
   import MultiSelect from "../components/MultiSelect.vue";
-
+  import moment from 'moment';
+  import DatePicker from 'vue-datepicker-next';
+  import 'vue-datepicker-next/index.css';
 
   export default {
     name: '',
     components: {
-      MultiSelect
-      // MaterialButton,
+      MultiSelect,
+      DatePicker
     },
     mounted() {
       this.getUser();
@@ -344,6 +366,37 @@
       }
     },
     methods:{
+
+      validateExpiryDate() {
+        const { valid_from, valid_to } = this.newItem;
+        if (valid_from && valid_to) {
+            const startDate = new Date(valid_from);
+            const endDate = new Date(valid_to);
+
+            if (startDate >= endDate) {
+                this.newItem.valid_to = null;
+            }
+        }
+      },
+      
+      validateInstallmentDate(index) {
+        const dates = this.installmentsAndDeposit.other_installments_due_date;
+        if (index > 0 && dates[index]) {
+          const previousDate = new Date(dates[index - 1]);
+          const currentDate = new Date(dates[index]);
+          const isAfterPreviousDate = currentDate > previousDate;
+          if (!isAfterPreviousDate) {
+            dates.splice(index, 1);
+          }
+        }
+      },
+
+      handleIntegerInput(event) {
+        const value = event.target.value;
+        if (value && !Number.isInteger(Number(value))) {
+          this.installmentsAndDeposit.total_installments = Math.floor(value); // removes decimals
+        }
+      },
       snackbarMsg(message) {
         this.$snackbar.add({
           type: 'success',
@@ -393,7 +446,7 @@
         // if(this.validateForm()){
         //   return;
         // }
-        
+        this.installmentsAndDeposit.initial_deposit_due_date= this.installmentsAndDeposit.initial_deposit_due_date ? this.installmentsAndDeposit.initial_deposit_due_date.toISOString().split('T')[0] :null;
         const formData = new FormData();
         formData.append('image', this.selectedImageFile);
         formData.append('installmentsAndDeposit',JSON.stringify(this.installmentsAndDeposit));
@@ -404,8 +457,8 @@
         formData.append('quantity', this.newItem.quantity);
         formData.append('detail', this.newItem.detail);
         formData.append('shop_id', this.newItem.shop_id);
-        formData.append('valid_from', this.newItem.valid_from);
-        formData.append('valid_to', this.newItem.valid_to);
+        formData.append('valid_from',this.newItem.valid_from.toISOString().split('T')[0]);
+        formData.append('valid_to', this.newItem.valid_to.toISOString().split('T')[0]);
         formData.append('product_owner_email', this.newItem.product_owner_email);
         formData.append('visibility_options', JSON.stringify(this.newItem.visibility_options));
         formData.append('limitColleges', JSON.stringify(this.newItem.limitColleges));
@@ -443,8 +496,8 @@
         this.newItem.attribute_id=data.attribute_id
         this.newItem.detail=data.detail
         this.newItem.attributes=data.attributes
-        this.newItem.valid_from=data.valid_from
-        this.newItem.valid_to=data.valid_to
+        this.newItem.valid_from = data.valid_from ? moment(data.valid_from, 'YYYY-MM-DD').toDate() : null;
+        this.newItem.valid_to = data.valid_to ? moment(data.valid_to, 'YYYY-MM-DD').toDate() : null;
         this.newItem.product_owner_email=data.product_owner_email
         this.newItem.visibility_options=data.visibility_options ? data.visibility_options : []
         this.newItem.limitColleges=data.limit_colleges ? data.limit_colleges : []
@@ -455,7 +508,13 @@
         {
           this.installmentsAndDeposit.total_installments=data.payment.total_installments
           this.installmentsAndDeposit.amount_per_installment=data.payment.amount_per_installment
+          data.payment.other_installments_deadline_installments = data.payment.other_installments_deadline_installments.map(installment_date =>
+              installment_date ? moment(installment_date, 'YYYY-MM-DD').toDate() : null
+          );
           this.installmentsAndDeposit.other_installments_due_date=data.payment.other_installments_deadline_installments
+          this.installmentsAndDeposit.initial_deposit_due_date=data.payment.initial_deposit_due_date ? moment(data.payment.initial_deposit_due_date, 'YYYY-MM-DD').toDate() : null
+          this.installmentsAndDeposit.initial_deposit=data.payment.initial_deposit
+
         }
     },
 

@@ -20,7 +20,6 @@ const globalHelperPlugin = {
           page.style.backgroundColor = bgColor;
         });
 
-
       };
 
       app.config.globalProperties.$globalHelper = {

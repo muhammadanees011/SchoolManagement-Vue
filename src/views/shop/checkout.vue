@@ -26,11 +26,11 @@
                                             <span v-if="item.shop_item.product_type">({{ item.shop_item.product_type }})</span>
                                             <br>
                                             <span v-if="item.shop_item.payment_plan=='installments'" class="text-success">
-                                                Installments ({{ item.shop_item.payment.total_installments }})
+                                                Instalments ({{ item.shop_item.payment.total_installments }})
                                             </span>
                                             <span v-if="item.shop_item.payment_plan=='installments_and_deposit'" class="text-success">
-                                                Installments And Deposit
-                                                <br> ({{ item.shop_item.payment.total_installments }} Installments)
+                                                Instalments And Deposit
+                                                <br> ({{ item.shop_item.payment.total_installments }} Instalments)
                                             </span>
                                         </h6>
                                         <span class="mb-1 text-success text-xs">
