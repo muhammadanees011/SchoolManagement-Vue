@@ -24,20 +24,15 @@
                             </small>
                           </div>
                           <div class="row mb-1">
-                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
                               <label class="input-label" for="name">Name</label>
                               <input class="input-box" id="name" v-model="newItem.name" type="text" placeholder="Name" name="name" />
                               <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["name"]!==""'>Name is required</small>
                             </div>
-                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
                               <label class="input-label" for="name">Price</label>
                               <input class="input-box" id="price" v-model="newItem.price" type="number" placeholder="price" name="price" />
                               <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["price"]!==""'>Price is required</small>
-                            </div>
-                            <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                              <label class="input-label" for="name">Quantity</label>
-                              <input class="input-box" id="quantity" v-model="newItem.quantity" type="number" placeholder="Quantity" name="quantity" />
-                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["quantity"]!==""'>Quantity is required</small>
                             </div>
                           </div>
 
@@ -122,6 +117,26 @@
                               @input="handleCourses"
                               placeholder="Limit Courses"
                               />
+                            </div>
+                          </div>
+
+                          <div class="row mb-1">
+                            <div class="col-xl-6 col-lg-6 col-md-6">
+                              <span class="mt-2 d-flex justify-space-between align-items-center text-dark font-weight-bold text-xs">
+                                <small class="ms-2 me-3">Enable Quantity Limit</small>
+                                <div class="checkbox-container mt-3 me-5">
+                                    <input :checked="isQuantityEnabled" @change="isQuantityEnabled=!isQuantityEnabled" type="checkbox" class="checkbox-input" id="installmentsCheckbox">
+                                    <label class="checkbox-label" for="installmentsCheckbox"></label>
+                                </div>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div v-if="isQuantityEnabled" class="row mb-1">
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
+                              <label class="input-label" for="name">Quantity</label>
+                              <input class="input-box" id="quantity" v-model="newItem.quantity" min="0" type="number" placeholder="Quantity" name="quantity" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["quantity"]!==""'>Quantity is required</small>
                             </div>
                           </div>
                           
@@ -311,6 +326,7 @@
     },
     data() {
       return {
+        isQuantityEnabled:false,
         paymentPlan:'',
         installmentsAndDeposit:{
           total_installments:null,
@@ -454,7 +470,11 @@
         formData.append('payment_plan', this.newItem.payment_plan);
         formData.append('name', this.newItem.name);
         formData.append('price', this.newItem.price);
-        formData.append('quantity', this.newItem.quantity);
+        if(!this.isQuantityEnabled){
+        formData.append('quantity','');
+        }else{
+          formData.append('quantity', this.newItem.quantity);
+        }
         formData.append('detail', this.newItem.detail);
         formData.append('shop_id', this.newItem.shop_id);
         formData.append('valid_from',this.newItem.valid_from.toISOString().split('T')[0]);
@@ -491,6 +511,7 @@
         this.newItem.name=data.name
         this.newItem.price=data.price
         this.newItem.quantity=data.quantity
+        this.isQuantityEnabled=data.quantity ? true:false
         this.newItem.product_type=data.product_type;
         this.newItem.shop_id=data.shop_id
         this.newItem.attribute_id=data.attribute_id

@@ -23,22 +23,18 @@
                             </small>
                           </div>
                           <div class="row mb-1">
-                          <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                            <label class="input-label" for="name">Name</label>
-                            <input class="input-box" id="name" v-model="newItem.name" type="text" placeholder="Name" name="name" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["name"]!==""'>Name is required</small>
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
+                              <label class="input-label" for="name">Name</label>
+                              <input class="input-box" id="name" v-model="newItem.name" type="text" placeholder="Name" name="name" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["name"]!==""'>Name is required</small>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
+                              <label class="input-label" for="name">Price</label>
+                              <input class="input-box" id="price" v-model="newItem.price" type="number" step="0.01" min="0" placeholder="price" name="price" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["price"]!==""'>Price is required</small>
+                            </div>
                           </div>
-                          <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                            <label class="input-label" for="name">Price</label>
-                            <input class="input-box" id="price" v-model="newItem.price" type="number" step="0.01" min="0" placeholder="price" name="price" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["price"]!==""'>Price is required</small>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-4 mb-1">
-                            <label class="input-label" for="name">Quantity</label>
-                            <input class="input-box" id="quantity" v-model="newItem.quantity" min="0" type="number" placeholder="Quantity" name="quantity" />
-                            <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["quantity"]!==""'>Quantity is required</small>
-                          </div>
-                          </div>
+
                           <div class="mb-1">
                             <label class="input-label" for="name">Detail</label>
                             <input class="input-box" id="name" v-model="newItem.detail" type="text" placeholder="Detail" name="detail" />
@@ -118,6 +114,25 @@
                             </div>
                           </div>
 
+                          <div class="row mb-1">
+                            <div class="col-xl-6 col-lg-6 col-md-6">
+                              <span class="mt-2 d-flex justify-space-between align-items-center text-dark font-weight-bold text-xs">
+                                <small class="ms-2 me-3">Enable Quantity Limit</small>
+                                <div class="checkbox-container mt-3 me-5">
+                                    <input :checked="isQuantityEnabled" @change="isQuantityEnabled=!isQuantityEnabled" type="checkbox" class="checkbox-input" id="installmentsCheckbox">
+                                    <label class="checkbox-label" for="installmentsCheckbox"></label>
+                                </div>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div v-if="isQuantityEnabled" class="row mb-1">
+                            <div class="col-xl-6 col-lg-6 col-md-6 mb-1">
+                              <label class="input-label" for="name">Quantity</label>
+                              <input class="input-box" id="quantity" v-model="newItem.quantity" min="0" type="number" placeholder="Quantity" name="quantity" />
+                              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["quantity"]!==""'>Quantity is required</small>
+                            </div>
+                          </div>
 
                           <div class="row p-2">
                               <div class="col-xl-12 col-lg-12 col-md-12">
@@ -300,6 +315,7 @@
     },
     data() {
       return {
+        isQuantityEnabled:false,
         debounceTimeout:null,
         paymentPlan:'',
         installmentsAndDeposit:{

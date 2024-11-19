@@ -77,7 +77,7 @@
                                     <!-- <div class="mt-0" v-if="item.cart!==null && user.role=='student'">
                                     <div class="cart-status">Added To Cart</div>
                                     </div> -->
-                                    <div class="mt-0" v-if="item.quantity > 0 ">
+                                    <div class="mt-0" v-if="item.quantity > 0 || item.quantity ==null ">
                                       <button @click="addToCart(item.id)" style="font-size: 12px; background-color: #573078;" class="btn me-3 trips-btn w-45  text-white fw-5 p-2 border-radius-lg"> Add To Cart </button>
                                     </div>
 

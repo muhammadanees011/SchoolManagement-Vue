@@ -102,7 +102,7 @@
                           <span class="text-secondary text-xs ">{{item.name  }}</span>
                         </td>
                         <td class="align-middle text-center">
-                          <span class="text-secondary text-xs ">{{ item.quantity }}</span>
+                          <span class="text-secondary text-xs ">{{ item.quantity ? item.quantity :'Unlimited' }}</span>
                         </td>
                         <td class="align-middle text-center">
                           <span class="text-secondary text-xs ">{{ item.quantity_sold }}</span>
@@ -117,6 +117,7 @@
                           <span class="text-secondary text-xs ">{{data.shop_name  ? data.shop_name:'-' }}</span>
                         </td>
                         <td class="align-middle text-center text-sm">
+                          <span v-if="item.quantity == null " class="badge badge-sm bg-gradient-success">Available</span>
                           <span v-if="item.quantity > 0 " class="badge badge-sm bg-gradient-success">Available</span>
                           <span v-if="item.quantity == 0 " class="badge badge-sm bg-gradient-danger">Not Available</span>
                         </td>
