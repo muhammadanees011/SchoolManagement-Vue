@@ -114,7 +114,7 @@
                         <span class="text-secondary text-xs ">{{item.name  }}</span>
                       </td>
                       <td class="align-middle text-center">
-                        <span class="text-secondary text-xs ">{{ item.quantity }}</span>
+                        <span class="text-secondary text-xs ">{{ item.quantity ? item.quantity :'Unlimited' }}</span>
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs ">£{{ formattedPrice(item.price) }}</span>
