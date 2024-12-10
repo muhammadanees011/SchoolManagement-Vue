@@ -11,7 +11,7 @@
                                   
                   <span class="ps-0">
                     <small class="ms-3 me-4 page-description">
-                      In the Refund Requests section, you can manage and process requests for refunds submitted by students and approve or <br>reject the request as needed. 
+                      In the Refund section, you can view a list of processed refunds along with their details.
                     </small>
                   </span>
 
@@ -50,51 +50,69 @@
                     <div class="card-body pt-1 p-3">
                         <div class="container-fluid mt-1">
                         <template v-for="(data,index) in shopItems" :key="index">
+                          <div class="row">
                             <div class="col-md-8">
                                 <div class="d-flex flex-column">
-                                <span class="d-flex">
-                                    <h6 class="mb-3 text-sm">{{ data.name }}</h6>
-                                    <small v-if="data.product_type" style="font-size: 12px !important;" class=" text-sm ms-2">
-                                        ({{ data.product_type }})
-                                    </small> 
-                                </span>
-                                <img :src="$env_vars.BASE_URL + data.image" alt="image" class="shadow-sm w-20 h-10 border-radius-lg" />
-                                <!-- <small class="trip-description mt-2">
-                                    {{ data.detail }}
-                                </small> -->
+                                  <span class="d-flex">
+                
+                                      <img :src="$env_vars.BASE_URL + data.image" alt="image" class="shadow-sm w-10 h-10 me-3 border-radius-lg" />
+
+                                      <div class="d-flex flex-column ">
+                                        <h6 class="text-sm" style="margin-bottom: 0px !important;">{{ data.name }}
+                                          <small v-if="data.product_type" style="font-size: 10px !important; font-weight: 400;" class=" text-sm">
+                                            ({{ data.product_type }})
+                                          </small> 
+                                        </h6>
+
+                                        <span style="margin-bottom: 0px !important; margin-top: 0px !important; line-height: 10px;">
+                                          <small class="me-3 trip-dates text-warning">Date {{ formatDateString(data.created_at) }}</small>
+                                        </span>
+                                        <span style="margin-bottom: 0px !important; margin-top: 0px !important; line-height: 10px;">
+                                            <small class="me-3 trip-dates text-warning">
+                                              <span class="me-2">Refunded to <span class="text-success">{{ data.buyer_name}},</span></span>
+                                            <span v-if="data.buyer_role=='student'">Student-ID: <span class="text-success">{{ data.buyer_student_id }}</span></span>
+                                            <span v-if="data.buyer_role=='staff'">Staff-ID: <span class="text-success">{{ data.buyer_staff_id }}</span></span>
+                                            </small>
+                                        </span> 
+                                      </div>                              
+                                  </span>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="ms-auto text-start">
-                                <span><small class="me-3 trip-dates text-warning">Date {{ formatDateString(data.created_at) }}</small></span>
-                                <br>
-                                <div class="d-flex align-items-start text-danger text-gradient text-sm font-weight-bold" style="justify-content: flex-start;">
-                                Price - £{{ formattedAmount(data.price) }}
-                                </div>
+                                <div class="ms-auto text-end me-3">
 
-                                <div style="font-size: 12px; background-color: #F3F4F6; color: #573078 !important;" class="text-white fw-5 p-2 mb-1">
-                                  <span v-if='data.payment_card!=null' class="text-success text-sm rounded-pill p-1"><small>Card Payment</small></span>
-                                  <span v-if='data.payment_card==null' class="text-warning text-sm rounded-pill p-1"><small>Wallet Payment</small></span>
-                                </div>
+                                  <div class="d-flex flex-column ">
+                                    <small class="text-danger text-gradient text-sm mt-1" style="font-size: 13px !important; font-weight: 600;line-height: 14px;">
+                                    Price - £{{ formattedAmount(data.price) }}
+                                    </small>
 
-                                <div style="font-size: 12px; background-color: #F3F4F6; color: #573078 !important;" class="text-white fw-5 p-2">
-                                    <span v-if="data.payment_status=='fully_paid'" class="text-success">Fully Paid: £{{ formattedAmount(data.amount_paid) }}</span>
-                                    <span v-if="data.payment_status=='partially_paid'" class="text-success">Partially Paid: £{{ formattedAmount(data.amount_paid) }}</span>
-                                </div>
-                                <template v-if="userPermissions.refunds">
-                                <div v-if="data.refund_status=='refund_requested'" class="mt-0 d-flex mt-2">
-                                <button @click="confirmAction(data.id,'refunded')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45  btn bg-success text-white fw-5 p-2 border-radius-lg"> Approve Refund </button>
-                                <button @click="confirmAction(data.id,'refund_rejected')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn btn w-45 bg-warning text-white fw-5 p-2 border-radius-lg"> Decline Refund </button>
-                                </div>
-                                </template>
-                                <div v-else style="font-size: 12px; background-color: #F3F4F6; color: #573078 !important;" class="text-white fw-5 p-2">
+                                      <span style="margin-bottom: 0px !important; margin-top: 0px !important; line-height: 14px;">
+                                        <small v-if='data.payment_card!=null' style=" font-size: 13px;" class="text-success">Card Payment</small>
+                                      </span>
+                                      <span style="margin-bottom: 0px !important; margin-top: 0px !important; line-height: 14px;">
+                                      <small v-if='data.payment_card==null' style="font-size: 13px;" class="text-warning">Wallet Payment</small>
+                                      </span>
+
+                                    <div style="font-size: 13px;" class="text-white">
+                                        <span v-if="data.payment_status=='fully_paid'" class="text-success">Fully Paid: £{{ formattedAmount(data.amount_paid) }}</span>
+                                        <span v-if="data.payment_status=='partially_paid'" class="text-success">Partially Paid: £{{ formattedAmount(data.amount_paid) }}</span>
+                                    </div>
+                                  </div>
+                                <!-- <template v-if="userPermissions.refunds">
+                                  <div v-if="data.refund_status=='refund_requested'" class="mt-0 d-flex mt-2">
+                                  <button @click="confirmAction(data.id,'refunded')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn w-45  btn bg-success text-white fw-5 p-2 border-radius-lg"> Approve Refund </button>
+                                  <button @click="confirmAction(data.id,'refund_rejected')" style="font-size: 12px; background-color: #573078;" class="me-3 trips-btn btn w-45 bg-warning text-white fw-5 p-2 border-radius-lg"> Decline Refund </button>
+                                  </div>
+                                </template> -->
+                                <!-- <div v-else style="font-size: 12px; background-color: #F3F4F6; color: #573078 !important;" class="text-white fw-5 p-2">
                                     <span v-if="data.refund_status=='not_refunded'" class="text-success">Refund Rejected</span>
                                     <span v-else class="text-success">{{ data.refund_status }}</span>
 
-                                </div>
-                                <br>
+                                </div> -->
                                 </div>
                             </div>
+                          </div>
+                          <hr>
                         </template>
                         <div v-if="shopItems.length==0" class="row list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                             <small class="d-flex justify-content-center">No products found!</small>

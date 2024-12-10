@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import { PublicClientApplication } from '@azure/msal-browser';
 import Navbar from '@/examples/PageLayout/Navbar.vue'
 import MaterialButton from '@/components/MaterialButton.vue'
 import { mapMutations } from 'vuex'
@@ -81,29 +80,11 @@ export default {
     this.toggleHideConfig()
   },
   async created() {
-    this.$msalInstance = new PublicClientApplication(
-      this.msalConfig,
-    );
   },
   mounted() {
-    const accounts = this.$msalInstance.getAllAccounts();
-    if (accounts.length == 0) {
-      return;
-    }
-    this.account = accounts[0];
-    this.$emitter.emit('login', this.account);
   },
   data() {
     return {
-      msalConfig: {
-        auth: {
-          clientId: '84e7c1e4-cd74-42c8-84fe-5ba42ee2049a',
-          authority: 'https://login.microsoftonline.com/f8cdef31-a31e-4b4a-93e4-5f571e91255a',
-        },
-        cache: {
-          cacheLocation: 'localStorage',
-        },
-      },
       unauthorized: false,
       formValidation:"",
       showPassword: false,
@@ -122,17 +103,6 @@ export default {
 
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
-    },
-    //------------MICROSOFT SIGNOUT-------------
-    async SignOut() {
-      await this.$msalInstance
-      .logout({})
-      .then(() => {
-        this.$emitter.emit('logout', 'logging out');
-      })
-      .catch(error => {
-        console.error(error);
-      });
     },
     //------------VALIDATE FORM-------------
     validateForm(){

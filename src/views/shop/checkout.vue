@@ -119,6 +119,7 @@
                                 <template v-else>
                                 <button v-if="cartItems.length>0" @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
                                 <button v-if="cartItems.length>0" @click="checkout('wallet')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet</button>
+                                <div id="express-checkout-element" style="min-height: 50px;"> </div>
                                 <!-- <p v-if="dataLoaded" class="text-sm text-warning mt-1">In a Wallet & Card Payment, the wallet is charged first, and any remaining amount is charged to the card.</p> -->
                                 </template>
                             </div>
@@ -134,11 +135,14 @@
   <script>
 import axiosClient from '../../axios'
 import { mapActions } from 'vuex'
+// import { loadStripe } from '@stripe/stripe-js';
 
   export default {
     name: "billing-card",
     data(){
         return{
+            stripe: null,
+            expressCheckoutElement: null,
             paymentMethodsLoaded:false,
             isLoading:false,
             isPaymentMethod:true,
@@ -147,6 +151,7 @@ import { mapActions } from 'vuex'
             user:'',
             cartItems:'',
             isSelected:0,
+            stripeAPIToken: 'pk_test_51NL39OA54mv9Tt3cBvUM2bicn8hMv5NhdEuvJcjgezES5zhVCGMOf5IUoqjglR8UfAWjVFStR2iPn3yLvMF3XcpM00Q0oowpaJ'
         }
     },
     mounted(){
@@ -154,12 +159,84 @@ import { mapActions } from 'vuex'
         this.getCartItems();
         this.getCustomerPaymentMethods();
         this.$globalHelper.buttonColor();
+        // this.expressPayment();
+        this.includeStripe('js.stripe.com/v3/', function(){
+                this.expressPayment();
+            }.bind(this) );
     },
     updated(){
         this.$globalHelper.buttonColor();
     },
     methods:{
         ...mapActions(['updateCartItemCounter']),
+
+        includeStripe( URL, callback ){
+            let documentTag = document, tag = 'script',
+                object = documentTag.createElement(tag),
+                scriptTag = documentTag.getElementsByTagName(tag)[0];
+            object.src = '//' + URL;
+            if (callback) { object.addEventListener('load', function (e) { callback(null, e); }, false); }
+            scriptTag.parentNode.insertBefore(object, scriptTag);
+        },
+
+        //--------------EXPRESS PAYMENT METHOD--------------
+        async expressPayment(){
+
+            // this.stripe = await loadStripe(this.stripeAPIToken);
+
+            // if (!this.stripe) {
+            //     console.error('Stripe failed to initialize.');
+            //     return;
+            // }
+
+
+
+            const appearance = {
+            theme: 'flat', // Example theme
+            };
+            let stripe = window.Stripe( this.stripeAPIToken );
+            let elements = stripe.elements({
+            mode: 'payment',
+            amount: 1099,
+            currency: 'usd',
+            appearance,
+            });
+            let card = elements.create('expressCheckout');
+            card.mount('#express-checkout-element');
+
+
+
+
+
+
+            // const appearance = {
+            // theme: 'flat', // Example theme
+            // };
+            // const options = {
+            // // Add any additional options here
+            // };
+            // const elements = this.stripe.elements({
+            // mode: 'payment',
+            // amount: 1099,
+            // currency: 'usd',
+            // appearance,
+            // })
+
+            // if (!elements) {
+            // console.error('Failed to initialize Stripe Elements.');
+            // return;
+            // }
+
+            // const expressCheckoutElement = elements.create('expressCheckout', options)
+
+            // if (!expressCheckoutElement) {
+            // console.error('Express Checkout Element creation failed.');
+            // return;
+            // }
+
+            // expressCheckoutElement.mount('#express-checkout-element')
+            // console.log('Express Checkout Element mounted successfully.');
+        },
         //--------------TOAST MESSAGE--------------
         snackbarMsg(message) {
             this.$snackbar.add({

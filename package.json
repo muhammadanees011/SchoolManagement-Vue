@@ -23,6 +23,7 @@
     "@azure/msal-browser": "^2.39.0",
     "@azure/storage-blob": "12.2.1",
     "@popperjs/core": "2.10.2",
+    "@stripe/stripe-js": "^5.2.0",
     "@vueform/multiselect": "^2.6.6",
     "axios": "^1.6.2",
     "bootstrap": "5.1.3",

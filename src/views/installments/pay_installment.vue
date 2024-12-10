@@ -4,6 +4,7 @@
             <div class="card">
                 <div class="card-header pb-0 px-3 d-flex justify-content-between">
                     <h6 class="mb-0">Pay Instalment</h6>
+                    <button @click="$router.go(-1)" style="font-size: 12px; background-color: #573078;" class="btn me-3 text-white fw-5 border-0 py-2 px-2  border-radius-lg"> <i class="fas fa-arrow-left"></i> </button>
                 </div>
                 <div class="card-body pt-4 p-3">
                     <div class="row">

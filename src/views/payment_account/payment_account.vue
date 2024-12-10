@@ -109,6 +109,9 @@
     },
     updated(){
       this.$globalHelper.buttonColor();
+      if(this.user.role!='student' && this.user.role!='staff'){
+        this.$permissions.redirectIfNotAllowed('topup');
+      }
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),
@@ -199,6 +202,7 @@
     async addBalance(){
       let user_id;
       let url=''
+      let type=''
       if(this.$route.params.id){
         user_id=this.$route.params.id;
       }else{
@@ -212,6 +216,7 @@
       }
       if((this.user.role!='student' && this.user.role!='parent' && this.user.role!='staff'))
       {
+          type='admin_top_up'
           if(this.user.role=='staff' && this.user.id==user_id)
           {
             url='/payment/initiate'
@@ -226,6 +231,7 @@
             payment_method=null
           }
       }else{
+        type='top_up'
         url='/payment/initiate'
         if(!payment_method){
             this.snackbarMsg('Payment Method Not Found','error');
@@ -236,7 +242,7 @@
         "user_id":user_id,
         "amount":amount,
         "payment_method":payment_method,
-        "type":'top_up',
+        "type":type,
       }
       try {
         await axiosClient.post(url,data)

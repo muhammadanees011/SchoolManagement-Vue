@@ -108,7 +108,7 @@
                             </div>
                             <div class="d-flex flex-column justify-content-center">
                               <p class="text-xs text-secondary mb-0">
-                                {{ item.user.first_name }} {{ item.user.last_name }}
+                                {{ item.user.first_name }} {{ item.user.last_name }},
                                 <br>
                                 {{ item.user.email }}
                               </p>
@@ -129,9 +129,11 @@
                         </td>
                         <td class="align-middle text-center">  
                           <span class="d-flex justify-content-center">
-                            <i v-if="item.type=='top_up'|| item.type=='pos_refund' || item.type=='school_shop_refund'" class="fas fa-plus fa-xs text-success me-2" aria-hidden="true"></i>
-                            <i v-else class="fas fa-minus fa-xs text-danger me-2" aria-hidden="true"></i>
-                            <p class="text-xs text-secondary mb-0">£{{formattedPrice(item.amount) }}</p>
+                            <p class="text-xs text-secondary mb-0">
+                              <span v-if="item.type=='top_up'|| item.type=='admin_top_up'|| item.type=='pos_refund' || item.type=='school_shop_refund'" class="text-success me-1" style="font-size:15px; font-weight: 600;">+ </span>
+                              <span v-else class="text-danger me-1" style="font-size:15px; font-weight: 600;">- </span>
+                              £{{formattedPrice(item.amount) }}
+                            </p>
                           </span>
                         </td>
                         <td class="align-middle text-center">
@@ -295,16 +297,63 @@
 
       exportTableToXLS() {
         const table = this.$refs.table;
-        const ws = XLSX.utils.table_to_sheet(table);
+        const clonedTable = table.cloneNode(true);
+
+        // Find the "Buyer" column index
+        const buyerColumnIndex = Array.from(clonedTable.querySelectorAll('th')).findIndex(
+          th => th.textContent.trim() === 'User'
+        );
+
+        if (buyerColumnIndex !== -1) {
+          // Modify the header row to create separate columns for "Buyer Name" and "Buyer Email"
+          const headerRow = clonedTable.querySelector('tr');
+          const buyerHeader = headerRow.children[buyerColumnIndex];
+          buyerHeader.textContent = 'User Name';
+
+          const buyerEmailHeader = document.createElement('th');
+          buyerEmailHeader.textContent = 'User Email';
+          headerRow.insertBefore(buyerEmailHeader, buyerHeader.nextSibling);
+
+          // Process each row to split the "Buyer" data
+          clonedTable.querySelectorAll('tr').forEach((row, index) => {
+            if (index > 0) { // Skip the header row
+              const buyerCell = row.children[buyerColumnIndex];
+              const buyerData = buyerCell.textContent.split(',').map(item => item.trim());
+
+              const buyerName = buyerData[0]; // Assume the name comes before the comma
+              const buyerEmail = buyerData.length > 1 ? buyerData[1] : ''; // Email is after the comma
+
+              // Update the cells
+              buyerCell.textContent = buyerName;
+
+              const buyerEmailCell = document.createElement('td');
+              buyerEmailCell.textContent = buyerEmail;
+              row.insertBefore(buyerEmailCell, buyerCell.nextSibling);
+            }
+          });
+        }
+
+        // Export the table
+        const ws = XLSX.utils.table_to_sheet(clonedTable);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
         XLSX.writeFile(wb, 'transaction_history.xlsx');
       },
 
+      // exportTableToXLS() {
+      //   const table = this.$refs.table;
+      //   const ws = XLSX.utils.table_to_sheet(table);
+      //   const wb = XLSX.utils.book_new();
+      //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      //   XLSX.writeFile(wb, 'transaction_history.xlsx');
+      // },
+
       transactionType(type){
         let newType='';
         if(type=='top_up'){
           newType="Top Up";
+        }else if(type=='admin_top_up'){
+          newType="Top Up (Admin)";
         }else if(type=='pos_transaction'){
           newType="Cafeteria Purchase";
         }else if(type=='pos_refund'){

@@ -48,7 +48,62 @@
 
                   </div> 
     
-                    <div class="card-body pt-1 p-3">
+                    <div v-if="user.role!='student' && user.role!='staff' && user.role!='parent'" class="card-body pt-1 p-3">
+                        <div class="container-fluid mt-1">
+                          <template v-for="(data,index) in shopItems" :key="index">
+                            <div @click="openInstallment(data.id)" class="listNavigation">
+                                <div class="listNavigation__lists">
+                                    <ul class="listNavigation__list">
+                                        <li class="list__item">
+                                            <a href="#" class="item__link">
+                                                <div class="item__icon">
+                                                  <img :src="$env_vars.BASE_URL + data.image" alt="image" class="shadow-sm border-radius-lg product-img" />
+                                                </div>
+                                                <div class="item__content">
+                                                    <h4 class="label text-sm">{{ data.name }} ({{ data.product_type }})</h4>
+                                                    <div class="description text-success">Order Amount - £{{ formattedAmount(data.price) }}</div>
+                                                    <div class="description text-success">Paid Amount - £{{ formattedAmount(data.amount_paid ? data.amount_paid:0) }}</div>
+                                                    <div class="description text-success">Remaining Amount - £{{ formattedAmount((data.price)-(data.amount_paid ? data.amount_paid:0)) }}</div>
+                                                    <div class="description">Purchase Id: #{{ data.id }}</div>
+                                                    <div class="description">Purchase Date: {{ formatDateString(data.purchase_date) }}</div>
+                                                </div>
+                                                <div class="item__metaInfo">
+                                                    <span class="iconUxt arrowSingleRight" aria-hidden="true"></span>
+                                                </div>
+                                            </a>
+        
+                                            <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="">
+                                                <h4 class="label text-sm">Buyer Information:</h4>
+                                                <p class="label text-sm"> {{ data.buyer_name }}</p>
+                                                <p class="label text-sm">{{ data.buyer_email }}
+                                                </p>
+                                            </div>   
+                                            <template v-if="user.role=='student' || user.role=='staff'">
+                                              <button @click="payNow(data.id)" style="font-size: 12px; width:25% !important; background-color: #573078;" class="trips-btn btn text-white fw-2 py-2 px-1 border-radius-lg"> Pay now</button>                                            
+                                            </template>                   
+                                          </li>
+                                          
+                                        <!-- Repeat for other list items -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <div v-if="openedInstallment==data.id" class="mb-5 pb-5">
+                              <template v-for="(installment,i) in data.installments" :key="i">
+                                <div class="d-flex justify-content-between">
+                                  <small class="ms-5 ps-3 text-success">Installment-{{ installment.installment_no }}</small>
+                                  <small class="me-5 text-success">Amount: £{{ formattedAmount(installment.installment_amount) }}</small>
+                                </div>
+                              </template>
+                            </div>
+                                          
+                          </template>
+                          <div v-if="shopItems.length==0" class="row list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                              <small class="d-flex justify-content-center">No products found!</small>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div v-if="user.role=='student' || user.role=='staff' || user.role=='parent'" class="card-body pt-1 p-3">
                         <div class="container-fluid mt-1">
 
                         <template v-for="(data,index) in shopItems" :key="index">
@@ -219,6 +274,7 @@
     },
     data(){
     return{
+      openedInstallment:null,
       time3: null,
       perPageOptions: [10,20, 40, 60,100,200,300,400],
       itemsPerPage:20,
@@ -259,6 +315,21 @@
         text: message,
         background: 'white',
       })
+      },
+
+      //------------FORMAT DATE--------------
+      formatDateString(dateString) {
+        const parsedDate = moment(dateString);
+        const formattedDate = parsedDate.format("DD/MM/YYYY");
+        return formattedDate;
+      },
+
+      openInstallment(id){
+        if(this.openedInstallment==id){
+          this.openedInstallment=null
+        }else{
+          this.openedInstallment=id
+        }
       },
 
     getUser(){
@@ -357,13 +428,6 @@
       editShopItem(id){
         this.$router.push({ name: 'edit-shop-items', params: { id } });
       },
-
-    //------------FORMAT DATE--------------
-    formatDateString(dateString) {
-        const parsedDate = moment(dateString);
-        const formattedDate = parsedDate.format('DD MMMM YYYY, HH:mm');
-        return formattedDate;
-    },
 
     //--------------FORMAT AMOUNT---------------
     formattedAmount(value){
@@ -503,7 +567,6 @@
 .list__item:active {
     background-color: #c0c0c0;
 }
-
  </style>
   
     

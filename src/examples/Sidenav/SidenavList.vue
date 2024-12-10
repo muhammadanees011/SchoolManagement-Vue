@@ -279,13 +279,13 @@
         </sidenav-collapse>
       </li>
     </template>
-      <!-- <li  v-if="userPermissions.support"  class="nav-item">
-        <sidenav-collapse url="#" :aria-controls="''" v-bind:collapse="false" collapseRef="support" navText="Support">
+      <li  v-if="user && user.role!='student' && user.role!='staff' && user.role!='parent'" class="nav-item">
+        <sidenav-collapse :to="{ name: 'configurations' }" :aria-controls="''" v-bind:collapse="false" collapseRef="configurations" navText="Configurations">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">support_agent</i>
+            <i class="material-icons-round opacity-10 fs-5">settings</i>
           </template>
         </sidenav-collapse>
-      </li> -->
+      </li>
       <li  v-if="user && user.role=='student' || user.role=='staff'" class="nav-item">
         <sidenav-collapse :to="{ name: 'support' }" :aria-controls="''" v-bind:collapse="false" collapseRef="support" navText="Support">
           <template v-slot:icon>

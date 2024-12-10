@@ -68,6 +68,7 @@ import DefaultLayout from '../views/DefaultLayout.vue'
 import ProductTypes from '../views/ProductTypes/index.vue'
 import AddProductTypes from '../views/ProductTypes/create.vue'
 import EditProductTypes from '../views/ProductTypes/edit.vue'
+import Configurations from '../views/configurations/configurations.vue'
 
 const routes = [
   {
@@ -263,6 +264,18 @@ const routes = [
     },
     children: [
       { path: '', name: 'support', component: Support },
+    ],
+  },
+  //------------CONFIGURATIONS----------
+  {
+    path: '/configurations',
+    component: DefaultLayout,
+    meta: {
+      title: 'Configurations',
+      requiresAuth: true,
+    },
+    children: [
+      { path: '/configurations', name: 'configurations', component: Configurations },
     ],
   },
   //-------------PRODUCT TYPES----------------

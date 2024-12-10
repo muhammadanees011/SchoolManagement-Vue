@@ -56,7 +56,7 @@
                       <th class="text-uppercase text-xxs font-weight-bolder"> Site </th>
                       <th class="text-uppercase text-center text-xxs font-weight-bolder"> Balance </th>
                       <th v-if="userPermissions.wallet" class="text-center text-uppercase text-xxs font-weight-bolder"> Wallet </th>
-                      <th class="text-uppercase text-xxs font-weight-bolder"> TopUp </th>
+                      <th v-if="userPermissions.topup" class="text-uppercase text-xxs font-weight-bolder"> TopUp </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Status </th>
                       <th class="text-center text-uppercase text-xxs font-weight-bolder"> Action </th>
                     </tr>

@@ -511,7 +511,7 @@
         this.newItem.name=data.name
         this.newItem.price=data.price
         this.newItem.quantity=data.quantity
-        this.isQuantityEnabled=data.quantity ? true:false
+        this.isQuantityEnabled = data.quantity !== null && data.quantity !== undefined;
         this.newItem.product_type=data.product_type;
         this.newItem.shop_id=data.shop_id
         this.newItem.attribute_id=data.attribute_id

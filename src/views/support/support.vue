@@ -13,11 +13,11 @@
           </div>
         <div class="form-group">
           <label for="fullName" class="input-label">Full Name</label>
-          <input v-model="form.fullName" type="text" class="input-box" id="fullName" name="fullName" required>
+          <input v-model="form.fullName" type="text" readonly class="input-box" id="fullName" name="fullName" required>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input v-model="form.email" type="email" class="input-box" id="email" name="email" required>
+          <input v-model="form.email" type="email" readonly class="input-box" id="email" name="email" required>
         </div>
         <div class="form-group">
           <label for="subject">Subject</label>
@@ -67,6 +67,8 @@
       }else{
         this.$router.go(-1);
       }
+      this.form.fullName=this.user.first_name+' '+ this.user.last_name
+      this.form.email=this.user.email
     },
     //--------------TOAST MESSAGE--------------
     snackbarMsg(message) {

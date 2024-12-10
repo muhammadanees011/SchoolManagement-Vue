@@ -291,7 +291,52 @@
 
       exportTableToXLS() {
         const table = this.$refs.table;
-        const ws = XLSX.utils.table_to_sheet(table);
+        const clonedTable = table.cloneNode(true);
+
+        // Find and remove the "Action" column
+        const actionColumnIndex = Array.from(clonedTable.querySelectorAll('th')).findIndex(
+          th => th.textContent.trim() === 'Action'
+        );
+        if (actionColumnIndex !== -1) {
+          clonedTable.querySelectorAll('tr').forEach(row => row.deleteCell(actionColumnIndex));
+        }
+
+        // Find the "Buyer" column index
+        const buyerColumnIndex = Array.from(clonedTable.querySelectorAll('th')).findIndex(
+          th => th.textContent.trim() === 'Buyer'
+        );
+
+        if (buyerColumnIndex !== -1) {
+          // Modify the header row to create separate columns for "Buyer Name" and "Buyer Email"
+          const headerRow = clonedTable.querySelector('tr');
+          const buyerHeader = headerRow.children[buyerColumnIndex];
+          buyerHeader.textContent = 'Buyer Name';
+
+          const buyerEmailHeader = document.createElement('th');
+          buyerEmailHeader.textContent = 'Buyer Email';
+          headerRow.insertBefore(buyerEmailHeader, buyerHeader.nextSibling);
+
+          // Process each row to split the "Buyer" data
+          clonedTable.querySelectorAll('tr').forEach((row, index) => {
+            if (index > 0) { // Skip the header row
+              const buyerCell = row.children[buyerColumnIndex];
+              const buyerData = buyerCell.textContent.split(',').map(item => item.trim());
+
+              const buyerName = buyerData[0]; // Assume the name comes before the comma
+              const buyerEmail = buyerData.length > 1 ? buyerData[1] : ''; // Email is after the comma
+
+              // Update the cells
+              buyerCell.textContent = buyerName;
+
+              const buyerEmailCell = document.createElement('td');
+              buyerEmailCell.textContent = buyerEmail;
+              row.insertBefore(buyerEmailCell, buyerCell.nextSibling);
+            }
+          });
+        }
+
+        // Export the table
+        const ws = XLSX.utils.table_to_sheet(clonedTable);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
         XLSX.writeFile(wb, 'purchase_history.xlsx');

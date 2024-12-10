@@ -4,6 +4,19 @@
       <div class="col-lg-12 position-relative z-index-2">
         <div class="row">
           <template v-if="user.role=='student'">
+
+            <div v-if="studentHistory.fsm_balance!=null || studentHistory.fsm_balance!=undefined" class="col-lg-3 col-md-6 col-sm-6">
+              <mini-statistics-card
+                :title="{ text:'FSM Balance', value: '£'+formattedPrice(studentHistory.fsm_balance ?? 0) }"
+                detail="FSM Balance"
+                :icon="{
+                  name: 'credit_card',
+                  color: 'text-white',
+                  background: 'primary',
+                }"
+              />
+            </div>
+
             <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
               :title="{ text:'Current Balance', value: '£'+formattedPrice(studentHistory.current_balance ?? 0) }"
@@ -17,7 +30,7 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Monthly Transactions', value: '£'+formattedPrice(studentHistory.last_month ?? 0)  }"
+              :title="{ text: 'Monthly', value: '£'+formattedPrice(studentHistory.last_month ?? 0)  }"
               detail="This Month Transactions"
               :icon="{
                 name: 'leaderboard',
@@ -28,7 +41,7 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Weekly Transactions', value: '£'+formattedPrice(studentHistory.last_week ?? 0) }"
+              :title="{ text: 'Weekly', value: '£'+formattedPrice(studentHistory.last_week ?? 0) }"
               detail="This Week Transactions"
               :icon="{
                 name: 'person',
