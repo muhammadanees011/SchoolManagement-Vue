@@ -19,7 +19,7 @@
                   <div class="filter-container ms-2 mb-2">
                     <div class="row" style="width: 100%;">
                   
-                      <div class="col-4" style="padding-top: 15px;">
+                      <div class="col-md-4 col-sm-12" style="padding-top: 15px;">
                         <span style="display: flex;">
                           <input class="input-box filter-box" @keyup="filterPurchaseHistory('string_search')" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
                           <select @change="filterPurchaseHistory('string_search')" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 110px !important;">
@@ -30,14 +30,14 @@
                         </span>
                       </div>
 
-                      <div class="col-4 col-md-4 col-sm-6" style="padding-top: 15px;">
+                      <div class="col-md-4 col-sm-12" style="padding-top: 15px;">
                         <!-- <span class="label-text bulk_topup" @click="exportTableToXLS()"  style="padding-top: 7px;">
                           <i class="fas fa-download download-icon me-1"></i>
                           Export To XLS
                         </span> -->
                       </div>
 
-                      <div class="col-4 col-md-4 col-sm-4 d-flex" style="padding-top: 15px;">
+                      <div class="col-md-4 col-sm-12 d-flex" style="padding-top: 15px;">
                         <div class="label-text bulk_topup me-3 d-flex" @click="exportTableToXLS()"  style="padding-top: 1px; width: fit-content;">
                           <i class="fas fa-download download-icon" title="Export to excel"></i>
                           <!-- Export -->

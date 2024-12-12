@@ -34,6 +34,7 @@
                                             </span>
                                         </h6>
                                         <span class="mb-1 text-success text-xs">
+                                            <span class="mb-1 text-sm bg-success text-white px-2" style="border-radius: 5px;">Shop Item</span>  
                                         </span>
                                         </div>
                                         <div class="ms-auto text-end">
@@ -62,11 +63,15 @@
                                         </div>
                                         </div>
                                     </li>
-                                    <li v-if="item.trip!==null" class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                                    <li v-if="item.installment!==null" class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                                         <div class="d-flex flex-column">
-                                        <h6 class="mb-3 text-sm">{{ item.trip.title }} (Trip)</h6>
+                                        <h6 class="mb-3 text-sm">{{item.installment.shop_items ? item.installment.shop_items.name:''}}</h6>
                                         <span class="mb-1 text-xs">
-                                            <!-- {{item.trip.description}} -->
+                                            <small class="mb-3 text-sm text-dark">Installment No.{{item.installment.installment_no}}</small>
+                                            <br>
+                                            <small class="mb-3 text-sm text-dark">Purchase ID: {{item.installment.purchases_id}}</small>
+                                            <br>
+                                            <span class="mb-1 text-sm bg-success text-white px-2" style="border-radius: 5px;">Installment</span>  
                                         </span>
                                         </div>
                                         <div class="ms-auto text-end">
@@ -79,7 +84,7 @@
                                         <div class="ms-auto text-end">
                                         <span>
                                             <span class="me-2 text-warning text-gradient text-sm font-weight-bold">
-                                                £{{formattedPrice(item.trip.budget)}}
+                                                £{{formattedPrice(item.installment.installment_amount)}}
                                             </span> 
                                             <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2 remove-icon" aria-hidden="true"></i>
                                         </span>
@@ -159,13 +164,15 @@ import { mapActions } from 'vuex'
         this.getCartItems();
         this.getCustomerPaymentMethods();
         this.$globalHelper.buttonColor();
-        // this.expressPayment();
-        this.includeStripe('js.stripe.com/v3/', function(){
-                this.expressPayment();
-            }.bind(this) );
+        // this.includeStripe('js.stripe.com/v3/', function(){
+        //         this.expressPayment();
+        //     }.bind(this) );
     },
     updated(){
         this.$globalHelper.buttonColor();
+        this.includeStripe('js.stripe.com/v3/', function(){
+            this.expressPayment();
+        }.bind(this) );
     },
     methods:{
         ...mapActions(['updateCartItemCounter']),
@@ -182,61 +189,53 @@ import { mapActions } from 'vuex'
         //--------------EXPRESS PAYMENT METHOD--------------
         async expressPayment(){
 
-            // this.stripe = await loadStripe(this.stripeAPIToken);
-
-            // if (!this.stripe) {
-            //     console.error('Stripe failed to initialize.');
-            //     return;
-            // }
-
-
-
+            let total_amount=this.totalAmount()
             const appearance = {
             theme: 'flat', // Example theme
             };
             let stripe = window.Stripe( this.stripeAPIToken );
             let elements = stripe.elements({
             mode: 'payment',
-            amount: 1099,
-            currency: 'usd',
+            amount: total_amount * 100,
+            currency: 'gbp',
             appearance,
             });
-            let card = elements.create('expressCheckout');
-            card.mount('#express-checkout-element');
+            let expressCheckoutElement = elements.create('expressCheckout');
+            expressCheckoutElement.mount('#express-checkout-element');
 
+            // Handle the 'confirm' event
+            expressCheckoutElement.on('confirm', async (event) => {
+                console.log('event-details',event)
+                try {
+                // Step 1: Submit the form details
+                const { error: submitError } = await elements.submit();
+                if (submitError) {
+                    console.error(submitError);
+                    alert('Payment details are invalid.');
+                    return;
+                }
 
+                // Step 2: Fetch the client_secret from the backend
+                let data={
+                    "payment_method":null,
+                    "type":'google_apple_pay',
+                };
+                this.isLoading=true;
+                const response=await axiosClient.post('/checkout',data)
+               
+                if (response.status === 200) {  // Make sure to check the status of the response
+                    this.snackbarMsg('Payment Successfull')
+                }else if (!response.status === 200) {  // Make sure to check the status of the response
+                    console.error('Failed to create PaymentIntent');
+                }
 
-
-
-
-            // const appearance = {
-            // theme: 'flat', // Example theme
-            // };
-            // const options = {
-            // // Add any additional options here
-            // };
-            // const elements = this.stripe.elements({
-            // mode: 'payment',
-            // amount: 1099,
-            // currency: 'usd',
-            // appearance,
-            // })
-
-            // if (!elements) {
-            // console.error('Failed to initialize Stripe Elements.');
-            // return;
-            // }
-
-            // const expressCheckoutElement = elements.create('expressCheckout', options)
-
-            // if (!expressCheckoutElement) {
-            // console.error('Express Checkout Element creation failed.');
-            // return;
-            // }
-
-            // expressCheckoutElement.mount('#express-checkout-element')
-            // console.log('Express Checkout Element mounted successfully.');
+                } catch (err) {
+                console.error(err);
+                alert('An error occurred during payment.');
+                }
+            });
         },
+        
         //--------------TOAST MESSAGE--------------
         snackbarMsg(message) {
             this.$snackbar.add({
@@ -292,6 +291,8 @@ import { mapActions } from 'vuex'
                         else if(item.shop_item.payment_plan=='full_payment'){
                             sum += item.shop_item.price;
                         }
+                    }if (item.installment) {
+                        sum += item.installment.installment_amount;
                     }
                 });
             } else {

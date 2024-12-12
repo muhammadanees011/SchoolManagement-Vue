@@ -31,6 +31,7 @@ import PurchaseHistory from '../views/my_purchases/my_purchases.vue'
 import PurchaseAdmin from '../views/my_purchases/purchases_admin.vue'
 import Installments from '../views/installments/my_installments.vue'
 import PayInstallment from '../views/installments/pay_installment.vue'
+import PaidInstallments from '../views/installments/paid_installments.vue'
 import Refund from '../views/my_purchases/refund.vue'
 import Support from '../views/support/support.vue'
 import Shop from '../views/shop/shop.vue'
@@ -252,6 +253,7 @@ const routes = [
       { path: '/refunds', name: 'refund', component: Refund },
       { path: '/installments', name: 'installments', component: Installments },
       { path: '/pay-installment/:id', name: 'pay-installment', component: PayInstallment },
+      { path: '/paidinstallments', name: 'paid-installments', component: PaidInstallments },
     ],
   },
   //------------SUPPORT----------

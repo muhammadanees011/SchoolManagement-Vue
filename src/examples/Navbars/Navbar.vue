@@ -42,7 +42,7 @@
                       <span v-if="item.shop_item.product_type">({{ item.shop_item.product_type }})</span>
                     </h6>
                     <span class="mb-1 text-xs text-dark">
-                        <!-- {{ item.shop_item ? item.shop_item.detail:'' }} -->
+                      <span class="mb-1 text-sm bg-success text-white px-2" style="border-radius: 5px;">Shop Item</span>  
                     </span>
                     </div>
                     <div class="ms-auto text-end">
@@ -56,17 +56,21 @@
                 </li>
               </template>
               <template v-for="(item,index) in cartItemsList" :key="index" >
-              <li  v-if="item.trip!==null" class="text-white list-group-item bg-gray-100 border-0 d-flex p-4 mb-2 border-radius-lg">
+              <li  v-if="item.installment!==null" class="text-white list-group-item bg-gray-100 border-0 d-flex p-4 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
-                  <h6 class="mb-3 text-sm text-dark">{{ item.trip ? item.trip.title:'' }} (Trip)</h6>
-                  <span class="mb-1 text-xs text-dark">
-                      <!-- {{ item.trip ? item.trip.description:'' }} -->
-                  </span>
+                    <h6 class="mb-3 text-sm text-dark">{{item.installment.shop_items ? item.installment.shop_items.name:''}}</h6>
+                    <span class="mb-1 text-xs text-dark">
+                        <small class="mb-3 text-sm text-dark">Installment No.{{item.installment.installment_no}}</small>
+                        <br>
+                        <small class="mb-3 text-sm text-dark">Purchase ID: {{item.installment.purchases_id}}</small>
+                        <br>
+                        <span class="mb-1 text-sm bg-success text-white px-2" style="border-radius: 5px;">Installment</span>  
+                    </span>
                   </div>
                   <div class="ms-auto text-end">
                       <span>
                         <span class="me-2 text-warning text-gradient text-sm font-weight-bold">
-                          £{{formattedPrice(item.trip ? item.trip.budget:0)}}
+                          £{{formattedPrice(item.installment ? item.installment.installment_amount:0)}}
                         </span> 
                         <i @click="removeItemFromCart(item.id)" class="fas fa-minus-circle text-danger me-2" aria-hidden="true"></i>
                       </span>

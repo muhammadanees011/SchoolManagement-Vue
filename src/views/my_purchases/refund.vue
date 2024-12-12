@@ -22,7 +22,7 @@
                     
                     <div class="row" style="width: 100%;">
                   
-                      <div class="col-4" style="padding-top: 15px;">  
+                      <div class="col-md-4 col-sm-12" style="padding-top: 15px;">  
                         <span style="display: flex; margin-left:20px;">
                           <input class="input-box filter-box" @keyup="filterRefunds('string_search')" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
                           <select @change="filterRefunds('string_search')" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
@@ -33,13 +33,14 @@
                         </span>
                       </div>
 
-                      <div class="col-4 col-md-4 col-sm-6" style="padding-top: 15px;">
+                      <div class="col-md-4 col-sm-12" style="padding-top: 15px;">
                       </div>
 
-                      <div class="col-4 col-md-4 col-sm-4" style="padding-top: 15px;">
+                      <div class="col-md-4 col-sm-12" style="padding-top: 15px;">
                         <date-picker @change="filterRefunds('daterange_search')"
                          @clear="getShopItems" 
                          v-model:value="time3"
+                         class="ms-3"
                          format="DD/MM/YYYY" value-type="format" range></date-picker>
                       </div>
 

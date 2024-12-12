@@ -233,17 +233,6 @@
         </sidenav-collapse>
       </li>
       <!-- </template> -->
-
-      <!-- <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'"> -->
-      <li v-if="userPermissions.refunds" class="nav-item">
-        <sidenav-collapse :to="{ name: 'refund' }" :aria-controls="''" v-bind:collapse="false" collapseRef="refunds" navText="Refunds">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">shopping_cart</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <!-- </template> -->
-
       </template>
 
       <li  v-if="user && user.role=='student' || user.role=='staff'"  class="nav-item">
@@ -253,6 +242,24 @@
           </template>
         </sidenav-collapse>
       </li>
+
+      <li    class="nav-item">
+        <sidenav-collapse :to="{ name: 'paid-installments' }" :aria-controls="''" v-bind:collapse="false" collapseRef="paidinstallments" navText="Paid Instalments">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">payments</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+      
+      <!-- <template v-if="user && user.role=='super_admin' || user.role=='organization_admin'"> -->
+        <li v-if="userPermissions.refunds" class="nav-item">
+        <sidenav-collapse :to="{ name: 'refund' }" :aria-controls="''" v-bind:collapse="false" collapseRef="refunds" navText="Refunds">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">shopping_cart</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+      <!-- </template> -->
 
       <li  v-if="user && user.role=='student' || user.role=='staff'"  class="nav-item">
         <sidenav-collapse :to="{ name: 'purchase-history' }" :aria-controls="''" v-bind:collapse="false" collapseRef="purchase history" navText="Purchase History">

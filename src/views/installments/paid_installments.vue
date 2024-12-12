@@ -7,11 +7,11 @@
           <div class="card">
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
-                <h6 class="ms-3 text-dark text-capitalize">PENDING INSTALMENTS</h6>
+                <h6 class="ms-3 text-dark text-capitalize">PAID INSTALMENTS</h6>
                   <div class="filter-container mb-3">
                     <span>
                       <small class="ms-4 page-description">
-                        In the Pending Instalments section, you can track and manage pending payments for students. This section allows you to view details of pending instalments.
+                        This section allows you to view details of paid instalments.
                       </small>
                     </span>
                   </div>  
@@ -47,80 +47,14 @@
                     </div>
 
                   </div> 
-    
-                    <div v-if="user.role!='student' && user.role!='staff' && user.role!='parent'" class="card-body pt-1 p-3">
-                        <div class="container-fluid mt-1">
-                          <template v-for="(data,index) in shopItems" :key="index">
-                            <div @click="openInstallment(data.id)" class="listNavigation">
-                                <div class="listNavigation__lists">
-                                    <ul class="listNavigation__list">
-                                        <li class="list__item">
-                                          <div class="row" style="width: 100%;">
-                                            <div class="col-md-8 col-sm-12">
-                                              <a href="#" class="item__link">
-                                                  <div class="item__icon">
-                                                    <img :src="$env_vars.BASE_URL + data.image" alt="image" class="shadow-sm border-radius-lg product-img" />
-                                                  </div>
-                                                  <div class="item__content">
-                                                      <h4 class="label text-sm">{{ data.name }} ({{ data.product_type }})</h4>
-                                                      <div class="description text-success">Order Amount - £{{ formattedAmount(data.price) }}</div>
-                                                      <div class="description text-success">Paid Amount - £{{ formattedAmount(data.amount_paid ? data.amount_paid:0) }}</div>
-                                                      <div class="description text-success">Remaining Amount - £{{ formattedAmount((data.price)-(data.amount_paid ? data.amount_paid:0)) }}</div>
-                                                      <div class="description">Purchase Id: #{{ data.id }}</div>
-                                                      <div class="description">Purchase Date: {{ formatDateString(data.purchase_date) }}</div>
-                                                  </div>
-                                                  <div class="item__metaInfo">
-                                                      <span class="iconUxt arrowSingleRight" aria-hidden="true"></span>
-                                                  </div>
-                                              </a>
-          
-                                              <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="">
-                                                  <h4 class="label text-sm">Buyer Information:</h4>
-                                                  <p class="label text-sm"> {{ data.buyer_name }}</p>
-                                                  <p class="label text-sm">{{ data.buyer_email }}
-                                                  </p>
-                                              </div> 
-                                            </div>  
-                                            <div class="col-md-4 col-sm-12">
-                                              <template v-if="user.role=='student' || user.role=='staff'">
-                                                <button @click="payNow(data.id)" style="font-size: 12px; width:25% !important; background-color: #573078;" class="trips-btn btn text-white fw-2 py-2 px-1 border-radius-lg"> Pay now</button>
-                                                <button style="font-size: 12px; background-color: white; color: #573078; border: 1px solid #573078;" class="mb-3 pt-2 fw-5 border-radius-lg"> 
-                                                  <i class="material-icons cursor-pointer">shopping_cart</i>   
-                                                </button>                               
-                                              </template>
-                                            </div> 
-                                          </div>
-                                        </li>
-                                        <!-- Repeat for other list items -->
-                                    </ul>
-                                </div>
-                            </div>
-                            <div v-if="openedInstallment==data.id" class="mb-5 pb-5">
-                              <template v-for="(installment,i) in data.installments" :key="i">
-                                <div class="d-flex justify-content-between">
-                                  <small class="ms-5 ps-3 text-success">Installment-{{ installment.installment_no }}</small>
-                                  <small class="me-5 text-success">Amount: £{{ formattedAmount(installment.installment_amount) }}</small>
-                                </div>
-                              </template>
-                            </div>
-                                          
-                          </template>
-                          <div v-if="shopItems.length==0" class="row list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                              <small class="d-flex justify-content-center">No products found!</small>
-                          </div>
-                        </div>
-                    </div>
 
-                    <div v-if="user.role=='student' || user.role=='staff' || user.role=='parent'" class="card-body pt-1 p-3">
+                    <div class="card-body pt-1 p-3">
                         <div class="container-fluid mt-1">
 
                         <template v-for="(data,index) in shopItems" :key="index">
 
                           <div class="listNavigation">
                               <div class="listNavigation__lists">
-                                  <!-- <div class="listNavigation__header">
-                                      Very simple List navigation
-                                  </div> -->
                                   <ul class="listNavigation__list">
                                       <li class="list__item">
                                           <a href="#" class="item__link">
@@ -131,25 +65,20 @@
                                                   <h4 class="label text-sm">Instalment No.{{ data.installment_no }}</h4>
                                                   <p class="label text-success">Instalment Amount - £{{ formattedAmount(data.installment_amount) }}
                                                   </p>
-                                                  <div class="description">{{ data.name }} ({{ data.product_type }}),  Purchase ID: {{ data.purchase_id  }} </div>
+                                                  <div class="description">{{ data.name }} ({{ data.product_type }})</div>
+                                                  <div class="description">Purchase ID: {{ data.purchase_id  }}</div>
+                                                  <span class="mb-1 text-sm bg-success text-white px-2 py-1" style="border-radius: 5px;">{{ data.payment_status }}</span>  
                                               </div>
                                               <div class="item__metaInfo">
                                                   <span class="iconUxt arrowSingleRight" aria-hidden="true"></span>
                                               </div>
-                                          </a>
-      
-                                          <div v-if="user.role=='super_admin' || user.role=='organization_admin'" class="">
-                                              <h4 class="label text-sm text-warning">Buyer</h4>
-                                              <h4 class="label text-sm"> {{ data.buyer_name }}</h4>
-                                              <p class="label text-success">{{ data.buyer_email }}
-                                              </p>
-                                          </div>   
-                                          <template v-if="user.role=='student' || user.role=='staff'">
-                                            <button @click="payNow(data.id)" style="font-size: 12px; width:12% !important; background-color: #573078;" class="trips-btn btn text-white fw-2 py-2 px-2 me-1 border-radius-lg"> Pay now</button> 
-                                            <button @click="addToCart(data.id)" style="font-size: 12px; background-color: white; color: #573078; border: 1px solid #573078;" class="mb-3 pt-2 fw-5 border-radius-lg"> 
-                                              <i class="material-icons cursor-pointer">shopping_cart</i>   
-                                            </button>
-                                          </template>                   
+                                              <div v-if="user.role!='student' || user.role!='staff'" class="">
+                                                <h4 class="label text-sm text-warning">Buyer</h4>
+                                                <h4 class="label text-sm"> {{ data.buyer_name }}</h4>
+                                                <p class="label text-success">{{ data.buyer_email }}
+                                                </p>
+                                             </div>
+                                          </a>                
                                         </li>
                                          
                                       <!-- Repeat for other list items -->
@@ -321,9 +250,9 @@
         });
       },
 
-      snackbarMsg(type='success',message) {
+      snackbarMsg(message) {
       this.$snackbar.add({
-        type: type,
+        type: 'success',
         text: message,
         background: 'white',
       })
@@ -362,7 +291,7 @@
           'entries_per_page': this.itemsPerPage
         }
         try {
-          const response=await axiosClient.post('/getMyInstallments',data)
+          const response=await axiosClient.post('/getPaidInstallments',data)
           this.shopItems=response.data.data;
           this.totalRows = response.data.pagination.total;
           this.currentPage = response.data.pagination.current_page;
@@ -389,8 +318,8 @@
         }
 
         const data = event === "daterange_search"
-        ? { type: "Date Range", value: dateRange, status:'pending' }
-        : { type: this.filterBy, value: this.seachString, status:'pending' };
+        ? { type: "Date Range", value: dateRange, status:'paid' }
+        : { type: this.filterBy, value: this.seachString, status:'paid' };
 
         try {
            const response=await axiosClient.post('/filterInstallments',data);
@@ -429,9 +358,6 @@
           this.snackbarMsg('Item Added to Cart')
         } catch (error) {
           console.log(error)
-          if(error.response.status==409){
-            this.snackbarMsg('error','Item already exists in the Cart')
-          }
         }
       },
 
