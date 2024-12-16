@@ -140,13 +140,15 @@
   <script>
 import axiosClient from '../../axios'
 import { mapActions } from 'vuex'
-// import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
   export default {
     name: "billing-card",
     data(){
         return{
             stripe: null,
+            elements: null,
+            clientSecret: null,
             expressCheckoutElement: null,
             paymentMethodsLoaded:false,
             isLoading:false,
@@ -164,9 +166,10 @@ import { mapActions } from 'vuex'
         this.getCartItems();
         this.getCustomerPaymentMethods();
         this.$globalHelper.buttonColor();
-        this.includeStripe('js.stripe.com/v3/', function(){
-                this.expressPayment();
-            }.bind(this) );
+        this.expressPaymentCheckout();
+        // this.includeStripe('js.stripe.com/v3/', function(){
+        //         this.expressPayment();
+        //     }.bind(this) );
     },
     updated(){
         this.$globalHelper.buttonColor();
@@ -174,68 +177,121 @@ import { mapActions } from 'vuex'
         //     this.expressPayment();
         // }.bind(this) );
     },
+    created(){
+    },
     methods:{
         ...mapActions(['updateCartItemCounter']),
 
-        includeStripe( URL, callback ){
-            let documentTag = document, tag = 'script',
-                object = documentTag.createElement(tag),
-                scriptTag = documentTag.getElementsByTagName(tag)[0];
-            object.src = '//' + URL;
-            if (callback) { object.addEventListener('load', function (e) { callback(null, e); }, false); }
-            scriptTag.parentNode.insertBefore(object, scriptTag);
-        },
+        // includeStripe( URL, callback ){
+        //     let documentTag = document, tag = 'script',
+        //     object = documentTag.createElement(tag),
+        //     scriptTag = documentTag.getElementsByTagName(tag)[0];
+        //     object.src = '//' + URL;
+        //     if (callback) { object.addEventListener('load', function (e) { callback(null, e); }, false); }
+        //     scriptTag.parentNode.insertBefore(object, scriptTag);
+        // },
 
         //--------------EXPRESS PAYMENT METHOD--------------
-        async expressPayment(){
+        // async expressPayment(){
 
-            let total_amount=this.totalAmount()
-            const appearance = {
-            theme: 'flat', // Example theme
-            };
-            let stripe = window.Stripe( this.stripeAPIToken );
-            let elements = stripe.elements({
-            mode: 'payment',
-            amount: total_amount * 100,
-            currency: 'gbp',
-            appearance,
-            });
-            let expressCheckoutElement = elements.create('expressCheckout');
-            expressCheckoutElement.mount('#express-checkout-element');
+        //     let total_amount=this.totalAmount()
+        //     const appearance = {
+        //     theme: 'flat', // Example theme
+        //     };
+        //     let stripe = window.Stripe( this.stripeAPIToken );
+        //     let elements = stripe.elements({
+        //     mode: 'payment',
+        //     amount: total_amount * 100,
+        //     currency: 'gbp',
+        //     appearance,
+        //     });
+        //     let expressCheckoutElement = elements.create('expressCheckout');
+        //     expressCheckoutElement.mount('#express-checkout-element');
 
-            // Handle the 'confirm' event
-            expressCheckoutElement.on('confirm', async (event) => {
-                console.log('event-details',event)
-                try {
-                // Step 1: Submit the form details
-                const { error: submitError } = await elements.submit();
-                if (submitError) {
-                    console.error(submitError);
-                    alert('Payment details are invalid.');
-                    return;
-                }
+        //     // Handle the 'confirm' event
+        //     expressCheckoutElement.on('confirm', async (event) => {
+        //         console.log('event-details',event)
+        //         try {
+        //         // Step 1: Submit the form details
+        //         const { error: submitError } = await elements.submit();
+        //         if (submitError) {
+        //             console.error(submitError);
+        //             alert('Payment details are invalid.');
+        //             return;
+        //         }
 
-                // Step 2: Fetch the client_secret from the backend
-                let data={
-                    "payment_method":null,
-                    "type":'google_apple_pay',
-                };
-                this.isLoading=true;
-                const response=await axiosClient.post('/checkout',data)
+        //         // Step 2: Fetch the client_secret from the backend
+        //         let data={
+        //             "payment_method":null,
+        //             "type":'google_apple_pay',
+        //         };
+        //         this.isLoading=true;
+        //         const response=await axiosClient.post('/checkout',data)
                
-                if (response.status === 200) {  // Make sure to check the status of the response
-                    this.snackbarMsg('Payment Successfull')
-                }else if (!response.status === 200) {  // Make sure to check the status of the response
-                    console.error('Failed to create PaymentIntent');
-                }
+        //         if (response.status === 200) {  // Make sure to check the status of the response
+        //             this.snackbarMsg('Payment Successfull')
+        //         }else if (!response.status === 200) {  // Make sure to check the status of the response
+        //             console.error('Failed to create PaymentIntent');
+        //         }
 
-                } catch (err) {
-                console.error(err);
-                alert('An error occurred during payment.');
+        //         } catch (err) {
+        //         console.error(err);
+        //         alert('An error occurred during payment.');
+        //         }
+        //     });
+        // },
+
+        async expressPaymentCheckout(){
+            // Load Stripe
+            this.stripe = await loadStripe('pk_test_51NL39OA54mv9Tt3cBvUM2bicn8hMv5NhdEuvJcjgezES5zhVCGMOf5IUoqjglR8UfAWjVFStR2iPn3yLvMF3XcpM00Q0oowpaJ'); // Replace with your publishable key
+            console.log('stripe created',this.stripe)
+            // Fetch Payment Intent client secret from your backend
+            let data={
+                amount:1000,
+                currency:'gbp'
+            }
+            const response=await axiosClient.post('/createexpressPaymentIntent',data)
+            const clientSecret = response.data.clientSecret;
+            console.log('clientSecret',clientSecret)
+            this.clientSecret = clientSecret;
+
+            // Initialize Elements and Express Checkout
+            this.elements = this.stripe.elements({ clientSecret });
+            this.expressCheckoutElement = this.elements.create('expressCheckout');
+            this.expressCheckoutElement.mount('#express-checkout-element');
+            this.expressCheckoutElement.on('confirm', this.handlePayment);
+        },
+
+        async handlePayment() {
+
+            if (!this.stripe || !this.expressCheckoutElement) {
+                console.error('Stripe or expressCheckoutElement is not initialized');
+                return;
+            }
+
+            // Add a listener to handle the "confirm" event
+            this.expressCheckoutElement.on('confirm', async (event) => {
+                console.log('Confirm event triggered:', event);
+
+                const { error } = await this.stripe.confirmPayment({
+                    elements: this.elements,
+                    confirmParams: {
+                        return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
+                    },
+                });
+
+                if (error) {
+                    console.error('Payment failed:', error.message);
+                    // Inform the user of the error
+                    event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
+                } else {
+                    // Inform the Express Checkout Element the confirmation succeeded
+                    event.complete('success');
                 }
             });
         },
-        
+
+                
         //--------------TOAST MESSAGE--------------
         snackbarMsg(message) {
             this.$snackbar.add({
