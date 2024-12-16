@@ -164,15 +164,15 @@ import { mapActions } from 'vuex'
         this.getCartItems();
         this.getCustomerPaymentMethods();
         this.$globalHelper.buttonColor();
-        // this.includeStripe('js.stripe.com/v3/', function(){
-        //         this.expressPayment();
-        //     }.bind(this) );
+        this.includeStripe('js.stripe.com/v3/', function(){
+                this.expressPayment();
+            }.bind(this) );
     },
     updated(){
         this.$globalHelper.buttonColor();
-        this.includeStripe('js.stripe.com/v3/', function(){
-            this.expressPayment();
-        }.bind(this) );
+        // this.includeStripe('js.stripe.com/v3/', function(){
+        //     this.expressPayment();
+        // }.bind(this) );
     },
     methods:{
         ...mapActions(['updateCartItemCounter']),
