@@ -102,7 +102,7 @@
                             </li> -->
                             <button @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
                             <button @click="checkout('wallet_and_card')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet Payment </button>
-                            <p v-if="dataLoaded" class="text-sm text-warning mt-1">In a Wallet & Card Payment, the wallet is charged first, and any remaining amount is charged to the card.</p>
+                            <div id="express-checkout-element" style="min-height: 50px;"> </div>
                         </div>
                     </div>
                 </div>
@@ -114,20 +114,25 @@
   
   <script>
 import axiosClient from '../../axios'
+import { loadStripe } from '@stripe/stripe-js';
+
   export default {
     name: "billing-card",
     data(){
         return{
+            installmentDetail:'',
             userCards:'',
             dataLoaded:false,
             user:'',
             isSelected:0,
         }
     },
-    mounted(){
+    async mounted(){
         this.getUser();
         this.getCustomerPaymentMethods();
         this.$globalHelper.buttonColor();
+        await this.getInstallment();
+        this.expressPaymentCheckout();
     },
     updated(){
         this.$globalHelper.buttonColor();
@@ -211,6 +216,90 @@ import axiosClient from '../../axios'
             console.log(error)
             }
         },
+
+        async getInstallment(){
+            let installment_id=this.$route.params.id;
+            let data={
+                "installment_id":installment_id,
+            }
+            try {
+            let response=await axiosClient.post('/getInstallmentDetail',data)
+            this.installmentDetail=response.data
+            } catch (error) {
+            console.log(error)
+            }
+        },
+
+        async expressPaymentCheckout(){
+            let installment_amount=this.installmentDetail ? this.installmentDetail.installment_amount: 0
+            // Load Stripe
+            this.stripe = await loadStripe('pk_test_51NL39OA54mv9Tt3cBvUM2bicn8hMv5NhdEuvJcjgezES5zhVCGMOf5IUoqjglR8UfAWjVFStR2iPn3yLvMF3XcpM00Q0oowpaJ'); // Replace with your publishable key
+            // Fetch Payment Intent client secret from your backend
+            let data={
+                amount:installment_amount*100,
+                currency:'gbp'
+            }
+            const response=await axiosClient.post('/createexpressPaymentIntent',data)
+            const clientSecret = response.data.clientSecret;
+            console.log('clientSecret',clientSecret)
+            this.clientSecret = clientSecret;
+
+            // Initialize Elements and Express Checkout
+            this.elements = this.stripe.elements({ clientSecret });
+            this.expressCheckoutElement = this.elements.create('expressCheckout');
+            this.expressCheckoutElement.mount('#express-checkout-element');
+            this.expressCheckoutElement.on('confirm', this.handlePayment);
+        },
+
+        async handlePayment() {
+
+            if (!this.stripe || !this.expressCheckoutElement) {
+                console.error('Stripe or expressCheckoutElement is not initialized');
+                return;
+            }
+
+            // Add a listener to handle the "confirm" event
+            this.expressCheckoutElement.on('confirm', async (event) => {
+                console.log('Confirm event triggered:', event);
+
+                const { error,paymentIntent } = await this.stripe.confirmPayment({
+                    elements: this.elements,
+                    confirmParams: {
+                        // return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
+                    },
+                });
+
+                if (error) {
+                    console.error('Payment failed:', error.message);
+                    // Inform the user of the error
+                    event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
+                } else {
+                    // Inform the Express Checkout Element the confirmation succeeded
+                    event.complete('success');
+
+                    // Extract details from paymentIntent
+                    const latestCharge = paymentIntent.charges.data[0]; // Get the first charge object
+                    const cardDetails = latestCharge.payment_method_details.card;
+
+                    let installment_id=this.$route.params.id;
+      
+                    let data={
+                        "payment_method":null,
+                        "type":'google_apple_pay',
+                        "installment_id":installment_id,
+                        "amount": this.installmentDetail ? this.installmentDetail.installment_amount : 0,
+                        latest_charge: latestCharge.id,
+                        last_4: cardDetails.last4,
+                        brand: cardDetails.brand,
+                        cardholder_name: latestCharge.billing_details.name
+                    };
+                    const response=await axiosClient.post('/payInstallment',data)
+                    console.log(response)
+                    this.$router.go(-1);
+                }
+            });
+        },
+
         //--------------PAYMENT METHODS---------
         async getCustomerPaymentMethods(){
         let user;
@@ -230,10 +319,10 @@ import axiosClient from '../../axios'
         },
         //---------------TOGGLE CARDS-----------
         toggleSelection(id,event) {
-        if (event.target.tagName.toLowerCase() === 'i') {
-            return;
-        }
-        this.isSelected = id;
+            if (event.target.tagName.toLowerCase() === 'i') {
+                return;
+            }
+            this.isSelected = id;
         },
     }
   };

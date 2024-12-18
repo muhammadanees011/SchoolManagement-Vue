@@ -167,79 +167,14 @@ import { loadStripe } from '@stripe/stripe-js';
         this.getCustomerPaymentMethods();
         this.$globalHelper.buttonColor();
         this.expressPaymentCheckout();
-        // this.includeStripe('js.stripe.com/v3/', function(){
-        //         this.expressPayment();
-        //     }.bind(this) );
     },
     updated(){
         this.$globalHelper.buttonColor();
-        // this.includeStripe('js.stripe.com/v3/', function(){
-        //     this.expressPayment();
-        // }.bind(this) );
     },
     created(){
     },
     methods:{
         ...mapActions(['updateCartItemCounter']),
-
-        // includeStripe( URL, callback ){
-        //     let documentTag = document, tag = 'script',
-        //     object = documentTag.createElement(tag),
-        //     scriptTag = documentTag.getElementsByTagName(tag)[0];
-        //     object.src = '//' + URL;
-        //     if (callback) { object.addEventListener('load', function (e) { callback(null, e); }, false); }
-        //     scriptTag.parentNode.insertBefore(object, scriptTag);
-        // },
-
-        //--------------EXPRESS PAYMENT METHOD--------------
-        // async expressPayment(){
-
-        //     let total_amount=this.totalAmount()
-        //     const appearance = {
-        //     theme: 'flat', // Example theme
-        //     };
-        //     let stripe = window.Stripe( this.stripeAPIToken );
-        //     let elements = stripe.elements({
-        //     mode: 'payment',
-        //     amount: total_amount * 100,
-        //     currency: 'gbp',
-        //     appearance,
-        //     });
-        //     let expressCheckoutElement = elements.create('expressCheckout');
-        //     expressCheckoutElement.mount('#express-checkout-element');
-
-        //     // Handle the 'confirm' event
-        //     expressCheckoutElement.on('confirm', async (event) => {
-        //         console.log('event-details',event)
-        //         try {
-        //         // Step 1: Submit the form details
-        //         const { error: submitError } = await elements.submit();
-        //         if (submitError) {
-        //             console.error(submitError);
-        //             alert('Payment details are invalid.');
-        //             return;
-        //         }
-
-        //         // Step 2: Fetch the client_secret from the backend
-        //         let data={
-        //             "payment_method":null,
-        //             "type":'google_apple_pay',
-        //         };
-        //         this.isLoading=true;
-        //         const response=await axiosClient.post('/checkout',data)
-               
-        //         if (response.status === 200) {  // Make sure to check the status of the response
-        //             this.snackbarMsg('Payment Successfull')
-        //         }else if (!response.status === 200) {  // Make sure to check the status of the response
-        //             console.error('Failed to create PaymentIntent');
-        //         }
-
-        //         } catch (err) {
-        //         console.error(err);
-        //         alert('An error occurred during payment.');
-        //         }
-        //     });
-        // },
 
         async expressPaymentCheckout(){
             // Load Stripe
@@ -273,10 +208,10 @@ import { loadStripe } from '@stripe/stripe-js';
             this.expressCheckoutElement.on('confirm', async (event) => {
                 console.log('Confirm event triggered:', event);
 
-                const { error } = await this.stripe.confirmPayment({
+                const { error,paymentIntent } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
-                        return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
+                        // return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
                     },
                 });
 
@@ -287,6 +222,23 @@ import { loadStripe } from '@stripe/stripe-js';
                 } else {
                     // Inform the Express Checkout Element the confirmation succeeded
                     event.complete('success');
+
+                    // Extract details from paymentIntent
+                    const latestCharge = paymentIntent.charges.data[0]; // Get the first charge object
+                    const cardDetails = latestCharge.payment_method_details.card;
+
+                    let data={
+                        "payment_method":null,
+                        "type":'google_apple_pay',
+                        latest_charge: latestCharge.id,
+                        last_4: cardDetails.last4,
+                        brand: cardDetails.brand,
+                        cardholder_name: latestCharge.billing_details.name
+                    };
+                    this.isLoading=true;
+                    const response=await axiosClient.post('/checkout',data)
+                    console.log(response)
+                    this.$router.go(-1);
                 }
             });
         },

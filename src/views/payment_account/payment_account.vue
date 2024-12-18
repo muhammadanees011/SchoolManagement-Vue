@@ -82,6 +82,11 @@
           </div>
           <div class="conteiner">
         <button  @click="addBalance" style="font-size: 12px; background-color: #573078;" class="btn top-up-btn p-3 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Add Balance </button>
+        <br>
+        <button v-if="user.role=='student' || user.role=='staff'"  @click="expressPaymentCheckout" style="font-size: 12px; background-color: #573078;" class="btn top-up-btn p-3 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Google Pay/ Apple Pay </button>
+        <br>
+        <div v-if="user.role=='student' || user.role=='staff'" id="express-checkout-element" style="min-height: 50px; width: 19em !important;"> </div>
+        <br>
       </div>
         </div>
       </div>
@@ -95,6 +100,7 @@
   import axiosClient from '../../axios'
   import Swal from 'sweetalert2';  
   import { mapGetters, mapActions } from 'vuex'
+  import { loadStripe } from '@stripe/stripe-js';
 
   export default {
     name: "payment-card",
@@ -164,6 +170,78 @@
     methods: {
       ...mapActions(['updateFilterString']),
 
+      async expressPaymentCheckout(){
+        let topup_amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
+        if(topup_amount==""){
+          this.snackbarMsg('Please select the amount','error');
+          return
+        }
+        // Load Stripe
+        this.stripe = await loadStripe('pk_test_51NL39OA54mv9Tt3cBvUM2bicn8hMv5NhdEuvJcjgezES5zhVCGMOf5IUoqjglR8UfAWjVFStR2iPn3yLvMF3XcpM00Q0oowpaJ'); // Replace with your publishable key
+        console.log('stripe created',this.stripe)
+        // Fetch Payment Intent client secret from your backend
+        let data={
+            amount:topup_amount*100,
+            currency:'gbp'
+        }
+        const response=await axiosClient.post('/createexpressPaymentIntent',data)
+        const clientSecret = response.data.clientSecret;
+        this.clientSecret = clientSecret;
+
+        // Initialize Elements and Express Checkout
+        this.elements = this.stripe.elements({ clientSecret });
+        this.expressCheckoutElement = this.elements.create('expressCheckout');
+        this.expressCheckoutElement.mount('#express-checkout-element');
+        this.expressCheckoutElement.on('confirm', this.handlePayment);
+      },
+
+        async handlePayment() {
+
+          if (!this.stripe || !this.expressCheckoutElement) {
+              console.error('Stripe or expressCheckoutElement is not initialized');
+              return;
+          }
+          // Add a listener to handle the "confirm" event
+          this.expressCheckoutElement.on('confirm', async (event) => {
+              console.log('Confirm event triggered:', event);
+              const { error,paymentIntent } = await this.stripe.confirmPayment({
+                  elements: this.elements,
+                  confirmParams: {
+                      // return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
+                  },
+              });
+
+              if (error) {
+                  console.error('Payment failed:', error.message);
+                  // Inform the user of the error
+                  event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
+              } else {
+                // Inform the Express Checkout Element the confirmation succeeded
+                event.complete('success');
+                let amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
+                if(amount==""){
+                  this.snackbarMsg('Please select the amount','error');
+                  return
+                }
+                const latestCharge = paymentIntent.charges.data[0];
+                const cardDetails = latestCharge.payment_method_details.card;
+                let user_id=this.user.id;
+                let data={
+                  "amount":amount,
+                  "type":'top_up',
+                  "user_id":user_id,
+                  latest_charge: latestCharge.id,
+                  last_4: cardDetails.last4,
+                  brand: cardDetails.brand,
+                  cardholder_name: latestCharge.billing_details.name
+                };
+                const response=await axiosClient.post('/TopupGoogleApplePay',data)
+                console.log(response)
+              }
+          });
+        },
+
+
       confirmDelete(id) {
         Swal.fire({
           title: 'Are you sure?',
@@ -216,27 +294,27 @@
       }
       if((this.user.role!='student' && this.user.role!='parent' && this.user.role!='staff'))
       {
-          type='admin_top_up'
-          if(this.user.role=='staff' && this.user.id==user_id)
-          {
-            url='/payment/initiate'
-            if(!payment_method){
-              this.snackbarMsg('Payment Method Not Found','error');
-              return
-            }
-          }
-          else
-          {
-            url='/adminTopUp';
-            payment_method=null
-          }
-      }else{
-        type='top_up'
-        url='/payment/initiate'
-        if(!payment_method){
+        type='admin_top_up'
+        if(this.user.role=='staff' && this.user.id==user_id)
+        {
+          url='/user_topup'
+          if(!payment_method){
             this.snackbarMsg('Payment Method Not Found','error');
             return
           }
+        }
+        else
+        {
+          url='/adminTopUp';
+          payment_method=null
+        }
+      }else{
+        type='top_up'
+        url='/user_topup'
+        if(!payment_method){
+          this.snackbarMsg('Payment Method Not Found','error');
+          return
+        }
       }
       let data={
         "user_id":user_id,
@@ -328,7 +406,7 @@
 color: #010A21;
 }
 .card-height{
-  height: 100vh;
+  height: auto !important;
 }
 .btn-color{
   background-color: #f513ca !important;
