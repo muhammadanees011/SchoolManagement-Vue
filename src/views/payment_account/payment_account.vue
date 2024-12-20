@@ -195,51 +195,62 @@
         this.expressCheckoutElement.on('confirm', this.handlePayment);
       },
 
-        async handlePayment() {
+      async handlePayment(event) {
 
-          if (!this.stripe || !this.expressCheckoutElement) {
-              console.error('Stripe or expressCheckoutElement is not initialized');
-              return;
-          }
-          // Add a listener to handle the "confirm" event
-          this.expressCheckoutElement.on('confirm', async (event) => {
-              console.log('Confirm event triggered:', event);
-              const { error,paymentIntent } = await this.stripe.confirmPayment({
-                  elements: this.elements,
-                  confirmParams: {
-                      // return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
-                  },
-              });
+        if (!this.stripe || !this.expressCheckoutElement) {
+            console.error('Stripe or expressCheckoutElement is not initialized');
+            return;
+        }
+        // Add a listener to handle the "confirm" event
 
-              if (error) {
-                  console.error('Payment failed:', error.message);
-                  // Inform the user of the error
-                  event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
-              } else {
-                // Inform the Express Checkout Element the confirmation succeeded
-                event.complete('success');
-                let amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
-                if(amount==""){
-                  this.snackbarMsg('Please select the amount','error');
-                  return
-                }
-                const latestCharge = paymentIntent.charges.data[0];
-                const cardDetails = latestCharge.payment_method_details.card;
-                let user_id=this.user.id;
-                let data={
-                  "amount":amount,
-                  "type":'top_up',
-                  "user_id":user_id,
-                  latest_charge: latestCharge.id,
-                  last_4: cardDetails.last4,
-                  brand: cardDetails.brand,
-                  cardholder_name: latestCharge.billing_details.name
-                };
-                const response=await axiosClient.post('/TopupGoogleApplePay',data)
-                console.log(response)
+        // this.expressCheckoutElement.on('confirm', async (event) => {
+            console.log('Confirm event triggered:', event);
+            const { error,paymentIntent } = await this.stripe.confirmPayment({
+                elements: this.elements,
+                confirmParams: {
+                    return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
+                },
+            });
+
+            if (error) {
+                console.error('Payment failed:', error.message);
+                // Inform the user of the error
+                event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
+            } else {
+              // Inform the Express Checkout Element the confirmation succeeded
+              let amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
+              if(amount==""){
+                this.snackbarMsg('Please select the amount','error');
+                return
               }
-          });
-        },
+              console.log('paymentIntent',paymentIntent)
+
+              const latestCharge = paymentIntent.charges.data[0];
+              const cardDetails = latestCharge.payment_method_details.card;
+
+              console.log('latestCharge',latestCharge)
+              console.log('cardDetails',cardDetails)
+
+              let user_id=this.user.id;
+              let data={
+                "amount":amount,
+                "type":'top_up',
+                "user_id":user_id,
+                latest_charge: latestCharge.id,
+                last_4: cardDetails.last4,
+                brand: cardDetails.brand,
+                cardholder_name: latestCharge.billing_details.name
+              };
+              console.log('before saving payment information')
+              const response=await axiosClient.post('/TopupGoogleApplePay',data)
+              console.log('payment information saved',response)
+
+              console.log(response)
+
+              event.complete('success');
+            }
+        // });
+      },
 
 
       confirmDelete(id) {

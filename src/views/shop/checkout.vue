@@ -197,7 +197,7 @@ import { loadStripe } from '@stripe/stripe-js';
             this.expressCheckoutElement.on('confirm', this.handlePayment);
         },
 
-        async handlePayment() {
+        async handlePayment(event) {
 
             if (!this.stripe || !this.expressCheckoutElement) {
                 console.error('Stripe or expressCheckoutElement is not initialized');
@@ -205,13 +205,13 @@ import { loadStripe } from '@stripe/stripe-js';
             }
 
             // Add a listener to handle the "confirm" event
-            this.expressCheckoutElement.on('confirm', async (event) => {
+            // this.expressCheckoutElement.on('confirm', async (event) => {
                 console.log('Confirm event triggered:', event);
 
                 const { error,paymentIntent } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
-                        // return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
+                        return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
                     },
                 });
 
@@ -221,11 +221,13 @@ import { loadStripe } from '@stripe/stripe-js';
                     event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
                 } else {
                     // Inform the Express Checkout Element the confirmation succeeded
-                    event.complete('success');
 
+                    console.log('paymentIntent',paymentIntent)
                     // Extract details from paymentIntent
                     const latestCharge = paymentIntent.charges.data[0]; // Get the first charge object
                     const cardDetails = latestCharge.payment_method_details.card;
+                    console.log('latestCharge',latestCharge)
+                    console.log('cardDetails',cardDetails)
 
                     let data={
                         "payment_method":null,
@@ -236,11 +238,14 @@ import { loadStripe } from '@stripe/stripe-js';
                         cardholder_name: latestCharge.billing_details.name
                     };
                     this.isLoading=true;
+                    console.log('before saving payment information')
                     const response=await axiosClient.post('/checkout',data)
-                    console.log(response)
+                    console.log('payment information saved',response)
                     this.$router.go(-1);
+                    event.complete('success');
+
                 }
-            });
+            // });
         },
 
                 
