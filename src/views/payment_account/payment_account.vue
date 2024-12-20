@@ -208,9 +208,9 @@
             const { error,paymentIntent } = await this.stripe.confirmPayment({
                 elements: this.elements,
                 confirmParams: {
-                  redirect: 'if_required',
                     // return_url: 'if_required', // Replace with your success URL
                 },
+                redirect: 'if_required',
             });
 
             if (error) {
