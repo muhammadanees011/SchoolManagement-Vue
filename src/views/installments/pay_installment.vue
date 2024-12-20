@@ -301,7 +301,7 @@ import { loadStripe } from '@stripe/stripe-js';
                     const response=await axiosClient.post('/payInstallment',data)
                     console.log('payment information saved',response)
                     console.log(response)
-                    this.$router.go(-1);
+                    // this.$router.go(-1);
                     event.complete('success');
                 }
             // });

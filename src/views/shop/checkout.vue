@@ -240,7 +240,7 @@ import { loadStripe } from '@stripe/stripe-js';
                     console.log('before saving payment information')
                     const response=await axiosClient.post('/checkout',data)
                     console.log('payment information saved',response)
-                    this.$router.go(-1);
+                    // this.$router.go(-1);
                     event.complete('success');
 
                 }
