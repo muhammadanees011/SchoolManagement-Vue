@@ -265,7 +265,7 @@ import { loadStripe } from '@stripe/stripe-js';
                 const { error,paymentIntent } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
-                        return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
+                        return_url: '', // Replace with your success URL
                     },
                 });
 

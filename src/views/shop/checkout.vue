@@ -158,7 +158,6 @@ import { loadStripe } from '@stripe/stripe-js';
             user:'',
             cartItems:'',
             isSelected:0,
-            stripeAPIToken: 'pk_test_51NL39OA54mv9Tt3cBvUM2bicn8hMv5NhdEuvJcjgezES5zhVCGMOf5IUoqjglR8UfAWjVFStR2iPn3yLvMF3XcpM00Q0oowpaJ'
         }
     },
     mounted(){
@@ -211,7 +210,7 @@ import { loadStripe } from '@stripe/stripe-js';
                 const { error,paymentIntent } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
-                        return_url: 'https://your-website.com/checkout-success', // Replace with your success URL
+                        return_url: '', // Replace with your success URL
                     },
                 });
 
