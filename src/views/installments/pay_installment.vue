@@ -267,6 +267,7 @@ import { loadStripe } from '@stripe/stripe-js';
                     confirmParams: {
                         // return_url: '', // Replace with your success URL
                     },
+                    expand: ['charges', 'payment_method', 'latest_charge'], // Request charges, payment method and latest_charge data to be included
                     redirect: 'if_required',
                 });
 
