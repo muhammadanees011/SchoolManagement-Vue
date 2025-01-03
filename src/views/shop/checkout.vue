@@ -227,7 +227,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
                     if (paymentIntent && paymentIntent.id) {
                     // Retrieve the expanded PaymentIntent data
-                    const expandedPaymentIntent = await this.stripe.retrievePaymentIntent(paymentIntent.id);
+                    const expandedPaymentIntent = await this.stripe.retrievePaymentIntent(paymentIntent.client_secret);
                     console.log('Expanded PaymentIntent:', expandedPaymentIntent);
                     
                     const latestCharge = expandedPaymentIntent.paymentIntent.latest_charge;
