@@ -212,7 +212,7 @@ import { loadStripe } from '@stripe/stripe-js';
                     confirmParams: {
                         // return_url: '', // Replace with your success URL
                     },
-                    expand: ['charges', 'payment_method', 'latest_charge'], // Request charges, payment method and latest_charge data to be included
+                    // expand: ['charges', 'payment_method', 'latest_charge'], // Request charges, payment method and latest_charge data to be included
                     redirect: 'if_required',
                 });
 
@@ -224,6 +224,16 @@ import { loadStripe } from '@stripe/stripe-js';
                     // Inform the Express Checkout Element the confirmation succeeded
 
                     console.log('paymentIntent',paymentIntent)
+
+                    if (paymentIntent && paymentIntent.id) {
+                    // Retrieve the expanded PaymentIntent data
+                    const expandedPaymentIntent = await this.stripe.retrievePaymentIntent(paymentIntent.id);
+                    console.log('Expanded PaymentIntent:', expandedPaymentIntent);
+                    
+                    const latestCharge = expandedPaymentIntent.paymentIntent.latest_charge;
+                    const chargeDetails = await this.stripe.charges.retrieve(latestCharge);
+                    console.log('Charge Details:', chargeDetails);
+}
                     // Extract details from paymentIntent
                     const latestCharge = paymentIntent.charges.data[0]; // Get the first charge object
                     const cardDetails = latestCharge.payment_method_details.card;

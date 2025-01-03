@@ -259,7 +259,6 @@ import { loadStripe } from '@stripe/stripe-js';
             }
 
             // Add a listener to handle the "confirm" event
-            // this.expressCheckoutElement.on('confirm', async (event) => {
                 console.log('Confirm event triggered:', event);
 
                 const { error,paymentIntent } = await this.stripe.confirmPayment({
@@ -276,8 +275,8 @@ import { loadStripe } from '@stripe/stripe-js';
                     // Inform the user of the error
                     event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
                 } else {
-                    // Inform the Express Checkout Element the confirmation succeeded
-                    event.complete('success');
+                
+                    event.complete('success');  // Inform the Express Checkout Element the confirmation succeeded
 
                     console.log('paymentIntent',paymentIntent)
                     // Extract details from paymentIntent
@@ -306,7 +305,6 @@ import { loadStripe } from '@stripe/stripe-js';
                     // this.$router.go(-1);
                     event.complete('success');
                 }
-            // });
         },
 
         //--------------PAYMENT METHODS---------
