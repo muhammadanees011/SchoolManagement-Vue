@@ -225,15 +225,11 @@ import { loadStripe } from '@stripe/stripe-js';
 
                     console.log('paymentIntent',paymentIntent)
 
-                    if (paymentIntent && paymentIntent.id) {
-                    // Retrieve the expanded PaymentIntent data
-                    const expandedPaymentIntent = await this.stripe.retrievePaymentIntent(paymentIntent.client_secret);
-                    console.log('Expanded PaymentIntent:', expandedPaymentIntent);
-                    
-                    const latestCharge = expandedPaymentIntent.paymentIntent.latest_charge;
-                    const chargeDetails = await this.stripe.charges.retrieve(latestCharge);
-                    console.log('Charge Details:', chargeDetails);
-}
+                    if (paymentIntent && paymentIntent.payment_method) {
+                        // Retrieve Payment Method using Stripe's API
+                        const paymentMethod = await this.stripe.retrievePaymentMethod(paymentIntent.payment_method);
+                        console.log('Payment Method Details:', paymentMethod);
+                    }
                     // Extract details from paymentIntent
                     const latestCharge = paymentIntent.charges.data[0]; // Get the first charge object
                     const cardDetails = latestCharge.payment_method_details.card;
