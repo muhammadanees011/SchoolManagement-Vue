@@ -225,17 +225,16 @@ import { loadStripe } from '@stripe/stripe-js';
 
                     console.log('paymentIntent',paymentIntent)
 
+                    let cardDetails
                     if (paymentIntent && paymentIntent.payment_method) {
                         // Retrieve Payment Method using Stripe's API
-                        this.fetchPaymentMethod(paymentIntent.payment_method);
+                        cardDetails=this.fetchPaymentMethod(paymentIntent.payment_method);
                         const paymentMethod = await this.stripe.retrievePaymentMethod(paymentIntent.payment_method);
                         console.log('Payment Method Details:', paymentMethod);
                     }
-                    // Extract details from paymentIntent
-                    const latestCharge = paymentIntent.charges.data[0]; // Get the first charge object
-                    const cardDetails = latestCharge.payment_method_details.card;
-                    console.log('latestCharge',latestCharge)
                     console.log('cardDetails',cardDetails)
+                    cardDetails=cardDetails.payment_method.card
+                    let latestCharge=cardDetails.charge_id
 
                     let data={
                         "payment_method":null,
@@ -243,7 +242,7 @@ import { loadStripe } from '@stripe/stripe-js';
                         latest_charge: latestCharge.id,
                         last_4: cardDetails.last4,
                         brand: cardDetails.brand,
-                        cardholder_name: latestCharge.billing_details.name
+                        cardholder_name: cardDetails.billing_details.name
                     };
                     this.isLoading=true;
                     console.log('before saving payment information')
@@ -260,6 +259,7 @@ import { loadStripe } from '@stripe/stripe-js';
             try {
                 const response = await axiosClient.get(`/payment-method/${paymentMethodId}`);
                 console.log('Payment Method Details:', response.data);
+                return response.data;
             } catch (error) {
                 console.error('Error fetching payment method:', error);
             }
