@@ -230,8 +230,6 @@ import { loadStripe } from '@stripe/stripe-js';
                     if (paymentIntent && paymentIntent.payment_method) {
                         // Retrieve Payment Method using Stripe's API
                         paymentMethodDetails=this.fetchPaymentMethod(paymentIntent.payment_method, paymentIntent.id);
-                        const paymentMethod = await this.stripe.retrievePaymentMethod(paymentIntent.payment_method);
-                        console.log('Payment Method Details:', paymentMethod);
                     }
                     console.log('cardDetails',cardDetails)
                     cardDetails=paymentMethodDetails.payment_method.card
