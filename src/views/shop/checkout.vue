@@ -242,7 +242,7 @@ import { loadStripe } from '@stripe/stripe-js';
                         latest_charge: latestCharge,
                         last_4: cardDetails.last4,
                         brand: cardDetails.brand,
-                        cardholder_name: cardDetails.billing_details.name
+                        cardholder_name: paymentMethodDetails.payment_method.billing_details.name
                     };
                     this.isLoading=true;
                     console.log('before saving payment information')
