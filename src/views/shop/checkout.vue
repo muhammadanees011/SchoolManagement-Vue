@@ -29,7 +29,7 @@
                                                 Instalments ({{ item.shop_item.payment.total_installments }})
                                             </span>
                                             <span v-if="item.shop_item.payment_plan=='installments_and_deposit'" class="text-success">
-                                                Instalments And Deposit
+                                                Initial Deposit
                                                 <br> ({{ item.shop_item.payment.total_installments }} Instalments)
                                             </span>
                                         </h6>
@@ -180,8 +180,10 @@ import { loadStripe } from '@stripe/stripe-js';
             this.stripe = await loadStripe('pk_test_51NL39OA54mv9Tt3cBvUM2bicn8hMv5NhdEuvJcjgezES5zhVCGMOf5IUoqjglR8UfAWjVFStR2iPn3yLvMF3XcpM00Q0oowpaJ'); // Replace with your publishable key
             console.log('stripe created',this.stripe)
             // Fetch Payment Intent client secret from your backend
+            let price=this.totalAmount();
+            price=price * 100
             let data={
-                amount:1000,
+                amount:price,
                 currency:'gbp'
             }
             const response=await axiosClient.post('/createexpressPaymentIntent',data)
