@@ -195,29 +195,23 @@
         this.expressCheckoutElement.on('confirm', this.handlePayment);
       },
 
-      async handlePayment(event) {
+      async handlePayment() {
 
         if (!this.stripe || !this.expressCheckoutElement) {
             console.error('Stripe or expressCheckoutElement is not initialized');
             return;
         }
-        // Add a listener to handle the "confirm" event
-
-        // this.expressCheckoutElement.on('confirm', async (event) => {
-            console.log('Confirm event triggered:', event);
+            // console.log('Confirm event triggered:', event);
             const { error,paymentIntent } = await this.stripe.confirmPayment({
                 elements: this.elements,
                 confirmParams: {
                     // return_url: 'if_required', // Replace with your success URL
                 },
-                expand: ['charges', 'payment_method', 'latest_charge'], // Request charges, payment method and latest_charge data to be included
                 redirect: 'if_required',
             });
 
             if (error) {
                 console.error('Payment failed:', error.message);
-                // Inform the user of the error
-                event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
             } else {
               // Inform the Express Checkout Element the confirmation succeeded
               let amount=this.selected_amount==null ? this.addedBalance : this.selected_amount
@@ -225,35 +219,47 @@
                 this.snackbarMsg('Please select the amount','error');
                 return
               }
-              console.log('paymentIntent',paymentIntent)
+              // console.log('paymentIntent',paymentIntent)
 
-              const latestCharge = paymentIntent.charges.data[0];
-              const cardDetails = latestCharge.payment_method_details.card;
-
-              console.log('latestCharge',latestCharge)
-              console.log('cardDetails',cardDetails)
+     
+              let cardDetails
+              let paymentMethodDetails
+              if (paymentIntent && paymentIntent.payment_method) {
+                  // Retrieve Payment Method using Stripe's API
+                  paymentMethodDetails=await this.fetchPaymentMethod(paymentIntent.payment_method, paymentIntent.id);
+              }
+              // console.log('cardDetails',paymentMethodDetails)
+              // console.log('paymetnMethod',paymentMethodDetails.payment_method)
+              cardDetails=paymentMethodDetails.payment_method.card
+              let latestCharge=paymentMethodDetails.charge_id
 
               let user_id=this.user.id;
               let data={
                 "amount":amount,
                 "type":'top_up',
                 "user_id":user_id,
-                latest_charge: latestCharge.id,
+                latest_charge: latestCharge,
                 last_4: cardDetails.last4,
                 brand: cardDetails.brand,
-                cardholder_name: latestCharge.billing_details.name
+                cardholder_name: paymentMethodDetails.payment_method.billing_details.name
               };
-              console.log('before saving payment information')
-              const response=await axiosClient.post('/TopupGoogleApplePay',data)
-              console.log('payment information saved',response)
-
-              console.log(response)
-
-              event.complete('success');
+              await axiosClient.post('/TopupGoogleApplePay',data)
             }
-        // });
       },
 
+      async fetchPaymentMethod(paymentMethodId, paymentIntentId) {
+          let data={
+              paymentMethodId:paymentMethodId,
+              paymentIntentId:paymentIntentId   
+          }
+          try {
+              const response = await axiosClient.post(`/payment-method`,data);
+              // console.log('Payment Method Details:', response.data);
+              return response.data;
+          } catch (error) {
+              console.error('Error fetching payment method:', error);
+          }
+      },
 
       confirmDelete(id) {
         Swal.fire({

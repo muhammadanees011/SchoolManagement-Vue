@@ -251,40 +251,38 @@ import { loadStripe } from '@stripe/stripe-js';
             this.expressCheckoutElement.on('confirm', this.handlePayment);
         },
 
-        async handlePayment(event) {
+        async handlePayment() {
 
             if (!this.stripe || !this.expressCheckoutElement) {
                 console.error('Stripe or expressCheckoutElement is not initialized');
                 return;
             }
 
-            // Add a listener to handle the "confirm" event
-                console.log('Confirm event triggered:', event);
-
                 const { error,paymentIntent } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
                         // return_url: '', // Replace with your success URL
                     },
-                    expand: ['charges', 'payment_method', 'latest_charge'], // Request charges, payment method and latest_charge data to be included
                     redirect: 'if_required',
                 });
 
                 if (error) {
                     console.error('Payment failed:', error.message);
                     // Inform the user of the error
-                    event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
                 } else {
                 
-                    event.complete('success');  // Inform the Express Checkout Element the confirmation succeeded
-
                     console.log('paymentIntent',paymentIntent)
                     // Extract details from paymentIntent
-                    const latestCharge = paymentIntent.charges.data[0]; // Get the first charge object
-                    const cardDetails = latestCharge.payment_method_details.card;
-
-                    console.log('latestCharge',latestCharge)
-                    console.log('cardDetails',cardDetails)
+        
+                    let cardDetails
+                    let paymentMethodDetails
+                    if (paymentIntent && paymentIntent.payment_method) {
+                        paymentMethodDetails=await this.fetchPaymentMethod(paymentIntent.payment_method, paymentIntent.id);
+                    }
+                    // console.log('cardDetails',paymentMethodDetails)
+                    // console.log('paymetnMethod',paymentMethodDetails.payment_method)
+                    cardDetails=paymentMethodDetails.payment_method.card
+                    let latestCharge=paymentMethodDetails.charge_id
 
                     let installment_id=this.$route.params.id;
       
@@ -293,18 +291,28 @@ import { loadStripe } from '@stripe/stripe-js';
                         "type":'google_apple_pay',
                         "installment_id":installment_id,
                         "amount": this.installmentDetail ? this.installmentDetail.installment_amount : 0,
-                        latest_charge: latestCharge.id,
+                        latest_charge: latestCharge,
                         last_4: cardDetails.last4,
                         brand: cardDetails.brand,
-                        cardholder_name: latestCharge.billing_details.name
+                        cardholder_name: paymentMethodDetails.payment_method.billing_details.name
                     };
-                    console.log('before saving payment information')
-                    const response=await axiosClient.post('/payInstallment',data)
-                    console.log('payment information saved',response)
-                    console.log(response)
-                    // this.$router.go(-1);
-                    event.complete('success');
+                    await axiosClient.post('/payInstallment',data)
+                    this.$router.go(-1);
                 }
+        },
+
+        async fetchPaymentMethod(paymentMethodId, paymentIntentId) {
+            let data={
+                paymentMethodId:paymentMethodId,
+                paymentIntentId:paymentIntentId   
+            }
+            try {
+                const response = await axiosClient.post(`/payment-method`,data);
+                // console.log('Payment Method Details:', response.data);
+                return response.data;
+            } catch (error) {
+                console.error('Error fetching payment method:', error);
+            }
         },
 
         //--------------PAYMENT METHODS---------

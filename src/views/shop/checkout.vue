@@ -55,7 +55,7 @@
                                                 £{{formattedPrice(item.shop_item.payment.amount_per_installment) }} Each
                                             </span>
                                             <span v-if="item.shop_item.payment_plan=='installments_and_deposit'" class="text-success me-3">
-                                                £{{formattedPrice(item.shop_item.payment.initial_deposit_installments) }} Deposit
+                                                £{{formattedPrice(item.shop_item.payment.initial_deposit) }} Deposit
                                                 <br>
                                                 £{{formattedPrice(item.shop_item.payment.amount_per_installment) }} Each
                                             </span>
@@ -196,17 +196,12 @@ import { loadStripe } from '@stripe/stripe-js';
             this.expressCheckoutElement.on('confirm', this.handlePayment);
         },
 
-        async handlePayment(event) {
+        async handlePayment() {
 
             if (!this.stripe || !this.expressCheckoutElement) {
                 console.error('Stripe or expressCheckoutElement is not initialized');
                 return;
             }
-
-            // Add a listener to handle the "confirm" event
-            // this.expressCheckoutElement.on('confirm', async (event) => {
-                console.log('Confirm event triggered:', event);
-
                 const { error,paymentIntent } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
@@ -218,12 +213,8 @@ import { loadStripe } from '@stripe/stripe-js';
 
                 if (error) {
                     console.error('Payment failed:', error.message);
-                    // Inform the user of the error
-                    event.complete('fail'); // Let the Express Checkout Element know the confirmation failed
                 } else {
-                    // Inform the Express Checkout Element the confirmation succeeded
-
-                    console.log('paymentIntent',paymentIntent)
+                    // console.log('paymentIntent',paymentIntent)
 
                     let cardDetails
                     let paymentMethodDetails
@@ -231,8 +222,8 @@ import { loadStripe } from '@stripe/stripe-js';
                         // Retrieve Payment Method using Stripe's API
                         paymentMethodDetails=await this.fetchPaymentMethod(paymentIntent.payment_method, paymentIntent.id);
                     }
-                    console.log('cardDetails',paymentMethodDetails)
-                    console.log('paymetnMethod',paymentMethodDetails.payment_method)
+                    // console.log('cardDetails',paymentMethodDetails)
+                    // console.log('paymetnMethod',paymentMethodDetails.payment_method)
                     cardDetails=paymentMethodDetails.payment_method.card
                     let latestCharge=paymentMethodDetails.charge_id
 
@@ -245,14 +236,10 @@ import { loadStripe } from '@stripe/stripe-js';
                         cardholder_name: paymentMethodDetails.payment_method.billing_details.name
                     };
                     this.isLoading=true;
-                    console.log('before saving payment information')
-                    const response=await axiosClient.post('/checkout',data)
-                    console.log('payment information saved',response)
-                    // this.$router.go(-1);
-                    event.complete('success');
+                    await axiosClient.post('/checkout',data)
+                    this.$router.go(-1);
 
                 }
-            // });
         },
 
         async fetchPaymentMethod(paymentMethodId, paymentIntentId) {
@@ -262,7 +249,7 @@ import { loadStripe } from '@stripe/stripe-js';
             }
             try {
                 const response = await axiosClient.post(`/payment-method`,data);
-                console.log('Payment Method Details:', response.data);
+                // console.log('Payment Method Details:', response.data);
                 return response.data;
             } catch (error) {
                 console.error('Error fetching payment method:', error);
@@ -320,7 +307,7 @@ import { loadStripe } from '@stripe/stripe-js';
                         if(item.shop_item.payment_plan=='installments'){
                             sum += item.shop_item.payment.amount_per_installment;
                         }else if(item.shop_item.payment_plan=='installments_and_deposit'){
-                            sum += item.shop_item.payment.initial_deposit_installments;
+                            sum += item.shop_item.payment.initial_deposit;
                         }
                         else if(item.shop_item.payment_plan=='full_payment'){
                             sum += item.shop_item.price;
