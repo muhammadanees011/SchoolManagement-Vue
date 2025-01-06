@@ -228,7 +228,7 @@ import { loadStripe } from '@stripe/stripe-js';
                     let cardDetails
                     if (paymentIntent && paymentIntent.payment_method) {
                         // Retrieve Payment Method using Stripe's API
-                        cardDetails=this.fetchPaymentMethod(paymentIntent.payment_method);
+                        cardDetails=this.fetchPaymentMethod(paymentIntent.payment_method, paymentIntent.id);
                         const paymentMethod = await this.stripe.retrievePaymentMethod(paymentIntent.payment_method);
                         console.log('Payment Method Details:', paymentMethod);
                     }
@@ -255,9 +255,13 @@ import { loadStripe } from '@stripe/stripe-js';
             // });
         },
 
-        async fetchPaymentMethod(paymentMethodId) {
+        async fetchPaymentMethod(paymentMethodId, paymentIntentId) {
+            let data={
+                paymentMethodId:paymentMethodId,
+                paymentIntentId:paymentIntentId   
+            }
             try {
-                const response = await axiosClient.get(`/payment-method/${paymentMethodId}`);
+                const response = await axiosClient.post(`/payment-method`,data);
                 console.log('Payment Method Details:', response.data);
                 return response.data;
             } catch (error) {
