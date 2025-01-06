@@ -226,20 +226,21 @@ import { loadStripe } from '@stripe/stripe-js';
                     console.log('paymentIntent',paymentIntent)
 
                     let cardDetails
+                    let paymentMethodDetails
                     if (paymentIntent && paymentIntent.payment_method) {
                         // Retrieve Payment Method using Stripe's API
-                        cardDetails=this.fetchPaymentMethod(paymentIntent.payment_method, paymentIntent.id);
+                        paymentMethodDetails=this.fetchPaymentMethod(paymentIntent.payment_method, paymentIntent.id);
                         const paymentMethod = await this.stripe.retrievePaymentMethod(paymentIntent.payment_method);
                         console.log('Payment Method Details:', paymentMethod);
                     }
                     console.log('cardDetails',cardDetails)
-                    cardDetails=cardDetails.payment_method.card
-                    let latestCharge=cardDetails.charge_id
+                    cardDetails=paymentMethodDetails.payment_method.card
+                    let latestCharge=paymentMethodDetails.charge_id
 
                     let data={
                         "payment_method":null,
                         "type":'google_apple_pay',
-                        latest_charge: latestCharge.id,
+                        latest_charge: latestCharge.charge_id,
                         last_4: cardDetails.last4,
                         brand: cardDetails.brand,
                         cardholder_name: cardDetails.billing_details.name
