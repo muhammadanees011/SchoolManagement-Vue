@@ -124,7 +124,7 @@
                                 <template v-else>
                                 <button v-if="cartItems.length>0" @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
                                 <button v-if="cartItems.length>0" @click="checkout('wallet')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet</button>
-                                <button v-if="cartItems.length>0" @click="expressPaymentCheckout()" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Google/Apple Pay</button>
+                                <button v-if="cartItems.length>0" @click="expressPaymentCheckout()" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Google/Apple Pay</button>
                                 <div id="express-checkout-element"> </div>
                                 <!-- <p v-if="dataLoaded" class="text-sm text-warning mt-1">In a Wallet & Card Payment, the wallet is charged first, and any remaining amount is charged to the card.</p> -->
                                 </template>

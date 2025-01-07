@@ -102,7 +102,8 @@
                             </li> -->
                             <button @click="checkout('card')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Card Payment </button>
                             <button @click="checkout('wallet_and_card')" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-45 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Wallet Payment </button>
-                            <div id="express-checkout-element" style="min-height: 50px;"> </div>
+                            <button @click="expressPaymentCheckout()" style="font-size: 12px; background-color: #573078;" class="btn mt-3 me-3 trips-btn w-100 bg-gradient-grey shadow-grey text-white fw-5 p-2 border-radius-lg"> Google/Apple Pay</button>
+                            <div id="express-checkout-element"> </div>
                         </div>
                     </div>
                 </div>
@@ -132,7 +133,7 @@ import { loadStripe } from '@stripe/stripe-js';
         this.getCustomerPaymentMethods();
         this.$globalHelper.buttonColor();
         await this.getInstallment();
-        this.expressPaymentCheckout();
+        // this.expressPaymentCheckout();
     },
     updated(){
         this.$globalHelper.buttonColor();

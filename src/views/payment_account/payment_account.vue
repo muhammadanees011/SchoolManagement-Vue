@@ -85,7 +85,7 @@
         <br>
         <button v-if="user.role=='student' || user.role=='staff'"  @click="expressPaymentCheckout" style="font-size: 12px; background-color: #573078;" class="btn top-up-btn p-3 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Google Pay/ Apple Pay </button>
         <br>
-        <div v-if="user.role=='student' || user.role=='staff'" id="express-checkout-element" style="min-height: 50px; width: 19em !important;"> </div>
+        <div v-if="user.role=='student' || user.role=='staff'" id="express-checkout-element"> </div>
         <br>
       </div>
         </div>
