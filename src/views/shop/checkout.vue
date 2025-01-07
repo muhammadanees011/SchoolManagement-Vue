@@ -160,12 +160,12 @@ import { loadStripe } from '@stripe/stripe-js';
             isSelected:0,
         }
     },
-    mounted(){
-        this.getUser();
-        this.getCartItems();
-        this.getCustomerPaymentMethods();
+    async mounted(){
+        await this.getUser();
+        await this.getCartItems();
+        await this.getCustomerPaymentMethods();
         this.$globalHelper.buttonColor();
-        this.expressPaymentCheckout();
+        await this.expressPaymentCheckout();
     },
     updated(){
         this.$globalHelper.buttonColor();
