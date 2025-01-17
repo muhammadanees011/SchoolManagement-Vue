@@ -53,7 +53,7 @@
               </div>
             </template>
 
-            <div class="amount-radio">
+            <div v-if="user.role!='student'" class="amount-radio">
               <div class="top-up-row">
                 <span class="mb-1" style="display: flex;">
                   <input id="amount25" class="me-1" type="radio" v-model="selected_amount" name="amount" value="25">
@@ -80,7 +80,7 @@
           </div>
           <div class="col-md-5">
           </div>
-          <div  class="conteiner">
+          <div v-if="user.role!='student'" class="conteiner">
             <button  @click="addBalance" style="font-size: 12px; background-color: #573078;" class="btn top-up-btn p-3 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Add Balance </button>
             <br>
             <button v-if="user.role=='student' || user.role=='staff'"  @click="expressPaymentCheckout" style="font-size: 12px; background-color: #573078;" class="btn top-up-btn p-3 mb-3 trips-btn  text-white fw-5 border-radius-lg"> Google Pay/ Apple Pay </button>
