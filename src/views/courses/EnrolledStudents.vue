@@ -32,8 +32,8 @@
                   <div class="row" style="width: 100%;">
                     <div class="col-4">
                     <span style="display: flex;">
-                      <input class="input-box filter-box" @keyup="filterStudents" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                      <select @change="filterStudents" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                      <input class="input-box filter-box" @keyup="debouncedSearch" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                      <select @change="debouncedSearch" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
                         <option v-for="(item, index) in allFields" :key="index" :value="item">
                           {{ item }}
                         </option>
@@ -136,7 +136,8 @@
   import { mapGetters, mapActions } from 'vuex'
   import * as XLSX from 'xlsx';
   import Enroll from './enroll_student.vue'
-  
+  import { debounce } from 'lodash';
+
   export default {
     name: 'tables',
     mounted(){
@@ -147,6 +148,9 @@
     updated(){
       this.$permissions.redirectIfNotAllowed('view_student');
       this.$globalHelper.buttonColor();
+    },
+    created() {
+      this.debouncedSearch = debounce(this.filterStudents, 500);
     },
     components:{
         Enroll

@@ -26,8 +26,8 @@
                   
                   <div class="col-4">
                     <span style="display: flex;">
-                    <input class="input-box filter-box" @keyup="filterStaff" v-model="searchString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                    <select @change="filterStaff" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                    <input class="input-box filter-box" @keyup="debouncedSearch" v-model="searchString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                    <select @change="debouncedSearch" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                       <option v-for="(item, index) in allFields" :key="index" :value="item">
                         {{ item }}
                       </option>
@@ -154,7 +154,7 @@
   import Swal from 'sweetalert2';
   import { mapGetters, mapActions } from 'vuex'
   import * as XLSX from 'xlsx';
-
+  import { debounce } from 'lodash';
   
   export default {
     name: 'tables',
@@ -165,7 +165,7 @@
       if(this.getFilterString.filterBy){
         this.filterBy=this.getFilterString.filterBy
         this.searchString=this.getFilterString.searchString
-        this.filterStaff()
+        this.debouncedSearch()
       }else{
         this.getAllStaff();
       }
@@ -174,6 +174,9 @@
     updated(){
       this.$permissions.redirectIfNotAllowed('view_staff');
       this.$globalHelper.buttonColor();
+    },
+    created() {
+      this.debouncedSearch = debounce(this.filterStaff, 500);
     },
     computed: {
       ...mapGetters(['getBrandingSetting','getFilterString']),

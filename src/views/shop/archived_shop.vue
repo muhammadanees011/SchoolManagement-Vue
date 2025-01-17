@@ -24,8 +24,8 @@
                     <div class="row" style="width: 100%;">
                       <div class="col-4">
                         <span style="display: flex;">
-                          <input class="input-box filter-box" @keyup="filterShopItems" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                          <select @change="filterShopItems" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
+                          <input class="input-box filter-box" @keyup="debouncedSearch" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                          <select @change="debouncedSearch" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter" style="width: 98px !important;">
                             <option v-for="(item, index) in allFields" :key="index" :value="item">
                               {{ item }}
                             </option>
@@ -184,7 +184,7 @@
   import { mapGetters } from 'vuex'
   import Swal from 'sweetalert2';
   import * as XLSX from 'xlsx';
-
+  import { debounce } from 'lodash';
 
   export default {
     name: "tables",
@@ -200,6 +200,9 @@
       }else{
         this.$permissions.redirectIfNotAllowed('view_shop');
       }
+    },
+    created() {
+      this.debouncedSearch = debounce(this.filterShopItems, 500);
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),

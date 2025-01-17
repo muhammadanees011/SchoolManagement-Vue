@@ -53,6 +53,15 @@
                     <span class="text-dark ms-sm-2 font-weight-bold">{{transactionType(item.type) }}
                     <br>
                     <small>{{ formatDate(item.created_at) }}</small>
+                    <br>
+                    <template v-if="user && user.role!=='student' && user.role!=='staff' && user.role!=='parent'">
+                      <span @click="confirmRefund(item.id)" v-if="item.type === 'top_up' && item.status!=='refunded'" class="bg-success px-3" style="border-radius: 4px; cursor: pointer;">
+                        <small class="text-white" style="text-decoration: underline;">Refund</small>
+                      </span>
+                    </template>
+                    <span v-if="item.type === 'top_up' && item.status=='refunded'" class="bg-danger px-3" style="border-radius: 4px;">
+                      <small class="text-white">Refunded</small>
+                    </span>
                     </span>
                     <div>
                       <span class="font-weight-bold me-3" :class="{'text-success': item.type === 'top_up' || item.type === 'admin_top_up' || item.type === 'pos_refund' || item.type === 'school_shop_refund', 'text-danger': !(item.type === 'top_up' || item.type === 'admin_top_up' ||  item.type === 'pos_refund' || item.type === 'school_shop_refund')}">
@@ -114,7 +123,7 @@
   import axiosClient from '../../axios'
   import moment from 'moment';
   import { mapGetters, mapActions } from 'vuex'
-
+  import Swal from 'sweetalert2';
 
   export default {
     name: "billing-card",
@@ -216,10 +225,59 @@
     methods:{
       ...mapActions(['updateFilterString']),
 
+      confirmRefund(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Paid Amount will be refunded and you will not be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, refund it!',
+          customClass: {
+            popup: 'custom-swal'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.refundTopup(id)
+          }
+        });
+      },
+
+      async refundTopup(id){
+        let data={
+            transaction_id:id
+        }
+        try {
+        let response=await axiosClient.post('/refundTopup',data)
+        let message=response.data ? response.data.message:''
+        if(response.data && response.data.refund){
+          this.snackbarMsg(message,'success')
+        }else{
+          this.snackbarMsg(message,'error')
+        }
+        this.getWallet();
+        this.getTransactionHistory();
+        } catch (error) {
+          console.log(error)
+          this.snackbarMsg('Something went wrong!','error')
+        }
+      },
+
+      snackbarMsg(message,type) {
+        this.$snackbar.add({
+          type: type,
+          text: message,
+          background: 'white',
+        })
+      },
+
       transactionType(type){
         let newType='';
         if(type=='top_up'){
           newType="Top Up";
+        }else if(type=='topup_refund'){
+          newType="Top Up Refunded";
         }else if(type=='admin_top_up'){
           newType="Top Up (Admin)";
         }else if(type=='pos_transaction'){
@@ -245,6 +303,7 @@
 
         let user=localStorage.getItem('user')
         user= JSON.parse(user)
+        this.user=user
         if(this.$route.params.id){
           this.user_id=this.$route.params.id;
         }else{

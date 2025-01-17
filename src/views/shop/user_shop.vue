@@ -18,8 +18,8 @@
                   
                   <div class="filter-container ms-4 mb-2">
                     <span style="display: flex;">
-                      <input class="input-box filter-box" @keyup="filterShopItems" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
-                      <select @change="filterShopItems" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
+                      <input class="input-box filter-box" @keyup="debouncedSearch" v-model="seachString" id="name" type="text" placeholder="Type to Search..." name="address" />
+                      <select @change="debouncedSearch" class="select-box filter-type-btn" v-model="filterBy" id="filter" type="select" placeholder="Filter" name="filter">
                         <option v-for="(item, index) in allFields" :key="index" :value="item">
                           {{ item }}
                         </option>
@@ -142,6 +142,7 @@
   import { mapGetters, mapActions } from 'vuex'
   import Swal from 'sweetalert2';
   import moment from 'moment';
+  import { debounce } from 'lodash';
 
   export default {
     name: "tables",
@@ -155,6 +156,9 @@
         this.$permissions.redirectIfNotAllowed('view_shop');
       }
       this.$globalHelper.buttonColor();
+    },
+    created() {
+      this.debouncedSearch = debounce(this.filterShopItems, 500);
     },
     computed: {
       ...mapGetters(['getBrandingSetting']),

@@ -112,7 +112,7 @@
                           </div>
                         </td>
                         <td class="align-middle text-center">
-                          <p v-if="item.charge_id" class="text-xs text-secondary mb-0">
+                          <p v-if="item.card_brand" class="text-xs text-secondary mb-0">
                             <span class="text-bold text-success">Charge ID:</span> {{ item.charge_id ? item.charge_id:'__' }}<br>
                             <span class="text-bold text-success">Card Brand:</span> {{ item.card_brand ? item.card_brand:'__' }}<br>
                             <span class="text-bold text-success">Last 4 Digit:</span> {{ item.last_4 ? item.last_4:'__'}}<br>
@@ -348,6 +348,8 @@
         let newType='';
         if(type=='top_up'){
           newType="Top Up";
+        }else if(type=='topup_refund'){
+          newType="Top Up Refund";
         }else if(type=='admin_top_up'){
           newType="Top Up (Admin)";
         }else if(type=='pos_transaction'){

@@ -19,34 +19,40 @@
               </div>
             </div>
             <div class="card-body">
-              <small class="text-danger" v-if="unauthorized">Incorrect Email or Password</small>
-              <!-- <form role="form" class="text-start mt-3"> -->
-              <div class="mb-3">
-                <input id="email" v-model="credentials.email" placeholder="Email" type="email" label="Email" name="email" />
-                <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
-              </div>
-              <div class="d-flex">
-                <input id="password" v-model="credentials.password" 
-                placeholder="Password"
-                :type="showPassword ? 'text' : 'password'" 
-                label="Password" name="password" />
-                <span @click="togglePasswordVisibility" class="eye-icon" style="margin-left: -25px; margin-top: 7px;">
-                  <i :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
-                </span>
-              </div>
-              <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>Password is required</small>
-              <!-- <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch> -->
-              <div class="text-center">
-                <material-button class="my-4 mb-2 custom-signin-btn" @click="signIn" style="background-color: #573078 !important;" fullWidth>Sign in</material-button>
-              </div>
+              <template v-if="isManuall">
+                <small class="text-danger" v-if="unauthorized">Incorrect Email or Password</small>
+                <!-- <form role="form" class="text-start mt-3"> -->
+                <div class="mb-3">
+                  <input id="email" v-model="credentials.email" placeholder="Email" type="email" label="Email" name="email" />
+                  <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["email"]!==""'>Email is required</small>
+                </div>
+                <div class="d-flex">
+                  <input id="password" v-model="credentials.password" 
+                  placeholder="Password"
+                  :type="showPassword ? 'text' : 'password'" 
+                  label="Password" name="password" />
+                  <span @click="togglePasswordVisibility" class="eye-icon" style="margin-left: -25px; margin-top: 7px;">
+                    <i :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                  </span>
+                </div>
+                <small class="text-danger error-txt" v-if='formValidation!=="" && formValidation["password"]!==""'>Password is required</small>
+                <!-- <material-switch id="rememberMe" name="rememberMe">Remember me</material-switch> -->
+                <div class="text-center">
+                  <material-button class="my-4 mb-2 custom-signin-btn" @click="signIn" style="background-color: #573078 !important;" fullWidth>Sign in</material-button>
+                </div>
+              </template>
               <p class="mt-4 text-sm text-success text-center">
                 <!-- <small class="text-success text-gradient font-weight-bold">Forgot Password ?</small> -->
-                <router-link :to="{ name: 'ForgotPassword' }" class="font-weight-bold" style="color: #573078;">Forgot Password ?</router-link>
+                <router-link  v-if="isManuall" :to="{ name: 'ForgotPassword' }" class="font-weight-bold" style="color: #573078;">Forgot Password ?</router-link>
                 <br>
                 <br>
-                <span @click="loginWithMicrosoft" class="mslogin-link mt-3">
-                  <img class="me-2" style="width: 12px; height: 12px;" src="@/assets/img/logos/microsoft.png">
-                  <small class="mslogin">SignIn with Microsoft</small>
+                <span  class="mt-3 d-flex justify-content-center">
+                    <img class="me-1 mt-1" style="width: 12px; height: 12px;" src="@/assets/img/logos/microsoft.png">
+                    <p @click="loginWithMicrosoft" class="mslogin mslogin-link">SignIn with Microsoft</p>
+                </span>
+                <br>
+                <span v-if="!isManuall" class="mt-3">
+                  <small @click="isManuall=true" class="loginmanually mslogin-link">SignIn Manually</small>
                 </span>
               </p>
               <!-- </form> -->
@@ -85,6 +91,7 @@ export default {
   },
   data() {
     return {
+      isManuall:false,
       unauthorized: false,
       formValidation:"",
       showPassword: false,
@@ -151,7 +158,13 @@ export default {
 
 <style scoped>
 .mslogin{
-  font-size: 11px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.loginmanually{
+  font-size: 12px;
+  text-decoration: underline;
 }
 .mslogin-link{
   cursor: pointer;
